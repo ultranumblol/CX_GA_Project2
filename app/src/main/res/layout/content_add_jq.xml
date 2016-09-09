@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/content_add_jq"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_height="match_parent"
+   >
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:paddingTop="10dp"
+           >
+            <EditText
+                android:id="@+id/id_callbackJQ"
+                android:layout_width="match_parent"
+                android:layout_height="140dp"
+                android:padding="8dp"
+                android:minHeight="180dp"
+                android:visibility="visible"
+                android:hint="添加警情内容..."
+                android:textColorHint="@color/gray"
+                android:gravity="top|left"
+                android:background="@color/white"
+                android:textColor="@color/black"
+                android:textSize="18sp" />
+        </LinearLayout>
+    <com.jude.easyrecyclerview.EasyRecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/addPicRV"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingBottom="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="10dp"
+        android:background="@color/white"
+        ></com.jude.easyrecyclerview.EasyRecyclerView>
+</LinearLayout>

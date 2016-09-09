@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    tools:context="wgz.com.cx_ga_project.activity.CamPlayerActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <include layout="@layout/title_toolbar"></include>
+
+        <include layout="@layout/content_cam_player" />
+    </LinearLayout>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="@dimen/fab_margin"
+        app:srcCompat="@drawable/ic_stop_white_48dp" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|start"
+        android:layout_margin="@dimen/fab_margin"
+        app:srcCompat="@drawable/ic_search_white_48dp" />
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|center"
+        android:visibility="invisible"
+        android:layout_margin="@dimen/fab_margin"
+        app:srcCompat="@color/grey" />
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:gravity="center_horizontal">
+
+       <!-- <include layout="@layout/up_down_right_left"></include>-->
+
+    </LinearLayout>
+    <android.support.design.widget.FloatingActionButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        app:srcCompat="@drawable/ic_keyboard_arrow_right_white_48dp"
+        android:id="@+id/fab_right"
+       app:layout_anchor="@id/fab3"
+        app:layout_anchorGravity="right|center_vertical"
+        app:fabSize="mini"></android.support.design.widget.FloatingActionButton>
+    <android.support.design.widget.FloatingActionButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        app:srcCompat="@drawable/ic_keyboard_arrow_up_white_48dp"
+        android:id="@+id/fab_up"
+        app:layout_anchor="@id/fab3"
+        app:layout_anchorGravity="center_horizontal"
+        app:fabSize="mini"></android.support.design.widget.FloatingActionButton>
+    <android.support.design.widget.FloatingActionButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        app:srcCompat="@drawable/ic_keyboard_arrow_left_white_48dp"
+        android:id="@+id/fab_left"
+        app:layout_anchor="@id/fab3"
+        app:layout_anchorGravity="center_vertical"
+
+        app:fabSize="mini"></android.support.design.widget.FloatingActionButton>
+    <android.support.design.widget.FloatingActionButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        app:srcCompat="@drawable/ic_keyboard_arrow_down_white_48dp"
+        android:id="@+id/fab_down"
+        app:layout_anchor="@id/fab3"
+
+        app:layout_anchorGravity="center"
+        app:fabSize="mini"></android.support.design.widget.FloatingActionButton>
+</android.support.design.widget.CoordinatorLayout>

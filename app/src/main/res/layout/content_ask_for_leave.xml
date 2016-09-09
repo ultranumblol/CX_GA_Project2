@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/content_ask_for_leave"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="wgz.com.cx_ga_project.activity.AskForLeaveActivity"
+    tools:showIn="@layout/activity_ask_for_leave">
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="1sp"
+        android:layout_marginTop="12dp"
+        android:background="@color/gainsboro"
+
+        />
+
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="40dp"
+    android:orientation="horizontal"
+    android:gravity="center_vertical"
+    android:background="@color/white"
+    android:id="@+id/id_leave_type_layout"
+    >
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="请假类型"
+        android:layout_marginLeft="16dp"
+        android:textColor="@color/darkcyan"
+        android:textSize="16dp"
+        />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="16dp"
+        android:layout_gravity="center_vertical"
+        android:layout_alignParentRight="true"
+        android:text="请选择(必填)"
+        android:layout_marginRight="16dp"
+        android:id="@+id/id_leave_type"
+
+        />
+
+</RelativeLayout>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="1sp"
+        android:background="@color/gainsboro"
+
+        />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="1sp"
+        android:background="@color/gainsboro"
+        android:layout_marginTop="12dp"
+        />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:background="@color/white"
+        android:id="@+id/id_leave_starttime_layout"
+        >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16dp"
+            android:layout_gravity="center_vertical"
+            android:layout_alignParentRight="true"
+            android:text="请选择(必填)"
+            android:layout_marginRight="16dp"
+            android:id="@+id/id_leave_starttime"
+
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="开始时间"
+            android:layout_marginLeft="16dp"
+            android:textColor="@color/darkcyan"
+            android:textSize="16dp" />
+
+    </RelativeLayout>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="1sp"
+        android:background="@color/gainsboro"
+        android:layout_marginLeft="16dp"
+        />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:background="@color/white"
+        android:id="@+id/id_leave_endtime_layout"
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="结束时间"
+            android:layout_marginLeft="16dp"
+            android:textColor="@color/darkcyan"
+            android:textSize="16dp"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16dp"
+            android:layout_gravity="center_vertical"
+            android:layout_alignParentRight="true"
+            android:text="请选择(必填)"
+            android:layout_marginRight="16dp"
+            android:id="@+id/id_leave_endtime"
+
+            />
+
+    </RelativeLayout>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="1sp"
+        android:background="@color/gainsboro"
+
+        />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="1sp"
+        android:background="@color/gainsboro"
+        android:layout_marginTop="12dp"
+        />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:orientation="horizontal"
+        android:id="@+id/id_leave_daycount_layout"
+        android:gravity="center_vertical"
+        android:background="@color/white"
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="请假天数"
+            android:layout_marginLeft="16dp"
+            android:textColor="@color/darkcyan"
+            android:textSize="16dp"
+
+            />
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16dp"
+            android:layout_gravity="center_vertical"
+            android:layout_alignParentRight="true"
+            android:hint="0"
+            android:background="@color/white"
+            android:layout_marginRight="16dp"
+            android:id="@+id/id_leave_daycount"
+
+            />
+
+    </RelativeLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="1sp"
+        android:background="@color/gainsboro"
+        />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="1sp"
+        android:background="@color/gainsboro"
+        android:layout_marginTop="12dp"
+
+        />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+
+        android:gravity="center_vertical"
+        android:background="@color/white"
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="请假事由"
+            android:layout_weight="1"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="16dp"
+            android:textColor="@color/darkcyan"
+            android:textSize="16dp"
+
+            />
+        <EditText
+            android:layout_width="220dp"
+            android:layout_height="120dp"
+            android:layout_weight="2"
+            android:textSize="16dp"
+            android:minHeight="200dp"
+            android:padding="8dp"
+            android:background="@color/white"
+            android:layout_gravity="center_vertical"
+            android:layout_alignParentRight="true"
+            android:hint="请输入请假事由(必填)"
+            android:gravity="top|left"
+            android:layout_marginRight="5dp"
+            android:id="@+id/id_leave_reason"
+
+            />
+
+    </RelativeLayout>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="1sp"
+        android:background="@color/gainsboro"
+
+        />
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="46dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="20dp"
+        app:cardBackgroundColor="@color/colorPrimary"
+        app:cardCornerRadius="5dp"
+        android:id="@+id/id_leave_commit"
+        >
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:text="提 交"
+            android:gravity="center"
+
+            android:textSize="18dp"
+            android:textColor="@color/white"
+
+            />
+    </android.support.v7.widget.CardView>
+
+</LinearLayout>

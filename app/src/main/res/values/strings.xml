@@ -1,0 +1,59 @@
+<resources>
+    <string name="app_name">智慧警务</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_scheduling">SchedulingActivity</string>
+    <string name="title_activity_main2">Main2Activity</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="title_activity_add_work_log">AddWorkLogActivity</string>
+    <string name="title_activity_login">Sign in</string>
+
+    <!-- Strings related to login -->
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Password (optional)</string>
+    <string name="action_sign_in">Sign in or register</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="error_invalid_email">This email address is invalid</string>
+    <string name="error_invalid_password">This password is too short</string>
+    <string name="error_incorrect_password">This password is incorrect</string>
+    <string name="error_field_required">This field is required</string>
+    <string name="permission_rationale">Contacts permissions are needed for providing email completions</string>
+    <string name="title_activity_select_file_upload">SelectFileUploadActivity</string>
+    <string name="title_activity_work_mag">WorkMagActivity</string>
+    <string name="title_activity_my_work_apply">MyWorkApplyActivity</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_ask_for_leave">AskForLeaveActivity</string>
+    <string name="title_activity_ask_for_jiaban">AskForJiabanActivity</string>
+    <string name="title_activity_jiaban_leave_detil">JiabanLeaveDetilActivity</string>
+    <string name="title_activity_my_subordinate">MySubordinateActivity</string>
+    <string name="title_activity_my_approval">MyApprovalActivity</string>
+    <string name="title_activity_fight">FightActivity</string>
+    <string name="title_activity_start_new_fight">StartNewFightActivity</string>
+    <string name="title_activity_scrolling">ScrollingActivity</string>
+    <string name="title_activity_pick_photo">PickPhotoActivity</string>
+    <string name="title_activity_add_jq">AddJQActivity</string>
+    <string name="title_activity_jqlist">JQListActivity</string>
+    <string name="title_activity_new_fight">NewFightActivity</string>
+
+    <string name="title_activity_splash">SplashActivity</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
+
+    <string name="title_activity_fullscreen">FullscreenActivity</string>
+    <string name="title_activity_my_working_track">MyWorkingTrackActivity</string>
+    <string name="title_activity_nearly_video_cam">NearlyVideoCamActivity</string>
+    <string name="title_activity_change_code">ChangeCodeActivity</string>
+    <string name="title_activity_sjpeople">SJPeopleActivity</string>
+    <string name="title_activity_up_load_sjcar">UpLoadSJCarActivity</string>
+    <string name="title_activity_jqcallback">JQCallbackActivity</string>
+    <string name="title_activity_cam_player">CamPlayerActivity</string>
+    <string name="title_activity_chat">ChatActivity</string>
+
+
+    <string name="text_ack_msg">已读</string>
+    <string name="text_delivered_msg">送达</string>
+
+</resources>

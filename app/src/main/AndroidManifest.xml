@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="wgz.com.cx_ga_project">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
+    <!-- 这个权限用于进行网络定位 -->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <!-- 这个权限用于访问GPS定位 -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <!-- 用于访问wifi网络信息，wifi信息会用于进行网络定位 -->
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <!-- 获取运营商信息，用于支持提供运营商信息相关的接口 -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <!-- 这个权限用于获取wifi的获取权限，wifi信息会用来进行网络定位 -->
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    <!-- 用于读取手机当前的状态 -->
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <!-- 写入扩展存储，向扩展卡写入数据，用于写入离线定位数据 -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <!-- 访问网络，网络定位需要上网 -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <!-- SD卡读取权限，用户写入离线定位数据 -->
+    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
+    <!-- To auto-complete the email text field in the login form with the user's emails -->
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.READ_PROFILE" />
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
+
+    <application
+        android:name=".app"
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <service
+            android:name="com.baidu.location.f"
+            android:enabled="true"
+            android:process=":remote" />
+        <service android:name=".service.UpdataService" />
+        <service android:name="com.uniview.airimos.service.KeepaliveService" />
+
+        <meta-data
+            android:name="com.baidu.lbsapi.API_KEY"
+            android:value="FZ4918PmSrrxkDRFBhaB0mw8NfRQnw2P" />
+        <meta-data
+            android:name="wgz.com.cx_ga_project.base.CustomCachingGlideModule"
+            android:value="GlideModule" />
+
+        <activity
+            android:name=".activity.WelcomeActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".activity.SchedulingActivity"
+            android:label="@string/title_activity_scheduling"
+            android:theme="@style/AppTheme.NoActionBar_notrans" />
+        <activity
+            android:name=".activity.WorkLogActivity"
+            android:theme="@style/AppTheme.NoActionBar_notrans" />
+        <activity
+            android:name=".activity.MySubordinateLogAcitvity"
+            android:theme="@style/AppTheme.NoActionBar_notrans" />
+        <activity
+            android:name=".activity.AddWorkLogActivity"
+            android:label="@string/title_activity_add_work_log"
+            android:theme="@style/AppTheme.NoActionBar_notrans" />
+        <activity
+            android:name=".activity.LoginActivity"
+            android:label="登录" />
+        <activity
+            android:name=".base.BaseActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <activity
+            android:name=".activity.SelectFileUploadActivity"
+            android:label="@string/title_activity_select_file_upload"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activity.WorkMagActivity"
+            android:label="@string/title_activity_work_mag"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activity.MyWorkApplyActivity"
+            android:label="@string/title_activity_my_work_apply"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activity.AskForLeaveActivity"
+            android:label="@string/title_activity_ask_for_leave"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activity.AskForJiabanActivity"
+            android:label="@string/title_activity_ask_for_jiaban"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activity.JiabanLeaveDetilActivity"
+            android:label="@string/title_activity_jiaban_leave_detil"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activity.HomeActivity"
+            android:launchMode="singleTask"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activity.MySubordinateActivity"
+            android:label="@string/title_activity_my_subordinate"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activity.MyApprovalActivity"
+            android:label="@string/title_activity_my_approval"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activity.ApprovalDetilActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activity.FightActivity"
+            android:label="@string/title_activity_fight"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activity.StartNewFightActivity"
+            android:label="@string/title_activity_start_new_fight"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activity.ScrollingActivity"
+            android:label="@string/title_activity_scrolling"
+            android:theme="@style/AppTheme.NoActionBar_notrans" />
+
+        <service android:name=".service.GetGPSService" />
+
+        <activity
+            android:name=".activity.PickPhotoActivity"
+            android:label="@string/title_activity_pick_photo"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activity.AddJQActivity"
+            android:label="@string/title_activity_add_jq"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activity.JQListActivity"
+            android:label="@string/title_activity_jqlist"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activity.NewFightActivity"
+            android:label="@string/title_activity_new_fight"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activity.FullscreenActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/title_activity_fullscreen"
+            android:theme="@style/FullscreenTheme" />
+        <activity
+            android:name=".activity.MyWorkingTrackActivity"
+            android:label="@string/title_activity_my_working_track"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activity.NearlyVideoCamActivity"
+            android:label="@string/title_activity_nearly_video_cam"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activity.ChangeCodeActivity"
+            android:label="@string/title_activity_change_code"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activity.SJPeopleActivity"
+            android:label="@string/title_activity_sjpeople"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activity.UpLoadSJCarActivity"
+            android:label="@string/title_activity_up_load_sjcar"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activity.JQCallbackActivity"
+            android:label="@string/title_activity_jqcallback"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activity.CamPlayerActivity"
+            android:label="@string/title_activity_cam_player"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".activity.CamLoginActivity" />
+        <activity
+            android:name=".activity.ChatActivity"
+            android:label="@string/title_activity_chat"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+    </application>
+
+</manifest>

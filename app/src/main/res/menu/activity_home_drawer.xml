@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+
+    >
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_saoyisao"
+            android:icon="@drawable/ic_search_cyan_800_48dp"
+            android:title="扫一扫" />
+        <item
+            android:id="@+id/nav_mypic"
+            android:icon="@drawable/ic_aspect_ratio_cyan_800_24dp"
+            android:title="我的二维码" />
+        <item
+            android:id="@+id/nav_changepass"
+            android:icon="@drawable/ic_enhanced_encryption_cyan_800_24dp"
+            android:title="修改密码" />
+        <item
+            android:id="@+id/nav_help"
+            android:icon="@drawable/ic_help_cyan_800_24dp"
+            android:title="帮助与反馈" />
+        <item
+            android:id="@+id/nav_updateAPP"
+            android:icon="@drawable/ic_settings_cyan_800_24dp"
+            android:title="检查新版本" />
+        <item
+            android:id="@+id/nav_about"
+            android:icon="@drawable/ic_feedback_cyan_800_24dp"
+            android:title="关于智慧警务" />
+        <item
+            android:id="@+id/nav_clearcache"
+            android:icon="@drawable/ic_clear_all_cyan_800_24dp"
+            android:title="清除缓存" />
+        <item
+            android:id="@+id/nav_logout"
+
+            android:icon="@drawable/ic_remove_circle_outline_cyan_800_24dp"
+            android:title="退出登录" />
+
+    </group>
+<!--
+    <item android:title=" ">
+        <menu>
+
+        </menu>
+    </item>-->
+
+</menu>

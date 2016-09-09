@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/content_jqcallback"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="wgz.com.cx_ga_project.activity.JQCallbackActivity"
+    tools:showIn="@layout/activity_jqcallback">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        >
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="涉警人"
+            android:padding="4dp"
+            android:background="@color/colorPrimary"
+            android:textColor="@color/white"
+            android:layout_marginTop="2dp"
+            android:textSize="18sp"
+            />
+
+        <com.jude.easyrecyclerview.EasyRecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_empty="@layout/view_empty"
+            android:id="@+id/sjr_rv"
+            app:scrollbarStyle="insideOverlay">
+        </com.jude.easyrecyclerview.EasyRecyclerView>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="涉警车辆"
+            android:padding="4dp"
+            android:background="@color/colorPrimary"
+            android:textColor="@color/white"
+            android:layout_marginTop="2dp"
+            android:textSize="18sp"
+            />
+        <com.jude.easyrecyclerview.EasyRecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_empty="@layout/view_empty"
+            android:id="@+id/sjCar_rv"
+            app:scrollbarStyle="insideOverlay">
+        </com.jude.easyrecyclerview.EasyRecyclerView>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="涉警电话"
+            android:padding="4dp"
+            android:background="@color/colorPrimary"
+            android:textColor="@color/white"
+            android:layout_marginTop="2dp"
+            android:textSize="18sp"
+            />
+        <com.jude.easyrecyclerview.EasyRecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_empty="@layout/view_empty"
+            android:id="@+id/sjPhone_rv"
+            app:scrollbarStyle="insideOverlay">
+        </com.jude.easyrecyclerview.EasyRecyclerView>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="回告内容"
+            android:padding="4dp"
+            android:background="@color/colorPrimary"
+            android:textColor="@color/white"
+            android:layout_marginTop="2dp"
+            android:textSize="18sp"
+            />
+        <com.jude.easyrecyclerview.EasyRecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_empty="@layout/view_empty"
+            android:id="@+id/callbackContent_rv"
+            app:scrollbarStyle="insideOverlay">
+        </com.jude.easyrecyclerview.EasyRecyclerView>
+
+
+    </LinearLayout>
+
+
+</android.support.v4.widget.NestedScrollView>

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/content_cam_player"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_height="match_parent"
+    tools:context="wgz.com.cx_ga_project.activity.CamPlayerActivity"
+    tools:showIn="@layout/activity_cam_player">
+    <SurfaceView
+        android:id="@+id/video_view"
+        android:layout_width="match_parent"
+        android:layout_height="245dp"
+        android:focusable="true"/>
+    <com.jude.easyrecyclerview.EasyRecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:scrollbarStyle="insideOverlay"
+        android:id="@+id/cam_recyclerview"
+        app:layout_progress="@layout/view_progress"
+        ></com.jude.easyrecyclerview.EasyRecyclerView>
+
+<TextView
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="24dp"
+    android:textColor="@color/black"
+    android:textSize="18sp"
+    android:id="@+id/id_cams"
+    />
+
+</LinearLayout>

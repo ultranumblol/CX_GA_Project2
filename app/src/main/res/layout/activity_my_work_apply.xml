@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    tools:context="wgz.com.cx_ga_project.activity.MyWorkApplyActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <include layout="@layout/title_toolbar"></include>
+        <android.support.design.widget.TabLayout
+            android:id="@+id/tab_myapply"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/ghostwhite"
+            app:tabIndicatorColor="@color/colorPrimary"
+            app:tabSelectedTextColor="@color/colorPrimary"
+            app:tabTextColor="@color/grey"
+            app:tabMode="fixed"
+            />
+
+        <android.support.v4.view.ViewPager
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/myapple_vp"
+            android:layout_weight="1"
+            ></android.support.v4.view.ViewPager>
+
+    </LinearLayout>
+
+    <include layout="@layout/fab_btns_qj_jiaban"></include>
+</android.support.design.widget.CoordinatorLayout>

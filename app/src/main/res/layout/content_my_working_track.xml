@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/content_my_working_track"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="wgz.com.cx_ga_project.activity.MyWorkingTrackActivity"
+    tools:showIn="@layout/activity_my_working_track">
+
+    <com.jude.easyrecyclerview.EasyRecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:scrollbarStyle="insideOverlay"
+        app:layout_progress="@layout/view_progress"
+        app:layout_empty="@layout/view_empty"
+        android:id="@+id/tracktimeline_rv"
+        ></com.jude.easyrecyclerview.EasyRecyclerView>
+</android.support.constraint.ConstraintLayout>
