@@ -68,8 +68,6 @@ public class AskForJiabanActivity extends BaseActivity {
 
     @Override
     public void initView() {
-
-
         toolbar.setTitle("加班申请");
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -161,16 +159,9 @@ public class AskForJiabanActivity extends BaseActivity {
                             }
                         }
                     });
-
-
-
-
         }
-
-
         // TODO: 2016/8/5 提交加班内容！
         Snackbar.make(rootview, "正在提交!", Snackbar.LENGTH_SHORT).show();
-
     }
 
 

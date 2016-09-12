@@ -4,6 +4,7 @@ import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.POST;
 import rx.Observable;
+import wgz.com.cx_ga_project.entity.ChatMsg;
 
 /**
  * Created by wgz on 2016/8/31.
@@ -78,5 +79,49 @@ public interface JqAPIService {
             @Field("gander") String gander
     );
 
+    /**
+     * 发送消息
+     * @param jqid
+     * @param msg
+     * @param taskid
+     * @param policeid
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("http://192.168.1.193:8004/liveshow/sendMsgToPC")
+    Observable<String> sendMsg(@Field("jqid") String jqid,
+                               @Field("msg") String msg,
+                               @Field("taskid") String taskid,
+                               @Field("time") String time,
+                               @Field("policeid") String policeid);
+
+
+
+    @FormUrlEncoded
+    @POST("http://192.168.1.193:8004/liveshow/getAppMsgList")
+    Observable<ChatMsg> GetMsg(@Field("jqid") String jqid,
+                               @Field("policeid") String msg);
+
+    /**
+     * 获取新消息
+     * @param jqid
+     * @param msg
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("http://192.168.1.193:8004/liveshow/getAppNewMsg")
+    Observable<ChatMsg> GetNewMsg(@Field("jqid") String jqid,
+                               @Field("policeid") String msg);
+
+    /**
+     * 获取新消息不修改数据库
+     * @param jqid
+     * @param msg
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("http://192.168.1.193:8004/liveshow/getAppNewMsgs")
+    Observable<ChatMsg> GetNewMsg2(@Field("jqid") String jqid,
+                                  @Field("policeid") String msg);
 
 }

@@ -17,29 +17,37 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bigkoo.pickerview.TimePickerView;
 import com.jakewharton.rxbinding.view.RxView;
 import com.jude.easyrecyclerview.EasyRecyclerView;
 import com.uniview.airimos.Player;
 import com.uniview.airimos.listener.OnLockPtzListener;
 import com.uniview.airimos.listener.OnLoginListener;
 import com.uniview.airimos.listener.OnPtzCommandListener;
+import com.uniview.airimos.listener.OnQueryReplayListener;
 import com.uniview.airimos.listener.OnQueryResourceListener;
 import com.uniview.airimos.listener.OnStartLiveListener;
+import com.uniview.airimos.listener.OnStartReplayListener;
 import com.uniview.airimos.listener.OnStopLiveListener;
 import com.uniview.airimos.listener.OnUnLockPtzListener;
 import com.uniview.airimos.manager.ServiceManager;
 import com.uniview.airimos.obj.QueryCondition;
+import com.uniview.airimos.obj.RecordInfo;
 import com.uniview.airimos.obj.ResourceInfo;
 import com.uniview.airimos.parameter.LockPtzParam;
 import com.uniview.airimos.parameter.LoginParam;
 import com.uniview.airimos.parameter.PtzCommandParam;
+import com.uniview.airimos.parameter.QueryReplayParam;
 import com.uniview.airimos.parameter.QueryResourceParam;
 import com.uniview.airimos.parameter.StartLiveParam;
+import com.uniview.airimos.parameter.StartReplayParam;
 import com.uniview.airimos.protocol.PresetInfo;
 import com.uniview.airimos.service.KeepaliveService;
 import com.uniview.airimos.thread.RecvStreamThread;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -53,6 +61,8 @@ import wgz.com.cx_ga_project.adapter.MyRecyclerArrayAdapter;
 import wgz.com.cx_ga_project.base.BaseActivity;
 import wgz.com.cx_ga_project.util.SomeUtil;
 import wgz.datatom.com.utillibrary.util.LogUtil;
+
+import static wgz.com.cx_ga_project.activity.AskForLeaveActivity.getTime;
 
 public class CamPlayerActivity extends BaseActivity implements KeepaliveService.OnKeepaliveListener, OnLoginListener {
 
@@ -72,16 +82,6 @@ public class CamPlayerActivity extends BaseActivity implements KeepaliveService.
     FloatingActionButton fabLeft;
     @Bind(R.id.fab_down)
     FloatingActionButton fabDown;
-
-
-    private Player mPlayer;
-    private KeepaliveService mService = null;
-    private boolean mBound = false;
-    private boolean mRequireLogout = false;
-    private RecvStreamThread mRecvStreamThread = null;
-    private String mCameraCode;
-    private List<PresetInfo> mPresetInfos;
-    private ArrayAdapter mAdapter;
     @Bind(R.id.toolbar)
     Toolbar toolbar;
     @Bind(R.id.video_view)
@@ -92,6 +92,20 @@ public class CamPlayerActivity extends BaseActivity implements KeepaliveService.
     FloatingActionButton fab;
     CamsIDAdapter adapter;
     List<String> camsIDs = new ArrayList<>();
+    TimePickerView pvTime;
+    @Bind(R.id.id_replay_starttime)
+    TextView idReplayStarttime;
+    @Bind(R.id.id_replay_endtime)
+    TextView idReplayEndtime;
+    private int flag = 0;
+    private Player mPlayer;
+    private KeepaliveService mService = null;
+    private boolean mBound = false;
+    private boolean mRequireLogout = false;
+    private RecvStreamThread mRecvStreamThread = null;
+    private String mCameraCode;
+    private List<PresetInfo> mPresetInfos;
+    private ArrayAdapter mAdapter;
 
     @Override
     public int getLayoutId() {
@@ -116,6 +130,29 @@ public class CamPlayerActivity extends BaseActivity implements KeepaliveService.
                 mCameraCode = id.getText().toString();
                 startLive(mCameraCode);
                 //SomeUtil.showSnackBar(rootview,"选中摄像头: "+id.getText().toString());
+            }
+        });
+
+        //时间选择器
+        pvTime = new TimePickerView(this, TimePickerView.Type.MONTH_DAY_HOUR_MIN);
+        //控制时间范围
+        Calendar calendar = Calendar.getInstance();
+        pvTime.setRange(calendar.get(Calendar.YEAR), calendar.get(Calendar.YEAR));//要在setTime 之前才有效果
+        pvTime.setTime(new Date());
+        pvTime.setCyclic(false);
+        pvTime.setCancelable(true);
+
+        pvTime.setOnTimeSelectListener(new TimePickerView.OnTimeSelectListener() {
+            @Override
+            public void onTimeSelect(Date date) {
+                switch (flag) {
+                    case 1:
+                        idReplayStarttime.setText(getTime(date));
+                        break;
+                    case 2:
+                        idReplayEndtime.setText(getTime(date));
+                }
+
             }
         });
 
@@ -220,7 +257,7 @@ public class CamPlayerActivity extends BaseActivity implements KeepaliveService.
         ButterKnife.bind(this);
     }
 
-    @OnClick({R.id.fab_up, R.id.fab_left, R.id.fab_right, R.id.fab_down})
+    @OnClick({R.id.fab_up, R.id.fab_left, R.id.fab_right, R.id.fab_down,R.id.id_replay_starttime,R.id.id_replay_endtime})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.fab_up:
@@ -237,6 +274,15 @@ public class CamPlayerActivity extends BaseActivity implements KeepaliveService.
             case R.id.fab_down:
                 ptzCommand(mCameraCode, PtzCommandParam.PTZ_CMD.TILTDOWN);
                 break;
+            case R.id.id_replay_starttime:
+                pvTime.show();
+                flag = 1;
+                break;
+            case R.id.id_replay_endtime:
+                pvTime.show();
+                flag = 2;
+                break;
+
         }
     }
 
@@ -311,6 +357,69 @@ public class CamPlayerActivity extends BaseActivity implements KeepaliveService.
         } catch (Exception ex) {
             ex.printStackTrace();
         }
+    }
+
+    private void startReplay() {
+        String beginTime = "";
+        String endTime = "";
+
+        //查询回放记录参数
+        QueryReplayParam p = new QueryReplayParam(mCameraCode, beginTime, endTime, new QueryCondition(0, 100, true));
+
+        //查询回放记录结果监听
+        OnQueryReplayListener queryListener = new OnQueryReplayListener() {
+            @Override
+            public void onQueryReplayResult(long errorCode, String errorDesc, List<RecordInfo> recordList) {
+                if (recordList == null || recordList.size() <= 0) {
+                    LogUtil.e("There is no record");
+                    SomeUtil.showSnackBar(rootview, "There is no record");
+                    return;
+                }
+
+
+                //取第一条回放记录测试回放
+                RecordInfo firstRecord = recordList.get(0);
+
+                //启动回放的参数
+                StartReplayParam p = new StartReplayParam();
+                p.setCameraCode(mCameraCode);
+                p.setRecodeInfo(firstRecord);
+                p.setBitrate(64 * 8);  //64KB码率
+                p.setFramerate(20);     //20帧率
+                p.setResolution(2);     //4CIF分辨率
+
+
+                OnStartReplayListener listener = new OnStartReplayListener() {
+                    @Override
+                    public void onStartReplayResult(long errorCode, String errorDesc, String playSession) {
+                        //设播放会话给Player
+                        mPlayer.setPlaySession(playSession);
+
+                        //先停掉已有的播放
+                        if (mRecvStreamThread != null) {
+                            mPlayer.AVStopPlay();
+                            mRecvStreamThread.interrupt();
+                            mRecvStreamThread = null;
+                        }
+
+                        //启动播放解码
+                        mPlayer.AVStartPlay();
+
+                        //启动收流线程
+                        mRecvStreamThread = new RecvStreamThread(mPlayer, playSession);
+                        mRecvStreamThread.start();
+                    }
+                };
+
+                //启动回放
+                ServiceManager.startReplay(p, listener);
+            }
+        };
+
+        //先查询指定时间段内有的回放记录
+        ServiceManager.queryReplay(p, queryListener);
+
+
     }
 
     /**
