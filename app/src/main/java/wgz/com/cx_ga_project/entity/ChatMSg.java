@@ -47,7 +47,7 @@ public class ChatMsg {
     }
 
 
-    public class Re implements Serializable {
+    public class Re {
 
         @SerializedName("id")
 

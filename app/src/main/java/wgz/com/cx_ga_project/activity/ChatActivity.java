@@ -10,6 +10,7 @@ import android.content.IntentFilter;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -28,6 +29,7 @@ import android.widget.RelativeLayout;
 import com.jakewharton.rxbinding.view.RxView;
 import com.jude.easyrecyclerview.EasyRecyclerView;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -47,9 +49,12 @@ import wgz.com.cx_ga_project.adapter.chatAdapter.ChatAdapter;
 import wgz.com.cx_ga_project.app;
 import wgz.com.cx_ga_project.base.BaseActivity;
 import wgz.com.cx_ga_project.entity.ChatMsg;
+import wgz.com.cx_ga_project.fragment.PhotoPickerFragment;
 import wgz.com.cx_ga_project.service.GetNewMsgService;
 import wgz.com.cx_ga_project.util.SomeUtil;
 import wgz.datatom.com.utillibrary.util.LogUtil;
+
+import static wgz.com.cx_ga_project.activity.PickPhotoActivity.HTTP_URL;
 
 public class ChatActivity extends BaseActivity {
 
@@ -101,6 +106,8 @@ public class ChatActivity extends BaseActivity {
     private List<ChatMsg.Re> chatData = new ArrayList<>();
     private List<ChatMsg.Re> newchatData = new ArrayList<>();
     private MsgReceiver receiver;
+    //图片地址
+    List<String> paths = new ArrayList<>();
     @Override
     public int getLayoutId() {
         return R.layout.activity_chat;
@@ -115,12 +122,7 @@ public class ChatActivity extends BaseActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         recyclerview.setLayoutManager(new LinearLayoutManager(this));
         recyclerview.setAdapter(adapter = new ChatAdapter(this));
-        //注册广播
-        receiver = new MsgReceiver();
-        IntentFilter filter=new IntentFilter();
-        filter.addAction("service.MsgService");
-        registerReceiver(receiver, filter);
-        LogUtil.e("广播注册成功！");
+
         startService(new Intent(this, GetNewMsgService.class));
 
         recyclerview.setOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -243,7 +245,7 @@ public class ChatActivity extends BaseActivity {
         Date currentdate = new Date(System.currentTimeMillis());
         String curredate = AskForLeaveActivity.getTime(currentdate);
 
-        app.jqAPIService.sendMsg("2016072100100000060", etSendmessage.getText().toString(), "213", curredate, "10001")
+        app.jqAPIService.sendMsg("2016072100100000060", etSendmessage.getText().toString(),"", "213", curredate, "10001")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<String>() {
@@ -266,11 +268,64 @@ public class ChatActivity extends BaseActivity {
                 });
 
     }
+    private void SendPicmsg(String path) {
+        Date currentdate = new Date(System.currentTimeMillis());
+        String curredate = AskForLeaveActivity.getTime(currentdate);
+
+        app.jqAPIService.sendMsg("2016072100100000060", " ",path, "213", curredate, "10001")
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<String>() {
+                    @Override
+                    public void onCompleted() {
+                        etSendmessage.setText("");
+                        // TODO: 2016/9/12 获取新消息 删除本地 换成服务器请求的
+                        //adapter.getHeader()
+                        //getNewmsg();
+                        //LogUtil.e("recyclerview count:"+recyclerview.getChildCount());
+                        //recyclerview.getChildCount();
+                        adapter.remove(adapter.getCount() - 1);
+                        getNewmsg();
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        //SomeUtil.showSnackBar(rootview, "error:" + e.toString());
+                        LogUtil.e("error:"+ e.toString());
+                    }
+
+                    @Override
+                    public void onNext(String s) {
+                        LogUtil.e("添加图片聊天记录result:" + s);
+
+
+                        // SomeUtil.showSnackBar(rootview,"result:"+s);
+                    }
+                });
+
+    }
     @Override
     protected void onStop()
     {
-        unregisterReceiver(receiver);
+
         super.onStop();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        //注册广播
+        receiver = new MsgReceiver();
+        IntentFilter filter=new IntentFilter();
+        filter.addAction("service.MsgService");
+        registerReceiver(receiver, filter);
+        LogUtil.e("广播注册成功！");
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        unregisterReceiver(receiver);
     }
 
     private class MsgReceiver extends BroadcastReceiver {
@@ -311,7 +366,7 @@ public class ChatActivity extends BaseActivity {
         }
     }
 
-    @OnClick({ R.id.btn_set_mode_keyboard, R.id.btn_more})
+    @OnClick({ R.id.btn_set_mode_keyboard, R.id.btn_more,R.id.view_photo,R.id.view_camera,R.id.view_video})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.btn_set_mode_keyboard:
@@ -322,12 +377,104 @@ public class ChatActivity extends BaseActivity {
                     System.out.println("more gone");
                     hideKeyboard();
                     more.setVisibility(View.VISIBLE);
-                   // llBtnContainer.setVisibility(View.VISIBLE);
+                   llBtnContainer.setVisibility(View.VISIBLE);
 
                 } else {
                     more.setVisibility(View.GONE);
                 }
                 break;
+            case R.id.view_photo:
+                Intent intent = new Intent(ChatActivity.this, PickPhotoActivity.class);
+                intent.putExtra(PhotoPickerFragment.EXTRA_SELECT_COUNT, 1);
+                intent.putExtra(PhotoPickerFragment.EXTRA_DEFAULT_SELECTED_LIST, "");
+                intent.putExtra(HTTP_URL, "");
+                startActivityForResult(intent, 7);
+                break;
+            case R.id.view_camera:
+                break;
+            case R.id.view_video:
+                break;
         }
     }
+    private List<File> makeFiles(){
+        final List<File> files = new ArrayList<>();
+        for (int i = 0; i < paths.size(); i++) {
+            File file = new File(paths.get(i));
+            files.add(file);
+        }
+        return  files;
+
+    }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        try {
+            if (resultCode==7){
+                if (data.getStringExtra("result").equals("addpic")) {
+                    if (more.getVisibility() == View.VISIBLE) {
+                        more.setVisibility(View.GONE);
+                    }
+                    newchatData.clear();
+                    paths.clear();
+                    paths = data.getStringArrayListExtra("paths");
+                    ChatMsg re = new ChatMsg();
+                    ChatMsg.Re pic = re.new Re();
+                    Date currentdate = new Date(System.currentTimeMillis());
+                    String curredate = AskForLeaveActivity.getTime(currentdate);
+                    pic.setPic(paths.get(0));
+                    pic.setSendtime(curredate);
+                    pic.setMark(0);
+
+                    newchatData.add(pic);
+                    adapter.addAll(newchatData);
+                    recyclerview.scrollToPosition(adapter.getCount() - 1);
+                    uploadpic(makeFiles());
+                    //adapter.addAll();
+                }
+
+            }
+
+
+        } catch (Exception e) {
+            LogUtil.e("error : " + e);
+
+        }
+
+    }
+
+    private void uploadpic(List<File> files) {
+        app.apiService.uploadFileWithRequestBody("saveAppPics",SomeUtil.filesToMultipartBody(files))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<String>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onNext(String s) {
+                        if (s.contains("\"code\":200")){
+
+                            SendPicmsg(paths.get(0));
+                           /* SomeUtil.showSnackBar(rootview,"提交成功！").setCallback(new Snackbar.Callback() {
+                                @Override
+                                public void onDismissed(Snackbar snackbar, int event) {
+                                    finish();
+                                }
+                            });*/
+                        }
+                        else {
+                            SomeUtil.showSnackBar(rootview,"网络错误，请再试！");
+                        }
+                    }
+                });
+
+    }
+
+
 }

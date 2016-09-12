@@ -91,6 +91,7 @@ public interface JqAPIService {
     @POST("http://192.168.1.193:8004/liveshow/sendMsgToPC")
     Observable<String> sendMsg(@Field("jqid") String jqid,
                                @Field("msg") String msg,
+                               @Field("pic") String pic,
                                @Field("taskid") String taskid,
                                @Field("time") String time,
                                @Field("policeid") String policeid);

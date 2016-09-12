@@ -91,7 +91,12 @@ public class ChatAdapter extends MyRecyclerArrayAdapter<ChatMsg.Re> {
 
         }
         if (getItem(position).getMark().equals(0)){
-            return SEND_MSG;
+            if (!getItem(position).getPic().equals("")&&!getItem(position).getPic().equals("null")){
+                return SEND_PIC;
+            }else if (!getItem(position).getVideo().equals("")&&!getItem(position).getVideo().equals("null")){
+                return SEND_VIDEO;
+            }else
+                return SEND_MSG;
 
         }
 

@@ -135,7 +135,7 @@ public class PickPhotoActivity extends BaseActivity {
         int id = item.getItemId();
         //noinspection SimplifiableIfStatement
         if (id == R.id.uploadpic_finish) {
-            // TODO: 2016/8/16
+            // TODO: 2016/8/16 设置返回图片地址
             List<String> paths = new ArrayList<>();
             paths = mPickerFragment.getPhotoPickerAdapter().getmSelectedImage();
             setResult(0, new Intent(PickPhotoActivity.this, AddJQActivity.class).
@@ -143,6 +143,10 @@ public class PickPhotoActivity extends BaseActivity {
                     .putExtra("result", "addpic"));
 
             setResult(1, new Intent(PickPhotoActivity.this, AddWorkLogActivity.class).
+                    putStringArrayListExtra("paths", (ArrayList<String>) paths)
+                    .putExtra("result", "addpic"));
+
+            setResult(7, new Intent(PickPhotoActivity.this, ChatActivity.class).
                     putStringArrayListExtra("paths", (ArrayList<String>) paths)
                     .putExtra("result", "addpic"));
 

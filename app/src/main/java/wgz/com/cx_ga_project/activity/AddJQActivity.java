@@ -194,10 +194,6 @@ public class AddJQActivity extends BaseActivity {
     private List<String> initdata() {
 
         paths.add("end");
-       /* List<String> list = new ArrayList<>();
-        for (int i = 0; i < 1; i++) {
-            list.add("" + i);
-        }*/
         return paths;
     }
 
