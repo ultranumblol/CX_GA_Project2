@@ -13,7 +13,10 @@ import java.math.BigDecimal;
 import java.net.ConnectException;
 import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import okhttp3.MediaType;
@@ -173,5 +176,22 @@ public class SomeUtil {
         return versionCode;
     }
 
+    /**
+     * yyyy-MM-dd
+     * @param str
+     * @return
+     */
+    public static Date getStrToDate(String str)  {
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            Date  date = null;
+            date = sdf.parse(str);
+            return date;
+        } catch (ParseException e) {
+            e.printStackTrace();
+            LogUtil.e("DATE error"+e.toString());
+            return null;
+        }
+    }
 
 }

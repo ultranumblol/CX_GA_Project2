@@ -67,6 +67,17 @@ public class ChatMsg {
         @SerializedName("txt")
 
         private String txt;
+
+        public String getIssend() {
+            return issend;
+        }
+
+        public void setIssend(String issend) {
+            this.issend = issend;
+        }
+
+        @SerializedName("issend")
+        private String issend;
         @SerializedName("pic")
 
         private String pic;

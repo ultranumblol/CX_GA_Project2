@@ -1,6 +1,7 @@
 package wgz.com.cx_ga_project.adapter.chatAdapter;
 
 import android.support.annotation.LayoutRes;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -41,6 +42,12 @@ public class ChatSendPicViewHolder extends BaseViewHolder<ChatMsg.Re> {
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(mSendPicture);
         timestamp.setText(data.getSendtime());
+        if (data.getIssend().equals("2")){
+            progressBar.setVisibility(View.VISIBLE);
+
+        }else {
+            progressBar.setVisibility(View.GONE);
+        }
 
     }
 }

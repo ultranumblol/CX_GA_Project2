@@ -285,6 +285,7 @@ public class ChatActivity extends BaseActivity {
                         //LogUtil.e("recyclerview count:"+recyclerview.getChildCount());
                         //recyclerview.getChildCount();
                         adapter.remove(adapter.getCount() - 1);
+
                         getNewmsg();
                     }
 
@@ -423,7 +424,7 @@ public class ChatActivity extends BaseActivity {
                     pic.setPic(paths.get(0));
                     pic.setSendtime(curredate);
                     pic.setMark(0);
-
+                    pic.setIssend("2");
                     newchatData.add(pic);
                     adapter.addAll(newchatData);
                     recyclerview.scrollToPosition(adapter.getCount() - 1);
@@ -453,11 +454,13 @@ public class ChatActivity extends BaseActivity {
 
                     @Override
                     public void onError(Throwable e) {
-
+                        LogUtil.e("uploadpic error : " + e.toString());
+                        adapter.remove(adapter.getCount() - 1);
                     }
 
                     @Override
                     public void onNext(String s) {
+                        LogUtil.e("upPic :"+s);
                         if (s.contains("\"code\":200")){
 
                             SendPicmsg(paths.get(0));
