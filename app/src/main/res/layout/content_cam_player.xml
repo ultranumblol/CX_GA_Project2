@@ -13,6 +13,27 @@
         android:layout_width="match_parent"
         android:layout_height="245dp"
         android:focusable="true"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="5dp"
+
+        >
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:hint="回放开始时间"
+            android:id="@+id/id_replay_starttime"
+            android:layout_weight="1"/>
+        <TextView
+            android:layout_width="0dp"
+            android:hint="回放结束时间"
+            android:layout_height="wrap_content"
+            android:id="@+id/id_replay_endtime"
+            android:layout_weight="1"/>
+
+    </LinearLayout>
     <com.jude.easyrecyclerview.EasyRecyclerView
         android:layout_width="match_parent"
         android:layout_height="match_parent"

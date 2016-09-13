@@ -53,7 +53,7 @@ public class WorkLog {
         @SerializedName("loginid")
 
         private String loginid;
-        @SerializedName("time")
+        @SerializedName("inserttime")
 
         private String time;
         @SerializedName("summary")
@@ -116,5 +116,13 @@ public class WorkLog {
             this.summary = summary;
         }
 
+    }
+
+    @Override
+    public String toString() {
+        return "WorkLog{" +
+                "code=" + code +
+                ", log=" + log +
+                '}';
     }
 }

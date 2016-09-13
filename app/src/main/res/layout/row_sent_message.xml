@@ -85,7 +85,7 @@
 				android:indeterminateBehavior="repeat"
             android:layout_centerVertical="true"
             android:layout_toLeftOf="@id/tv_chatcontent"
-            android:visibility="visible" />
+            android:visibility="gone" />
     </RelativeLayout>
 
 </LinearLayout>

@@ -148,6 +148,23 @@ public interface APIservice {
                                    @Field("time") String time
     );
 
+
+
+    /**
+     * 获取某天工作日志
+     *
+     * @param type
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("{type}")
+    Observable<WorkLog> getLogDataToDay(@Path("type") String type,
+                                   @Field("loginid") String loginid,
+                                   @Field("time") String time
+    );
+
+
+
     /**
      * 登陆
      *
@@ -159,6 +176,19 @@ public interface APIservice {
     @POST("ceshi/denglu")
     Observable<UserBean> UserLogin(@Field("username") String username,
                                    @Field("password") String password);
+
+
+    /**
+     *
+     * @param type
+     * @param policeid
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("{type}")
+    Observable<String> getuserhead(@Path("type") String type,
+                                   @Field("policeid") String policeid
+    );
 
 
 }

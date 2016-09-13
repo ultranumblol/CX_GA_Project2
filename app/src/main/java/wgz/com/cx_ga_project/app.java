@@ -4,6 +4,8 @@ import android.app.Application;
 import android.os.Looper;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.Interceptor;
@@ -14,6 +16,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
 import wgz.com.cx_ga_project.API.APIservice;
 import wgz.com.cx_ga_project.API.JqAPIService;
+import wgz.com.cx_ga_project.entity.ChatMsg;
 import wgz.com.cx_ga_project.util.ProgressListener;
 import wgz.com.cx_ga_project.util.ProgressResponseBody;
 import wgz.datatom.com.utillibrary.util.LogUtil;
@@ -28,6 +31,8 @@ public class app extends Application {
     public static final String BASE_URL = "http://192.168.1.193:8004/appworkmanager/";
     public static APIservice apiService;
     public static JqAPIService jqAPIService;
+
+
     @Override
     public void onCreate() {
         super.onCreate();

@@ -36,8 +36,8 @@
 
             <ImageView
                 android:id="@+id/iv_sendPicture"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
                 android:background="@drawable/chatto_bg"
             	android:padding="17dp"
                 android:scaleType="fitCenter"
@@ -68,7 +68,7 @@
                 android:layout_height="wrap_content"
                 android:text="0%"
                 android:textColor="@android:color/black"
-                android:visibility="visible" />
+                android:visibility="gone" />
         </LinearLayout>
 
         <ImageView

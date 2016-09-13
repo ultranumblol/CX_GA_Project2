@@ -9,12 +9,13 @@ import java.security.PublicKey;
 import java.util.Map;
 
 import wgz.com.cx_ga_project.adapter.MyRecyclerArrayAdapter;
+import wgz.com.cx_ga_project.entity.ChatMsg;
 
 /**
  * Created by wgz on 2016/9/8.
  */
 
-public class ChatAdapter extends MyRecyclerArrayAdapter<Map<String,Object>> {
+public class ChatAdapter extends MyRecyclerArrayAdapter<ChatMsg.Re> {
     public static final int SEND_MSG =11;
     public static final int SEND_VIDEO =12;
     public static final int SEND_PIC =13;
@@ -54,7 +55,7 @@ public class ChatAdapter extends MyRecyclerArrayAdapter<Map<String,Object>> {
 
     @Override
     public int getViewType(int position) {
-        if (getItem(position).get("from").equals("send")){
+        /*if (getItem(position).get("from").equals("send")){
             if (getItem(position).get("type").equals("msg")){
                 return SEND_MSG;
             }
@@ -83,6 +84,20 @@ public class ChatAdapter extends MyRecyclerArrayAdapter<Map<String,Object>> {
             if (getItem(position).get("type").equals("video")){
                 return RECIEVE_VIDEO;
             }
+        }
+*/
+        if (getItem(position).getMark().equals(1)){
+            return RECIEVE_MSG;
+
+        }
+        if (getItem(position).getMark().equals(0)){
+            if (!getItem(position).getPic().equals("")&&!getItem(position).getPic().equals("null")){
+                return SEND_PIC;
+            }else if (!getItem(position).getVideo().equals("")&&!getItem(position).getVideo().equals("null")){
+                return SEND_VIDEO;
+            }else
+                return SEND_MSG;
+
         }
 
 
