@@ -54,6 +54,7 @@ public class MyapprovalFragment extends BaseFragment implements SwipeRefreshLayo
                 Intent intent = new Intent();
                 intent.setClass(getActivity(), ApprovalDetilActivity.class);
                 Bundle bundle = new Bundle();
+                bundle.putString("id",adapter.getItem(position).getId());
                 bundle.putString("poiceid",adapter.getItem(position).getPoliceid());
                 bundle.putString("applytime",adapter.getItem(position).getApplytime());
                 bundle.putString("starttime",adapter.getItem(position).getStart());
@@ -80,19 +81,8 @@ public class MyapprovalFragment extends BaseFragment implements SwipeRefreshLayo
         initdata();
     }
 
-    private ArrayList<String> initData() {
-        ArrayList<String> list = new ArrayList<>();
-        list.add("qingjia");
-        for (int i = 0; i < 4; i++) {
-            list.add("jiaban");
-        }
-        list.add("qingjia");
-        return list;
-    }
-
-
     private void initdata(){
-        app.apiService.getBeanData("getDepLeaveOverApply")
+        app.apiService.getBeanData("getDepLeaveOverApply","007")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .map(new Func1<Apply, List<Apply.Result>>() {

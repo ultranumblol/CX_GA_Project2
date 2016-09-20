@@ -15,6 +15,10 @@ import wgz.com.cx_ga_project.R;
 import wgz.com.cx_ga_project.adapter.TimelineAdapter;
 import wgz.com.cx_ga_project.base.BaseActivity;
 
+/**
+ * 我的工作轨迹
+ *
+ */
 public class MyWorkingTrackActivity extends BaseActivity {
     @Bind(R.id.toolbar)
     Toolbar toolbar;

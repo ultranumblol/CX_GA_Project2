@@ -4,9 +4,15 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
-    android:paddingLeft="16dp"
+    android:paddingLeft="12dp"
     android:paddingRight="16dp">
-
+<TextView
+    android:layout_width="55dp"
+    android:layout_height="wrap_content"
+    android:textSize="12sp"
+    android:layout_gravity="center_vertical"
+    android:text="2016-9-18 11:43"
+    />
     <wgz.com.cx_ga_project.view.TimeLineMarker
         android:id="@+id/timeLineMarker"
         android:layout_width="wrap_content"

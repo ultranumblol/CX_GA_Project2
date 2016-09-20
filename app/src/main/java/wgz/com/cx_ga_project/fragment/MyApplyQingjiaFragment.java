@@ -101,20 +101,20 @@ public class MyApplyQingjiaFragment extends BaseFragment implements SwipeRefresh
      */
     private void initData() {
 
-        app.apiService.getBeanData("getOverLeaveStatus")
+        app.apiService.getBeanData("getOverLeaveStatus","501")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .map(new Func1<Apply, List<Apply.Result>>() {
                     @Override
                     public List<Apply.Result> call(Apply apply) {
-                        //LogUtil.e("map_result::"+apply.getResult().toString());
+                        LogUtil.e("map_result::"+apply.getResult().toString());
                         return apply.getResult();
                     }
                 })
                 .flatMap(new Func1<List<Apply.Result>, Observable<Apply.Result>>() {
                     @Override
                     public Observable<Apply.Result> call(List<Apply.Result> results) {
-                        //LogUtil.e("flatMap_result::"+results.size());
+                        LogUtil.e("flatMap_result::"+results.size());
                         return Observable.from(results);
                     }
                 })
@@ -143,7 +143,7 @@ public class MyApplyQingjiaFragment extends BaseFragment implements SwipeRefresh
 
             @Override
             public void onNext(List<Apply.Result> results) {
-                //LogUtil.e("resultCOUNT:"+results.size());
+                LogUtil.e("resultCOUNT:"+results.size());
             }
         });
 

@@ -21,6 +21,9 @@ import wgz.com.cx_ga_project.R;
 import wgz.com.cx_ga_project.adapter.JQCallbackDetilAdapter;
 import wgz.com.cx_ga_project.base.BaseActivity;
 
+/**
+ * 警情回告
+ */
 public class JQCallbackActivity extends BaseActivity {
 
 

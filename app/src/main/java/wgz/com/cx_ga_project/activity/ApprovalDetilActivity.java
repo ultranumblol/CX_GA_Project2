@@ -21,8 +21,12 @@ import java.util.concurrent.TimeUnit;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import rx.Subscriber;
+import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
+import rx.schedulers.Schedulers;
 import wgz.com.cx_ga_project.R;
+import wgz.com.cx_ga_project.app;
 import wgz.com.cx_ga_project.base.BaseActivity;
 import wgz.com.cx_ga_project.util.SomeUtil;
 
@@ -85,7 +89,7 @@ public class ApprovalDetilActivity extends BaseActivity {
     TextView userName;
     @Bind(R.id.userName_jiaban)
     TextView userNameJiaban;
-
+    private String mId = "";
     @Override
     public int getLayoutId() {
         return R.layout.activity_jiaban_leave_detil;
@@ -98,6 +102,7 @@ public class ApprovalDetilActivity extends BaseActivity {
         int type = intent.getIntExtra("type",-1);
         Bundle bundle = intent.getBundleExtra("detil");
         approvalMakesrue.setVisibility(View.VISIBLE);
+        mId = bundle.getString("id");
         switch (type) {
             case 0:
                 toolbar.setTitle("加班明细");
@@ -162,12 +167,40 @@ public class ApprovalDetilActivity extends BaseActivity {
                 .setPositiveButton("审核通过", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        SomeUtil.showSnackBar(detilRoot, "审批通过！").setCallback(new Snackbar.Callback() {
-                            @Override
-                            public void onDismissed(Snackbar snackbar, int event) {
-                                finish();
-                            }
-                        }).show();
+                       app.apiService.approvalApply("approvalApply",mId,"1")
+                               .subscribeOn(Schedulers.io())
+                               .observeOn(AndroidSchedulers.mainThread())
+                               .subscribe(new Subscriber<String>() {
+                                   @Override
+                                   public void onCompleted() {
+
+                                   }
+
+                                   @Override
+                                   public void onError(Throwable e) {
+
+                                   }
+
+                                   @Override
+                                   public void onNext(String s) {
+                                        if (s.contains("200")){
+                                            SomeUtil.showSnackBar(detilRoot, "审批通过！").setCallback(new Snackbar.Callback() {
+                                                @Override
+                                                public void onDismissed(Snackbar snackbar, int event) {
+                                                    finish();
+                                                }
+                                            }).show();
+
+                                        }else {
+                                            SomeUtil.showSnackBar(detilRoot,"服务器错误！请稍后再试");
+                                        }
+                                   }
+                               });
+
+
+
+
+
                     }
                 }).setNegativeButton("拒绝申请", new DialogInterface.OnClickListener() {
             @Override
@@ -187,7 +220,30 @@ public class ApprovalDetilActivity extends BaseActivity {
                 .setPositiveButton("提交", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        SomeUtil.showSnackBar(detilRoot, "提交成功").show();
+                        app.apiService.approvalApply("approvalApply",mId,"2")
+                                .subscribeOn(Schedulers.io())
+                                .observeOn(AndroidSchedulers.mainThread())
+                                .subscribe(new Subscriber<String>() {
+                                    @Override
+                                    public void onCompleted() {
+
+                                    }
+
+                                    @Override
+                                    public void onError(Throwable e) {
+
+                                    }
+
+                                    @Override
+                                    public void onNext(String s) {
+                                        if (s.contains("200")){
+                                            SomeUtil.showSnackBar(detilRoot, "提交成功").show();
+
+                                        }else{
+                                            SomeUtil.showSnackBar(detilRoot, "服务器错误！").show();
+                                        }
+                                    }
+                                });
                     }
                 }).setNegativeButton("取消", null).show();
     }

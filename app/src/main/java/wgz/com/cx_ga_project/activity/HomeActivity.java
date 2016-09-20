@@ -39,6 +39,8 @@ import rx.Observable;
 import rx.Subscriber;
 import rx.schedulers.Schedulers;
 import wgz.com.cx_ga_project.R;
+import wgz.com.cx_ga_project.app;
+import wgz.com.cx_ga_project.base.Constant;
 import wgz.com.cx_ga_project.util.SPUtils;
 import wgz.com.cx_ga_project.util.SomeUtil;
 import wgz.datatom.com.utillibrary.util.LogUtil;
@@ -111,6 +113,17 @@ public class HomeActivity extends AppCompatActivity
         ColorStateList csl = (ColorStateList) resource.getColorStateList(R.drawable.navigation_menu_item_color);
         navView.setItemTextColor(csl);
         navView.setItemIconTintList(csl);
+        LogUtil.e("userhead_url: " +SPUtils.get(app.getApp().getApplicationContext(), Constant.USERHEAD, ""));
+        ImageView userhead = (ImageView) navView.getHeaderView(0).findViewById(R.id.imageView);
+        // TODO: 2016/9/18 获取用户头像地址有问题
+        Glide.with(this)
+                .load("http://"+SPUtils.get(app.getApp().getApplicationContext(), Constant.USERHEAD, ""))
+                .placeholder(R.mipmap.ic_launcher)
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .thumbnail(0.4f)
+                .dontAnimate()
+                .into(userhead);
+
 
     }
 
@@ -270,6 +283,7 @@ public class HomeActivity extends AppCompatActivity
         }
         else if (id==R.id.nav_saoyisao){
             // TODO: 2016/9/3 扫一扫
+            startActivity(new Intent(HomeActivity.this,SaoYiSaoActivity.class));
 
         }
 

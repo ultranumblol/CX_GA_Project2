@@ -19,6 +19,9 @@ import wgz.com.cx_ga_project.base.BaseActivity;
 import wgz.com.cx_ga_project.fragment.MyapprovalFragment;
 import wgz.com.cx_ga_project.fragment.MyapprovalHistoryFragment;
 
+/**
+ * 我的审批
+ */
 public class MyApprovalActivity extends BaseActivity {
     private ArrayList<Fragment> fragments;
     private List<String> titles;

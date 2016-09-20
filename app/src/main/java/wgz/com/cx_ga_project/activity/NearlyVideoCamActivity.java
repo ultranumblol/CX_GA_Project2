@@ -15,6 +15,9 @@ import butterknife.ButterKnife;
 import wgz.com.cx_ga_project.R;
 import wgz.com.cx_ga_project.base.BaseActivity;
 
+/**
+ * 附近摄像头
+ */
 public class NearlyVideoCamActivity extends BaseActivity {
 
 

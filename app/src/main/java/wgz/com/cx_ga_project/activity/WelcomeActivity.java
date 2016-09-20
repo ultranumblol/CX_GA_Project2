@@ -14,7 +14,10 @@ import rx.Observable;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 
+import rx.schedulers.Schedulers;
+import wgz.com.cx_ga_project.API.APIservice;
 import wgz.com.cx_ga_project.R;
+import wgz.com.cx_ga_project.app;
 import wgz.com.cx_ga_project.base.BaseActivity;
 import wgz.com.cx_ga_project.base.Constant;
 import wgz.com.cx_ga_project.observable.AnimatorOnSubscribe;
@@ -26,10 +29,12 @@ import wgz.datatom.com.utillibrary.util.LogUtil;
 import static rx.schedulers.Schedulers.io;
 
 /**
+ * 欢迎页面
  * Created by wgz on 2016/8/8.
  */
 
 public class WelcomeActivity extends BaseActivity {
+    private String userhead;
     @Bind(R.id.img_welcome)
     ImageView imgWelcome;
 
@@ -67,10 +72,37 @@ public class WelcomeActivity extends BaseActivity {
                     public void onNext(String str) {
                         LogUtil.e(str);
                         saveinfo();
+                        getuserhead();
                     }
                 });
     }
 
+    private void getuserhead() {
+        app.apiService.getUserhead(APIservice.GET_USER_HEAD,"10001").subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<String>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onNext(String s) {
+                        LogUtil.e("userhead : " + s);
+                        String s2 = s.replace("\"","");
+                        LogUtil.e("userhead : " + s2);
+                        userhead = s2;
+                        saveUserHead();
+                    }
+                });
+
+
+    }
 
 
     @Override
@@ -84,5 +116,11 @@ public class WelcomeActivity extends BaseActivity {
         new SPBuild(getApplicationContext())
                 .addData(Constant.LOGINTIME, System.currentTimeMillis())
                 .build();
+    }
+    private void saveUserHead(){
+        new SPBuild(getApplicationContext())
+                .addData(Constant.USERHEAD, userhead)
+                .build();
+
     }
 }

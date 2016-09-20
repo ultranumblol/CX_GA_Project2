@@ -21,6 +21,10 @@ import wgz.com.cx_ga_project.base.BaseActivity;
 import wgz.com.cx_ga_project.util.SomeUtil;
 import wgz.datatom.com.utillibrary.util.LogUtil;
 
+/**
+ * 上传涉警车辆信息
+ * Created by wgz on 2016/8/25.
+ */
 public class UpLoadSJCarActivity extends BaseActivity {
 
 

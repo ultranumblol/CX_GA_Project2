@@ -18,6 +18,9 @@ import wgz.com.cx_ga_project.adapter.MyRecyclerArrayAdapter;
 import wgz.com.cx_ga_project.adapter.SubordinateAdapter;
 import wgz.com.cx_ga_project.base.BaseActivity;
 
+/**
+ * 我的下属
+ */
 public class MySubordinateActivity extends BaseActivity {
 
 

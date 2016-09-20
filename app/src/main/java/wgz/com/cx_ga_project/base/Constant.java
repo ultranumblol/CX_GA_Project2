@@ -14,6 +14,7 @@ public class Constant {
     public static final String LOGINTIME = "loginTime";
     public static final String USERACCOUNT = "userAccount";
     public static final String USERPASSWORD = "userPassword";
+    public static final String USERHEAD = "userHead";
 
 
 

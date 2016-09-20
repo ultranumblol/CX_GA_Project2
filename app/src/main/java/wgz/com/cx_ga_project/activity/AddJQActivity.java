@@ -41,6 +41,9 @@ import wgz.datatom.com.utillibrary.util.LogUtil;
 
 import static wgz.com.cx_ga_project.activity.PickPhotoActivity.HTTP_URL;
 
+/**
+ * 警情信息回告
+ */
 public class AddJQActivity extends BaseActivity {
 
     @Bind(R.id.content_add_jq)

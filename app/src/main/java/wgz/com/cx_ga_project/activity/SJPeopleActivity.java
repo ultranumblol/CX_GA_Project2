@@ -20,6 +20,10 @@ import wgz.com.cx_ga_project.app;
 import wgz.com.cx_ga_project.base.BaseActivity;
 import wgz.datatom.com.utillibrary.util.LogUtil;
 
+/**
+ * 涉警人信息采集
+ * Created by wgz on 2016/8/15.
+ */
 public class SJPeopleActivity extends BaseActivity {
 
 
