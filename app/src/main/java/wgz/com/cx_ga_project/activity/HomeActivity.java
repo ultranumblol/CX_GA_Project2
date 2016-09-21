@@ -150,7 +150,7 @@ public class HomeActivity extends AppCompatActivity
                 break;
             case R.id.fab:
                 // TODO: 2016/8/3 社会信息采集功能
-                startActivity(new Intent(HomeActivity.this, FullscreenActivity.class));
+                //startActivity(new Intent(HomeActivity.this, FullscreenActivity.class));
                 // Snackbar.make(homeRootView, "社会信息采集开发中。。", Snackbar.LENGTH_SHORT).show();
                 break;
             case R.id.to_jiechujing:
@@ -254,9 +254,9 @@ public class HomeActivity extends AppCompatActivity
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
-        // TODO: 2016/8/3 个人页面内容待定
         if (id == R.id.nav_mypic) {
-
+            //我的二维码
+            startActivity(new Intent(HomeActivity.this, FullscreenActivity.class));
             // Handle the camera action
         } else if (id == R.id.nav_changepass) {
             startActivity(new Intent(HomeActivity.this, ChangeCodeActivity.class));

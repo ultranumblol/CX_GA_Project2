@@ -56,5 +56,6 @@
     <string name="text_ack_msg">已读</string>
     <string name="text_delivered_msg">送达</string>
     <string name="title_activity_sao_yi_sao">SaoYiSaoActivity</string>
+    <string name="title_activity_new_msg">NewMsgActivity</string>
 
 </resources>
