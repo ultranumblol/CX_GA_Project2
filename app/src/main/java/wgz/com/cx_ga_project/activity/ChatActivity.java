@@ -56,6 +56,9 @@ import wgz.datatom.com.utillibrary.util.LogUtil;
 
 import static wgz.com.cx_ga_project.activity.PickPhotoActivity.HTTP_URL;
 
+/**
+ * 指挥通讯
+ */
 public class ChatActivity extends BaseActivity {
 
 

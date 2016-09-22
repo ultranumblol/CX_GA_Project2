@@ -97,21 +97,21 @@
                         android:textColor="@color/white"
                         android:paddingLeft="16dp"
                         android:text="工作记录" />
-
-
                 </LinearLayout>
-
-
                 <TextView
                     android:layout_width="match_parent"
-                    android:layout_height="200dip"
+                    android:layout_height="wrap_content"
                     android:background="@color/white"
                     android:padding="16dp"
                     android:textSize="16dp"
                     android:id="@+id/id_workLogText"
                     android:text="没有工作记录" />
-
+                <com.jude.easyrecyclerview.EasyRecyclerView
+                    android:id="@+id/worklog_pics"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"></com.jude.easyrecyclerview.EasyRecyclerView>
             </LinearLayout>
+
         </ScrollView>
     </wgz.com.cx_ga_project.calendarView.view.ContainerLayout>
 

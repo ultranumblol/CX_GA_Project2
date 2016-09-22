@@ -24,40 +24,50 @@ import wgz.com.cx_ga_project.entity.WorkLog;
  */
 
 public interface APIservice {
+
+    public static final String GET_USER_HEAD = "getAvantar";
+    public static final String CHECK_ONESSUMMARY_BYDAYS = "checkOnceSummaryBydays";
+    public static final String CHECK_ONESSUMMARY="checkOnceSummary";
+    public static final String UPLOAD_PICS = "saveAppPics";
+
+
     /**
      * 通过 List<MultipartBody.Part> 传入多个part实现多文件上传
+     *
      * @param parts 每个part代表一个
      * @return 状态信息
      */
     @Multipart
     @POST("{type}")
-    Observable<String> uploadFilesWithParts( @Path("type") String type,
-                                             @Part() List<MultipartBody.Part> parts);
+    Observable<String> uploadFilesWithParts(@Path("type") String type,
+                                            @Part() List<MultipartBody.Part> parts);
 
 
     /**
      * 通过 MultipartBody和@body作为参数来上传
+     *
      * @param multipartBody MultipartBody包含多个Part
      * @return 状态信息
      */
     @POST("{type}")
-    Observable<String> uploadFileWithRequestBody( @Path("type") String type,
-                                                  @Body MultipartBody multipartBody);
+    Observable<String> uploadFileWithRequestBody(@Path("type") String type,
+                                                 @Body MultipartBody multipartBody);
 
 
 
 
 
-
+/*
     @Multipart
     @POST("{type}")
     Observable<ResponseBody> uploadPic(
             @Path("type") String type,
-            @Part MultipartBody.Part file);
+            @Part MultipartBody.Part file);*/
 
 
     /**
      * 修改工作日志
+     *
      * @param type
      * @param id
      * @param summary
@@ -69,6 +79,18 @@ public interface APIservice {
                                      @Field("id") String id,
                                      @Field("summary") String summary);
 
+    /**
+     * 审核申请
+     * @param type
+     * @param id
+     * @param status  1通过 ，2未通过
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("{type}")
+    Observable<String> approvalApply(@Path("type") String type,
+                                     @Field("id") String id,
+                                     @Field("status") String status);
     /**
      * 提交工作日志
      *
@@ -131,8 +153,12 @@ public interface APIservice {
      * @param type
      * @return
      */
-    @GET("{type}")
-    Observable<Apply> getBeanData(@Path("type") String type);
+    @FormUrlEncoded
+    @POST("{type}")
+    Observable<Apply> getBeanData(@Path("type") String type,
+                                  @Field("policeid") String policeid
+
+    );
 
 
     /**
@@ -149,7 +175,6 @@ public interface APIservice {
     );
 
 
-
     /**
      * 获取某天工作日志
      *
@@ -159,10 +184,9 @@ public interface APIservice {
     @FormUrlEncoded
     @POST("{type}")
     Observable<WorkLog> getLogDataToDay(@Path("type") String type,
-                                   @Field("loginid") String loginid,
-                                   @Field("time") String time
+                                        @Field("loginid") String loginid,
+                                        @Field("time") String time
     );
-
 
 
     /**
@@ -179,6 +203,7 @@ public interface APIservice {
 
 
     /**
+     * 获取用户头像
      *
      * @param type
      * @param policeid
@@ -186,9 +211,12 @@ public interface APIservice {
      */
     @FormUrlEncoded
     @POST("{type}")
-    Observable<String> getuserhead(@Path("type") String type,
+    Observable<String> getUserhead(@Path("type") String type,
                                    @Field("policeid") String policeid
     );
 
 
+    /*@FormUrlEncoded
+    @POST("http://192.168.1.193:8004/appworkmanager/getAvantar")
+    Observable<String> getUserHead(@Field("policeid") String policeid);*/
 }

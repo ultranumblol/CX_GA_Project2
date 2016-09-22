@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/content_help_and_feed_back"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_height="match_parent"
+    tools:context="wgz.com.cx_ga_project.activity.HelpAndFeedBackActivity"
+    tools:showIn="@layout/activity_help_and_feed_back">
+    <EditText
+        android:id="@+id/id_feedback_tv"
+        android:layout_width="match_parent"
+        android:layout_height="140dp"
+        android:padding="8dp"
+        android:minHeight="180dp"
+        android:visibility="visible"
+        android:hint="请输入反馈内容"
+        android:textColorHint="@color/gray"
+        android:gravity="top|left"
+       android:layout_margin="10dp"
+        android:background="@color/white"
+        android:textColor="@color/black"
+        android:textSize="18sp" />
+
+
+</LinearLayout>

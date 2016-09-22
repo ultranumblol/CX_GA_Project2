@@ -70,7 +70,7 @@ public class Apply {
         private String status;
         @SerializedName("upperid")
         private String upperid;
-        @SerializedName("type")
+        @SerializedName("applytype")
         private String type;
         @SerializedName("days")
         private Object days;

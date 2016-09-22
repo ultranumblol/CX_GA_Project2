@@ -59,18 +59,17 @@ public class SchedulingActivity extends BaseActivity {
     @Override
     public void initView() {
         mtoolbar.setTitle("我的值班");
-        LogUtil.e("ContainerLayout开始初始化");
         setSupportActionBar(mtoolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         initCalendar();
-            new Thread(new Runnable() {
+          /*  new Thread(new Runnable() {
                 @Override
                 public void run() {
                    String result =  httpUtil.getStr("http://192.168.1.88/demojob/getAppAllSch","utf_8");
                     LogUtil.e("jsonStr:"+result);
                 }
-            }).start();
+            }).start();*/
       /*  Call<String> call = app.apiService.getZhiBan();
         call.enqueue(new Callback<String>() {
             @Override

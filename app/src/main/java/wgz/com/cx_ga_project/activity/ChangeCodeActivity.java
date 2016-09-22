@@ -5,6 +5,7 @@ import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.Toolbar;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 
 import com.jakewharton.rxbinding.view.RxView;
 
@@ -16,6 +17,9 @@ import rx.functions.Action1;
 import wgz.com.cx_ga_project.R;
 import wgz.com.cx_ga_project.base.BaseActivity;
 
+/**
+ * 修改密码
+ */
 public class ChangeCodeActivity extends BaseActivity {
 
 
@@ -30,7 +34,7 @@ public class ChangeCodeActivity extends BaseActivity {
     @Bind(R.id.button)
     Button commit;
     @Bind(R.id.content_change_code)
-    ConstraintLayout rootview;
+    LinearLayout rootview;
 
     @Override
     public int getLayoutId() {

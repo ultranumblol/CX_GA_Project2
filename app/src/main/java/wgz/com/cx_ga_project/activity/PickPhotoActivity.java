@@ -21,6 +21,10 @@ import wgz.com.cx_ga_project.fragment.PhotoPickerFragment;
 import wgz.com.cx_ga_project.util.SomeUtil;
 import wgz.datatom.com.utillibrary.util.LogUtil;
 
+/**
+ * 选择图片
+ * Created by wgz on 2016/8/30.
+ */
 public class PickPhotoActivity extends BaseActivity {
     public static final String HTTP_URL = "http_url";
     @Bind(R.id.toolbar)

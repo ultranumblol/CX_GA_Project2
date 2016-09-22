@@ -5,6 +5,7 @@ import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.POST;
 import rx.Observable;
 import wgz.com.cx_ga_project.entity.ChatMsg;
+import wgz.com.cx_ga_project.entity.JQDetil;
 
 /**
  * Created by wgz on 2016/8/31.
@@ -124,5 +125,18 @@ public interface JqAPIService {
     @POST("http://192.168.1.193:8004/liveshow/getAppNewMsgs")
     Observable<ChatMsg> GetNewMsg2(@Field("jqid") String jqid,
                                   @Field("policeid") String msg);
+
+
+
+    //http://192.168.1.193:8004/nearbyresources/getDetailjqInfo
+
+    /**
+     * 获取警情详情
+     * @param key
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("http://192.168.1.193:8004/nearbyresources/getDetailjqInfo")
+    Observable<JQDetil> GetJQDetil(@Field("key") String key);
 
 }

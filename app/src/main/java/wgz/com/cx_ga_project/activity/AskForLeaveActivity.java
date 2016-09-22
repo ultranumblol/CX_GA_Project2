@@ -192,6 +192,7 @@ public class AskForLeaveActivity extends BaseActivity {
                 .subscribe(new Action1<String>() {
                     @Override
                     public void call(String s) {
+                        LogUtil.e("leaveApply :" +s);
                         if (s.contains("200")) {
                             SomeUtil.showSnackBar(rootview, "提交申请成功！");
                         } else {

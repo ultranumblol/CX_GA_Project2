@@ -52,8 +52,12 @@
     <string name="title_activity_cam_player">CamPlayerActivity</string>
     <string name="title_activity_chat">ChatActivity</string>
 
-
+    <string name="scan_text">将二维码放入框内, 即可自动扫描</string>
     <string name="text_ack_msg">已读</string>
     <string name="text_delivered_msg">送达</string>
+    <string name="title_activity_sao_yi_sao">SaoYiSaoActivity</string>
+    <string name="title_activity_new_msg">NewMsgActivity</string>
+    <string name="title_activity_help_and_feed_back">HelpAndFeedBackActivity</string>
+    <string name="title_activity_about_app">AboutAppActivity</string>
 
 </resources>

@@ -64,6 +64,9 @@ import wgz.datatom.com.utillibrary.util.LogUtil;
 
 import static wgz.com.cx_ga_project.activity.AskForLeaveActivity.getTime;
 
+/**
+ * 附近摄像头播放
+ */
 public class CamPlayerActivity extends BaseActivity implements KeepaliveService.OnKeepaliveListener, OnLoginListener {
 
     @Bind(R.id.fab2)

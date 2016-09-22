@@ -22,6 +22,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import rx.Observable;
 import rx.Observer;
+import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Func1;
 import rx.schedulers.Schedulers;
@@ -35,20 +36,25 @@ import wgz.com.cx_ga_project.base.BaseFragment;
 import wgz.com.cx_ga_project.entity.Apply;
 import wgz.datatom.com.utillibrary.util.LogUtil;
 
+import static wgz.com.cx_ga_project.base.Constant.APPROVAL_PASS;
+import static wgz.com.cx_ga_project.base.Constant.APPROVAL_UNPASS;
+import static wgz.com.cx_ga_project.base.Constant.UNAPPROVAL;
+
 /**
  * Created by wgz on 2016/8/9.
  */
 
-public class MyapprovalHistoryFragment extends BaseFragment implements SwipeRefreshLayout.OnRefreshListener{
+public class MyapprovalHistoryFragment extends BaseFragment implements SwipeRefreshLayout.OnRefreshListener {
     @Bind(R.id.id_myapproval_Lv_his)
     EasyRecyclerView recyclerview;
     private Handler handler = new Handler();
     private ApplyAdapter adapter;
     List<Apply.Result> list = new ArrayList<Apply.Result>();
+
     @Override
     public void initview(View view) {
         recyclerview.setLayoutManager(new LinearLayoutManager(getActivity()));
-        recyclerview.setAdapter( adapter = new ApplyAdapter(getActivity()));
+        recyclerview.setAdapter(adapter = new ApplyAdapter(getActivity()));
         adapter.setNoMore(R.layout.view_nomore);
       /*  adapter.setMore(R.layout.view_more, new MyRecyclerArrayAdapter.OnLoadMoreListener() {
             @Override
@@ -69,21 +75,20 @@ public class MyapprovalHistoryFragment extends BaseFragment implements SwipeRefr
                 Intent intent = new Intent();
                 intent.setClass(getActivity(), ApprovalDetilActivity.class);
                 Bundle bundle = new Bundle();
-                bundle.putString("poiceid",adapter.getItem(position).getPoliceid());
-                bundle.putString("applytime",adapter.getItem(position).getApplytime());
-                bundle.putString("starttime",adapter.getItem(position).getStart());
-                bundle.putString("endtime",adapter.getItem(position).getEnd());
-                bundle.putString("days",adapter.getItem(position).getDays()+"");
-                bundle.putString("content",adapter.getItem(position).getContent());
-                bundle.putString("status",adapter.getItem(position).getStatus());
-                bundle.putString("upperid",adapter.getItem(position).getUpperid());
-                bundle.putString("reasontype",adapter.getItem(position).getReasontype());
-                intent.putExtra("detil",bundle);
+                bundle.putString("poiceid", adapter.getItem(position).getPoliceid());
+                bundle.putString("applytime", adapter.getItem(position).getApplytime());
+                bundle.putString("starttime", adapter.getItem(position).getStart());
+                bundle.putString("endtime", adapter.getItem(position).getEnd());
+                bundle.putString("days", adapter.getItem(position).getDays() + "");
+                bundle.putString("content", adapter.getItem(position).getContent());
+                bundle.putString("status", adapter.getItem(position).getStatus());
+                bundle.putString("upperid", adapter.getItem(position).getUpperid());
+                bundle.putString("reasontype", adapter.getItem(position).getReasontype());
+                intent.putExtra("detil", bundle);
                 //intent.putExtra("type","qingjia");
 
 
-
-                intent.putExtra("type",adapter.getItem(position).getType());
+                intent.putExtra("type", adapter.getItem(position).getType());
                 ActivityCompat.startActivity(getActivity(),
                         intent, ActivityOptionsCompat
                                 .makeSceneTransitionAnimation(getActivity(),
@@ -98,11 +103,63 @@ public class MyapprovalHistoryFragment extends BaseFragment implements SwipeRefr
     /**
      * 初始化数据
      */
-    private void initdata(){
-        app.apiService.getBeanData("getDepLeaveOverApply")
+    private void initdata() {
+        app.apiService.getBeanData("getDepLeaveOverApply", "007")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<Apply>() {
+                .map(new Func1<Apply, List<Apply.Result>>() {
+                    @Override
+                    public List<Apply.Result> call(Apply apply) {
+                        LogUtil.e("map_result::" + apply.getResult().toString());
+                        return apply.getResult();
+                    }
+                })
+                .flatMap(new Func1<List<Apply.Result>, Observable<Apply.Result>>() {
+                    @Override
+                    public Observable<Apply.Result> call(List<Apply.Result> results) {
+                        LogUtil.e("flatMap_result::" + results.size());
+                        return Observable.from(results);
+                    }
+                })
+                .filter(new Func1<Apply.Result, Boolean>() {
+                    @Override
+                    public Boolean call(Apply.Result result) {
+                        if (result.getStatus().equals(APPROVAL_PASS)||result.getStatus().equals(APPROVAL_UNPASS)){
+                            return  true;
+                        }
+                        else return false;
+                    }
+                })
+                .map(new Func1<Apply.Result, List<Apply.Result>>() {
+                            @Override
+                            public List<Apply.Result> call(Apply.Result result) {
+                                list.add(result);
+                                return list;
+                            }
+                        }).subscribe(new Subscriber<List<Apply.Result>>() {
+            @Override
+            public void onCompleted() {
+                adapter.addAll(list);
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                LogUtil.e("ApprovalhistoryERROR:" + e.toString());
+            }
+
+            @Override
+            public void onNext(List<Apply.Result> results) {
+
+            }
+        });
+
+
+
+
+
+
+
+                /*.subscribe(new Observer<Apply>() {
                     @Override
                     public void onCompleted() {
                     adapter.addAll(list);
@@ -118,8 +175,9 @@ public class MyapprovalHistoryFragment extends BaseFragment implements SwipeRefr
                         list =  apply.getResult();
                         LogUtil.e("ApprovalhistoryRESULT:"+apply.getResult().size());
                     }
-                });
+                });*/
     }
+
     @Override
     public int getLayoutitem() {
         return R.layout.fragment_my_approval_history;
@@ -139,7 +197,7 @@ public class MyapprovalHistoryFragment extends BaseFragment implements SwipeRefr
             public void run() {
                 list.clear();
                 adapter.clear();
-               initdata();
+                initdata();
             }
         }, 2000);
     }

@@ -39,6 +39,8 @@ import rx.Observable;
 import rx.Subscriber;
 import rx.schedulers.Schedulers;
 import wgz.com.cx_ga_project.R;
+import wgz.com.cx_ga_project.app;
+import wgz.com.cx_ga_project.base.Constant;
 import wgz.com.cx_ga_project.util.SPUtils;
 import wgz.com.cx_ga_project.util.SomeUtil;
 import wgz.datatom.com.utillibrary.util.LogUtil;
@@ -111,6 +113,18 @@ public class HomeActivity extends AppCompatActivity
         ColorStateList csl = (ColorStateList) resource.getColorStateList(R.drawable.navigation_menu_item_color);
         navView.setItemTextColor(csl);
         navView.setItemIconTintList(csl);
+        LogUtil.e("userhead_url: " +SPUtils.get(app.getApp().getApplicationContext(), Constant.USERHEAD, ""));
+        ImageView userhead = (ImageView) navView.getHeaderView(0).findViewById(R.id.imageView);
+        // TODO: 2016/9/18 获取用户头像地址
+        Glide.with(this)
+                .load("http://192.168.1.193:8004/avantar/10001.png")
+                //.load("http://"+SPUtils.get(app.getApp().getApplicationContext(), Constant.USERHEAD, ""))
+                .placeholder(R.mipmap.ic_launcher)
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .thumbnail(0.4f)
+                .dontAnimate()
+                .into(userhead);
+
 
     }
 
@@ -137,7 +151,7 @@ public class HomeActivity extends AppCompatActivity
                 break;
             case R.id.fab:
                 // TODO: 2016/8/3 社会信息采集功能
-                startActivity(new Intent(HomeActivity.this, FullscreenActivity.class));
+                //startActivity(new Intent(HomeActivity.this, FullscreenActivity.class));
                 // Snackbar.make(homeRootView, "社会信息采集开发中。。", Snackbar.LENGTH_SHORT).show();
                 break;
             case R.id.to_jiechujing:
@@ -226,6 +240,7 @@ public class HomeActivity extends AppCompatActivity
 
             //startActivity(new Intent(HomeActivity.this, CamPlayerActivity.class));
             //startActivity(new Intent(HomeActivity.this, LoginActivity.class));
+            startActivity(new Intent(HomeActivity.this, NewMsgActivity.class));
             return true;
         }
         if (id == android.R.id.home) {
@@ -241,14 +256,17 @@ public class HomeActivity extends AppCompatActivity
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
-        // TODO: 2016/8/3 个人页面内容待定
         if (id == R.id.nav_mypic) {
-
+            //我的二维码
+            startActivity(new Intent(HomeActivity.this, FullscreenActivity.class));
             // Handle the camera action
         } else if (id == R.id.nav_changepass) {
             startActivity(new Intent(HomeActivity.this, ChangeCodeActivity.class));
 
         } else if (id == R.id.nav_help) {
+            //帮助与反馈
+            startActivity(new Intent(HomeActivity.this, HelpAndFeedBackActivity.class));
+
 
         } else if (id == R.id.nav_updateAPP) {
 
@@ -258,6 +276,8 @@ public class HomeActivity extends AppCompatActivity
 
 
         } else if (id == R.id.nav_about) {
+            startActivity(new Intent(HomeActivity.this, AboutAppActivity.class));
+
 
         } else if (id == R.id.nav_clearcache) {
             clearImageAllCache();
@@ -270,6 +290,7 @@ public class HomeActivity extends AppCompatActivity
         }
         else if (id==R.id.nav_saoyisao){
             // TODO: 2016/9/3 扫一扫
+            startActivity(new Intent(HomeActivity.this,SaoYiSaoActivity.class));
 
         }
 
