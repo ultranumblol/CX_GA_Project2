@@ -205,6 +205,14 @@
         <activity
             android:name=".activity.NewMsgActivity"
             android:label="@string/title_activity_new_msg"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activity.HelpAndFeedBackActivity"
+            android:label="@string/title_activity_help_and_feed_back"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activity.AboutAppActivity"
+            android:label="@string/title_activity_about_app"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 

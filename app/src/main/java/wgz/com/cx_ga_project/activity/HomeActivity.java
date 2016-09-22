@@ -115,9 +115,10 @@ public class HomeActivity extends AppCompatActivity
         navView.setItemIconTintList(csl);
         LogUtil.e("userhead_url: " +SPUtils.get(app.getApp().getApplicationContext(), Constant.USERHEAD, ""));
         ImageView userhead = (ImageView) navView.getHeaderView(0).findViewById(R.id.imageView);
-        // TODO: 2016/9/18 获取用户头像地址有问题
+        // TODO: 2016/9/18 获取用户头像地址
         Glide.with(this)
-                .load("http://"+SPUtils.get(app.getApp().getApplicationContext(), Constant.USERHEAD, ""))
+                .load("http://192.168.1.193:8004/avantar/10001.png")
+                //.load("http://"+SPUtils.get(app.getApp().getApplicationContext(), Constant.USERHEAD, ""))
                 .placeholder(R.mipmap.ic_launcher)
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .thumbnail(0.4f)
@@ -239,6 +240,7 @@ public class HomeActivity extends AppCompatActivity
 
             //startActivity(new Intent(HomeActivity.this, CamPlayerActivity.class));
             //startActivity(new Intent(HomeActivity.this, LoginActivity.class));
+            startActivity(new Intent(HomeActivity.this, NewMsgActivity.class));
             return true;
         }
         if (id == android.R.id.home) {
@@ -262,6 +264,9 @@ public class HomeActivity extends AppCompatActivity
             startActivity(new Intent(HomeActivity.this, ChangeCodeActivity.class));
 
         } else if (id == R.id.nav_help) {
+            //帮助与反馈
+            startActivity(new Intent(HomeActivity.this, HelpAndFeedBackActivity.class));
+
 
         } else if (id == R.id.nav_updateAPP) {
 
@@ -271,6 +276,8 @@ public class HomeActivity extends AppCompatActivity
 
 
         } else if (id == R.id.nav_about) {
+            startActivity(new Intent(HomeActivity.this, AboutAppActivity.class));
+
 
         } else if (id == R.id.nav_clearcache) {
             clearImageAllCache();

@@ -57,5 +57,7 @@
     <string name="text_delivered_msg">送达</string>
     <string name="title_activity_sao_yi_sao">SaoYiSaoActivity</string>
     <string name="title_activity_new_msg">NewMsgActivity</string>
+    <string name="title_activity_help_and_feed_back">HelpAndFeedBackActivity</string>
+    <string name="title_activity_about_app">AboutAppActivity</string>
 
 </resources>
