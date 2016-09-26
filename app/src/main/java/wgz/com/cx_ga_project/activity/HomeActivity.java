@@ -36,7 +36,9 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import rx.Observable;
+import rx.Observer;
 import rx.Subscriber;
+import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import wgz.com.cx_ga_project.R;
 import wgz.com.cx_ga_project.app;
@@ -151,6 +153,8 @@ public class HomeActivity extends AppCompatActivity
                 break;
             case R.id.fab:
                 // TODO: 2016/8/3 社会信息采集功能
+
+                //uploadpicsTest();
                 //startActivity(new Intent(HomeActivity.this, FullscreenActivity.class));
                 // Snackbar.make(homeRootView, "社会信息采集开发中。。", Snackbar.LENGTH_SHORT).show();
                 break;
@@ -161,7 +165,6 @@ public class HomeActivity extends AppCompatActivity
                 break;
         }
     }
-
    /* private ArrayList<Integer> initData() {
         ArrayList<Integer> list = new ArrayList<>();
 

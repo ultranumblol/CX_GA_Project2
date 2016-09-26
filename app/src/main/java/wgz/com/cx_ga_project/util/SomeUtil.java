@@ -31,12 +31,13 @@ import wgz.datatom.com.utillibrary.util.LogUtil;
 
 public class SomeUtil {
     public static Snackbar showSnackBar(View view, String message) {
-        Snackbar snackbar=Snackbar.make(view, message, Snackbar.LENGTH_SHORT);
+        Snackbar snackbar = Snackbar.make(view, message, Snackbar.LENGTH_SHORT);
         snackbar.show();
         return snackbar;
     }
+
     public static Snackbar showSnackBarLong(View view, String message) {
-        Snackbar snackbar=Snackbar.make(view, message, Snackbar.LENGTH_LONG);
+        Snackbar snackbar = Snackbar.make(view, message, Snackbar.LENGTH_LONG);
         snackbar.show();
         return snackbar;
     }
@@ -54,6 +55,7 @@ public class SomeUtil {
                 .show();
 
     }
+
     /**
      * 检查对象非空
      *
@@ -68,25 +70,27 @@ public class SomeUtil {
         }
         return object;
     }
+
     public static void checkHttpException(Context mContext, Throwable mThrowable, View mRootView) {
         String snack_action_to_setting = "设置";
         if ((mThrowable instanceof UnknownHostException)) {
             String snack_message_net_error = "网络错误，请检查网络";
             showNetworkErrorSnackBar(mContext, mRootView, snack_message_net_error, snack_action_to_setting);
-        }  else if (mThrowable instanceof SocketTimeoutException) {
+        } else if (mThrowable instanceof SocketTimeoutException) {
             String snack_message_time_out = "连接超时，请检查网络";
-           showNetworkErrorSnackBar(mContext, mRootView, snack_message_time_out, snack_action_to_setting);
+            showNetworkErrorSnackBar(mContext, mRootView, snack_message_time_out, snack_action_to_setting);
         } else if (mThrowable instanceof ConnectException) {
             String snack_message_net_error = "网络错误，请检查网络";
             showNetworkErrorSnackBar(mContext, mRootView, snack_message_net_error, snack_action_to_setting);
         } else {
-            String snack_message_unknown_error ="未知错误";
-            showSnackBar(mRootView,snack_message_unknown_error);
+            String snack_message_unknown_error = "未知错误";
+            showSnackBar(mRootView, snack_message_unknown_error);
         }
     }
 
     /**
      * 文件转换为multipartBody
+     *
      * @param files
      * @return
      */
@@ -105,7 +109,22 @@ public class SomeUtil {
     }
 
     /**
+     * 字符转换为multipartBody
+     *
+     * @param
+     * @return
+     */
+    public static MultipartBody StrToMultipartBody(String paraname, String paravalue) {
+        MultipartBody.Builder builder = new MultipartBody.Builder();
+        builder.addFormDataPart(paraname, paravalue);
+        builder.setType(MultipartBody.FORM);
+        MultipartBody multipartBody = builder.build();
+        return multipartBody;
+    }
+
+    /**
      * File转化成MultipartBody.Part
+     *
      * @param files
      * @return
      */
@@ -119,6 +138,7 @@ public class SomeUtil {
         }
         return parts;
     }
+
     /**
      * 格式化单位
      *
@@ -171,25 +191,26 @@ public class SomeUtil {
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         } catch (Exception ex) {
-            LogUtil.e("Update:GetVersionCode:"+ex.getMessage());
+            LogUtil.e("Update:GetVersionCode:" + ex.getMessage());
         }
         return versionCode;
     }
 
     /**
      * yyyy-MM-dd
+     *
      * @param str
      * @return
      */
-    public static Date getStrToDate(String str)  {
+    public static Date getStrToDate(String str) {
         try {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-            Date  date = null;
+            Date date = null;
             date = sdf.parse(str);
             return date;
         } catch (ParseException e) {
             e.printStackTrace();
-            LogUtil.e("DATE error"+e.toString());
+            LogUtil.e("DATE error" + e.toString());
             return null;
         }
     }

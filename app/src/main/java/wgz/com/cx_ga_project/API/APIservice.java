@@ -1,22 +1,32 @@
 package wgz.com.cx_ga_project.API;
 
+import android.net.http.HttpResponseCache;
+
 import java.util.List;
+import java.util.Map;
 
 import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
+import retrofit2.http.HEAD;
+import retrofit2.http.Headers;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.Part;
+import retrofit2.http.PartMap;
 import retrofit2.http.Path;
 import rx.Observable;
 import wgz.com.cx_ga_project.bean.JiaBan;
 import wgz.com.cx_ga_project.bean.UserBean;
 import wgz.com.cx_ga_project.entity.Apply;
+import wgz.com.cx_ga_project.entity.DatrixCreat;
+import wgz.com.cx_ga_project.entity.DatrixFinish;
 import wgz.com.cx_ga_project.entity.WorkLog;
 
 /**
@@ -27,7 +37,7 @@ public interface APIservice {
 
     public static final String GET_USER_HEAD = "getAvantar";
     public static final String CHECK_ONESSUMMARY_BYDAYS = "checkOnceSummaryBydays";
-    public static final String CHECK_ONESSUMMARY="checkOnceSummary";
+    public static final String CHECK_ONESSUMMARY = "checkOnceSummary";
     public static final String UPLOAD_PICS = "saveAppPics";
 
 
@@ -54,8 +64,54 @@ public interface APIservice {
                                                  @Body MultipartBody multipartBody);
 
 
+    @POST("http://222.85.131.142:3007/apps/task/saveattachment")
+    @Headers("ACCESS-TOKEN:X7yABwjE20sUJLefATUFqU0iUs8mJPqEJo6iRnV63mI=")
+    Observable<String> testdatrix(@Body MultipartBody multipartBody);
 
 
+    /**
+     * detrix 创建文件creat方法(1)
+     *
+     * @param filename
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("http://101.231.77.242:9001/api/cluster/tracker/file/create")
+    @Headers("ACCESS-TOKEN:X7yABwjE20sUJLefATUFqU0iUs8mJPqEJo6iRnV63mI=")
+    Observable<DatrixCreat> uploadFileWithRequestBodyTest(
+            @Field("uid") String uid,
+            @Field("filename") String filename);
+
+
+    /**
+     * detrix 上传写入文件方法(2)
+     *
+     * @return
+     */
+    @Multipart
+    @POST("http://101.231.77.242:9001/api/cluster/storage/file/write")
+    @Headers("ACCESS-TOKEN:X7yABwjE20sUJLefATUFqU0iUs8mJPqEJo6iRnV63mI=")
+    Observable<String> detrixWrite(
+            @Part("fileid") String fileid,
+            @Part("offset") String offset,
+            @Part("length") String length,
+            @PartMap Map<String, RequestBody> params);
+
+
+    /**
+     * detrix 上传结束方法(3)
+     *
+     * @param fileid
+     * @param customjson
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("http://101.231.77.242:9001/upload/finish")
+    @Headers("ACCESS-TOKEN:X7yABwjE20sUJLefATUFqU0iUs8mJPqEJo6iRnV63mI=")
+    Observable<DatrixFinish> detrixfinish(
+            @Field("fileid") String fileid,
+            @Field("customjson") String customjson
+    );
 
 /*
     @Multipart
@@ -81,9 +137,10 @@ public interface APIservice {
 
     /**
      * 审核申请
+     *
      * @param type
      * @param id
-     * @param status  1通过 ，2未通过
+     * @param status 1通过 ，2未通过
      * @return
      */
     @FormUrlEncoded
@@ -91,6 +148,7 @@ public interface APIservice {
     Observable<String> approvalApply(@Path("type") String type,
                                      @Field("id") String id,
                                      @Field("status") String status);
+
     /**
      * 提交工作日志
      *
@@ -214,6 +272,8 @@ public interface APIservice {
     Observable<String> getUserhead(@Path("type") String type,
                                    @Field("policeid") String policeid
     );
+
+
 
 
     /*@FormUrlEncoded
