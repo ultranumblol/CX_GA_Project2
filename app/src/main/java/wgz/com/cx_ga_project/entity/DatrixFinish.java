@@ -7,6 +7,9 @@ import com.google.gson.annotations.SerializedName;
  */
 
 public class DatrixFinish {
+    @SerializedName("code")
+
+    private Integer code;
     public Integer getCode() {
         return code;
     }
@@ -15,7 +18,5 @@ public class DatrixFinish {
         this.code = code;
     }
 
-    @SerializedName("code")
 
-    private Integer code;
 }

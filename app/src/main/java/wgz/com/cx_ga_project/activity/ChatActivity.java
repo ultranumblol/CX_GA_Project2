@@ -7,6 +7,9 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.media.MediaMetadataRetriever;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
@@ -40,6 +43,8 @@ import java.util.concurrent.TimeUnit;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import okhttp3.MediaType;
+import okhttp3.RequestBody;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
@@ -49,6 +54,7 @@ import wgz.com.cx_ga_project.adapter.chatAdapter.ChatAdapter;
 import wgz.com.cx_ga_project.app;
 import wgz.com.cx_ga_project.base.BaseActivity;
 import wgz.com.cx_ga_project.entity.ChatMsg;
+import wgz.com.cx_ga_project.entity.DatrixCreat;
 import wgz.com.cx_ga_project.fragment.PhotoPickerFragment;
 import wgz.com.cx_ga_project.service.GetNewMsgService;
 import wgz.com.cx_ga_project.util.SomeUtil;
@@ -111,6 +117,7 @@ public class ChatActivity extends BaseActivity {
     private MsgReceiver receiver;
     //图片地址
     List<String> paths = new ArrayList<>();
+    private String fileid = "";
     @Override
     public int getLayoutId() {
         return R.layout.activity_chat;
@@ -397,6 +404,13 @@ public class ChatActivity extends BaseActivity {
             case R.id.view_camera:
                 break;
             case R.id.view_video:
+                Intent intent2 = new Intent();
+                intent2.setType("video/*");
+                intent2.setAction(Intent.ACTION_GET_CONTENT);
+                intent2.addCategory(Intent.CATEGORY_OPENABLE);
+                startActivityForResult(intent2,
+                        4);
+
                 break;
         }
     }
@@ -432,8 +446,22 @@ public class ChatActivity extends BaseActivity {
                     adapter.addAll(newchatData);
                     recyclerview.scrollToPosition(adapter.getCount() - 1);
                     uploadpic(makeFiles());
+                    //DatrixCreate();
                     //adapter.addAll();
                 }
+
+            }
+
+            if (requestCode==4){
+                Uri uri = data.getData();
+                Cursor cursor = getContentResolver().query(uri, null, null, null, null);
+                cursor.moveToFirst();
+                String number= cursor.getString(0); // 视频编号
+                String path = cursor.getString(1); // 视频文件路径
+                SomeUtil.showSnackBarLong(rootview,"视频地址："+path);
+
+
+
 
             }
 
@@ -454,13 +482,11 @@ public class ChatActivity extends BaseActivity {
                     public void onCompleted() {
 
                     }
-
                     @Override
                     public void onError(Throwable e) {
                         LogUtil.e("uploadpic error : " + e.toString());
                         adapter.remove(adapter.getCount() - 1);
                     }
-
                     @Override
                     public void onNext(String s) {
                         LogUtil.e("upPic :"+s);
@@ -479,6 +505,143 @@ public class ChatActivity extends BaseActivity {
                         }
                     }
                 });
+
+    }
+
+    private void uploadpic2(List<File> files){
+
+
+
+    }
+
+    /**
+     * 获取视频缩略图
+     * @param filePath
+     * @return
+     */
+    public Bitmap getVideoThumbnail(String filePath) {
+        Bitmap bitmap = null;
+        MediaMetadataRetriever retriever = new MediaMetadataRetriever();
+        try {
+            retriever.setDataSource(filePath);
+            bitmap = retriever.getFrameAtTime();
+        }
+        catch(IllegalArgumentException e) {
+            e.printStackTrace();
+        }
+        catch (RuntimeException e) {
+            e.printStackTrace();
+        }
+        finally {
+            try {
+                retriever.release();
+            }
+            catch (RuntimeException e) {
+                e.printStackTrace();
+            }
+        }
+        return bitmap;
+    }
+
+    private void DatrixCreate() {
+        app.apiService.uploadFileWithRequestBodyTest("testtestwgzwgz")
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<DatrixCreat>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        LogUtil.e("Detrix_upPic_error:" + e.toString());
+                    }
+
+                    @Override
+                    public void onNext(DatrixCreat datrixCreat) {
+                        LogUtil.e("Detrix_upPic_create : code :" +datrixCreat.getCode().toString());
+                        if (datrixCreat.getCode().equals(200)){
+                            LogUtil.e("Detrix_upPic_create :"+datrixCreat.getResult().getFileid());
+                            fileid = datrixCreat.getResult().getFileid();
+                            LogUtil.e("Detrix_upPic_create :" +datrixCreat.getResult().toString());
+                            DatrixDoWrite(paths,fileid);
+
+                        }else{
+
+                            SomeUtil.showSnackBar(rootview,"创建上传图片失败!");
+                        }
+
+                    }
+                });
+    }
+
+    private void DatrixDoWrite(List<String> paths, String fileid) {
+        String size = "";
+        Map<String, RequestBody> bodyMap = new HashMap<>();
+        if (paths.size() > 0) {
+            for (int i = 0; i < 1; i++) {
+                File file = new File(paths.get(i));
+                bodyMap.put("file" + i + "\" ; filename=\"" + file.getName(), RequestBody.create(MediaType.parse("image/*"), file));
+                size = file.length()+"";
+            }
+        }
+        LogUtil.e("file size : " +size);
+        app.apiService.detrixWrite(fileid,"0",size,bodyMap)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<String>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        LogUtil.e("detrix_write_Response_error :" + e.toString());
+                    }
+
+                    @Override
+                    public void onNext(String s) {
+                        LogUtil.e("detrix_write_Response :" + s);
+                        if (s.contains("\t\"code\":\t200")){
+                            DatrixDoFinish();
+                        }else
+                        {
+                            SomeUtil.showSnackBar(rootview,"图片上传失败!");
+                        }
+                    }
+                });
+
+
+    }
+
+    private void DatrixDoFinish() {
+        app.apiService.detrixfinish(fileid," ")
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<String>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onNext(String s) {
+                        if (s.contains("200")){
+                            SomeUtil.showSnackBar(rootview,"上传图片成功！");
+                        }
+                        else {
+                            SomeUtil.showSnackBar(rootview,"网络错误，请稍后！");
+                        }
+                    }
+                });
+
 
     }
 

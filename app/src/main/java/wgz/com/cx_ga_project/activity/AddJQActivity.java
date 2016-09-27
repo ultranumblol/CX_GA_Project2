@@ -96,49 +96,12 @@ public class AddJQActivity extends BaseActivity {
                     @Override
                     public void call(Void aVoid) {
                         // TODO: 2016/9/26 测试datrix 上传图片
-
                         // UpLoadPictures(paths);
-                        uploadpicsTest1();
-                       // uppic3(paths);
+                        DatrixCreate();
                     }
                 });
 
     }
-
-    private void uppic3(List<String> paths) {
-        File file = new File(paths.get(0));
-        MultipartBody.Builder builder = new MultipartBody.Builder();
-        builder.addFormDataPart("id", file.getName());
-        RequestBody requestBody = RequestBody.create(MediaType.parse("image/*"), file);
-        builder.addFormDataPart("myfile", file.getName(), requestBody);
-        builder.setType(MultipartBody.FORM);
-        MultipartBody multipartBody = builder.build();
-        app.apiService.testdatrix(multipartBody)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<String>() {
-                    @Override
-                    public void onCompleted() {
-
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        LogUtil.e("testdatrix error :" + e.toString());
-                    }
-
-                    @Override
-                    public void onNext(String s) {
-                        LogUtil.e("testdatrix:" + s);
-                    }
-                });
-
-
-    }
-
-    ;
-
-
     private void uploadpics(List<File> files) {
         app.apiService.uploadFileWithRequestBody("saveAppPics", SomeUtil.filesToMultipartBody(files))
                 .subscribeOn(Schedulers.io())
@@ -171,8 +134,8 @@ public class AddJQActivity extends BaseActivity {
 
     }
 
-    private void uploadpicsTest1() {
-        app.apiService.uploadFileWithRequestBodyTest("testtestwgzwgz","100098")
+    private void DatrixCreate() {
+        app.apiService.uploadFileWithRequestBodyTest("testtestwgzwgz")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<DatrixCreat>() {
@@ -188,22 +151,23 @@ public class AddJQActivity extends BaseActivity {
 
                     @Override
                     public void onNext(DatrixCreat datrixCreat) {
+                        LogUtil.e("Detrix_upPic_create : code :" +datrixCreat.getCode().toString());
                         if (datrixCreat.getCode().equals(200)){
                             LogUtil.e("Detrix_upPic_create :"+datrixCreat.getResult().getFileid());
                             fileid = datrixCreat.getResult().getFileid();
                             LogUtil.e("Detrix_upPic_create :" +datrixCreat.getResult().toString());
-                            uppictest2(paths,fileid);
+                            DatrixDoWrite(paths,fileid);
 
                         }else{
 
-                            SomeUtil.showSnackBar(rootview,"上传图片创建失败!请稍后再试");
+                            SomeUtil.showSnackBar(rootview,"创建上传图片失败!");
                         }
 
                     }
                 });
     }
 
-    private void uppictest2(List<String> paths, String fileid) {
+    private void DatrixDoWrite(List<String> paths, String fileid) {
         String size = "";
         Map<String, RequestBody> bodyMap = new HashMap<>();
         if (paths.size() > 0) {
@@ -232,7 +196,10 @@ public class AddJQActivity extends BaseActivity {
                     public void onNext(String s) {
                         LogUtil.e("detrix_write_Response :" + s);
                         if (s.contains("\t\"code\":\t200")){
-                            dofinish();
+                            DatrixDoFinish();
+                        }else
+                        {
+                            SomeUtil.showSnackBar(rootview,"图片上传失败!");
                         }
                     }
                 });
@@ -240,11 +207,11 @@ public class AddJQActivity extends BaseActivity {
 
     }
 
-    private void dofinish() {
+    private void DatrixDoFinish() {
             app.apiService.detrixfinish(fileid," ")
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(new Subscriber<DatrixFinish>() {
+                    .subscribe(new Subscriber<String>() {
                         @Override
                         public void onCompleted() {
 
@@ -256,14 +223,16 @@ public class AddJQActivity extends BaseActivity {
                         }
 
                         @Override
-                        public void onNext(DatrixFinish datrixFinish) {
-                        if (datrixFinish.getCode().equals(200)){
-                            SomeUtil.showSnackBar(rootview,"上传图片成功！");
-                        }else {
-                            SomeUtil.showSnackBar(rootview,"网络错误，请稍后！");
-                        }
+                        public void onNext(String s) {
+                            if (s.contains("200")){
+                                SomeUtil.showSnackBar(rootview,"上传图片成功！");
+                            }
+                            else {
+                                SomeUtil.showSnackBar(rootview,"网络错误，请稍后！");
+                            }
                         }
                     });
+
 
     }
 
