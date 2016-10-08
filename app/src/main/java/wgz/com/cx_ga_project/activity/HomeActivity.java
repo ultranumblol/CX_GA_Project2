@@ -287,7 +287,7 @@ public class HomeActivity extends AppCompatActivity
 
         } else if (id == R.id.nav_logout) {
             SPUtils.clear(getApplicationContext());
-            startActivity(new Intent(HomeActivity.this, WelcomeActivity.class));
+            startActivity(new Intent(HomeActivity.this, LoginActivity.class));
 
 
         }

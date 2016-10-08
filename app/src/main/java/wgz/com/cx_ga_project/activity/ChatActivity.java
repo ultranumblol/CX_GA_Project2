@@ -58,6 +58,7 @@ import wgz.com.cx_ga_project.entity.DatrixCreat;
 import wgz.com.cx_ga_project.fragment.PhotoPickerFragment;
 import wgz.com.cx_ga_project.service.GetNewMsgService;
 import wgz.com.cx_ga_project.util.SomeUtil;
+import wgz.com.cx_ga_project.util.UriUtils;
 import wgz.datatom.com.utillibrary.util.LogUtil;
 
 import static wgz.com.cx_ga_project.activity.PickPhotoActivity.HTTP_URL;
@@ -454,10 +455,8 @@ public class ChatActivity extends BaseActivity {
 
             if (requestCode==4){
                 Uri uri = data.getData();
-                Cursor cursor = getContentResolver().query(uri, null, null, null, null);
-                cursor.moveToFirst();
-                String number= cursor.getString(0); // 视频编号
-                String path = cursor.getString(1); // 视频文件路径
+                String path = UriUtils.getPath(getApplicationContext(),uri);
+                  // 视频文件路径
                 SomeUtil.showSnackBarLong(rootview,"视频地址："+path);
 
 
