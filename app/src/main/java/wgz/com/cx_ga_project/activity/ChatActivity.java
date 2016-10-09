@@ -119,6 +119,7 @@ public class ChatActivity extends BaseActivity {
     //图片地址
     List<String> paths = new ArrayList<>();
     private String fileid = "";
+    private String videoPath = "";
     @Override
     public int getLayoutId() {
         return R.layout.activity_chat;
@@ -287,6 +288,14 @@ public class ChatActivity extends BaseActivity {
 
 
     }
+
+    private void SendVideoMsg(){
+
+
+
+
+    }
+
     @Override
     protected void onStop()
     {
@@ -425,10 +434,29 @@ public class ChatActivity extends BaseActivity {
             }
 
             if (requestCode==4){
+                if (more.getVisibility() == View.VISIBLE) {
+                    more.setVisibility(View.GONE);
+                }
+                newchatData.clear();
+
                 Uri uri = data.getData();
-                String path = UriUtils.getPath(getApplicationContext(),uri);
-                  // 视频文件路径
-                SomeUtil.showSnackBarLong(rootview,"视频地址："+path);
+                videoPath  = UriUtils.getPath(getApplicationContext(),uri);
+                // 视频文件路径
+                SomeUtil.showSnackBarLong(rootview,"视频地址："+videoPath);
+
+                ChatMsg re = new ChatMsg();
+                ChatMsg.Re pic = re.new Re();
+                Date currentdate = new Date(System.currentTimeMillis());
+                String curredate = AskForLeaveActivity.getTime(currentdate);
+                pic.setVideo(videoPath);
+                pic.setPic("null");
+                pic.setSendtime(curredate);
+                pic.setMark(0);
+                pic.setIssend("2");
+                newchatData.add(pic);
+                adapter.addAll(newchatData);
+                recyclerview.scrollToPosition(adapter.getCount() - 1);
+
 
 
 
@@ -478,11 +506,6 @@ public class ChatActivity extends BaseActivity {
 
     }
 
-    private void uploadpic2(List<File> files){
-
-
-
-    }
 
     /**
      * 获取视频缩略图
@@ -557,6 +580,7 @@ public class ChatActivity extends BaseActivity {
             }
         }
         LogUtil.e("file size : " +size);
+        LogUtil.e("fileid  : " +fileid);
         app.apiService.detrixWrite(fileid,"0",size,bodyMap)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

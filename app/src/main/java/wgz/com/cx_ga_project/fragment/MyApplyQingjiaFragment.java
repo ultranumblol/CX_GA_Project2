@@ -32,7 +32,9 @@ import wgz.com.cx_ga_project.adapter.MyRecyclerArrayAdapter;
 import wgz.com.cx_ga_project.app;
 import wgz.com.cx_ga_project.base.BaseFragment;
 
+import wgz.com.cx_ga_project.base.Constant;
 import wgz.com.cx_ga_project.entity.Apply;
+import wgz.com.cx_ga_project.util.SPUtils;
 import wgz.datatom.com.utillibrary.util.LogUtil;
 
 import static wgz.com.cx_ga_project.base.Constant.TYPE_QINGJIA;
@@ -101,7 +103,7 @@ public class MyApplyQingjiaFragment extends BaseFragment implements SwipeRefresh
      */
     private void initData() {
 
-        app.apiService.getBeanData("getOverLeaveStatus","501")
+        app.apiService.getBeanData("getOverLeaveStatus",(String) SPUtils.get(app.getApp().getApplicationContext(), Constant.USERID,""))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .map(new Func1<Apply, List<Apply.Result>>() {

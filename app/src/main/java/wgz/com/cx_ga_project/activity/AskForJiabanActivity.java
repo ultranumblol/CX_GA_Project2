@@ -31,6 +31,8 @@ import wgz.com.cx_ga_project.app;
 import wgz.com.cx_ga_project.base.BaseActivity;
 import com.jakewharton.rxbinding.view.RxView;
 
+import wgz.com.cx_ga_project.base.Constant;
+import wgz.com.cx_ga_project.util.SPUtils;
 import wgz.com.cx_ga_project.util.SomeUtil;
 import wgz.datatom.com.utillibrary.util.LogUtil;
 
@@ -134,8 +136,8 @@ public class AskForJiabanActivity extends BaseActivity {
         LogUtil.e("curredate:"+curredate);
         if (!cancle){
             app.apiService.upOverTime("overTimeApply",stime,
-                    etime,"content"
-                    ,"007",curredate,"11")
+                    etime,mJiabanReason.getText().toString()
+                    ,(String) SPUtils.get(app.getApp().getApplicationContext(), Constant.USERID,""),curredate,"11")
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(new Observer<String>() {

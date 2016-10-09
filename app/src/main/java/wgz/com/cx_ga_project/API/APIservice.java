@@ -29,6 +29,7 @@ import wgz.com.cx_ga_project.entity.DatrixCreat;
 import wgz.com.cx_ga_project.entity.DatrixFinish;
 import wgz.com.cx_ga_project.entity.Scheduling;
 import wgz.com.cx_ga_project.entity.SchedulingOneDay;
+import wgz.com.cx_ga_project.entity.UserInfo;
 import wgz.com.cx_ga_project.entity.WorkLog;
 
 /**
@@ -300,10 +301,28 @@ public interface APIservice {
     Observable<SchedulingOneDay> getOneDayScheduling(
             @Field("day") String day
     );
-    //@GET(" http://192.168.1.193:8004/avantar/10001.png")
+
+    /**
+     * 显示datrix上的图片
+     * @return
+     */
     @GET("http://101.231.77.242:9001/preview/getImage?fileid=c1b09c7c-6e9f-43cc-8f16-780713066cc0&token=X7yABwjE20sUJLefATUFqU0iUs8mJPqEJo6iRnV63mI=")
     Observable<String> getdatrixPic();
-    /*@FormUrlEncoded
-    @POST("http://192.168.1.193:8004/appworkmanager/getAvantar")
-    Observable<String> getUserHead(@Field("policeid") String policeid);*/
+
+    /**
+     * 登录
+     * @param username
+     * @param pwd
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("http://192.168.1.193:8004/applogin/appLogin")
+    Observable<UserInfo> login(@Field("username") String username,
+                               @Field("pwd") String pwd);
+
+    @FormUrlEncoded
+    @POST("http://192.168.1.193:8004/applogin/appChangePwd")
+    Observable<String> changePass(@Field("username") String username,
+                                  @Field("newpwd") String newpwd);
+
 }

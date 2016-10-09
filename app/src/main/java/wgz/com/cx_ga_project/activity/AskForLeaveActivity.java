@@ -31,7 +31,9 @@ import rx.schedulers.Schedulers;
 import wgz.com.cx_ga_project.R;
 import wgz.com.cx_ga_project.app;
 import wgz.com.cx_ga_project.base.BaseActivity;
+import wgz.com.cx_ga_project.base.Constant;
 import wgz.com.cx_ga_project.bean.AskForLeaveBean;
+import wgz.com.cx_ga_project.util.SPUtils;
 import wgz.com.cx_ga_project.util.SomeUtil;
 import wgz.datatom.com.utillibrary.util.LogUtil;
 
@@ -187,7 +189,7 @@ public class AskForLeaveActivity extends BaseActivity {
 
         // TODO: 2016/8/5 提交请假申请
         app.apiService.upLoadLeave("leaveApply", stime, etime, mLeaveReason.getText().toString(),
-                "501", curredate, "101", mLeaveType.getText().toString(), mLeaveDaycount.getText().toString()).subscribeOn(Schedulers.io())
+                (String) SPUtils.get(app.getApp().getApplicationContext(), Constant.USERID,""), curredate, "101", mLeaveType.getText().toString(), mLeaveDaycount.getText().toString()).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Action1<String>() {
                     @Override
@@ -195,6 +197,7 @@ public class AskForLeaveActivity extends BaseActivity {
                         LogUtil.e("leaveApply :" +s);
                         if (s.contains("200")) {
                             SomeUtil.showSnackBar(rootview, "提交申请成功！");
+                            finish();
                         } else {
                             SomeUtil.showSnackBar(rootview, "服务器错误！");
                         }

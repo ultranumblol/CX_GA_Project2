@@ -51,8 +51,8 @@ public class WelcomeActivity extends BaseActivity {
         animation.setTarget(imgWelcome);
         Observable<String> observable =  Observable.create(new AnimatorOnSubscribe(animation));
         observable
-                .subscribeOn(AndroidSchedulers.mainThread())//指定订阅的Observable对象的call方法运行在ui线程中
-                .observeOn(AndroidSchedulers.mainThread())//最后统一回到UI线程中处理
+                .subscribeOn(AndroidSchedulers.mainThread())
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<String>() {
                     @Override
                     public void onCompleted() {
@@ -72,37 +72,12 @@ public class WelcomeActivity extends BaseActivity {
                     public void onNext(String str) {
                         LogUtil.e(str);
                         saveinfo();
-                        getuserhead();
+
                     }
                 });
     }
 
-    private void getuserhead() {
-        app.apiService.getUserhead(APIservice.GET_USER_HEAD,"10001").subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<String>() {
-                    @Override
-                    public void onCompleted() {
 
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-
-                    }
-
-                    @Override
-                    public void onNext(String s) {
-                        LogUtil.e("userhead : " + s);
-                        String s2 = s.replace("\"","");
-                        LogUtil.e("userhead : " + s2);
-                        userhead = s2;
-                        saveUserHead();
-                    }
-                });
-
-
-    }
 
 
     @Override
@@ -117,10 +92,5 @@ public class WelcomeActivity extends BaseActivity {
                 .addData(Constant.LOGINTIME, System.currentTimeMillis())
                 .build();
     }
-    private void saveUserHead(){
-        new SPBuild(getApplicationContext())
-                .addData(Constant.USERHEAD, userhead)
-                .build();
 
-    }
 }

@@ -13,28 +13,44 @@
     tools:context="wgz.com.cx_ga_project.activity.ChangeCodeActivity"
     tools:showIn="@layout/activity_change_code">
 
-
-
-    <EditText
+    <android.support.design.widget.TextInputLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:inputType="textPassword"
-        android:ems="10"
         android:layout_marginTop="80dp"
-        android:id="@+id/newpass"
-        android:hint="新密码"
-
-       />
-
+        android:layout_height="wrap_content">
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
         android:id="@+id/oldpass"
         android:hint="原密码"
-        android:layout_marginTop="8dp"
-        />
+        android:maxLines="1"
 
+        android:inputType="textPassword"
+
+        />
+    </android.support.design.widget.TextInputLayout>
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_marginTop="8dp"
+        android:layout_height="wrap_content">
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textPassword"
+        android:ems="10"
+        android:maxLines="1"
+
+        android:id="@+id/newpass"
+        android:hint="新密码"
+
+       />
+    </android.support.design.widget.TextInputLayout>
+
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_marginTop="8dp"
+        android:layout_height="wrap_content">
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -42,8 +58,10 @@
         android:ems="10"
         android:id="@+id/newpass2"
         android:hint="确认新密码"
-        android:layout_marginTop="8dp"
+
+        android:maxLines="1"
         />
+    </android.support.design.widget.TextInputLayout>
 
     <Button
         android:text="确认修改"

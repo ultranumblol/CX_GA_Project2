@@ -1,5 +1,8 @@
 package wgz.com.cx_ga_project.base;
 
+import wgz.com.cx_ga_project.app;
+import wgz.com.cx_ga_project.util.SPUtils;
+
 /**
  * Created by wgz on 2016/8/12.
  */
@@ -12,11 +15,14 @@ public class Constant {
     public static  String APPROVAL_UNPASS = "2";
     public static final String ISLOGIN = "isLogin";
     public static final String LOGINTIME = "loginTime";
-    public static final String USERACCOUNT = "userAccount";
-    public static final String USERPASSWORD = "userPassword";
+    public static final String USERID = "userID";
+    public static final String USERNAME = "userName";
     public static final String USERHEAD = "userHead";
-
-
+    public static final String USERDATRIXID = "userDatrixID";
+    public static final String USERPASSWORD = "userPassWord";
+    public static final String USERPHONENUM = "userPhoneNum";
+    public static final String USEROFFICENAME = "userOfficeName";
+    public static final String USERHEADURL = "http://"+ SPUtils.get(app.getApp().getApplicationContext(), Constant.USERHEAD, "");
 
 /*public  enum Approval{
         UNAPROVAL("0") ,

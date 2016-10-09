@@ -24,11 +24,13 @@
         android:layout_height="wrap_content"
         android:paddingTop="16dp"
         android:text="警员007"
+        android:id="@+id/username_head"
         android:textColor="@color/white"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/departmant_head"
+
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@color/white"

@@ -13,7 +13,10 @@ import java.util.List;
 public class Apply {
     @SerializedName("code")
     private Integer code;
+
+
     @SerializedName("result")
+
     private List<Result> result = new ArrayList<Result>();
 
     /**

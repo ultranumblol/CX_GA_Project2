@@ -23,6 +23,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -115,19 +116,25 @@ public class HomeActivity extends AppCompatActivity
         ColorStateList csl = (ColorStateList) resource.getColorStateList(R.drawable.navigation_menu_item_color);
         navView.setItemTextColor(csl);
         navView.setItemIconTintList(csl);
-        LogUtil.e("userhead_url: " +SPUtils.get(app.getApp().getApplicationContext(), Constant.USERHEAD, ""));
+        //LogUtil.e("userhead_url: " +SPUtils.get(app.getApp().getApplicationContext(), Constant.USERHEAD, ""));
         ImageView userhead = (ImageView) navView.getHeaderView(0).findViewById(R.id.imageView);
         // TODO: 2016/9/18 获取用户头像地址
+        //String userheadurl = "http://"+SPUtils.get(app.getApp().getApplicationContext(), Constant.USERHEAD, "");
+        //LogUtil.e("userheadurl : "+userheadurl);
         Glide.with(this)
-                .load("http://192.168.1.193:8004/avantar/10001.png")
-                //.load("http://101.231.77.242:9001/preview/getImage?fileid=c1b09c7c-6e9f-43cc-8f16-780713066cc0&token=X7yABwjE20sUJLefATUFqU0iUs8mJPqEJo6iRnV63mI=")
-                //.load("http://"+SPUtils.get(app.getApp().getApplicationContext(), Constant.USERHEAD, ""))
+                //.load("http://192.168.1.193:8004/avantar/10001.png")
+               // .load("http://192.168.1.193:8004/avantar/030283.png")
+                .load(Constant.USERHEADURL)
                 .placeholder(R.mipmap.ic_launcher)
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .thumbnail(0.4f)
                 .dontAnimate()
                 .into(userhead);
 
+        TextView username = (TextView) navView.getHeaderView(0).findViewById(R.id.username_head);
+        TextView userdepartment = (TextView) navView.getHeaderView(0).findViewById(R.id.departmant_head);
+        username.setText((String) SPUtils.get(app.getApp().getApplicationContext(), Constant.USERNAME,"未知"));
+        userdepartment.setText((String) SPUtils.get(app.getApp().getApplicationContext(), Constant.USEROFFICENAME,"未知"));
 
     }
 

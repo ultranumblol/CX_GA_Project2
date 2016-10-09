@@ -47,11 +47,11 @@ public class AnimatorOnSubscribe implements Observable.OnSubscribe<String> {
                 LogUtil.e("dTime= " + dTime + " default: " + mTimeDifference);
                 LogUtil.e("isLogin: "+isLogin);
                 // TODO: 2016/8/19 是否登陆的判断先写为true
-                if (true) {
+                if (isLogin) {
                     if (dTime < mTimeDifference) {
                         subscriber.onCompleted();
-                    }
-                } else subscriber.onError(new Exception("error"));
+                    }else subscriber.onError(new Exception("登录超时！"));
+                } else subscriber.onError(new Exception("未登录！"));
             }
         };
 
