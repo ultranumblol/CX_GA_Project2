@@ -123,6 +123,8 @@ public class ChatActivity extends BaseActivity {
     public int getLayoutId() {
         return R.layout.activity_chat;
     }
+    private String datrixUrl = "http://101.231.77.242:9001/preview/getImage?fileid=";
+    private String datrixurl2 = "&token=X7yABwjE20sUJLefATUFqU0iUs8mJPqEJo6iRnV63mI=";
 
     @Override
     public void initView() {
@@ -256,7 +258,7 @@ public class ChatActivity extends BaseActivity {
         Date currentdate = new Date(System.currentTimeMillis());
         String curredate = AskForLeaveActivity.getTime(currentdate);
 
-        app.jqAPIService.sendMsg("2016072100100000060", etSendmessage.getText().toString(),"", "213", curredate, "10001")
+        app.jqAPIService.sendMsg("2016072100100000060", etSendmessage.getText().toString(),"", "213", curredate, "532301030355")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<String>() {
@@ -280,40 +282,9 @@ public class ChatActivity extends BaseActivity {
 
     }
     private void SendPicmsg(String path) {
-        Date currentdate = new Date(System.currentTimeMillis());
-        String curredate = AskForLeaveActivity.getTime(currentdate);
 
-        app.jqAPIService.sendMsg("2016072100100000060", " ",path, "213", curredate, "10001")
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<String>() {
-                    @Override
-                    public void onCompleted() {
-                        etSendmessage.setText("");
-                        // TODO: 2016/9/12 获取新消息 删除本地 换成服务器请求的
-                        //adapter.getHeader()
-                        //getNewmsg();
-                        //LogUtil.e("recyclerview count:"+recyclerview.getChildCount());
-                        //recyclerview.getChildCount();
-                        adapter.remove(adapter.getCount() - 1);
+        DatrixCreate();
 
-                        getNewmsg();
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        //SomeUtil.showSnackBar(rootview, "error:" + e.toString());
-                        LogUtil.e("error:"+ e.toString());
-                    }
-
-                    @Override
-                    public void onNext(String s) {
-                        LogUtil.e("添加图片聊天记录result:" + s);
-
-
-                        // SomeUtil.showSnackBar(rootview,"result:"+s);
-                    }
-                });
 
     }
     @Override
@@ -633,7 +604,46 @@ public class ChatActivity extends BaseActivity {
                     @Override
                     public void onNext(String s) {
                         if (s.contains("200")){
-                            SomeUtil.showSnackBar(rootview,"上传图片成功！");
+                            Date currentdate = new Date(System.currentTimeMillis());
+                            String curredate = AskForLeaveActivity.getTime(currentdate);
+
+
+                            app.jqAPIService.sendMsg("2016072100100000060", " ",datrixUrl+fileid+datrixurl2, "213", curredate, "532301030355")
+                                    .subscribeOn(Schedulers.io())
+                                    .observeOn(AndroidSchedulers.mainThread())
+                                    .subscribe(new Subscriber<String>() {
+                                        @Override
+                                        public void onCompleted() {
+                                            etSendmessage.setText("");
+                                            // TODO: 2016/9/12 获取新消息 删除本地 换成服务器请求的
+                                            //adapter.getHeader()
+                                            //getNewmsg();
+                                            //LogUtil.e("recyclerview count:"+recyclerview.getChildCount());
+                                            //recyclerview.getChildCount();
+                                            adapter.remove(adapter.getCount() - 1);
+
+                                            getNewmsg();
+                                        }
+
+                                        @Override
+                                        public void onError(Throwable e) {
+                                            //SomeUtil.showSnackBar(rootview, "error:" + e.toString());
+                                            LogUtil.e("error:"+ e.toString());
+                                        }
+
+                                        @Override
+                                        public void onNext(String s) {
+                                            LogUtil.e("添加图片聊天记录result:" + s);
+
+
+                                            // SomeUtil.showSnackBar(rootview,"result:"+s);
+                                        }
+                                    });
+
+
+
+
+                            //SomeUtil.showSnackBar(rootview,"上传图片成功！");
                         }
                         else {
                             SomeUtil.showSnackBar(rootview,"网络错误，请稍后！");

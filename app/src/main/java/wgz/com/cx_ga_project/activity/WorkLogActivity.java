@@ -83,13 +83,16 @@ public class WorkLogActivity extends BaseActivity {
         toolbarWprklog.setTitle("工作日志");
         setSupportActionBar(toolbarWprklog);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        initCalendar();
         iniData();
 
     }
 
     private void iniData() {
         final Calendar calendar = Calendar.getInstance();
+        LogUtil.e("initData : " + OtherUtils.formatMonth(calendar.getTime()).toString());
         app.apiService.getLogData(APIservice.CHECK_ONESSUMMARY, "10001", OtherUtils.formatMonth(calendar.getTime()))
+
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<WorkLog>() {
@@ -136,6 +139,8 @@ public class WorkLogActivity extends BaseActivity {
                             initCalendar();
                         } else {
                             SomeUtil.showSnackBar(mRootview, "服务器错误！请稍后再试");
+                            LogUtil.e("logs : " + mylogs.toString());
+                            //initCalendar();
                         }
 
                     }

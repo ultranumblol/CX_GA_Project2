@@ -120,6 +120,7 @@ public class HomeActivity extends AppCompatActivity
         // TODO: 2016/9/18 获取用户头像地址
         Glide.with(this)
                 .load("http://192.168.1.193:8004/avantar/10001.png")
+                //.load("http://101.231.77.242:9001/preview/getImage?fileid=c1b09c7c-6e9f-43cc-8f16-780713066cc0&token=X7yABwjE20sUJLefATUFqU0iUs8mJPqEJo6iRnV63mI=")
                 //.load("http://"+SPUtils.get(app.getApp().getApplicationContext(), Constant.USERHEAD, ""))
                 .placeholder(R.mipmap.ic_launcher)
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
@@ -153,7 +154,24 @@ public class HomeActivity extends AppCompatActivity
                 break;
             case R.id.fab:
                 // TODO: 2016/8/3 社会信息采集功能
+                app.apiService.getdatrixPic().subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(new Subscriber<String>() {
+                            @Override
+                            public void onCompleted() {
 
+                            }
+
+                            @Override
+                            public void onError(Throwable e) {
+
+                            }
+
+                            @Override
+                            public void onNext(String s) {
+                            LogUtil.e("datrixPix : " +s.toString());
+                            }
+                        });
                 //uploadpicsTest();
                 //startActivity(new Intent(HomeActivity.this, FullscreenActivity.class));
                 // Snackbar.make(homeRootView, "社会信息采集开发中。。", Snackbar.LENGTH_SHORT).show();

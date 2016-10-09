@@ -98,7 +98,12 @@ public interface JqAPIService {
                                @Field("policeid") String policeid);
 
 
-
+    /**
+     * 查询聊天记录
+     * @param jqid
+     * @param msg
+     * @return
+     */
     @FormUrlEncoded
     @POST("http://192.168.1.193:8004/liveshow/getAppMsgList")
     Observable<ChatMsg> GetMsg(@Field("jqid") String jqid,

@@ -27,6 +27,8 @@ import wgz.com.cx_ga_project.bean.UserBean;
 import wgz.com.cx_ga_project.entity.Apply;
 import wgz.com.cx_ga_project.entity.DatrixCreat;
 import wgz.com.cx_ga_project.entity.DatrixFinish;
+import wgz.com.cx_ga_project.entity.Scheduling;
+import wgz.com.cx_ga_project.entity.SchedulingOneDay;
 import wgz.com.cx_ga_project.entity.WorkLog;
 
 /**
@@ -273,8 +275,34 @@ public interface APIservice {
     );
 
 
+    /**
+     * 根据时间段获取值班信息
+     * @param start
+     * @param end
+     * @param policenum
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("http://192.168.1.193:8004/demojob/getAppAllSch")
+    Observable<Scheduling> getAllScheduling(
+            @Field("start") String start,
+            @Field("end") String end,
+            @Field("policenum") String policenum
+    );
 
-
+    /**
+     * 查询某一天的排班记录
+     * @param day
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("http://192.168.1.193:8004/apponduty/getWeekLeaderByDay")
+    Observable<SchedulingOneDay> getOneDayScheduling(
+            @Field("day") String day
+    );
+    //@GET(" http://192.168.1.193:8004/avantar/10001.png")
+    @GET("http://101.231.77.242:9001/preview/getImage?fileid=c1b09c7c-6e9f-43cc-8f16-780713066cc0&token=X7yABwjE20sUJLefATUFqU0iUs8mJPqEJo6iRnV63mI=")
+    Observable<String> getdatrixPic();
     /*@FormUrlEncoded
     @POST("http://192.168.1.193:8004/appworkmanager/getAvantar")
     Observable<String> getUserHead(@Field("policeid") String policeid);*/
