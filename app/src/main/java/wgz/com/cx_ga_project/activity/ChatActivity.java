@@ -57,6 +57,7 @@ import wgz.com.cx_ga_project.entity.ChatMsg;
 import wgz.com.cx_ga_project.entity.DatrixCreat;
 import wgz.com.cx_ga_project.fragment.PhotoPickerFragment;
 import wgz.com.cx_ga_project.service.GetNewMsgService;
+import wgz.com.cx_ga_project.util.DatrixUtil;
 import wgz.com.cx_ga_project.util.SomeUtil;
 import wgz.com.cx_ga_project.util.UriUtils;
 import wgz.datatom.com.utillibrary.util.LogUtil;
@@ -282,10 +283,25 @@ public class ChatActivity extends BaseActivity {
                 });
 
     }
-    private void SendPicmsg(String path) {
+    private void SendPicmsg() {
 
-        DatrixCreate();
+        //DatrixCreate();
+        DatrixUtil datrixUtil = new DatrixUtil(fileid,paths,rootview);
+        datrixUtil.DatrixUpLoadPic();
+        datrixUtil.setOnAfterFinish(new DatrixUtil.AfterFinish() {
+            @Override
+            public void afterfinish() {
+                etSendmessage.setText("");
+                // TODO: 2016/9/12 获取新消息 删除本地 换成服务器请求的
+                //adapter.getHeader()
+                //getNewmsg();
+                //LogUtil.e("recyclerview count:"+recyclerview.getChildCount());
+                //recyclerview.getChildCount();
+                adapter.remove(adapter.getCount() - 1);
 
+                getNewmsg();
+            }
+        });
 
     }
 
@@ -426,7 +442,8 @@ public class ChatActivity extends BaseActivity {
                     newchatData.add(pic);
                     adapter.addAll(newchatData);
                     recyclerview.scrollToPosition(adapter.getCount() - 1);
-                    uploadpic(makeFiles());
+                    //uploadpic(makeFiles());
+                    SendPicmsg();
                     //DatrixCreate();
                     //adapter.addAll();
                 }
@@ -490,7 +507,7 @@ public class ChatActivity extends BaseActivity {
                         LogUtil.e("upPic :"+s);
                         if (s.contains("\"code\":200")){
 
-                            SendPicmsg(paths.get(0));
+                            SendPicmsg();
                            /* SomeUtil.showSnackBar(rootview,"提交成功！").setCallback(new Snackbar.Callback() {
                                 @Override
                                 public void onDismissed(Snackbar snackbar, int event) {

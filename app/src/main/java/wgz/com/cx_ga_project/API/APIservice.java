@@ -24,6 +24,7 @@ import retrofit2.http.Path;
 import rx.Observable;
 import wgz.com.cx_ga_project.bean.JiaBan;
 import wgz.com.cx_ga_project.bean.UserBean;
+import wgz.com.cx_ga_project.entity.AppVersion;
 import wgz.com.cx_ga_project.entity.Apply;
 import wgz.com.cx_ga_project.entity.DatrixCreat;
 import wgz.com.cx_ga_project.entity.DatrixFinish;
@@ -320,9 +321,22 @@ public interface APIservice {
     Observable<UserInfo> login(@Field("username") String username,
                                @Field("pwd") String pwd);
 
+    /**
+     * 修改用户密码
+     * @param username
+     * @param newpwd
+     * @return
+     */
     @FormUrlEncoded
     @POST("http://192.168.1.193:8004/applogin/appChangePwd")
     Observable<String> changePass(@Field("username") String username,
                                   @Field("newpwd") String newpwd);
+
+    /**
+     * 检查版本
+     * @return
+     */
+    @GET("http://192.168.1.193:8004/appupload/checkAppVersion")
+    Observable<AppVersion> checkVersion();
 
 }

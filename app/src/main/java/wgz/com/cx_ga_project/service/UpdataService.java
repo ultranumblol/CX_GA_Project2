@@ -16,6 +16,9 @@ import android.support.annotation.Nullable;
  */
 
 public class UpdataService extends Service {
+
+
+
     /**
      * 安卓系统下载类
      **/
@@ -37,7 +40,7 @@ public class UpdataService extends Service {
 
         //设置下载地址
         DownloadManager.Request down = new DownloadManager.Request(
-                Uri.parse("http://gdown.baidu.com/data/wisegame/fd84b7f6746f0b18/baiduyinyue_4802.apk"));
+                Uri.parse("http://192.168.1.193:8004/apk/1.apk"));
 
         // 设置允许使用的网络类型，这里是移动网络和wifi都可以
         down.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_MOBILE

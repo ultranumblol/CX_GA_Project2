@@ -15,6 +15,7 @@ import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import wgz.com.cx_ga_project.activity.AskForLeaveActivity;
+import wgz.com.cx_ga_project.adapter.chatAdapter.ChatAdapter;
 import wgz.com.cx_ga_project.app;
 import wgz.com.cx_ga_project.entity.DatrixCreat;
 import wgz.datatom.com.utillibrary.util.LogUtil;
@@ -29,12 +30,18 @@ public class DatrixUtil {
     private String fileid;
     List<String> paths = new ArrayList<>();
     private View rootview;
+    private AfterFinish afterFinish;
     public DatrixUtil(String fileid, List<String> paths, View rootview) {
         this.fileid = fileid;
         this.paths = paths;
         this.rootview = rootview;
+
     }
 
+    public void DatrixUpLoadPic(){
+        DatrixCreate();
+
+    }
     private void DatrixCreate() {
         app.apiService.uploadFileWithRequestBodyTest("testtestwgzwgz")
                 .subscribeOn(Schedulers.io())
@@ -137,7 +144,11 @@ public class DatrixUtil {
                                     .subscribe(new Subscriber<String>() {
                                         @Override
                                         public void onCompleted() {
-                                            etSendmessage.setText("");
+                                            if (afterFinish!=null){
+                                                afterFinish.afterfinish();
+                                            }
+
+                                           /* etSendmessage.setText("");
                                             // TODO: 2016/9/12 获取新消息 删除本地 换成服务器请求的
                                             //adapter.getHeader()
                                             //getNewmsg();
@@ -145,7 +156,7 @@ public class DatrixUtil {
                                             //recyclerview.getChildCount();
                                             adapter.remove(adapter.getCount() - 1);
 
-                                            getNewmsg();
+                                            getNewmsg();*/
                                         }
 
                                         @Override
@@ -156,7 +167,7 @@ public class DatrixUtil {
 
                                         @Override
                                         public void onNext(String s) {
-                                            LogUtil.e("添加图片聊天记录result:" + s);
+                                            LogUtil.e("Finish result:" + s);
 
 
                                             // SomeUtil.showSnackBar(rootview,"result:"+s);
@@ -176,6 +187,12 @@ public class DatrixUtil {
 
 
     }
+    public interface  AfterFinish{
+        void afterfinish();
+    }
+    public void setOnAfterFinish(AfterFinish afterFinish){
+        this.afterFinish = afterFinish;
 
+    }
 
 }

@@ -1,5 +1,6 @@
 package wgz.com.cx_ga_project.activity;
 
+import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.ColorStateList;
@@ -14,7 +15,7 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AlertDialog;
+
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
@@ -44,6 +45,8 @@ import rx.schedulers.Schedulers;
 import wgz.com.cx_ga_project.R;
 import wgz.com.cx_ga_project.app;
 import wgz.com.cx_ga_project.base.Constant;
+import wgz.com.cx_ga_project.entity.AppVersion;
+import wgz.com.cx_ga_project.service.UpdataService;
 import wgz.com.cx_ga_project.util.SPUtils;
 import wgz.com.cx_ga_project.util.SomeUtil;
 import wgz.datatom.com.utillibrary.util.LogUtil;
@@ -123,7 +126,7 @@ public class HomeActivity extends AppCompatActivity
         //LogUtil.e("userheadurl : "+userheadurl);
         Glide.with(this)
                 //.load("http://192.168.1.193:8004/avantar/10001.png")
-               // .load("http://192.168.1.193:8004/avantar/030283.png")
+                // .load("http://192.168.1.193:8004/avantar/030283.png")
                 .load(Constant.USERHEADURL)
                 .placeholder(R.mipmap.ic_launcher)
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
@@ -133,12 +136,12 @@ public class HomeActivity extends AppCompatActivity
 
         TextView username = (TextView) navView.getHeaderView(0).findViewById(R.id.username_head);
         TextView userdepartment = (TextView) navView.getHeaderView(0).findViewById(R.id.departmant_head);
-        username.setText((String) SPUtils.get(app.getApp().getApplicationContext(), Constant.USERNAME,"未知"));
-        userdepartment.setText((String) SPUtils.get(app.getApp().getApplicationContext(), Constant.USEROFFICENAME,"未知"));
+        username.setText((String) SPUtils.get(app.getApp().getApplicationContext(), Constant.USERNAME, "未知"));
+        userdepartment.setText((String) SPUtils.get(app.getApp().getApplicationContext(), Constant.USEROFFICENAME, "未知"));
 
     }
 
-    @OnClick({R.id.id_fighttrack,R.id.fab, R.id.to_jiechujing, R.id.id_toWorkLog, R.id.id_myscheduling, R.id.id_myApply, R.id.id_shenhe, R.id.id_xiashu})
+    @OnClick({R.id.id_fighttrack, R.id.fab, R.id.to_jiechujing, R.id.id_toWorkLog, R.id.id_myscheduling, R.id.id_myApply, R.id.id_shenhe, R.id.id_xiashu})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.id_fighttrack:
@@ -176,7 +179,7 @@ public class HomeActivity extends AppCompatActivity
 
                             @Override
                             public void onNext(String s) {
-                            LogUtil.e("datrixPix : " +s.toString());
+                                LogUtil.e("datrixPix : " + s.toString());
                             }
                         });
                 //uploadpicsTest();
@@ -297,9 +300,52 @@ public class HomeActivity extends AppCompatActivity
 
 
         } else if (id == R.id.nav_updateAPP) {
-
-            int versionCode = SomeUtil.getVersionCode(this);
+            final int versionCode = SomeUtil.getVersionCode(this);
             LogUtil.e("versionCode:" + versionCode);
+            app.apiService.checkVersion().subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new Subscriber<AppVersion>() {
+                        @Override
+                        public void onCompleted() {
+
+                        }
+
+                        @Override
+                        public void onError(Throwable e) {
+                            LogUtil.e("checkVersion error:  " + e.toString());
+                        }
+
+                        @Override
+                        public void onNext(AppVersion appVersion) {
+                            if (appVersion.getCode().equals(200)) {
+                                String code = appVersion.getRes().get(0).getApkVersioncode();
+                                int a = Integer.parseInt(code);
+                                LogUtil.e("serviceCode : " + a);
+                                if (a > versionCode) {
+                                    // TODO: 2016/10/10 下载更新
+                                    AlertDialog.Builder alertDialog = new AlertDialog.Builder(HomeActivity.this);
+                                    alertDialog.setTitle("版本更新")
+                                            .setMessage("检查到新版本，现在更新吗？")
+                                            .setPositiveButton("立即更新", new DialogInterface.OnClickListener() {
+                                                @Override
+                                                public void onClick(DialogInterface dialog, int which) {
+                                                    startService(new Intent(HomeActivity.this, UpdataService.class));
+
+                                                }
+                                            }).setNegativeButton("稍后更新", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+
+                                        }
+                                    }).show();
+
+                                }
+
+                            }
+                        }
+                    });
+
+
             //startService(new Intent(HomeActivity.this, UpdataService.class));
 
 
@@ -315,10 +361,9 @@ public class HomeActivity extends AppCompatActivity
             startActivity(new Intent(HomeActivity.this, LoginActivity.class));
 
 
-        }
-        else if (id==R.id.nav_saoyisao){
+        } else if (id == R.id.nav_saoyisao) {
             // TODO: 2016/9/3 扫一扫
-            startActivity(new Intent(HomeActivity.this,SaoYiSaoActivity.class));
+            startActivity(new Intent(HomeActivity.this, SaoYiSaoActivity.class));
 
         }
 
