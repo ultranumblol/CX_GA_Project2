@@ -17,9 +17,15 @@ import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import rx.Subscriber;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 import wgz.com.cx_ga_project.R;
 import wgz.com.cx_ga_project.adapter.JQCallbackDetilAdapter;
+import wgz.com.cx_ga_project.app;
 import wgz.com.cx_ga_project.base.BaseActivity;
+import wgz.com.cx_ga_project.entity.JqCallBack;
+import wgz.datatom.com.utillibrary.util.LogUtil;
 
 /**
  * 警情回告
@@ -68,7 +74,7 @@ public class JQCallbackActivity extends BaseActivity {
 
                         break;
                     case R.id.fabtag_addsjPhone:
-                        startActivity(new Intent(JQCallbackActivity.this, SJPeopleActivity.class));
+                        startActivity(new Intent(JQCallbackActivity.this, UpLoadSJPhoneActivity.class));
                         break;
                     case R.id.fabtag_addjqMsg:
                         startActivity(new Intent(JQCallbackActivity.this, AddJQActivity.class));
@@ -80,10 +86,12 @@ public class JQCallbackActivity extends BaseActivity {
         sjPhoneRv.setLayoutManager(new LinearLayoutManager(this));
         sjrRv.setLayoutManager(new LinearLayoutManager(this));
         callbackContentRv.setLayoutManager(new LinearLayoutManager(this));
+
         sjCarRv.setAdapter(adapter = new JQCallbackDetilAdapter(this));
         sjPhoneRv.setAdapter(adapter);
-        callbackContentRv.setAdapter(adapter);
         sjrRv.setAdapter(adapter);
+        callbackContentRv.setAdapter(adapter);
+
         adapter.addAll(initData());
 
 
@@ -92,10 +100,32 @@ public class JQCallbackActivity extends BaseActivity {
     }
 
     private List<String> initData() {
-        for (int i = 0 ; i<5 ; i++){
+        /*for (int i = 0 ; i<5 ; i++){
             mdata.add(i+"");
 
-        }
+        }*/
+        app.jqAPIService.GetAllJQDetil("2016072100100000060")
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<JqCallBack>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        LogUtil.e("jqcallback error : "+e.toString());
+                    }
+
+                    @Override
+                    public void onNext(JqCallBack jqCallBack) {
+                        LogUtil.e("jqcallback getRescar : "+jqCallBack.getRescar().toString() );
+                        LogUtil.e("jqcallback getRespeople : "+jqCallBack.getRespeople().toString() );
+                        LogUtil.e("jqcallback getResphone : "+jqCallBack.getResphone().toString() );
+                        LogUtil.e("jqcallback getResreport : "+jqCallBack.getResreport().toString() );
+                    }
+                });
 
 
         return mdata;

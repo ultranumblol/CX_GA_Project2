@@ -34,10 +34,9 @@ import wgz.com.cx_ga_project.R;
 import wgz.com.cx_ga_project.app;
 import wgz.com.cx_ga_project.base.BaseActivity;
 import wgz.com.cx_ga_project.base.Constant;
-import wgz.com.cx_ga_project.bean.UserBean;
 import wgz.com.cx_ga_project.entity.UserInfo;
-import wgz.com.cx_ga_project.util.MD5Util;
 import wgz.com.cx_ga_project.util.SPBuild;
+import wgz.com.cx_ga_project.util.SPUtils;
 import wgz.com.cx_ga_project.util.SomeUtil;
 import wgz.datatom.com.utillibrary.util.LogUtil;
 
@@ -225,7 +224,7 @@ public class LoginActivity extends BaseActivity {
 
     private void saveUserInfo(UserInfo.UserRes userRes,String password) {
         LogUtil.e("userres : "+ userRes.toString());
-
+        SPUtils.clear(getApplicationContext());
         // TODO: 2016/8/5 存储用户信息
         new SPBuild(getApplicationContext())
                 .addData(Constant.ISLOGIN, Boolean.TRUE)

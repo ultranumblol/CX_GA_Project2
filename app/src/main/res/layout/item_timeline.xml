@@ -6,29 +6,32 @@
     android:orientation="horizontal"
     android:paddingLeft="12dp"
     android:paddingRight="16dp">
-<TextView
-    android:layout_width="55dp"
-    android:layout_height="wrap_content"
-    android:textSize="12sp"
-    android:layout_gravity="center_vertical"
-    android:text="2016-9-18 11:43"
-    />
+
+    <TextView
+        android:id="@+id/id_timelineTime"
+        android:layout_width="70dp"
+        android:layout_height="50dp"
+        android:layout_gravity="center_vertical"
+        android:gravity="center_vertical"
+        android:text="2016-9-18 11:43:22"
+        android:textSize="12sp" />
+
     <wgz.com.cx_ga_project.view.TimeLineMarker
         android:id="@+id/timeLineMarker"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
+        android:paddingBottom="16dp"
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
         android:paddingTop="16dp"
-        android:paddingBottom="16dp"
         app:beginLine="@color/colorPrimary"
         app:endLine="@color/colorPrimary"
         app:lineSize="2dp"
         app:marker="@drawable/ic_timeline_marker"
         app:markerSize="24dp"
         app:text="1"
-        app:textSize="14dp"
-        app:textColor="@color/white"/>
+        app:textColor="@color/white"
+        app:textSize="14dp" />
 
     <TextView
         android:id="@+id/desc_tv"

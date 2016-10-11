@@ -58,6 +58,7 @@ public class WelcomeActivity extends BaseActivity {
                     public void onCompleted() {
                         LogUtil.e("onCompleted!");
                         startActivity(new Intent(WelcomeActivity.this,HomeActivity.class));
+                        saveinfo();
                         finish();
                     }
 
@@ -71,7 +72,7 @@ public class WelcomeActivity extends BaseActivity {
                     @Override
                     public void onNext(String str) {
                         LogUtil.e(str);
-                        saveinfo();
+
 
                     }
                 });

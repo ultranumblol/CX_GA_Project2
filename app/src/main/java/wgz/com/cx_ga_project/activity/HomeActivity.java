@@ -47,6 +47,7 @@ import wgz.com.cx_ga_project.app;
 import wgz.com.cx_ga_project.base.Constant;
 import wgz.com.cx_ga_project.entity.AppVersion;
 import wgz.com.cx_ga_project.service.UpdataService;
+import wgz.com.cx_ga_project.util.SPBuild;
 import wgz.com.cx_ga_project.util.SPUtils;
 import wgz.com.cx_ga_project.util.SomeUtil;
 import wgz.datatom.com.utillibrary.util.LogUtil;
@@ -323,6 +324,10 @@ public class HomeActivity extends AppCompatActivity
                                 LogUtil.e("serviceCode : " + a);
                                 if (a > versionCode) {
                                     // TODO: 2016/10/10 下载更新
+                                    String url = appVersion.getRes().get(0).getApkUrl();
+                                    url.replaceAll("\\\\","");
+                                    new SPBuild(getApplicationContext())
+                                            .addData(Constant.UPDATEURL,url).build();
                                     AlertDialog.Builder alertDialog = new AlertDialog.Builder(HomeActivity.this);
                                     alertDialog.setTitle("版本更新")
                                             .setMessage("检查到新版本，现在更新吗？")
@@ -330,6 +335,7 @@ public class HomeActivity extends AppCompatActivity
                                                 @Override
                                                 public void onClick(DialogInterface dialog, int which) {
                                                     startService(new Intent(HomeActivity.this, UpdataService.class));
+
 
                                                 }
                                             }).setNegativeButton("稍后更新", new DialogInterface.OnClickListener() {
@@ -339,6 +345,8 @@ public class HomeActivity extends AppCompatActivity
                                         }
                                     }).show();
 
+                                }else{
+                                    SomeUtil.showSnackBar(homeRootView,"当前已经是最新版本！");
                                 }
 
                             }
@@ -359,6 +367,7 @@ public class HomeActivity extends AppCompatActivity
         } else if (id == R.id.nav_logout) {
             SPUtils.clear(getApplicationContext());
             startActivity(new Intent(HomeActivity.this, LoginActivity.class));
+            HomeActivity.this.finish();
 
 
         } else if (id == R.id.nav_saoyisao) {

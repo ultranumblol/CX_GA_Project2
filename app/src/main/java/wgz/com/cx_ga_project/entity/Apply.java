@@ -80,7 +80,24 @@ public class Apply {
         @SerializedName("reasontype")
         private String reasontype;
 
-        /**
+            @Override
+            public String toString() {
+                return "Result{" +
+                        "id='" + id + '\'' +
+                        ", policeid='" + policeid + '\'' +
+                        ", start='" + start + '\'' +
+                        ", end='" + end + '\'' +
+                        ", content='" + content + '\'' +
+                        ", applytime='" + applytime + '\'' +
+                        ", status='" + status + '\'' +
+                        ", upperid='" + upperid + '\'' +
+                        ", type='" + type + '\'' +
+                        ", days=" + days +
+                        ", reasontype='" + reasontype + '\'' +
+                        '}';
+            }
+
+            /**
          *
          * @return
          * The id

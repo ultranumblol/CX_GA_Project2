@@ -28,8 +28,8 @@
         <com.jude.easyrecyclerview.EasyRecyclerView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_empty="@layout/view_empty"
             android:id="@+id/sjr_rv"
+            android:minHeight="80dp"
             app:scrollbarStyle="insideOverlay">
         </com.jude.easyrecyclerview.EasyRecyclerView>
         <TextView
@@ -45,7 +45,8 @@
         <com.jude.easyrecyclerview.EasyRecyclerView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_empty="@layout/view_empty"
+            android:minHeight="80dp"
+
             android:id="@+id/sjCar_rv"
             app:scrollbarStyle="insideOverlay">
         </com.jude.easyrecyclerview.EasyRecyclerView>
@@ -62,8 +63,9 @@
         <com.jude.easyrecyclerview.EasyRecyclerView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_empty="@layout/view_empty"
+
             android:id="@+id/sjPhone_rv"
+            android:minHeight="80dp"
             app:scrollbarStyle="insideOverlay">
         </com.jude.easyrecyclerview.EasyRecyclerView>
         <TextView
@@ -79,8 +81,9 @@
         <com.jude.easyrecyclerview.EasyRecyclerView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_empty="@layout/view_empty"
+
             android:id="@+id/callbackContent_rv"
+            android:minHeight="80dp"
             app:scrollbarStyle="insideOverlay">
         </com.jude.easyrecyclerview.EasyRecyclerView>
 

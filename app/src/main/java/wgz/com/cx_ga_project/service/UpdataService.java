@@ -11,6 +11,11 @@ import android.os.Environment;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 
+import wgz.com.cx_ga_project.app;
+import wgz.com.cx_ga_project.base.Constant;
+import wgz.com.cx_ga_project.util.SPUtils;
+import wgz.datatom.com.utillibrary.util.LogUtil;
+
 /**
  * Created by wgz on 2016/8/31.
  */
@@ -37,10 +42,11 @@ public class UpdataService extends Service {
         manager = (DownloadManager) getSystemService(DOWNLOAD_SERVICE);
 
         receiver = new DownloadCompleteReceiver();
-
+        String url = (String) SPUtils.get(app.getApp().getApplicationContext(), Constant.UPDATEURL, "error!");
+        LogUtil.e("updateUrl : "+url);
         //设置下载地址
         DownloadManager.Request down = new DownloadManager.Request(
-                Uri.parse("http://192.168.1.193:8004/apk/1.apk"));
+                Uri.parse(url));
 
         // 设置允许使用的网络类型，这里是移动网络和wifi都可以
         down.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_MOBILE

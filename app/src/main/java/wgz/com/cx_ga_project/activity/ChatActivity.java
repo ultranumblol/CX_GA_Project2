@@ -260,7 +260,7 @@ public class ChatActivity extends BaseActivity {
         Date currentdate = new Date(System.currentTimeMillis());
         String curredate = AskForLeaveActivity.getTime(currentdate);
 
-        app.jqAPIService.sendMsg("2016072100100000060", etSendmessage.getText().toString(),"", "213", curredate, "532301030355")
+        app.jqAPIService.sendMsg("2016072100100000060", etSendmessage.getText().toString(),"", "213", curredate, "030283")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<String>() {
@@ -649,7 +649,7 @@ public class ChatActivity extends BaseActivity {
                             String curredate = AskForLeaveActivity.getTime(currentdate);
 
 
-                            app.jqAPIService.sendMsg("2016072100100000060", " ",datrixUrl+fileid+datrixurl2, "213", curredate, "532301030355")
+                            app.jqAPIService.sendMsg("2016072100100000060", " ",datrixUrl+fileid+datrixurl2, "213", curredate, "030283")
                                     .subscribeOn(Schedulers.io())
                                     .observeOn(AndroidSchedulers.mainThread())
                                     .subscribe(new Subscriber<String>() {

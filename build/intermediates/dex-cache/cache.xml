@@ -1,3 +1,401 @@
 <?xml version="1.0" encoding="utf-8"?>
-<items version="2" />
+<items version="2" >
 
+    <item
+        is-multidex="false"
+        jar="C:\Users\wgz\Desktop\ant\CX_GA_Project\app\build\intermediates\exploded-aar\com.jude\rollviewpager\1.3.2\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="23.0.1"
+        sha1="7c51c9087f14c509ec6d3d819f9ae183b71096fb">
+        <dex dex="C:\Users\wgz\Desktop\ant\CX_GA_Project\app\build\intermediates\pre-dexed\debug\com.jude-rollviewpager-1.3.2_2d157991ff9731ee1ae7c86b8f4ebd3cc0ece4e3.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\wgz\Desktop\ant\CX_GA_Project\app\libs\tssdk.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="23.0.1"
+        sha1="064cb089033fd69080c357c2a6120de1ef6b9d2b">
+        <dex dex="C:\Users\wgz\Desktop\ant\CX_GA_Project\app\build\intermediates\pre-dexed\debug\tssdk_168aed1b2085243cbedf265f77328af7b4d48b10.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\wgz\Desktop\ant\CX_GA_Project\app\libs\zxing.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="23.0.1"
+        sha1="e88c14e6e7daa0fa65172a62b54ee6a16ff4162d">
+        <dex dex="C:\Users\wgz\Desktop\ant\CX_GA_Project\app\build\intermediates\pre-dexed\debug\zxing_b08432c8a4535101bea46d5a99176d9dccd55f85.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\wgz\Desktop\ant\CX_GA_Project\app\build\intermediates\exploded-aar\com.lzp.floatingactionbutton\floatingactionbuttonplus\1.0.0\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="23.0.1"
+        sha1="76d8b8e81a75920b2af62d15e72269c59db67754">
+        <dex dex="C:\Users\wgz\Desktop\ant\CX_GA_Project\app\build\intermediates\pre-dexed\debug\com.lzp.floatingactionbutton-floatingactionbuttonplus-1.0.0_9229fb15277443501c050093efb2335ab37afba7.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\wgz\Desktop\ant\CX_GA_Project\app\build\intermediates\exploded-aar\com.bigkoo\pickerview\2.1.0\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="23.0.1"
+        sha1="785e7795aa8c3df729ae5d6bb6fc7e4428108332">
+        <dex dex="C:\Users\wgz\Desktop\ant\CX_GA_Project\app\build\intermediates\pre-dexed\debug\com.bigkoo-pickerview-2.1.0_d24621d53c7a003217411f09864ff33b0c2fd995.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\wgz\.gradle\caches\modules-2\files-2.1\com.squareup.retrofit2\retrofit\2.1.0\2de7cd8b95b7021b1d597f049bcb422055119f2c\retrofit-2.1.0.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="23.0.1"
+        sha1="2de7cd8b95b7021b1d597f049bcb422055119f2c">
+        <dex dex="C:\Users\wgz\Desktop\ant\CX_GA_Project\app\build\intermediates\pre-dexed\debug\retrofit-2.1.0_090684e7f582dc19d9dce6ddfeb09187d2580f94.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\wgz\.gradle\caches\modules-2\files-2.1\io.reactivex\rxjava\1.1.5\ece7b5d0870e66d8226dab6dcf47a2b12afff061\rxjava-1.1.5.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="23.0.1"
+        sha1="ece7b5d0870e66d8226dab6dcf47a2b12afff061">
+        <dex dex="C:\Users\wgz\Desktop\ant\CX_GA_Project\app\build\intermediates\pre-dexed\debug\rxjava-1.1.5_8e7d640835c43d3858a241a9024440ac8d968be8.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\wgz\Desktop\ant\CX_GA_Project\app\build\intermediates\exploded-aar\com.jakewharton.rxbinding\rxbinding-appcompat-v7\0.4.0\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="23.0.1"
+        sha1="cea3c0edbda1279bc261187fb3b6f874bfc841f4">
+        <dex dex="C:\Users\wgz\Desktop\ant\CX_GA_Project\app\build\intermediates\pre-dexed\debug\com.jakewharton.rxbinding-rxbinding-appcompat-v7-0.4.0_b61e3eeafd2a1a613c51dd9b00b9d26893ac8e9b.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\wgz\Desktop\ant\CX_GA_Project\app\build\intermediates\exploded-aar\com.android.support.constraint\constraint-layout\1.0.0-alpha4\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="23.0.1"
+        sha1="affe29a90a2a709bfd2b8d6411aa99c05a2be96f">
+        <dex dex="C:\Users\wgz\Desktop\ant\CX_GA_Project\app\build\intermediates\pre-dexed\debug\com.android.support.constraint-constraint-layout-1.0.0-alpha4_69e787a789143ad379f5c7beb348cc8d2a35fd98.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\wgz\Desktop\ant\CX_GA_Project\app\build\intermediates\exploded-aar\com.jude\easyrecyclerview\4.0.6\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="23.0.1"
+        sha1="a37a445ce723dba5d5f6cf87d2ede6729c7f7972">
+        <dex dex="C:\Users\wgz\Desktop\ant\CX_GA_Project\app\build\intermediates\pre-dexed\debug\com.jude-easyrecyclerview-4.0.6_6f11960a09b9ca41ba5cac73fb933f0385f2579e.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\wgz\.gradle\caches\modules-2\files-2.1\com.alibaba\fastjson\1.1.52.android\6fcd2df42d3576368514855c72baabe3b6e318e0\fastjson-1.1.52.android.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="23.0.1"
+        sha1="6fcd2df42d3576368514855c72baabe3b6e318e0">
+        <dex dex="C:\Users\wgz\Desktop\ant\CX_GA_Project\app\build\intermediates\pre-dexed\debug\fastjson-1.1.52.android_0ffc67721ae004ba64de2d5bfd7759c19289f7a7.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\wgz\.gradle\caches\modules-2\files-2.1\com.squareup.retrofit2\adapter-rxjava\2.1.0\693eddc23e87ab13f9cf5001707ce8e7e1d1ff01\adapter-rxjava-2.1.0.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="23.0.1"
+        sha1="693eddc23e87ab13f9cf5001707ce8e7e1d1ff01">
+        <dex dex="C:\Users\wgz\Desktop\ant\CX_GA_Project\app\build\intermediates\pre-dexed\debug\adapter-rxjava-2.1.0_49cc984efcf79ea8da4e1a44ab4be87d609640b5.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\wgz\Desktop\ant\CX_GA_Project\app\libs\org.slf4j.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="23.0.1"
+        sha1="e56c6a11848fbea799f60d92e7f35cd39f7a21d2">
+        <dex dex="C:\Users\wgz\Desktop\ant\CX_GA_Project\app\build\intermediates\pre-dexed\debug\org.slf4j_aa4d5150b271122d757a478148b1faa0a26d1ec7.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\wgz\.gradle\caches\modules-2\files-2.1\com.squareup.okhttp3\logging-interceptor\3.1.2\a1b4b8e4dc5f7bfa9186e79f9e267c1539a847b0\logging-interceptor-3.1.2.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="23.0.1"
+        sha1="a1b4b8e4dc5f7bfa9186e79f9e267c1539a847b0">
+        <dex dex="C:\Users\wgz\Desktop\ant\CX_GA_Project\app\build\intermediates\pre-dexed\debug\logging-interceptor-3.1.2_6269804a386ebb915707f297296bc25aff7a76f9.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\wgz\.gradle\caches\modules-2\files-2.1\org.ligboy.retrofit2\converter-fastjson-android\2.1.0\8576271d8e8564b7a45d93be11f3bf5d695f02cf\converter-fastjson-android-2.1.0.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="23.0.1"
+        sha1="8576271d8e8564b7a45d93be11f3bf5d695f02cf">
+        <dex dex="C:\Users\wgz\Desktop\ant\CX_GA_Project\app\build\intermediates\pre-dexed\debug\converter-fastjson-android-2.1.0_5277d4d379dd93d0b4e6d61e4de0a62cde3af1e2.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\wgz\Desktop\ant\CX_GA_Project\app\build\intermediates\incremental-runtime-classes\debug\instant-run.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="23.0.1"
+        sha1="0ad9730b42d0da7775cca83f636ec2f29f8f618c">
+        <dex dex="C:\Users\wgz\Desktop\ant\CX_GA_Project\app\build\intermediates\pre-dexed\debug\instant-run_ca6aac7c44a6cb161fc18e987e177f51579936c0.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\wgz\Desktop\ant\CX_GA_Project\app\build\intermediates\exploded-aar\com.android.support\appcompat-v7\23.4.0\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="23.0.1"
+        sha1="548f06de403a9409f00554b3ee12a9fdea0e236c">
+        <dex dex="C:\Users\wgz\Desktop\ant\CX_GA_Project\app\build\intermediates\pre-dexed\debug\com.android.support-appcompat-v7-23.4.0_da7235dd6c0adf3e40d2a72ee02312a28773be0f.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\wgz\.gradle\caches\modules-2\files-2.1\com.squareup.okio\okio\1.8.0\5ea7af56cc7c567ed9856d99efb30740e9b17ff\okio-1.8.0.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="23.0.1"
+        sha1="05ea7af56cc7c567ed9856d99efb30740e9b17ff">
+        <dex dex="C:\Users\wgz\Desktop\ant\CX_GA_Project\app\build\intermediates\pre-dexed\debug\okio-1.8.0_a4ad140194fd4359d9fdd6c2b4c92691e60e2378.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\wgz\.gradle\caches\modules-2\files-2.1\com.nineoldandroids\library\2.4.0\e9b63380f3a242dbdbf103a2355ad7e43bad17cb\library-2.4.0.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="23.0.1"
+        sha1="e9b63380f3a242dbdbf103a2355ad7e43bad17cb">
+        <dex dex="C:\Users\wgz\Desktop\ant\CX_GA_Project\app\build\intermediates\pre-dexed\debug\library-2.4.0_877b50e0d3d7a96ee094744db8e8349ffae26c78.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\wgz\AppData\Local\Android\Sdk\extras\m2repository\com\android\support\constraint\constraint-layout-solver\1.0.0-alpha4\constraint-layout-solver-1.0.0-alpha4.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="23.0.1"
+        sha1="a882fef6a6b9e3efbb0b6b001895a5fc7c35b391">
+        <dex dex="C:\Users\wgz\Desktop\ant\CX_GA_Project\app\build\intermediates\pre-dexed\debug\constraint-layout-solver-1.0.0-alpha4_d118192c5f7cc86890b49af08970ba3cfb549000.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\wgz\Desktop\ant\CX_GA_Project\app\build\intermediates\incremental-classes\debug\instant-run-bootstrap.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="23.0.1"
+        sha1="025cbc234700c7147ac4636411684cea11076f20">
+        <dex dex="C:\Users\wgz\Desktop\ant\CX_GA_Project\app\build\intermediates\pre-dexed\debug\instant-run-bootstrap_c7600d048a61ee78ca7df4259586661317da9f89.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\wgz\.gradle\caches\modules-2\files-2.1\com.jakewharton\butterknife\7.0.1\d5d13ea991eab0252e3710e5df3d6a9d4b21d461\butterknife-7.0.1.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="23.0.1"
+        sha1="d5d13ea991eab0252e3710e5df3d6a9d4b21d461">
+        <dex dex="C:\Users\wgz\Desktop\ant\CX_GA_Project\app\build\intermediates\pre-dexed\debug\butterknife-7.0.1_38f06ef6c46784512d555366c5cc2d8000720a74.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\wgz\Desktop\ant\CX_GA_Project\app\build\intermediates\exploded-aar\de.hdodenhof\circleimageview\1.3.0\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="23.0.1"
+        sha1="ac6948cce36f694f3eb3d73a135e298dc4b3527a">
+        <dex dex="C:\Users\wgz\Desktop\ant\CX_GA_Project\app\build\intermediates\pre-dexed\debug\de.hdodenhof-circleimageview-1.3.0_fdf5f12bd1f0e3eaf08841fc194761add49dbce0.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\wgz\Desktop\ant\CX_GA_Project\app\libs\org.apache.commons.lang.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="23.0.1"
+        sha1="fbc3c4d2bdd2e8883208dc5d94843d724a49e18f">
+        <dex dex="C:\Users\wgz\Desktop\ant\CX_GA_Project\app\build\intermediates\pre-dexed\debug\org.apache.commons.lang_ca7c1c4a56efdf3a83823895b48e2fb38ce96069.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\wgz\Desktop\ant\CX_GA_Project\app\build\intermediates\exploded-aar\com.jakewharton.rxbinding\rxbinding-support-v4\0.4.0\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="23.0.1"
+        sha1="417b075934c24fa45ba94be0f451fd6dec69feb8">
+        <dex dex="C:\Users\wgz\Desktop\ant\CX_GA_Project\app\build\intermediates\pre-dexed\debug\com.jakewharton.rxbinding-rxbinding-support-v4-0.4.0_981d78a11520458df0d2c8913a7a505ed5b38dcc.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\wgz\Desktop\ant\CX_GA_Project\app\libs\org.apache.thrift.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="23.0.1"
+        sha1="0e5363261633338acdd4320e6d3f78309879ecde">
+        <dex dex="C:\Users\wgz\Desktop\ant\CX_GA_Project\app\build\intermediates\pre-dexed\debug\org.apache.thrift_49ef08cade6dc861f241c9663b514d471d11e3b4.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\wgz\Desktop\ant\CX_GA_Project\app\build\intermediates\exploded-aar\com.jakewharton.rxbinding\rxbinding\0.4.0\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="23.0.1"
+        sha1="ffc09f4e5bdebe068e5101f587dadc42b60fbfe4">
+        <dex dex="C:\Users\wgz\Desktop\ant\CX_GA_Project\app\build\intermediates\pre-dexed\debug\com.jakewharton.rxbinding-rxbinding-0.4.0_ffbc52145fa9bebc6016e45e4ed686a62c6435cb.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\wgz\Desktop\ant\CX_GA_Project\app\build\intermediates\exploded-aar\com.jakewharton.rxbinding\rxbinding-design\0.4.0\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="23.0.1"
+        sha1="d875246afc9be5798bf65fd61fb42af06fee4553">
+        <dex dex="C:\Users\wgz\Desktop\ant\CX_GA_Project\app\build\intermediates\pre-dexed\debug\com.jakewharton.rxbinding-rxbinding-design-0.4.0_b542551edf1a4c061fe5b729fd43564f687fa902.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\wgz\Desktop\ant\CX_GA_Project\app\build\intermediates\exploded-aar\com.wgz\appUtil\1.3\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="23.0.1"
+        sha1="422fa3da075df63098add5ddc5d56c6131af6f07">
+        <dex dex="C:\Users\wgz\Desktop\ant\CX_GA_Project\app\build\intermediates\pre-dexed\debug\com.wgz-appUtil-1.3_dd0ba12eed72371bd080348b765c4c541ac8f651.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\wgz\.gradle\caches\modules-2\files-2.1\com.google.code.gson\gson\2.6.1\b9d63507329a7178e026fc334f87587ee5070ac5\gson-2.6.1.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="23.0.1"
+        sha1="b9d63507329a7178e026fc334f87587ee5070ac5">
+        <dex dex="C:\Users\wgz\Desktop\ant\CX_GA_Project\app\build\intermediates\pre-dexed\debug\gson-2.6.1_d53bb6cfd154062a8f0c66484f4b1e6d7f52dd96.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\wgz\Desktop\ant\CX_GA_Project\app\build\intermediates\exploded-aar\com.android.support\support-v4\23.4.0\jars\libs\internal_impl-23.4.0.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="23.0.1"
+        sha1="ea3c07504d2c8f4b13aa17c45c1b68ed9c1c3674">
+        <dex dex="C:\Users\wgz\Desktop\ant\CX_GA_Project\app\build\intermediates\pre-dexed\debug\internal_impl-23.4.0_655a03be171ffd8491c7a32d64896f4b5dd913d4.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\wgz\.gradle\caches\modules-2\files-2.1\com.squareup.retrofit2\converter-gson\2.0.2\f8d87f15b94b8d74e7ccf61d7eedb558811cdb30\converter-gson-2.0.2.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="23.0.1"
+        sha1="f8d87f15b94b8d74e7ccf61d7eedb558811cdb30">
+        <dex dex="C:\Users\wgz\Desktop\ant\CX_GA_Project\app\build\intermediates\pre-dexed\debug\converter-gson-2.0.2_31b34cdf7f2427648974819b03472d36f3c8e0a3.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\wgz\Desktop\ant\CX_GA_Project\app\build\intermediates\exploded-aar\com.android.support\cardview-v7\23.4.0\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="23.0.1"
+        sha1="d9ecde39b460470e655de6e47c05573d2d5a8bfb">
+        <dex dex="C:\Users\wgz\Desktop\ant\CX_GA_Project\app\build\intermediates\pre-dexed\debug\com.android.support-cardview-v7-23.4.0_88a5c53f5f930907af96d58358718c48b6899717.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\wgz\Desktop\ant\CX_GA_Project\app\libs\BaiduLBS_Android.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="23.0.1"
+        sha1="5d08d15af018a0d6f6fd877c3e64d55a120bef77">
+        <dex dex="C:\Users\wgz\Desktop\ant\CX_GA_Project\app\build\intermediates\pre-dexed\debug\BaiduLBS_Android_f781f80759eb9f7cab4927f8a2d845a1fca844fe.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\wgz\Desktop\ant\CX_GA_Project\app\build\intermediates\exploded-aar\com.android.support\recyclerview-v7\23.4.0\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="23.0.1"
+        sha1="ec75036c3c52e451d0cde50a5aedaf5fd32354a0">
+        <dex dex="C:\Users\wgz\Desktop\ant\CX_GA_Project\app\build\intermediates\pre-dexed\debug\com.android.support-recyclerview-v7-23.4.0_f74356d4a2f725a80bc9855f0145686487872b13.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\wgz\.gradle\caches\modules-2\files-2.1\com.github.bumptech.glide\glide\3.7.0\9e9eeaf9948ee4d6c3ab354e8dc14368f16994a4\glide-3.7.0.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="23.0.1"
+        sha1="9e9eeaf9948ee4d6c3ab354e8dc14368f16994a4">
+        <dex dex="C:\Users\wgz\Desktop\ant\CX_GA_Project\app\build\intermediates\pre-dexed\debug\glide-3.7.0_0e97ed887e7a1d8b332a60c4562f19be1cd9384b.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\wgz\.gradle\caches\modules-2\files-2.1\com.squareup.retrofit2\converter-scalars\2.1.0\7c0d7c8f6e52115bb82fa018d81a8d0cae35dde5\converter-scalars-2.1.0.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="23.0.1"
+        sha1="7c0d7c8f6e52115bb82fa018d81a8d0cae35dde5">
+        <dex dex="C:\Users\wgz\Desktop\ant\CX_GA_Project\app\build\intermediates\pre-dexed\debug\converter-scalars-2.1.0_f8a110b01069490ec8c193bb153f9a63883ecb4c.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\wgz\Desktop\ant\CX_GA_Project\app\build\intermediates\exploded-aar\com.android.support\support-vector-drawable\23.4.0\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="23.0.1"
+        sha1="c2c594cace5d83a3227b2b6e658ecbfd586d3ed9">
+        <dex dex="C:\Users\wgz\Desktop\ant\CX_GA_Project\app\build\intermediates\pre-dexed\debug\com.android.support-support-vector-drawable-23.4.0_844a402257b0dc3c2314ab44c3558b0f28769a0f.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\wgz\Desktop\ant\CX_GA_Project\app\build\intermediates\exploded-aar\com.android.support\support-v4\23.4.0\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="23.0.1"
+        sha1="67bd36ee9340ec7c254108936ad16b24bed160cc">
+        <dex dex="C:\Users\wgz\Desktop\ant\CX_GA_Project\app\build\intermediates\pre-dexed\debug\com.android.support-support-v4-23.4.0_3f66a46f13174396f3c46cc261a5bbf713a3ae08.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\wgz\Desktop\ant\CX_GA_Project\app\build\intermediates\exploded-aar\io.reactivex\rxandroid\1.1.0\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="23.0.1"
+        sha1="d4c4b83de2f6412072d2a29b1b7a5b03edaad5ff">
+        <dex dex="C:\Users\wgz\Desktop\ant\CX_GA_Project\app\build\intermediates\pre-dexed\debug\io.reactivex-rxandroid-1.1.0_0910f2f0494d4b1662f734fc11b1e351bb8cf756.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\wgz\AppData\Local\Android\Sdk\extras\android\m2repository\com\android\support\support-annotations\23.4.0\support-annotations-23.4.0.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="23.0.1"
+        sha1="ffbe55fdb2bb456b1485831706a9eac3300bb6b8">
+        <dex dex="C:\Users\wgz\Desktop\ant\CX_GA_Project\app\build\intermediates\pre-dexed\debug\support-annotations-23.4.0_0ddbd29d57996f89107491d1832f5bf4d57a76d8.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\wgz\.gradle\caches\modules-2\files-2.1\com.squareup.okhttp3\okhttp\3.3.0\2b802460eea20f8f2ad9c08c74e0f14718e88aa9\okhttp-3.3.0.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="23.0.1"
+        sha1="2b802460eea20f8f2ad9c08c74e0f14718e88aa9">
+        <dex dex="C:\Users\wgz\Desktop\ant\CX_GA_Project\app\build\intermediates\pre-dexed\debug\okhttp-3.3.0_75264fcd162f7c1a6a6360e645479cec69ca2ad7.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\wgz\Desktop\ant\CX_GA_Project\app\build\intermediates\exploded-aar\com.android.support\design\23.4.0\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="23.0.1"
+        sha1="5326d9a850d491714fef8cbfaa9ea3416f0bf0d2">
+        <dex dex="C:\Users\wgz\Desktop\ant\CX_GA_Project\app\build\intermediates\pre-dexed\debug\com.android.support-design-23.4.0_8164c4665127b3e5bb88fa947b310010463c2282.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\wgz\Desktop\ant\CX_GA_Project\app\build\intermediates\exploded-aar\com.android.support\animated-vector-drawable\23.4.0\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="23.0.1"
+        sha1="de4db3785756bfb0915a9f59a9b3f2fea7407be4">
+        <dex dex="C:\Users\wgz\Desktop\ant\CX_GA_Project\app\build\intermediates\pre-dexed\debug\com.android.support-animated-vector-drawable-23.4.0_f841cdd16420e40f6ec7cd0a6fdb48e269dc8922.jar" />
+    </item>
+
+</items>

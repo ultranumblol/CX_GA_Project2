@@ -5,7 +5,10 @@ import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.POST;
 import rx.Observable;
 import wgz.com.cx_ga_project.entity.ChatMsg;
+import wgz.com.cx_ga_project.entity.ChuJingRen;
 import wgz.com.cx_ga_project.entity.JQDetil;
+import wgz.com.cx_ga_project.entity.JqCallBack;
+import wgz.com.cx_ga_project.entity.JqOrbit;
 
 /**
  * Created by wgz on 2016/8/31.
@@ -81,6 +84,32 @@ public interface JqAPIService {
     );
 
     /**
+     * 添加涉警电话信息
+     * @param jqid
+     * @param taskid
+     * @param cj_policeid
+     * @param cj_reporttime
+     * @param involvepeoplename
+     * @param involvepeopleidcard
+     * @param involvepeoplephone
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("http://192.168.1.193:8004/appjqreport/addJqPhone")
+    Observable<String> uploadSjPhone(
+            @Field("jqid") String jqid,
+            @Field("taskid") String taskid,
+            @Field("cj_policeid") String cj_policeid,
+            @Field("cj_reporttime") String cj_reporttime,
+            @Field("relationname") String involvepeoplename,
+            @Field("relationidcard") String involvepeopleidcard,
+            @Field("mobilephone") String involvepeoplephone
+    );
+
+
+
+
+    /**
      * 发送消息
      * @param jqid
      * @param msg
@@ -144,4 +173,49 @@ public interface JqAPIService {
     @POST("http://192.168.1.193:8004/nearbyresources/getDetailjqInfo")
     Observable<JQDetil> GetJQDetil(@Field("key") String key);
 
+
+    /**
+     * 获取警情回告页面的所有涉警信息
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("http://192.168.1.193:8004/appjqreport/getAllDetail")
+    Observable<JqCallBack> GetAllJQDetil(@Field("jqid") String jqid);
+
+
+    /**
+     * 获取一个警情的出警人名单
+     * @param taskid
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("http://192.168.1.193:8004/appjqreport/getTaskPeople")
+    Observable<ChuJingRen> GetCJRList(@Field("taskid") String taskid);
+
+
+    /**
+     * 开始新警情
+     * @param jqid
+     * @param taskid
+     * @param arrivetime
+     * @param gps_e
+     * @param gps_n
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("http://192.168.1.193:8004/appjqreport/locationBack")
+    Observable<String > StartNewFight(@Field("jqid") String jqid,
+                                      @Field("taskid") String taskid,
+                                      @Field("arrivetime") String arrivetime,
+                                      @Field("arrivetime") String gps_e,
+                                      @Field("arrivetime") String gps_n);
+
+    /**
+     * 获取警情处理轨迹
+     * @param jqid
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("http://192.168.1.193:8004/appjqreport/getJqOrbit ")
+    Observable<JqOrbit> getJqOrbit(@Field("jqid") String jqid);
 }

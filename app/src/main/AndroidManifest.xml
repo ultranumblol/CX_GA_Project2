@@ -113,7 +113,7 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activity.HomeActivity"
-            android:launchMode="singleTask"
+            android:launchMode="singleTop"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activity.MySubordinateActivity"
@@ -213,6 +213,10 @@
         <activity
             android:name=".activity.AboutAppActivity"
             android:label="@string/title_activity_about_app"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activity.UpLoadSJPhoneActivity"
+            android:label="@string/title_activity_up_load_sjphone"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
