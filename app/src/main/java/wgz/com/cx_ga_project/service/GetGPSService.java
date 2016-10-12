@@ -14,6 +14,8 @@ import com.baidu.location.Poi;
 
 import java.util.List;
 
+import wgz.com.cx_ga_project.base.Constant;
+import wgz.com.cx_ga_project.util.SPBuild;
 import wgz.datatom.com.utillibrary.util.LogUtil;
 
 /**
@@ -132,7 +134,10 @@ public class GetGPSService extends Service {
                     sb.append(p.getId() + " " + p.getName() + " " + p.getRank());
                 }
             }
-            LogUtil.e("BaiduLocationApiDem::"+sb.toString());
+            //LogUtil.e("BaiduLocationApiDem::"+sb.toString());
+            new SPBuild(getApplicationContext())
+                    .addData(Constant.LONGITUDE,longitude )
+                    .addData(Constant.LATITUDE, latitude).build();
         }
     }
 }

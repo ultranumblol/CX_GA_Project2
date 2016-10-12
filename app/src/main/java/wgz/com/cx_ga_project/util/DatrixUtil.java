@@ -168,16 +168,9 @@ public class DatrixUtil {
                                         @Override
                                         public void onNext(String s) {
                                             LogUtil.e("Finish result:" + s);
-
-
                                             // SomeUtil.showSnackBar(rootview,"result:"+s);
                                         }
                                     });
-
-
-
-
-                            //SomeUtil.showSnackBar(rootview,"上传图片成功！");
                         }
                         else {
                             SomeUtil.showSnackBar(rootview,"网络错误，请稍后！");

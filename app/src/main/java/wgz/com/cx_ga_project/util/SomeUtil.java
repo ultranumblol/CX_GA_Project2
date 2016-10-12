@@ -23,6 +23,7 @@ import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import wgz.com.cx_ga_project.R;
+import wgz.com.cx_ga_project.app;
 import wgz.datatom.com.utillibrary.util.LogUtil;
 
 /**
@@ -224,5 +225,5 @@ public class SomeUtil {
         return str;
 
     }
-
+    //(String) SPUtils.get(app.getApp().getApplicationContext(), Constant.USERNAME, "未知")
 }

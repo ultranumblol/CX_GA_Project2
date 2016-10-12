@@ -24,6 +24,7 @@ public class Constant {
     public static final String USEROFFICENAME = "userOfficeName";
     public static final String UPDATEURL = "updateurl";
     public static final String USERHEADURL = "http://" + SPUtils.get(app.getApp().getApplicationContext(), Constant.USERHEAD, "");
-
+    public static final String LONGITUDE = "longitude";
+    public static final String LATITUDE = "latitude";
 
 }

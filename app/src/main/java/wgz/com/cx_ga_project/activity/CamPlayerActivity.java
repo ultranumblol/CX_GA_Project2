@@ -122,6 +122,13 @@ public class CamPlayerActivity extends BaseActivity implements KeepaliveService.
         toolbar.setTitle("监控播放");
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        Intent i  = getIntent();
+        mCameraCode = i.getStringExtra("camid");
+        LogUtil.e("mCameraCode : "+mCameraCode);
+
+
+
         recyclerview.setLayoutManager(new LinearLayoutManager(this));
         recyclerview.setAdapter(adapter = new CamsIDAdapter(this));
         adapter.setOnItemClickListener(new MyRecyclerArrayAdapter.OnItemClickListener() {

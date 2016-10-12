@@ -31,9 +31,11 @@ import wgz.com.cx_ga_project.R;
 import wgz.com.cx_ga_project.adapter.TimelineAdapter;
 import wgz.com.cx_ga_project.app;
 import wgz.com.cx_ga_project.base.BaseActivity;
+import wgz.com.cx_ga_project.base.Constant;
 import wgz.com.cx_ga_project.entity.JQDetil;
 import wgz.com.cx_ga_project.entity.JqOrbit;
 import wgz.com.cx_ga_project.util.RxUtil;
+import wgz.com.cx_ga_project.util.SPUtils;
 import wgz.com.cx_ga_project.util.SomeUtil;
 import wgz.datatom.com.utillibrary.util.LogUtil;
 
@@ -90,14 +92,13 @@ public class NewFightActivity extends BaseActivity {
                 int id = tagView.getId();
                 switch (id) {
                     case R.id.fabtag_bjrJQ:
-                        startActivity(new Intent(NewFightActivity.this, StartNewFightActivity.class).putExtra("title", "bjr"));
+                        startActivity(new Intent(NewFightActivity.this, JQListActivity.class).putExtra("title", "bjr"));
                         break;
                     case R.id.fabtag_nearvideoCam:
-                        //startActivity(new Intent(NewFightActivity.this, NearlyVideoCamActivity.class));
-                        startActivity(new Intent(NewFightActivity.this, CamPlayerActivity.class));
+                        startActivity(new Intent(NewFightActivity.this, CamMapHtmlActivity.class));
                         break;
                     case R.id.fabtag_nearjq:
-
+                        startActivity(new Intent(NewFightActivity.this, JQListActivity.class).putExtra("title","nearjq"));
                         break;
 
                 }
@@ -121,9 +122,13 @@ public class NewFightActivity extends BaseActivity {
     }
 
     private void StartFight() {
-        LogUtil.e("systime : "+SomeUtil.getSysTime());
+        //LogUtil.e("systime : "+SomeUtil.getSysTime());
         String time = SomeUtil.getSysTime();
-        app.jqAPIService.StartNewFight("2016072100100000060", "1", time, "111", "1111")
+        String latitude = (String) SPUtils.get(app.getApp().getApplicationContext(), Constant.LATITUDE, "111");
+        String longitude = (String) SPUtils.get(app.getApp().getApplicationContext(), Constant.LONGITUDE, "1111");
+        LogUtil.e("fight latitude:"+latitude);
+        LogUtil.e("fight longitude:"+longitude);
+        app.jqAPIService.StartNewFight("2016072100100000060", "1", time, longitude, latitude)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<String>() {

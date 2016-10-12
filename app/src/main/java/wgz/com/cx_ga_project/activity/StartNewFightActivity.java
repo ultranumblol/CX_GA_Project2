@@ -46,6 +46,7 @@ public class StartNewFightActivity extends BaseActivity {
     EasyRecyclerView recyclerView;
     private JQAdapter adapter;
     private List<String> list = new ArrayList<>();
+
     @Override
     public int getLayoutId() {
         return R.layout.activity_start_new_fight;
@@ -53,15 +54,8 @@ public class StartNewFightActivity extends BaseActivity {
 
     @Override
     public void initView() {
-        Intent intent = getIntent();
-        String title = intent.getStringExtra("title");
-        if (title.equals("new")){
-            toolbarFight.setTitle("新警情");
-        }else if (title.equals("bjr"))
-            toolbarFight.setTitle("报警人关联警情");
-        else if (title.equals("sjr"))
-            toolbarFight.setTitle("涉警人关联警情");
 
+        toolbarFight.setTitle("新警情");
 
 
         setSupportActionBar(toolbarFight);
@@ -81,25 +75,12 @@ public class StartNewFightActivity extends BaseActivity {
         adapter.addAll(list);
 
 
-
-
     }
 
     private void initdata() {
         list.add("1");
         list.add("2");
         list.add("3");
-
-    }
-
-    private void gofight() {
-        SomeUtil.showSnackBar(rootview, "是否开始作战？").setAction("确定", new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // TODO: 2016/8/15 开始作战
-                startActivity(new Intent(StartNewFightActivity.this, NewFightActivity.class));
-            }
-        });
 
     }
 
@@ -129,10 +110,5 @@ public class StartNewFightActivity extends BaseActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        // TODO: add setContentView(...) invocation
-        ButterKnife.bind(this);
-    }
+
 }

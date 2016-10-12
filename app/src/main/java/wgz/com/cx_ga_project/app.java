@@ -1,6 +1,7 @@
 package wgz.com.cx_ga_project;
 
 import android.app.Application;
+import android.content.Intent;
 import android.os.Looper;
 
 import java.io.IOException;
@@ -17,6 +18,7 @@ import retrofit2.converter.scalars.ScalarsConverterFactory;
 import wgz.com.cx_ga_project.API.APIservice;
 import wgz.com.cx_ga_project.API.JqAPIService;
 import wgz.com.cx_ga_project.entity.ChatMsg;
+import wgz.com.cx_ga_project.service.GetGPSService;
 import wgz.com.cx_ga_project.util.ProgressListener;
 import wgz.com.cx_ga_project.util.ProgressResponseBody;
 import wgz.datatom.com.utillibrary.util.LogUtil;
@@ -39,7 +41,7 @@ public class app extends Application {
         mApp = this;
         ToastUtil.isShow =true;
         //开启定位服务
-        //startService(new Intent(getApplicationContext(), GetGPSService.class));
+        startService(new Intent(getApplicationContext(), GetGPSService.class));
         LogUtil.isDebug=true;
 
         //配置程序异常退出处理
