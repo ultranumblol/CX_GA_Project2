@@ -60,6 +60,28 @@ public class WorkLog {
 
         private String summary;
 
+        @SerializedName("summary_pic")
+        private String summary_pic;
+
+        public String getSummary_pic() {
+            return summary_pic;
+        }
+
+        public void setSummary_pic(String summary_pic) {
+            this.summary_pic = summary_pic;
+        }
+
+        @Override
+        public String toString() {
+            return "Mylog{" +
+                    "id='" + id + '\'' +
+                    ", loginid='" + loginid + '\'' +
+                    ", time='" + time + '\'' +
+                    ", summary='" + summary + '\'' +
+                    ", summary_pic='" + summary_pic + '\'' +
+                    '}';
+        }
+
         /**
          * @return The id
          */

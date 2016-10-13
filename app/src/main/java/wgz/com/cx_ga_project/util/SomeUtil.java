@@ -24,6 +24,7 @@ import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import wgz.com.cx_ga_project.R;
 import wgz.com.cx_ga_project.app;
+import wgz.com.cx_ga_project.base.Constant;
 import wgz.datatom.com.utillibrary.util.LogUtil;
 
 /**
@@ -226,4 +227,9 @@ public class SomeUtil {
 
     }
     //(String) SPUtils.get(app.getApp().getApplicationContext(), Constant.USERNAME, "未知")
+    //获取用户id
+    public static String getUserId(){
+
+        return (String) SPUtils.get(app.getApp().getApplicationContext(), Constant.USERID, "未知");
+    }
 }

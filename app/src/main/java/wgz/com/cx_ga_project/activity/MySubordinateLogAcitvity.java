@@ -56,8 +56,6 @@ public class MySubordinateLogAcitvity extends BaseActivity {
     ScrollView view_content;
     @Bind(R.id.workLog_container)
     ContainerLayout container;
-    @Bind(R.id.content_workLog)
-    ConstraintLayout contentWorkLog;
     @Bind(R.id.id_workLogRootview)
     CoordinatorLayout mRootview;
     @Bind(R.id.fab_addworklog)

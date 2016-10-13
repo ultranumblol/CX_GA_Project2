@@ -29,9 +29,11 @@ public class DatrixUtil {
     private static String DATRIXURL2 = "&token=X7yABwjE20sUJLefATUFqU0iUs8mJPqEJo6iRnV63mI=";
     private String fileid;
     List<String> paths = new ArrayList<>();
+    List<String> ids = new ArrayList<>();
     private View rootview;
     private AfterFinish afterFinish;
     public DatrixUtil(String fileid, List<String> paths, View rootview) {
+        ids.clear();
         this.fileid = fileid;
         this.paths = paths;
         this.rootview = rootview;
@@ -39,11 +41,28 @@ public class DatrixUtil {
     }
 
     public void DatrixUpLoadPic(){
-        DatrixCreate();
+        LogUtil.e("datrixUtil pathssize:"+paths.size());
+        paths.remove(paths.size()-1);
+        for (int i = 0 ; i <paths.size(); i++){
+
+            DatrixCreate(paths.get(i));
+        }
+
 
     }
-    private void DatrixCreate() {
-        app.apiService.uploadFileWithRequestBodyTest("testtestwgzwgz")
+    //只传一张图片
+    public void DatrixUpLoadPic2(){
+        LogUtil.e("datrixUtil pathssize:"+paths.size());
+        for (int i = 0 ; i <paths.size(); i++){
+
+            DatrixCreate(paths.get(i));
+        }
+
+
+    }
+
+    private void DatrixCreate(final String path) {
+        app.apiService.uploadFileWithRequestBodyTest(SomeUtil.getUserId())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<DatrixCreat>() {
@@ -63,8 +82,9 @@ public class DatrixUtil {
                         if (datrixCreat.getCode().equals(200)){
                             LogUtil.e("Detrix_upPic_create :"+datrixCreat.getResult().getFileid());
                             fileid = datrixCreat.getResult().getFileid();
+                            ids.add(fileid);
                             LogUtil.e("Detrix_upPic_create :" +datrixCreat.getResult().toString());
-                            DatrixDoWrite(paths,fileid);
+                            DatrixDoWrite(path,fileid);
 
                         }else{
 
@@ -75,16 +95,16 @@ public class DatrixUtil {
                 });
     }
 
-    private void DatrixDoWrite(List<String> paths, String fileid) {
+    private void DatrixDoWrite(String paths, String fileid) {
         String size = "";
         Map<String, RequestBody> bodyMap = new HashMap<>();
-        if (paths.size() > 0) {
-            for (int i = 0; i < 1; i++) {
-                File file = new File(paths.get(i));
-                bodyMap.put("file" + i + "\" ; filename=\"" + file.getName(), RequestBody.create(MediaType.parse("image/*"), file));
+
+
+                File file = new File(paths);
+                bodyMap.put("file" + 1 + "\" ; filename=\"" + file.getName(), RequestBody.create(MediaType.parse("image/*"), file));
                 size = file.length()+"";
-            }
-        }
+
+
         LogUtil.e("file size : " +size);
         LogUtil.e("fileid  : " +fileid);
         app.apiService.detrixWrite(fileid,"0",size,bodyMap)
@@ -134,43 +154,11 @@ public class DatrixUtil {
                     @Override
                     public void onNext(String s) {
                         if (s.contains("200")){
-                            Date currentdate = new Date(System.currentTimeMillis());
-                            String curredate = AskForLeaveActivity.getTime(currentdate);
+                            if (afterFinish!=null){
+                                afterFinish.afterfinish(fileid,ids);
+                            }
 
 
-                            app.jqAPIService.sendMsg("2016072100100000060", " ",DATRIXURL+fileid+DATRIXURL2, "213", curredate, "532301030355")
-                                    .subscribeOn(Schedulers.io())
-                                    .observeOn(AndroidSchedulers.mainThread())
-                                    .subscribe(new Subscriber<String>() {
-                                        @Override
-                                        public void onCompleted() {
-                                            if (afterFinish!=null){
-                                                afterFinish.afterfinish();
-                                            }
-
-                                           /* etSendmessage.setText("");
-                                            // TODO: 2016/9/12 获取新消息 删除本地 换成服务器请求的
-                                            //adapter.getHeader()
-                                            //getNewmsg();
-                                            //LogUtil.e("recyclerview count:"+recyclerview.getChildCount());
-                                            //recyclerview.getChildCount();
-                                            adapter.remove(adapter.getCount() - 1);
-
-                                            getNewmsg();*/
-                                        }
-
-                                        @Override
-                                        public void onError(Throwable e) {
-                                            //SomeUtil.showSnackBar(rootview, "error:" + e.toString());
-                                            LogUtil.e("error:"+ e.toString());
-                                        }
-
-                                        @Override
-                                        public void onNext(String s) {
-                                            LogUtil.e("Finish result:" + s);
-                                            // SomeUtil.showSnackBar(rootview,"result:"+s);
-                                        }
-                                    });
                         }
                         else {
                             SomeUtil.showSnackBar(rootview,"网络错误，请稍后！");
@@ -181,7 +169,7 @@ public class DatrixUtil {
 
     }
     public interface  AfterFinish{
-        void afterfinish();
+        void afterfinish(String fileid,List<String> ids);
     }
     public void setOnAfterFinish(AfterFinish afterFinish){
         this.afterFinish = afterFinish;

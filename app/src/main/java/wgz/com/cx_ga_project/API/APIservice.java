@@ -42,6 +42,7 @@ public interface APIservice {
     public static final String GET_USER_HEAD = "getAvantar";
     public static final String CHECK_ONESSUMMARY_BYDAYS = "checkOnceSummaryBydays";
     public static final String CHECK_ONESSUMMARY = "checkOnceSummary";
+    public static final String CHECK_ONESSUMMARYPIC_BYDAYS = "checkOnceSummaryPicBydays";
     public static final String UPLOAD_PICS = "saveAppPics";
 
 
@@ -166,6 +167,7 @@ public interface APIservice {
     Observable<String> upWorkLog(@Path("type") String type,
                                  @Field("loginid") String loginid,
                                  @Field("summary") String summary,
+                                 @Field("pic") String pic,
                                  @Field("time") String time);
 
     /**
@@ -234,6 +236,21 @@ public interface APIservice {
                                    @Field("loginid") String loginid,
                                    @Field("time") String time
     );
+
+    /**
+     * 获取工作日志图片
+     * @param type
+     * @param loginid
+     * @param time
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("{type}")
+    Observable<WorkLog> getLogPicData(@Path("type") String type,
+                                   @Field("loginid") String loginid,
+                                   @Field("time") String time
+    );
+
 
 
     /**

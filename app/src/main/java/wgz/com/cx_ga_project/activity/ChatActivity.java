@@ -287,19 +287,41 @@ public class ChatActivity extends BaseActivity {
 
         //DatrixCreate();
         DatrixUtil datrixUtil = new DatrixUtil(fileid,paths,rootview);
-        datrixUtil.DatrixUpLoadPic();
+        datrixUtil.DatrixUpLoadPic2();
         datrixUtil.setOnAfterFinish(new DatrixUtil.AfterFinish() {
             @Override
-            public void afterfinish() {
-                etSendmessage.setText("");
-                // TODO: 2016/9/12 获取新消息 删除本地 换成服务器请求的
-                //adapter.getHeader()
-                //getNewmsg();
-                //LogUtil.e("recyclerview count:"+recyclerview.getChildCount());
-                //recyclerview.getChildCount();
-                adapter.remove(adapter.getCount() - 1);
+            public void afterfinish(String fileid ,List<String> ids) {
+                Date currentdate = new Date(System.currentTimeMillis());
+                String curredate = AskForLeaveActivity.getTime(currentdate);
 
-                getNewmsg();
+
+                app.jqAPIService.sendMsg("2016072100100000060", " ",datrixUrl+fileid+datrixurl2, "213", curredate, SomeUtil.getUserId())
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(new Subscriber<String>() {
+                            @Override
+                            public void onCompleted() {
+                                etSendmessage.setText("");
+                                // TODO: 2016/9/12 获取新消息 删除本地 换成服务器请求的
+                                //adapter.getHeader()
+                                //getNewmsg();
+                                //LogUtil.e("recyclerview count:"+recyclerview.getChildCount());
+                                //recyclerview.getChildCount();
+                                adapter.remove(adapter.getCount() - 1);
+                                getNewmsg();
+                            }
+
+                            @Override
+                            public void onError(Throwable e) {
+                                //SomeUtil.showSnackBar(rootview, "error:" + e.toString());
+                                LogUtil.e("error:"+ e.toString());
+                            }
+                            @Override
+                            public void onNext(String s) {
+                                LogUtil.e("Finish result:" + s);
+                                // SomeUtil.showSnackBar(rootview,"result:"+s);
+                            }
+                        });
             }
         });
 

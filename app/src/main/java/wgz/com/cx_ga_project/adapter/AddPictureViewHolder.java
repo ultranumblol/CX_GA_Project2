@@ -36,10 +36,10 @@ public class AddPictureViewHolder extends BaseViewHolder<String> {
         }else{
             Glide.with(getContext())
                     .load(data)
-                    .thumbnail(0.1f)
+                    .thumbnail(0.7f)
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .centerCrop()
-                    .override(78,78)
+                    .override(80,80)
                     .dontAnimate()
                     .placeholder(R.drawable.ic_photo_grey_400_48dp)
                     .error(R.drawable.ic_broken_image_grey_400_48dp)
