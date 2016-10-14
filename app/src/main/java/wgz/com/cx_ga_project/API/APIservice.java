@@ -28,6 +28,7 @@ import wgz.com.cx_ga_project.entity.AppVersion;
 import wgz.com.cx_ga_project.entity.Apply;
 import wgz.com.cx_ga_project.entity.DatrixCreat;
 import wgz.com.cx_ga_project.entity.DatrixFinish;
+import wgz.com.cx_ga_project.entity.LeaveType;
 import wgz.com.cx_ga_project.entity.Scheduling;
 import wgz.com.cx_ga_project.entity.SchedulingOneDay;
 import wgz.com.cx_ga_project.entity.UserInfo;
@@ -151,7 +152,10 @@ public interface APIservice {
     @POST("{type}")
     Observable<String> approvalApply(@Path("type") String type,
                                      @Field("id") String id,
-                                     @Field("status") String status);
+                                     @Field("status") String status,
+                                     @Field("nopassreason") String nopassreason
+
+    );
 
     /**
      * 提交工作日志
@@ -355,5 +359,19 @@ public interface APIservice {
      */
     @GET("http://192.168.1.193:8004/appupload/checkAppVersion")
     Observable<AppVersion> checkVersion();
+
+
+    /**
+     * 获取请假类型
+     * @return
+     */
+    @GET("http://192.168.1.193:8004/appworkmanager/getLeaveType")
+    Observable<LeaveType> getLeaveType();
+
+
+    //获取某个人的时间银行
+   /* appworkmanager/getOnceTimeBankDetail
+            $policeid = $this ->param('policeid');
+    $year = $this ->param('year');*/
 
 }

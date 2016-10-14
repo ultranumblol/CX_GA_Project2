@@ -34,6 +34,7 @@ import wgz.com.cx_ga_project.adapter.MyRecyclerArrayAdapter;
 import wgz.com.cx_ga_project.app;
 import wgz.com.cx_ga_project.base.BaseFragment;
 import wgz.com.cx_ga_project.entity.Apply;
+import wgz.com.cx_ga_project.util.SomeUtil;
 import wgz.datatom.com.utillibrary.util.LogUtil;
 
 import static wgz.com.cx_ga_project.base.Constant.APPROVAL_PASS;
@@ -55,7 +56,7 @@ public class MyapprovalHistoryFragment extends BaseFragment implements SwipeRefr
     public void initview(View view) {
         recyclerview.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerview.setAdapter(adapter = new ApplyAdapter(getActivity()));
-        adapter.setNoMore(R.layout.view_nomore);
+
       /*  adapter.setMore(R.layout.view_more, new MyRecyclerArrayAdapter.OnLoadMoreListener() {
             @Override
             public void onLoadMore() {
@@ -84,11 +85,13 @@ public class MyapprovalHistoryFragment extends BaseFragment implements SwipeRefr
                 bundle.putString("status", adapter.getItem(position).getStatus());
                 bundle.putString("upperid", adapter.getItem(position).getUpperid());
                 bundle.putString("reasontype", adapter.getItem(position).getReasontype());
+                bundle.putString("head","http://"+adapter.getItem(position).getUrl());
                 intent.putExtra("detil", bundle);
                 //intent.putExtra("type","qingjia");
 
 
                 intent.putExtra("type", adapter.getItem(position).getType());
+                intent.putExtra("ifhis",true);
                 ActivityCompat.startActivity(getActivity(),
                         intent, ActivityOptionsCompat
                                 .makeSceneTransitionAnimation(getActivity(),
@@ -104,7 +107,7 @@ public class MyapprovalHistoryFragment extends BaseFragment implements SwipeRefr
      * 初始化数据
      */
     private void initdata() {
-        app.apiService.getBeanData("getDepLeaveOverApply", "007")
+        app.apiService.getBeanData("getDepLeaveOverApply", SomeUtil.getUserId())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .map(new Func1<Apply, List<Apply.Result>>() {
@@ -142,6 +145,11 @@ public class MyapprovalHistoryFragment extends BaseFragment implements SwipeRefr
             public void onCompleted() {
                 //LogUtil.e("approvalHistory list : "+list.toString());
                 //LogUtil.e("approvalHistory list  size : "+list.size());
+                if (list.size()>1){
+                    adapter.setNoMore(R.layout.view_nomore);
+                }
+
+
                 adapter.addAll(list);
             }
 
@@ -153,7 +161,7 @@ public class MyapprovalHistoryFragment extends BaseFragment implements SwipeRefr
             @Override
             public void onNext(List<Apply.Result> results) {
                 //LogUtil.e("approvalHistory list : "+list.toString());
-                //LogUtil.e("approvalHistory results : "+results.toString());
+                LogUtil.e("approvalHistory results : "+results.toString());
             }
         });
 

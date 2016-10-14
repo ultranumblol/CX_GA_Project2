@@ -12,6 +12,7 @@ import android.widget.TextView;
 import butterknife.Bind;
 import wgz.com.cx_ga_project.R;
 import wgz.com.cx_ga_project.base.BaseActivity;
+import wgz.com.cx_ga_project.util.SomeUtil;
 
 import static wgz.com.cx_ga_project.base.Constant.APPROVAL_PASS;
 import static wgz.com.cx_ga_project.base.Constant.APPROVAL_UNPASS;
@@ -79,12 +80,14 @@ public class JiabanLeaveDetilActivity extends BaseActivity {
         String type = intent.getStringExtra("type");
         Bundle bundle = intent.getBundleExtra("detil");
         switch (type) {
-            case "0":
+            case "2":
                 toolbar.setTitle("加班明细");
                 jiabanLeaveDetilJiaban.setVisibility(View.VISIBLE);
                 ViewCompat.setTransitionName(userPicJiaban, "share_img");
                 jiabanLeaveDetilQingjia.setVisibility(View.GONE);
                 userNameJiaban.setText(bundle.getString("poiceid"));
+                SomeUtil.GlidePic(this,userPicJiaban,bundle.getString("head"));
+
                 detilJiabanCommittime.setText(bundle.getString("applytime"));
                 detilJiabanStarttime.setText(bundle.getString("starttime"));
                 detilJiabanEndtime.setText(bundle.getString("endtime"));
@@ -105,6 +108,8 @@ public class JiabanLeaveDetilActivity extends BaseActivity {
                 ViewCompat.setTransitionName(userPic, "share_img");
                 jiabanLeaveDetilQingjia.setVisibility(View.VISIBLE);
                 userName.setText(bundle.getString("poiceid"));
+                SomeUtil.GlidePic(this,userPic,bundle.getString("head"));
+
                 detilLeaveCommittime.setText(bundle.getString("applytime"));
                 detilLeaveStarttime.setText(bundle.getString("starttime"));
                 detilLeaveEndtime.setText(bundle.getString("endtime"));

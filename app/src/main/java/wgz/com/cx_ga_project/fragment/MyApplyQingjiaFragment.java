@@ -85,6 +85,7 @@ public class MyApplyQingjiaFragment extends BaseFragment implements SwipeRefresh
                 bundle.putString("status",adapter.getItem(position).getStatus());
                 bundle.putString("upperid",adapter.getItem(position).getUpperid());
                 bundle.putString("reasontype",adapter.getItem(position).getReasontype());
+                bundle.putString("head","http://"+adapter.getItem(position).getUrl());
                 intent.putExtra("detil",bundle);
                 intent.putExtra("type",adapter.getItem(position).getType());
 
@@ -145,7 +146,7 @@ public class MyApplyQingjiaFragment extends BaseFragment implements SwipeRefresh
 
             @Override
             public void onNext(List<Apply.Result> results) {
-                LogUtil.e("resultCOUNT:"+results.size());
+                LogUtil.e("QingjiaResult:"+results.toString());
             }
         });
 

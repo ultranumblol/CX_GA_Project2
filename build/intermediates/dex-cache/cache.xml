@@ -637,7 +637,7 @@
         jumboMode="true"
         optimize="true"
         revision="23.0.1"
-        sha1="535645d552f5cde89553c1262845ec1c9e9ddd4f">
+        sha1="00f6cc1d8020f2ae648d4e3221756ca641d738c8">
         <dex dex="C:\Users\wgz\Desktop\ant\CX_GA_Project\app\build\intermediates\pre-dexed\debug\instant-run_ca6aac7c44a6cb161fc18e987e177f51579936c0.jar" />
     </item>
     <item
@@ -655,7 +655,7 @@
         jumboMode="true"
         optimize="true"
         revision="23.0.1"
-        sha1="414896c9962f25a4b841da8ceb8d9969b2c5e5b6">
+        sha1="bcd264ddd2da66078f473b2ef19bfb41bf832412">
         <dex dex="C:\Users\wgz\Desktop\ant\CX_GA_Project\app\build\intermediates\pre-dexed\debug\instant-run-bootstrap_c7600d048a61ee78ca7df4259586661317da9f89.jar" />
     </item>
     <item

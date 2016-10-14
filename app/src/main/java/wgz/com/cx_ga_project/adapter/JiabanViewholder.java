@@ -45,10 +45,11 @@ public class JiabanViewholder extends BaseViewHolder<Apply.Result> {
         }else if (data.getStatus().equals(APPROVAL_UNPASS)){
             jiabanState.setText("审批未通过");
         }
+        String url = "http://"+data.getUrl().replaceAll("\\\\","");
         Glide.with(getContext())
                 //.load("http://192.168.1.193:8004/avantar/10001.png")
                 // .load("http://192.168.1.193:8004/avantar/030283.png")
-                .load(Constant.USERHEADURL)
+                .load(url)
                 .placeholder(R.drawable.ic_account_circle_gray_48dp)
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .thumbnail(0.4f)

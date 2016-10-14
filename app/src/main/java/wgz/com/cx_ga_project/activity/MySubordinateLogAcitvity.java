@@ -8,6 +8,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -53,7 +54,7 @@ public class MySubordinateLogAcitvity extends BaseActivity {
     @Bind(R.id.id_workLogText)
     TextView idWorkLogText;
     @Bind(R.id.view_content)
-    ScrollView view_content;
+    NestedScrollView view_content;
     @Bind(R.id.workLog_container)
     ContainerLayout container;
     @Bind(R.id.id_workLogRootview)
@@ -78,6 +79,7 @@ public class MySubordinateLogAcitvity extends BaseActivity {
         LogUtil.e("xxx的日志开始初始化");
         setSupportActionBar(toolbarWprklog);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        initCalendar();
         initData();
     }
 
@@ -130,6 +132,7 @@ public class MySubordinateLogAcitvity extends BaseActivity {
                             initCalendar();
                         }else {
                             SomeUtil.showSnackBar(mRootview,"服务器错误！");
+                            initCalendar();
                         }
 
                     }
@@ -179,15 +182,6 @@ public class MySubordinateLogAcitvity extends BaseActivity {
             }
         });
     }
-  /*  @OnClick(R.id.fab_addworklog)
-    public void onClick() {
-        Snackbar.make(mRootview, "是否为选中日期添加工作记录？", Snackbar.LENGTH_LONG).setAction("确定", new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(MySubordinateLogAcitvity.this, AddWorkLogActivity.class));
-            }
-        }).show();
-    }*/
     /**
      * 点击某个日期回调
      */

@@ -137,7 +137,7 @@ public class AskForJiabanActivity extends BaseActivity {
         if (!cancle){
             app.apiService.upOverTime("overTimeApply",stime,
                     etime,mJiabanReason.getText().toString()
-                    ,(String) SPUtils.get(app.getApp().getApplicationContext(), Constant.USERID,""),curredate,"11")
+                    ,(String) SPUtils.get(app.getApp().getApplicationContext(), Constant.USERID,""),curredate,"030283")
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(new Observer<String>() {
@@ -156,6 +156,7 @@ public class AskForJiabanActivity extends BaseActivity {
                             LogUtil.e("result:"+s);
                             if (s.contains("200")){
                                 SomeUtil.showSnackBar(rootview,"提交申请成功！");
+                                finish();
                             }else {
                                 SomeUtil.showSnackBar(rootview,"网络错误！");
                             }

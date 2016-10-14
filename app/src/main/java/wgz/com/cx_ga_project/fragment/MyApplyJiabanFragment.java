@@ -85,6 +85,7 @@ public class MyApplyJiabanFragment extends BaseFragment implements SwipeRefreshL
                 bundle.putString("content",adapter.getItem(position).getContent());
                 bundle.putString("status",adapter.getItem(position).getStatus());
                 bundle.putString("upperid",adapter.getItem(position).getUpperid());
+                bundle.putString("head","http://"+adapter.getItem(position).getUrl());
                 //bundle.putString("reasontype",adapter.getItem(position).getReasontype());
                 intent.putExtra("detil",bundle);
                 intent.putExtra("type",adapter.getItem(position).getType());
@@ -170,7 +171,7 @@ public class MyApplyJiabanFragment extends BaseFragment implements SwipeRefreshL
 
             @Override
             public void onNext(List<Apply.Result> results) {
-                LogUtil.e("resultCOUNT:"+results.size());
+                LogUtil.e("JiabanApplyresult:"+results.toString());
             }
         });
 

@@ -7,6 +7,10 @@ import android.content.pm.PackageManager;
 import android.provider.Settings;
 import android.support.design.widget.Snackbar;
 import android.view.View;
+import android.widget.ImageView;
+
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
 import java.io.File;
 import java.math.BigDecimal;
@@ -216,6 +220,25 @@ public class SomeUtil {
             return null;
         }
     }
+
+    /**
+     * 用glide加载图片 有缓存和缩略图0.4f
+     * @param context
+     * @param view
+     */
+    public static void GlidePic(Context context, ImageView view,String loadurl){
+        Glide.with(context)
+                .load(loadurl)
+                .placeholder(R.mipmap.ic_launcher)
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .thumbnail(0.4f)
+                .dontAnimate()
+                .placeholder(R.drawable.ic_photo_grey_400_48dp)
+                .error(R.drawable.ic_broken_image_grey_400_48dp)
+                .into(view);
+
+    }
+
 
     public static String getSysTime(){
         SimpleDateFormat formatter = new SimpleDateFormat ("yyyy-MM-dd HH:mm:ss ");

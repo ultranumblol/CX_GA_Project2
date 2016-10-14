@@ -30,7 +30,7 @@ public class AboutAppActivity extends BaseActivity {
         toolbar.setTitle("关于智慧警务");
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        idTvAboutApp.setText("警务APP将为每位干警提供Andriod下的APP应用，是维稳大数据平台的移动端扩展，与大数据平台紧密结合,和大数据平台的功能模块互联互通，也可以作为大数据平台的补充，将某些更适合在移动端使用的功能独立出来。警务APP提供社会化信息采集功能、勤务考核功能、任务分发功能、工作管理功能、单兵作战情报功能这五大目标");
+        idTvAboutApp.setText("警务APP将为每位干警提供Andriod下的APP应用，是维稳大数据平台的移动端扩展，与大数据平台紧密结合,和大数据平台的功能模块互联互通，也可以作为大数据平台的补充，将某些更适合在移动端使用的功能独立出来。警务APP提供社会化信息采集功能、勤务考核功能、任务分发功能、工作管理功能、单兵作战情报功能这五大目标。");
 
     }
 
