@@ -85,7 +85,7 @@ public class JiabanLeaveDetilActivity extends BaseActivity {
                 jiabanLeaveDetilJiaban.setVisibility(View.VISIBLE);
                 ViewCompat.setTransitionName(userPicJiaban, "share_img");
                 jiabanLeaveDetilQingjia.setVisibility(View.GONE);
-                userNameJiaban.setText(bundle.getString("poiceid"));
+                userNameJiaban.setText(bundle.getString("poicename"));
                 SomeUtil.GlidePic(this,userPicJiaban,bundle.getString("head"));
 
                 detilJiabanCommittime.setText(bundle.getString("applytime"));
@@ -107,7 +107,7 @@ public class JiabanLeaveDetilActivity extends BaseActivity {
                 jiabanLeaveDetilJiaban.setVisibility(View.GONE);
                 ViewCompat.setTransitionName(userPic, "share_img");
                 jiabanLeaveDetilQingjia.setVisibility(View.VISIBLE);
-                userName.setText(bundle.getString("poiceid"));
+                userName.setText(bundle.getString("poicename"));
                 SomeUtil.GlidePic(this,userPic,bundle.getString("head"));
 
                 detilLeaveCommittime.setText(bundle.getString("applytime"));

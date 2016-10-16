@@ -6,9 +6,11 @@ import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.CardView;
-import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.jakewharton.rxbinding.view.RxView;
@@ -21,7 +23,6 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.Bind;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
@@ -37,6 +38,8 @@ import wgz.com.cx_ga_project.entity.JqOrbit;
 import wgz.com.cx_ga_project.util.RxUtil;
 import wgz.com.cx_ga_project.util.SPUtils;
 import wgz.com.cx_ga_project.util.SomeUtil;
+import wgz.com.cx_ga_project.view.Mylayout;
+import wgz.com.cx_ga_project.view.TimeLineMarker;
 import wgz.datatom.com.utillibrary.util.LogUtil;
 
 /**
@@ -70,6 +73,8 @@ public class NewFightActivity extends BaseActivity {
     FloatingActionButton fabNewfight;
     @Bind(R.id.id_fight_rootview)
     CoordinatorLayout rootview;
+    @Bind(R.id.id_recyclerview)
+    RecyclerView idRecyclerview;
     private TimelineAdapter adapter;
     private List<JqOrbit.Re> list = new ArrayList<>();
     private ArrayList<String> list2 = new ArrayList<>();
@@ -77,7 +82,8 @@ public class NewFightActivity extends BaseActivity {
     Toolbar toolbar;
     @Bind(R.id.app_bar)
     AppBarLayout appBar;
-    private String[] types = new String[]{"涉警人员信息", "涉警车辆信息", "警情信息"};
+    private HomeAdapter mAdapter;
+
 
     @Override
     public int getLayoutId() {
@@ -98,7 +104,7 @@ public class NewFightActivity extends BaseActivity {
                         startActivity(new Intent(NewFightActivity.this, CamMapHtmlActivity.class));
                         break;
                     case R.id.fabtag_nearjq:
-                        startActivity(new Intent(NewFightActivity.this, JQListActivity.class).putExtra("title","nearjq"));
+                        startActivity(new Intent(NewFightActivity.this, JQListActivity.class).putExtra("title", "nearjq"));
                         break;
 
                 }
@@ -107,9 +113,15 @@ public class NewFightActivity extends BaseActivity {
         toolbar.setTitle("接处警作战");
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        timelineRv.setLayoutManager(new LinearLayoutManager(this));
+
+        idRecyclerview.setLayoutManager(new Mylayout(this));
+        //idRecyclerview.setAdapter(mAdapter = new HomeAdapter());
+
+
+        timelineRv.setLayoutManager(new Mylayout(this));
         timelineRv.setAdapter(adapter = new TimelineAdapter(this));
         initData();
+
 
         RxView.clicks(fabNewfight).throttleFirst(500, TimeUnit.MICROSECONDS)
                 .subscribe(new Action1<Void>() {
@@ -121,20 +133,21 @@ public class NewFightActivity extends BaseActivity {
 
     }
 
+
     private void StartFight() {
+        //adapter.addAll(list2);
         //LogUtil.e("systime : "+SomeUtil.getSysTime());
         String time = SomeUtil.getSysTime();
         String latitude = (String) SPUtils.get(app.getApp().getApplicationContext(), Constant.LATITUDE, "111");
         String longitude = (String) SPUtils.get(app.getApp().getApplicationContext(), Constant.LONGITUDE, "1111");
-        LogUtil.e("fight latitude:"+latitude);
-        LogUtil.e("fight longitude:"+longitude);
+        LogUtil.e("fight latitude:" + latitude);
+        LogUtil.e("fight longitude:" + longitude);
         app.jqAPIService.StartNewFight("2016072100100000060", "1", time, longitude, latitude)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<String>() {
                     @Override
                     public void onCompleted() {
-
                     }
 
                     @Override
@@ -146,19 +159,66 @@ public class NewFightActivity extends BaseActivity {
                     public void onNext(String s) {
                         LogUtil.e("newfight result : " + s);
                         if (s.contains("199")) {
-                            SomeUtil.showSnackBarLong(rootview,"已经开始作战！");
+                            SomeUtil.showSnackBarLong(rootview, "已经开始作战！");
                             fabNewfight.setImageResource(R.drawable.ic_stop_white_48dp);
 
-                        }if (s.contains("200")){
-                            SomeUtil.showSnackBar(rootview,"开始作战！");
+                        }
+                        if (s.contains("200")) {
+                            SomeUtil.showSnackBar(rootview, "开始作战！");
 
-                        }if (s.contains("300")){
-                            SomeUtil.showSnackBar(rootview,"服务器错误！请稍后再试！");
+                        }
+                        if (s.contains("300")) {
+                            SomeUtil.showSnackBar(rootview, "服务器错误！请稍后再试！");
 
                         }
                     }
                 });
 
+    }
+
+
+
+    class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.MyViewHolder> {
+
+        @Override
+        public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            MyViewHolder holder = new MyViewHolder(LayoutInflater.from(
+                    NewFightActivity.this).inflate(R.layout.item_timeline, parent,
+                    false));
+            return holder;
+        }
+
+        @Override
+        public void onBindViewHolder(MyViewHolder holder, int position) {
+            //holder.tv.setText(mDatas.get(position));
+            if (position == 0) {
+                holder.timeLineMarker.setText("" + (position + 1));
+                holder.timeLineMarker.setBeginLine(null);
+            } else {
+                holder.timeLineMarker.setText("" + (position + 1));
+            }
+            holder.time.setText(list.get(position).getSendtime());
+            holder.desc_tv.setText(list.get(position).getTreatmentdep());
+
+
+        }
+
+        @Override
+        public int getItemCount() {
+            return list.size();
+        }
+
+        class MyViewHolder extends RecyclerView.ViewHolder {
+            private TextView desc_tv, time;
+            private TimeLineMarker timeLineMarker;
+
+            public MyViewHolder(View view) {
+                super(view);
+                desc_tv = (TextView) view.findViewById(R.id.desc_tv);
+                timeLineMarker = (TimeLineMarker) view.findViewById(R.id.timeLineMarker);
+                time = (TextView) view.findViewById(R.id.id_timelineTime);
+            }
+        }
     }
 
     private void initData() {
@@ -168,14 +228,14 @@ public class NewFightActivity extends BaseActivity {
         list2.add("东城派出所\n将该情况通告各派出所值班室、警务室");
         list2.add("西城派出所\n将该情况通告各派出所值班室、警务室");
         list2.add("开发区派出所\n将该情况通告各派出所值班室、警务室");
-        LogUtil.e("currentThread : "+Thread.currentThread().getName());
-        adapter.addAll(list2);
+
+
         app.jqAPIService.getJqOrbit("2016072100100000060")
                 .compose(RxUtil.<JqOrbit>applySchedulers())
                 .subscribe(new Subscriber<JqOrbit>() {
                     @Override
                     public void onCompleted() {
-                        LogUtil.e("Rxjava currentThread : "+Thread.currentThread().getName());
+                        idRecyclerview.setAdapter(mAdapter = new HomeAdapter());
                     }
 
                     @Override
@@ -185,12 +245,11 @@ public class NewFightActivity extends BaseActivity {
 
                     @Override
                     public void onNext(JqOrbit jqOrbit) {
-                       // LogUtil.e("JqOrbit result : "+jqOrbit.getRes().toString());
-                        list=jqOrbit.getRes();
-                        LogUtil.e("JqOrbit result : "+list.size());
+                        // LogUtil.e("JqOrbit result : "+jqOrbit.getRes().toString());
+                        list = jqOrbit.getRes();
+                        LogUtil.e("JqOrbit result : " + list.toString());
                     }
                 });
-
 
 
         app.jqAPIService.GetJQDetil("2016072100100000060")
@@ -233,6 +292,7 @@ public class NewFightActivity extends BaseActivity {
                 startActivity(new Intent(NewFightActivity.this, JQCallbackActivity.class));
                 break;
             case R.id.id_fight_bulu:
+
                 break;
             case R.id.id_fight_talk:
                 startActivity(new Intent(NewFightActivity.this, ChatActivity.class));

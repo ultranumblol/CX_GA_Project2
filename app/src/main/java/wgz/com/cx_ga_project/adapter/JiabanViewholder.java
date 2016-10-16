@@ -36,7 +36,7 @@ public class JiabanViewholder extends BaseViewHolder<Apply.Result> {
 
     @Override
     public void setData(Apply.Result data) {
-       jiabanID.setText(data.getPoliceid());
+       jiabanID.setText(data.getPolicename());
         jiabanDate.setText(data.getApplytime());
         if (data.getStatus().equals(UNAPPROVAL)){
             jiabanState.setText("未审批");

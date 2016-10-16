@@ -77,6 +77,7 @@ public class MyapprovalHistoryFragment extends BaseFragment implements SwipeRefr
                 intent.setClass(getActivity(), ApprovalDetilActivity.class);
                 Bundle bundle = new Bundle();
                 bundle.putString("poiceid", adapter.getItem(position).getPoliceid());
+                bundle.putString("poicename",adapter.getItem(position).getPolicename());
                 bundle.putString("applytime", adapter.getItem(position).getApplytime());
                 bundle.putString("starttime", adapter.getItem(position).getStart());
                 bundle.putString("endtime", adapter.getItem(position).getEnd());

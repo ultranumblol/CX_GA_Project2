@@ -110,19 +110,13 @@ public class ApprovalDetilActivity extends BaseActivity {
         mId = bundle.getString("id");
         switch (type) {
             case "2":
-
-
-
-
                 toolbar.setTitle("加班明细");
                 jiabanLeaveDetilJiaban.setVisibility(View.VISIBLE);
                 ViewCompat.setTransitionName(userPicJiaban, "share_img");
                 jiabanLeaveDetilQingjia.setVisibility(View.GONE);
                 jiabanLeaveDetilQingjia.setVisibility(View.GONE);
-
-
                 SomeUtil.GlidePic(this,userPicJiaban,bundle.getString("head"));
-                userNameJiaban.setText(bundle.getString("poiceid"));
+                userNameJiaban.setText(bundle.getString("poicename"));
                 detilJiabanCommittime.setText(bundle.getString("applytime"));
                 detilJiabanStarttime.setText(bundle.getString("starttime"));
                 detilJiabanEndtime.setText(bundle.getString("endtime"));
@@ -142,7 +136,7 @@ public class ApprovalDetilActivity extends BaseActivity {
                 jiabanLeaveDetilJiaban.setVisibility(View.GONE);
                 ViewCompat.setTransitionName(userPic, "share_img");
                 jiabanLeaveDetilQingjia.setVisibility(View.VISIBLE);
-                userName.setText(bundle.getString("poiceid"));
+                userName.setText(bundle.getString("poicename"));
                 SomeUtil.GlidePic(this,userPic,bundle.getString("head"));
 
                 detilLeaveCommittime.setText(bundle.getString("applytime"));
@@ -265,11 +259,4 @@ public class ApprovalDetilActivity extends BaseActivity {
                 }).setNegativeButton("取消", null).show();
     }
 
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        // TODO: add setContentView(...) invocation
-        ButterKnife.bind(this);
-    }
 }

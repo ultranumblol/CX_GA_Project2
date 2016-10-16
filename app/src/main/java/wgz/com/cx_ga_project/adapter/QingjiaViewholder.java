@@ -35,7 +35,7 @@ public class QingjiaViewholder extends BaseViewHolder<Apply.Result> {
 
     @Override
     public void setData(Apply.Result data) {
-        qingjiaID.setText(data.getPoliceid());
+        qingjiaID.setText(data.getPolicename());
         qingjiaReason.setText(data.getContent());
         qingjiaDate.setText(data.getApplytime());
         if (data.getStatus().equals(UNAPPROVAL)){

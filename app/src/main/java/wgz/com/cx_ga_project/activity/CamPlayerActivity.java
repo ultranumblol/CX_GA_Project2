@@ -180,6 +180,7 @@ public class CamPlayerActivity extends BaseActivity implements KeepaliveService.
                     public void call(Void aVoid) {
                         //queryCameraRes();
                         startLive(mCameraCode);
+                        queryCameraRes();
                     }
                 });
 

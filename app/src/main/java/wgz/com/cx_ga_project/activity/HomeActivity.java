@@ -372,7 +372,7 @@ public class HomeActivity extends AppCompatActivity
 
         } else if (id == R.id.nav_saoyisao) {
             // TODO: 2016/9/3 扫一扫
-            startActivity(new Intent(HomeActivity.this, SaoYiSaoActivity.class));
+            startActivityForResult(new Intent(HomeActivity.this, SaoYiSaoActivity.class),9);
 
         }
 

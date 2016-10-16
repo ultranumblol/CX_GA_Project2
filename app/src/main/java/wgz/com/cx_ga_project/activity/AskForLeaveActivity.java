@@ -211,11 +211,11 @@ public class AskForLeaveActivity extends BaseActivity {
         if (mLeaveReason.getText().toString().equals("")) {
             Snackbar.make(rootview, "请填写请假事由!", Snackbar.LENGTH_SHORT).show();
             return;
-        } else if (mLeaveStarttime.getText().toString().contains("请选择")
-                || mLeaveEndtime.getText().toString().contains("请选择")) {
+        } else if (mLeaveStarttime.getText().toString().equals("")
+                || mLeaveEndtime.getText().toString().equals("")) {
             Snackbar.make(rootview, "请选择日期!", Snackbar.LENGTH_SHORT).show();
             return;
-        } else if (mLeaveType.getText().toString().contains("请选择")) {
+        } else if (mLeaveType.getText().toString().equals("")) {
             Snackbar.make(rootview, "请选择请假类型！", Snackbar.LENGTH_SHORT).show();
             return;
         } else if (!compareDate(startdate, enddate)) {

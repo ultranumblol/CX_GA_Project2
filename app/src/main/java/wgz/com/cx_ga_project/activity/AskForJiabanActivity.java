@@ -113,6 +113,17 @@ public class AskForJiabanActivity extends BaseActivity {
         Date CUDDATE = getStrToDate(curredate);
         String stime = AskForLeaveActivity.getTime(startdate);
         String etime = AskForLeaveActivity.getTime(enddate);
+        if (mJiabanReason.getText().toString().equals("")) {
+            Snackbar.make(rootview, "请填写加班内容!", Snackbar.LENGTH_SHORT).show();
+            cancle = true;
+            return;
+        }else if (mJiabanStarttime.getText().toString().equals("")
+                ||mJiabanEndtime.getText().toString().equals(""))
+        {
+            Snackbar.make(rootview, "请选择日期！", Snackbar.LENGTH_SHORT).show();
+            cancle = true;
+            return;
+        }
         /*if (mJiabanReason.getText().toString().equals("")) {
             Snackbar.make(rootview, "请填写加班内容!", Snackbar.LENGTH_SHORT).show();
             cancle = true;
@@ -132,7 +143,7 @@ public class AskForJiabanActivity extends BaseActivity {
             cancle = true;
             return;
         }*/
-        cancle = false;
+        //cancle = false;
         LogUtil.e("curredate:"+curredate);
         if (!cancle){
             app.apiService.upOverTime("overTimeApply",stime,

@@ -78,9 +78,12 @@ public class MyApplyJiabanFragment extends BaseFragment implements SwipeRefreshL
                 intent.setClass(getActivity(), JiabanLeaveDetilActivity.class);
                 Bundle bundle = new Bundle();
                 bundle.putString("poiceid",adapter.getItem(position).getPoliceid());
+                bundle.putString("poicename",adapter.getItem(position).getPolicename());
+
                 bundle.putString("applytime",adapter.getItem(position).getApplytime());
                 bundle.putString("starttime",adapter.getItem(position).getStart());
                 bundle.putString("endtime",adapter.getItem(position).getEnd());
+
                 //bundle.putString("days",adapter.getItem(position).getDays()+"");
                 bundle.putString("content",adapter.getItem(position).getContent());
                 bundle.putString("status",adapter.getItem(position).getStatus());

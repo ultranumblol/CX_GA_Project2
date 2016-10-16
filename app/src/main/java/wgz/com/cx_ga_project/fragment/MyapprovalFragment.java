@@ -59,6 +59,7 @@ public class MyapprovalFragment extends BaseFragment implements SwipeRefreshLayo
                 Bundle bundle = new Bundle();
                 bundle.putString("id",adapter.getItem(position).getId());
                 bundle.putString("poiceid",adapter.getItem(position).getPoliceid());
+                bundle.putString("poicename",adapter.getItem(position).getPolicename());
                 bundle.putString("applytime",adapter.getItem(position).getApplytime());
                 bundle.putString("starttime",adapter.getItem(position).getStart());
                 bundle.putString("endtime",adapter.getItem(position).getEnd());
