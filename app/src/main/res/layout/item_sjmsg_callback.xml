@@ -9,6 +9,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         >
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -17,19 +18,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="回告时间"
-                />
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="2016年1月2日 09:22:22"
-                android:layout_marginLeft="12dp"
-                />
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="回告人"
-                android:layout_marginLeft="40dp"
+                android:text="回告人:"
                 />
             <TextView
                 android:layout_width="wrap_content"
@@ -39,36 +28,11 @@
 
                 />
 
-
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginTop="12dp"
-            >
-
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="是的范德萨仿盛大范德萨大师傅福建代理商就快乐的撒娇就废了阿三放假了艾弗杰阿凡达的顶顶顶顶顶顶顶顶顶顶
-                                  "
-                />
-
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginTop="12dp"
-
-            >
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="回告单位"
+                android:text="回告单位:"
+                android:layout_marginLeft="20dp"
                 />
             <TextView
                 android:layout_width="wrap_content"
@@ -77,9 +41,44 @@
                 android:layout_marginLeft="12dp"
                 />
 
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="10dp"
+            >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="是的范德萨仿盛大范德萨大师傅福建代理商就快乐的撒娇就废了阿三放假了艾弗杰阿凡达的顶顶顶顶"
+                />
 
         </LinearLayout>
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="12dp"
+            >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="回告时间:"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="2016年1月2日 09:22:22"
+                android:layout_marginLeft="12dp"
+                />
+
+
+
+
+        </LinearLayout>
     </LinearLayout>
 
 

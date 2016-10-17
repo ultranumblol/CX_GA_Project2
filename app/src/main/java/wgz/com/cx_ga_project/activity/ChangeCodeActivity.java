@@ -85,12 +85,12 @@ public class ChangeCodeActivity extends BaseActivity {
 
                             @Override
                             public void onError(Throwable e) {
-                                LogUtil.e("changepass result error: "+e.toString());
+                                LogUtil.d("changepass result error: "+e.toString());
                             }
 
                             @Override
                             public void onNext(String s) {
-                                LogUtil.e("changepass result : "+s);
+                                LogUtil.d("changepass result : "+s);
                                 if (s.contains("200")){
                                     SomeUtil.showSnackBar(rootview,"修改密码成功！");
 

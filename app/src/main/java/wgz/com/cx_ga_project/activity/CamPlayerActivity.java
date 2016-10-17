@@ -125,7 +125,7 @@ public class CamPlayerActivity extends BaseActivity implements KeepaliveService.
 
         Intent i  = getIntent();
         mCameraCode = i.getStringExtra("camid");
-        LogUtil.e("mCameraCode : "+mCameraCode);
+        LogUtil.d("mCameraCode : "+mCameraCode);
 
 
 
@@ -232,7 +232,7 @@ public class CamPlayerActivity extends BaseActivity implements KeepaliveService.
 
                         }
                     }
-                    LogUtil.e("cam列表：" + stringBuffer.toString());
+                    LogUtil.d("cam列表：" + stringBuffer.toString());
                     // idCams.setText("cam列表：" + stringBuffer.toString());
                     adapter.addAll(camsIDs);
                 }
@@ -304,12 +304,12 @@ public class CamPlayerActivity extends BaseActivity implements KeepaliveService.
         @Override
         public void surfaceCreated(SurfaceHolder holder) {
 
-            LogUtil.e("------ surfaceCreated -----");
+            LogUtil.d("------ surfaceCreated -----");
         }
 
         @Override
         public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
-            LogUtil.e("------ surfaceChanged -----");
+            LogUtil.d("------ surfaceChanged -----");
             if (null != mPlayer) {
                 mPlayer.changeDisplaySize(width, height);
             }
@@ -317,7 +317,7 @@ public class CamPlayerActivity extends BaseActivity implements KeepaliveService.
 
         @Override
         public void surfaceDestroyed(SurfaceHolder holder) {
-            LogUtil.e("------ surfaceDestroyed -----");
+            LogUtil.d("------ surfaceDestroyed -----");
         }
     }
 
@@ -383,7 +383,7 @@ public class CamPlayerActivity extends BaseActivity implements KeepaliveService.
             @Override
             public void onQueryReplayResult(long errorCode, String errorDesc, List<RecordInfo> recordList) {
                 if (recordList == null || recordList.size() <= 0) {
-                    LogUtil.e("There is no record");
+                    LogUtil.d("There is no record");
                     SomeUtil.showSnackBar(rootview, "There is no record");
                     return;
                 }

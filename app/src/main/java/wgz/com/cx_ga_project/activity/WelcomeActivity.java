@@ -56,7 +56,7 @@ public class WelcomeActivity extends BaseActivity {
                 .subscribe(new Subscriber<String>() {
                     @Override
                     public void onCompleted() {
-                        LogUtil.e("onCompleted!");
+                        LogUtil.d("onCompleted!");
                         startActivity(new Intent(WelcomeActivity.this,HomeActivity.class));
                         saveinfo();
                         finish();
@@ -64,14 +64,14 @@ public class WelcomeActivity extends BaseActivity {
 
                     @Override
                     public void onError(Throwable e) {
-                        LogUtil.e("error:"+e);
+                        LogUtil.d("error:"+e);
                         startActivity(new Intent(WelcomeActivity.this,LoginActivity.class));
                         finish();
                     }
 
                     @Override
                     public void onNext(String str) {
-                        LogUtil.e(str);
+                        LogUtil.d(str);
 
 
                     }

@@ -30,7 +30,7 @@ public class TimeUtils {
 
         long hTime = ((long) httpTime) * 1000;
         long dTime = currentTime - hTime;
-        LogUtil.e("hTime=" + hTime + " currentTime=" + currentTime + " dTime=" + dTime);
+        LogUtil.d("hTime=" + hTime + " currentTime=" + currentTime + " dTime=" + dTime);
 
         if (dTime < MINUTES) {
             return dTime / SECOND + "秒前";

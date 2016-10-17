@@ -186,7 +186,7 @@ public class AddWorkLogActivity extends BaseActivity {
 
                 @Override
                 public void onNext(String s) {
-                    LogUtil.e("Xiugairesult:" + s);
+                    LogUtil.d("Xiugairesult:" + s);
                     if (s.contains("200")) {
                         onCompleted();
                     } else onError(new Exception(s));
@@ -195,7 +195,7 @@ public class AddWorkLogActivity extends BaseActivity {
     }
 
     private void UpLoadWorkLog() {
-        LogUtil.e("pathsize : "+paths.size());
+        LogUtil.d("pathsize : "+paths.size());
         if (paths.size()>1){
             DatrixUtil datrixUtil = new DatrixUtil(fileid,paths,rootview);
             datrixUtil.DatrixUpLoadPic();
@@ -212,7 +212,7 @@ public class AddWorkLogActivity extends BaseActivity {
 
     // TODO: 2016/10/13 循环取ids值上传
     private void addsummaryPic(final String fileid, final List<String> ids) {
-        LogUtil.e(" addwork log ids :"+ids.toString());
+        LogUtil.d(" addwork log ids :"+ids.toString());
         /*app.apiService.upWorkLog("addSummary", getUserId(), worklogText.getText().toString(),"", time)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -243,7 +243,7 @@ public class AddWorkLogActivity extends BaseActivity {
 
                                         @Override
                                         public void onNext(String s) {
-                                            LogUtil.e("result:" + s);
+                                            LogUtil.d("result:" + s);
                                             if (s.contains("200")) {
                                                 // onCompleted();
 
@@ -258,15 +258,15 @@ public class AddWorkLogActivity extends BaseActivity {
 
                     @Override
                     public void onError(Throwable e) {
-                        LogUtil.e("error:" + e.toString());
+                        LogUtil.d("error:" + e.toString());
                     }
 
                     @Override
                     public void onNext(String s) {
-                        LogUtil.e("result:" + s);
+                        LogUtil.d("result:" + s);
                         if (s.contains("200")) {
                            // onCompleted();
-                            LogUtil.e("执行上传图片！！！！！！！");
+                            LogUtil.d("执行上传图片！！！！！！！");
                         } else onError(new Exception(s));
                     }
                 });*/
@@ -296,12 +296,12 @@ public class AddWorkLogActivity extends BaseActivity {
 
                     @Override
                     public void onError(Throwable e) {
-                        LogUtil.e("error:" + e.toString());
+                        LogUtil.d("error:" + e.toString());
                     }
 
                     @Override
                     public void onNext(String s) {
-                        LogUtil.e("result:" + s);
+                        LogUtil.d("result:" + s);
                         if (s.contains("200")) {
                             onCompleted();
                         } else onError(new Exception(s));
@@ -328,7 +328,7 @@ public class AddWorkLogActivity extends BaseActivity {
 
             }
         } catch (Exception e) {
-            LogUtil.e("error :" + e);
+            LogUtil.d("error :" + e);
         }
 
     }

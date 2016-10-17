@@ -66,13 +66,13 @@ public class UpLoadSJCarActivity extends BaseActivity {
 
                     @Override
                     public void onError(Throwable e) {
-                        LogUtil.e("error:"+e.toString());
+                        LogUtil.d("error:"+e.toString());
                         SomeUtil.showSnackBar(rootview,"提交失败！");
                     }
 
                     @Override
                     public void onNext(String s) {
-                        LogUtil.e("result:"+s);
+                        LogUtil.d("result:"+s);
                         SomeUtil.showSnackBar(rootview,"提交成功！");
                     }
                 });

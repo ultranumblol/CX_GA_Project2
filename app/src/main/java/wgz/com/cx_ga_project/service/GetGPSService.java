@@ -30,7 +30,7 @@ public class GetGPSService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-        LogUtil.e("定位服务准备启动！");
+        LogUtil.d("定位服务准备启动！");
         mLocationClient = new LocationClient(getApplicationContext());     //声明LocationClient类
         mLocationClient.registerLocationListener(myListener);    //注册监听函数
         initLocation();
@@ -38,7 +38,7 @@ public class GetGPSService extends Service {
             @Override
             public void run() {
                 mLocationClient.start();
-                LogUtil.e("定位服务启动！");
+                LogUtil.d("定位服务启动！");
             }
         }).start();
 
@@ -134,7 +134,7 @@ public class GetGPSService extends Service {
                     sb.append(p.getId() + " " + p.getName() + " " + p.getRank());
                 }
             }
-            //LogUtil.e("BaiduLocationApiDem::"+sb.toString());
+            //LogUtil.d("BaiduLocationApiDem::"+sb.toString());
             new SPBuild(getApplicationContext())
                     .addData(Constant.LONGITUDE,longitude )
                     .addData(Constant.LATITUDE, latitude).build();

@@ -245,9 +245,21 @@ public interface JqAPIService {
                                     @Field("page") String page,
                                     @Field("perpage") String perpage);
 
-
+    /**
+     * 获取报警人警情列表
+     * @param caller
+     * @return
+     */
     @FormUrlEncoded
     @POST("http://192.168.1.193:8004/appjqreport/getCallerInfo")
     Observable<CallerInfo> getCallerInfo(@Field("caller") String caller);
 
+    /**
+     * 获取涉警人警情列表
+     * @param policeid
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("http://192.168.1.193:8004/appjqreport/getPoliceJqInfo")
+    Observable<String> getPoliceJqInfo(@Field("policeid") String policeid);
 }

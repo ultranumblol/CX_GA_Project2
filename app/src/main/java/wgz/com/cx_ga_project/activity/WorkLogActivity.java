@@ -98,7 +98,7 @@ public class WorkLogActivity extends BaseActivity {
 
     private void iniData() {
         final Calendar calendar = Calendar.getInstance();
-        LogUtil.e("initData : " + OtherUtils.formatMonth(calendar.getTime()).toString());
+        LogUtil.d("initData : " + OtherUtils.formatMonth(calendar.getTime()).toString());
         app.apiService.getLogData(APIservice.CHECK_ONESSUMMARY,SomeUtil.getUserId(), OtherUtils.formatMonth(calendar.getTime()))
 
                 .subscribeOn(Schedulers.io())
@@ -111,15 +111,15 @@ public class WorkLogActivity extends BaseActivity {
 
                     @Override
                     public void onError(Throwable e) {
-                        LogUtil.e("getLogData error : " + e);
+                        LogUtil.d("getLogData error : " + e);
                     }
 
                     @Override
                     public void onNext(WorkLog workLog) {
-                        LogUtil.e("workLog : " + workLog.toString());
+                        LogUtil.d("workLog : " + workLog.toString());
                         if (workLog.getCode().toString().contains("200")) {
                             mylogs = workLog.getLogs();
-                            LogUtil.e("logs : " + mylogs.toString());
+                            LogUtil.d("logs : " + mylogs.toString());
                             String nowdate = OtherUtils.formatDate(calendar.getTime());
                             app.apiService.getLogDataToDay(APIservice.CHECK_ONESSUMMARY_BYDAYS, SomeUtil.getUserId(), nowdate)
                                     .subscribeOn(Schedulers.io())
@@ -147,7 +147,7 @@ public class WorkLogActivity extends BaseActivity {
                             initCalendar();
                         } else {
                             SomeUtil.showSnackBar(container, "服务器错误！请稍后再试");
-                            LogUtil.e("logs : " + mylogs.toString());
+                            LogUtil.d("logs : " + mylogs.toString());
                             //initCalendar();
                         }
 
@@ -168,7 +168,7 @@ public class WorkLogActivity extends BaseActivity {
 
             eventDays.add(OtherUtils.formatDate(SomeUtil.getStrToDate(date)));
         }
-       // LogUtil.e("eventDays :" + eventDays.toString());
+       // LogUtil.d("eventDays :" + eventDays.toString());
         calendarView.setEventDays(eventDays);
     }
 
@@ -243,7 +243,7 @@ public class WorkLogActivity extends BaseActivity {
             }
 
         } catch (Exception e) {
-            LogUtil.e("error :" + e);
+            LogUtil.d("error :" + e);
 
         }
 
@@ -273,7 +273,7 @@ public class WorkLogActivity extends BaseActivity {
                         public void onCompleted() {
                             adapter.clear();
                             adapter.addAll(paths);
-                            LogUtil.e("显示图片");
+                            LogUtil.d("显示图片");
                         }
 
                         @Override
@@ -288,13 +288,13 @@ public class WorkLogActivity extends BaseActivity {
                                 for (int i = 0 ; i<workLog.getLogs().size();i++){
                                     paths.add(workLog.getLogs().get(i).getSummary_pic());
                                 }
-                                LogUtil.e("PIC path :"+paths.toString());
+                                LogUtil.d("PIC path :"+paths.toString());
 
                                // idWorkLogText.setText(workLog.getLogs().get(0).getSummary());
                                 //id = workLog.getLogs().get(0).getId();
                             } else {
                                 //idWorkLogText.setText("没有工作记录");
-                                LogUtil.e("没有工作日志图片");
+                                LogUtil.d("没有工作日志图片");
                             }
                         }
                     });
@@ -318,10 +318,10 @@ public class WorkLogActivity extends BaseActivity {
 
                         @Override
                         public void onNext(WorkLog workLog) {
-                            LogUtil.e("worklogByday code: "+workLog.getCode().toString());
+                            LogUtil.d("worklogByday code: "+workLog.getCode().toString());
                             if (workLog.getCode().equals(200)) {
                                 idWorkLogText.setText(workLog.getLogs().get(0).getSummary());
-                                LogUtil.e("worklogByday : "+workLog.getLogs().toString());
+                                LogUtil.d("worklogByday : "+workLog.getLogs().toString());
                                 id = workLog.getLogs().get(0).getId();
                             } else {
                                 idWorkLogText.setText("没有工作记录");
@@ -345,7 +345,7 @@ public class WorkLogActivity extends BaseActivity {
         public void onPageSelected(int position) {
             final CalendarView calendarView = (CalendarView) calenderViews.get(position % 3);
             txToday.setText(calendarView.getCurrentDay());
-            LogUtil.e("当前月份 ： " + calendarView.getCurrentDay());
+            LogUtil.d("当前月份 ： " + calendarView.getCurrentDay());
             app.apiService.getLogData(APIservice.CHECK_ONESSUMMARY, SomeUtil.getUserId(), calendarView.getCurrentDay())
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
@@ -364,7 +364,7 @@ public class WorkLogActivity extends BaseActivity {
                         public void onNext(WorkLog workLog) {
                             if (workLog.getCode().toString().contains("200")) {
                                 mylogs = workLog.getLogs();
-                                LogUtil.e("logs : " + mylogs.toString());
+                                LogUtil.d("logs : " + mylogs.toString());
                                 initEventDays(calendarView);
                             } else {
                                 SomeUtil.showSnackBar(container, "没有记录！");

@@ -25,6 +25,20 @@ public class JQCallbackDetilAdapter extends MyRecyclerArrayAdapter<Object> {
 
     @Override
     public BaseViewHolder OnCreateViewHolder(ViewGroup parent, int viewType) {
+        if (viewType==TYPE_SJCAR){
+            return new JQCallbackSJCarViewHolder(parent);
+        }
+        if (viewType==TYPE_SJR){
+            return new JQCallbackSJRViewHolder(parent);
+        }
+        if (viewType==TYPE_SJPHONE){
+            return new JQCallbackSJPhoneViewHolder(parent);
+        }
+        if (viewType ==TYPE_SJMSG){
+            return new JQCallbackMsgViewHolder(parent);
+        }
+
+
         return new JQCallbackSJRViewHolder(parent);
     }
 
@@ -36,6 +50,8 @@ public class JQCallbackDetilAdapter extends MyRecyclerArrayAdapter<Object> {
             return TYPE_SJR;
         if (getItem(position) instanceof JqCallBack.Resreport)
             return TYPE_SJMSG;
+        if (getItem(position) instanceof JqCallBack.Resphone)
+            return TYPE_SJPHONE;
         return TYPE_SJR;
     }
 }

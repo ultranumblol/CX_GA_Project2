@@ -120,14 +120,12 @@ public class HomeActivity extends AppCompatActivity
         ColorStateList csl = (ColorStateList) resource.getColorStateList(R.drawable.navigation_menu_item_color);
         navView.setItemTextColor(csl);
         navView.setItemIconTintList(csl);
-        //LogUtil.e("userhead_url: " +SPUtils.get(app.getApp().getApplicationContext(), Constant.USERHEAD, ""));
+        //LogUtil.d("userhead_url: " +SPUtils.get(app.getApp().getApplicationContext(), Constant.USERHEAD, ""));
         ImageView userhead = (ImageView) navView.getHeaderView(0).findViewById(R.id.imageView);
         // TODO: 2016/9/18 获取用户头像地址
         //String userheadurl = "http://"+SPUtils.get(app.getApp().getApplicationContext(), Constant.USERHEAD, "");
-        //LogUtil.e("userheadurl : "+userheadurl);
+        //LogUtil.d("userheadurl : "+userheadurl);
         Glide.with(this)
-                //.load("http://192.168.1.193:8004/avantar/10001.png")
-                // .load("http://192.168.1.193:8004/avantar/030283.png")
                 .load(Constant.USERHEADURL)
                 .placeholder(R.mipmap.ic_launcher)
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
@@ -180,7 +178,7 @@ public class HomeActivity extends AppCompatActivity
 
                             @Override
                             public void onNext(String s) {
-                                LogUtil.e("datrixPix : " + s.toString());
+                                LogUtil.d("datrixPix : " + s.toString());
                             }
                         });
                 //uploadpicsTest();
@@ -302,7 +300,7 @@ public class HomeActivity extends AppCompatActivity
 
         } else if (id == R.id.nav_updateAPP) {
             final int versionCode = SomeUtil.getVersionCode(this);
-            LogUtil.e("versionCode:" + versionCode);
+            LogUtil.d("versionCode:" + versionCode);
             app.apiService.checkVersion().subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(new Subscriber<AppVersion>() {
@@ -313,7 +311,7 @@ public class HomeActivity extends AppCompatActivity
 
                         @Override
                         public void onError(Throwable e) {
-                            LogUtil.e("checkVersion error:  " + e.toString());
+                            LogUtil.d("checkVersion error:  " + e.toString());
                         }
 
                         @Override
@@ -321,7 +319,7 @@ public class HomeActivity extends AppCompatActivity
                             if (appVersion.getCode().equals(200)) {
                                 String code = appVersion.getRes().get(0).getApkVersioncode();
                                 int a = Integer.parseInt(code);
-                                LogUtil.e("serviceCode : " + a);
+                                LogUtil.d("serviceCode : " + a);
                                 if (a > versionCode) {
                                     // TODO: 2016/10/10 下载更新
                                     String url = appVersion.getRes().get(0).getApkUrl();
@@ -403,7 +401,7 @@ public class HomeActivity extends AppCompatActivity
                                 .subscribe(new Subscriber<Void>() {
                                     @Override
                                     public void onCompleted() {
-                                        LogUtil.e("clearCache_oncompleted");
+                                        LogUtil.d("clearCache_oncompleted");
                                         SomeUtil.showSnackBar(homeRootView, "清理完成！");
 
                                     }
@@ -415,7 +413,7 @@ public class HomeActivity extends AppCompatActivity
 
                                     @Override
                                     public void onNext(Void aVoid) {
-                                        LogUtil.e("clearCache_onNext");
+                                        LogUtil.d("clearCache_onNext");
                                         Glide.get(getApplicationContext()).clearDiskCache();
                                         //
                                     }

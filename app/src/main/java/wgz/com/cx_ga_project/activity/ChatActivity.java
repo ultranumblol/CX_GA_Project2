@@ -218,7 +218,7 @@ public class ChatActivity extends BaseActivity {
 
                     @Override
                     public void onNext(ChatMsg chatMsg) {
-                        LogUtil.e("chatmsg:" + chatMsg.getRes().size());
+                        LogUtil.d("chatmsg:" + chatMsg.getRes().size());
                         chatData = chatMsg.getRes();
                         adapter.addAll(chatData);
 
@@ -244,7 +244,7 @@ public class ChatActivity extends BaseActivity {
 
                     @Override
                     public void onNext(ChatMsg chatMsg) {
-                        LogUtil.e("chatNewmsg:" + chatMsg.getRes().size());
+                        LogUtil.d("chatNewmsg:" + chatMsg.getRes().size());
                         chatData = chatMsg.getRes();
 
 
@@ -277,7 +277,7 @@ public class ChatActivity extends BaseActivity {
 
                     @Override
                     public void onNext(String s) {
-                        LogUtil.e("result:" + s);
+                        LogUtil.d("result:" + s);
                         // SomeUtil.showSnackBar(rootview,"result:"+s);
                     }
                 });
@@ -295,7 +295,7 @@ public class ChatActivity extends BaseActivity {
                 String curredate = AskForLeaveActivity.getTime(currentdate);
 
 
-                app.jqAPIService.sendMsg("2016072100100000060", " ",datrixUrl+fileid+datrixurl2, "213", curredate, SomeUtil.getUserId())
+                app.jqAPIService.sendMsg("2016072100100000060", "",datrixUrl+fileid+datrixurl2, "213", curredate, SomeUtil.getUserId())
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(new Subscriber<String>() {
@@ -305,7 +305,7 @@ public class ChatActivity extends BaseActivity {
                                 // TODO: 2016/9/12 获取新消息 删除本地 换成服务器请求的
                                 //adapter.getHeader()
                                 //getNewmsg();
-                                //LogUtil.e("recyclerview count:"+recyclerview.getChildCount());
+                                //LogUtil.d("recyclerview count:"+recyclerview.getChildCount());
                                 //recyclerview.getChildCount();
                                 adapter.remove(adapter.getCount() - 1);
                                 getNewmsg();
@@ -314,11 +314,11 @@ public class ChatActivity extends BaseActivity {
                             @Override
                             public void onError(Throwable e) {
                                 //SomeUtil.showSnackBar(rootview, "error:" + e.toString());
-                                LogUtil.e("error:"+ e.toString());
+                                LogUtil.d("error:"+ e.toString());
                             }
                             @Override
                             public void onNext(String s) {
-                                LogUtil.e("Finish result:" + s);
+                                LogUtil.d("Finish result:" + s);
                                 // SomeUtil.showSnackBar(rootview,"result:"+s);
                             }
                         });
@@ -349,7 +349,7 @@ public class ChatActivity extends BaseActivity {
         IntentFilter filter=new IntentFilter();
         filter.addAction("service.MsgService");
         registerReceiver(receiver, filter);
-        LogUtil.e("广播注册成功！");
+        LogUtil.d("广播注册成功！");
     }
 
     @Override
@@ -504,7 +504,7 @@ public class ChatActivity extends BaseActivity {
 
 
         } catch (Exception e) {
-            LogUtil.e("error : " + e);
+            LogUtil.d("error : " + e);
 
         }
 
@@ -521,12 +521,12 @@ public class ChatActivity extends BaseActivity {
                     }
                     @Override
                     public void onError(Throwable e) {
-                        LogUtil.e("uploadpic error : " + e.toString());
+                        LogUtil.d("uploadpic error : " + e.toString());
                         adapter.remove(adapter.getCount() - 1);
                     }
                     @Override
                     public void onNext(String s) {
-                        LogUtil.e("upPic :"+s);
+                        LogUtil.d("upPic :"+s);
                         if (s.contains("\"code\":200")){
 
                             SendPicmsg();
@@ -587,16 +587,16 @@ public class ChatActivity extends BaseActivity {
 
                     @Override
                     public void onError(Throwable e) {
-                        LogUtil.e("Detrix_upPic_error:" + e.toString());
+                        LogUtil.d("Detrix_upPic_error:" + e.toString());
                     }
 
                     @Override
                     public void onNext(DatrixCreat datrixCreat) {
-                        LogUtil.e("Detrix_upPic_create : code :" +datrixCreat.getCode().toString());
+                        LogUtil.d("Detrix_upPic_create : code :" +datrixCreat.getCode().toString());
                         if (datrixCreat.getCode().equals(200)){
-                            LogUtil.e("Detrix_upPic_create :"+datrixCreat.getResult().getFileid());
+                            LogUtil.d("Detrix_upPic_create :"+datrixCreat.getResult().getFileid());
                             fileid = datrixCreat.getResult().getFileid();
-                            LogUtil.e("Detrix_upPic_create :" +datrixCreat.getResult().toString());
+                            LogUtil.d("Detrix_upPic_create :" +datrixCreat.getResult().toString());
                             DatrixDoWrite(paths,fileid);
 
                         }else{
@@ -618,8 +618,8 @@ public class ChatActivity extends BaseActivity {
                 size = file.length()+"";
             }
         }
-        LogUtil.e("file size : " +size);
-        LogUtil.e("fileid  : " +fileid);
+        LogUtil.d("file size : " +size);
+        LogUtil.d("fileid  : " +fileid);
         app.apiService.detrixWrite(fileid,"0",size,bodyMap)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -631,12 +631,12 @@ public class ChatActivity extends BaseActivity {
 
                     @Override
                     public void onError(Throwable e) {
-                        LogUtil.e("detrix_write_Response_error :" + e.toString());
+                        LogUtil.d("detrix_write_Response_error :" + e.toString());
                     }
 
                     @Override
                     public void onNext(String s) {
-                        LogUtil.e("detrix_write_Response :" + s);
+                        LogUtil.d("detrix_write_Response :" + s);
                         if (s.contains("\t\"code\":\t200")){
                             DatrixDoFinish();
                         }else
@@ -681,7 +681,7 @@ public class ChatActivity extends BaseActivity {
                                             // TODO: 2016/9/12 获取新消息 删除本地 换成服务器请求的
                                             //adapter.getHeader()
                                             //getNewmsg();
-                                            //LogUtil.e("recyclerview count:"+recyclerview.getChildCount());
+                                            //LogUtil.d("recyclerview count:"+recyclerview.getChildCount());
                                             //recyclerview.getChildCount();
                                             adapter.remove(adapter.getCount() - 1);
 
@@ -691,12 +691,12 @@ public class ChatActivity extends BaseActivity {
                                         @Override
                                         public void onError(Throwable e) {
                                             //SomeUtil.showSnackBar(rootview, "error:" + e.toString());
-                                            LogUtil.e("error:"+ e.toString());
+                                            LogUtil.d("error:"+ e.toString());
                                         }
 
                                         @Override
                                         public void onNext(String s) {
-                                            LogUtil.e("添加图片聊天记录result:" + s);
+                                            LogUtil.d("添加图片聊天记录result:" + s);
 
 
                                             // SomeUtil.showSnackBar(rootview,"result:"+s);

@@ -141,7 +141,7 @@ public class LoginActivity extends BaseActivity {
 
     private void httpLogin(final String username, final String password) {
 
-        //LogUtil.e("login :" +password );
+        //LogUtil.d("login :" +password );
         app.apiService.login(username,password)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -159,13 +159,13 @@ public class LoginActivity extends BaseActivity {
                     @Override
                     public void onError(Throwable e) {
                         showProgress(false);
-                        LogUtil.e("Login error:"+e.toString());
+                        LogUtil.d("Login error:"+e.toString());
                         SomeUtil.checkHttpException(getApplicationContext(),e,scrollLoginForm);
                     }
 
                     @Override
                     public void onNext(UserInfo userInfo) {
-                        LogUtil.e("login result :" +userInfo.getRes().toString());
+                        LogUtil.d("login result :" +userInfo.getRes().toString());
                         if (userInfo.getCode().equals(200)){
                             showProgress(false);
 
@@ -187,7 +187,7 @@ public class LoginActivity extends BaseActivity {
                 });
     }
     private void getuserhead(String userid) {
-        LogUtil.e("userid : "+userid);
+        LogUtil.d("userid : "+userid);
         app.apiService.getUserhead(APIservice.GET_USER_HEAD,userid).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<String>() {
@@ -198,15 +198,15 @@ public class LoginActivity extends BaseActivity {
 
                     @Override
                     public void onError(Throwable e) {
-                        LogUtil.e("getuserhead : "+e.toString());
+                        LogUtil.d("getuserhead : "+e.toString());
                     }
 
                     @Override
                     public void onNext(String s) {
-                        //LogUtil.e("userhead : " + s);
+                        //LogUtil.d("userhead : " + s);
                         String s2 = s.replaceAll("\\\\","");
                         s2.replaceAll("\"","");
-                        LogUtil.e("userhead : " + s2);
+                        LogUtil.d("userhead : " + s2);
                         userhead = s2;
                         saveUserHead();
                     }
@@ -223,7 +223,7 @@ public class LoginActivity extends BaseActivity {
 
 
     private void saveUserInfo(UserInfo.UserRes userRes,String password) {
-        LogUtil.e("userres : "+ userRes.toString());
+        LogUtil.d("userres : "+ userRes.toString());
         SPUtils.clear(getApplicationContext());
         // TODO: 2016/8/5 存储用户信息
         new SPBuild(getApplicationContext())

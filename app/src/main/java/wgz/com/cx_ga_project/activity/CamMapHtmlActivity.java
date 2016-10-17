@@ -122,7 +122,7 @@ public class CamMapHtmlActivity extends BaseActivity {
 
             @JavascriptInterface
             public void copyText(String html) {
-                LogUtil.e(html);
+                LogUtil.d(html);
 
             }
 
@@ -130,20 +130,20 @@ public class CamMapHtmlActivity extends BaseActivity {
             @JavascriptInterface
             public String getlongitude() {
                 String longitude = (String) SPUtils.get(app.getApp().getApplicationContext(), Constant.LONGITUDE, "1111");
-                LogUtil.e("html longitude "+longitude);
+                LogUtil.d("html longitude "+longitude);
                 return longitude;
             }
 
             @JavascriptInterface
             public String getlatitude() {
                 String latitude = (String) SPUtils.get(app.getApp().getApplicationContext(), Constant.LATITUDE, "111");
-                LogUtil.e("html latitude "+latitude);
+                LogUtil.d("html latitude "+latitude);
                 return latitude;
             }
 
             @JavascriptInterface
             public void goPlay(String camID) {
-                LogUtil.e("camid : "+camID);
+                LogUtil.d("camid : "+camID);
                 startActivity(new Intent(CamMapHtmlActivity.this, CamPlayerActivity.class).putExtra("camid", camID));
 
             }

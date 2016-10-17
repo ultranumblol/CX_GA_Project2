@@ -197,7 +197,7 @@ public class SomeUtil {
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         } catch (Exception ex) {
-            LogUtil.e("Update:GetVersionCode:" + ex.getMessage());
+            LogUtil.d("Update:GetVersionCode:" + ex.getMessage());
         }
         return versionCode;
     }
@@ -216,7 +216,7 @@ public class SomeUtil {
             return date;
         } catch (ParseException e) {
             e.printStackTrace();
-            LogUtil.e("DATE error" + e.toString());
+            LogUtil.d("DATE error" + e.toString());
             return null;
         }
     }

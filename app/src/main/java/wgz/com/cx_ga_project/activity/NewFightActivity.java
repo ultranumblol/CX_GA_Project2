@@ -136,12 +136,12 @@ public class NewFightActivity extends BaseActivity {
 
     private void StartFight() {
         //adapter.addAll(list2);
-        //LogUtil.e("systime : "+SomeUtil.getSysTime());
+        //LogUtil.d("systime : "+SomeUtil.getSysTime());
         String time = SomeUtil.getSysTime();
         String latitude = (String) SPUtils.get(app.getApp().getApplicationContext(), Constant.LATITUDE, "111");
         String longitude = (String) SPUtils.get(app.getApp().getApplicationContext(), Constant.LONGITUDE, "1111");
-        LogUtil.e("fight latitude:" + latitude);
-        LogUtil.e("fight longitude:" + longitude);
+        LogUtil.d("fight latitude:" + latitude);
+        LogUtil.d("fight longitude:" + longitude);
         app.jqAPIService.StartNewFight("2016072100100000060", "1", time, longitude, latitude)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -152,12 +152,12 @@ public class NewFightActivity extends BaseActivity {
 
                     @Override
                     public void onError(Throwable e) {
-                        LogUtil.e("newfight result error: " + e.toString());
+                        LogUtil.d("newfight result error: " + e.toString());
                     }
 
                     @Override
                     public void onNext(String s) {
-                        LogUtil.e("newfight result : " + s);
+                        LogUtil.d("newfight result : " + s);
                         if (s.contains("199")) {
                             SomeUtil.showSnackBarLong(rootview, "已经开始作战！");
                             fabNewfight.setImageResource(R.drawable.ic_stop_white_48dp);
@@ -245,9 +245,9 @@ public class NewFightActivity extends BaseActivity {
 
                     @Override
                     public void onNext(JqOrbit jqOrbit) {
-                        // LogUtil.e("JqOrbit result : "+jqOrbit.getRes().toString());
+                        // LogUtil.d("JqOrbit result : "+jqOrbit.getRes().toString());
                         list = jqOrbit.getRes();
-                        LogUtil.e("JqOrbit result : " + list.toString());
+                        LogUtil.d("JqOrbit result : " + list.toString());
                     }
                 });
 
@@ -263,15 +263,15 @@ public class NewFightActivity extends BaseActivity {
 
                     @Override
                     public void onError(Throwable e) {
-                        LogUtil.e("jqDetil_error:" + e.toString());
+                        LogUtil.d("jqDetil_error:" + e.toString());
                     }
 
                     @Override
                     public void onNext(JQDetil jqDetil) {
-                        //LogUtil.e("jqDetil : " + jqDetil.getCode().toString());
+                        //LogUtil.d("jqDetil : " + jqDetil.getCode().toString());
 
                         if (jqDetil.getCode().equals(200)) {
-                            //LogUtil.e("jqDetil :" + jqDetil.getResult().toString());
+                            //LogUtil.d("jqDetil :" + jqDetil.getResult().toString());
                             detilJqAddress.setText(jqDetil.getResult().get(0).getJqaddr());
                             detilJqBjrName.setText(jqDetil.getResult().get(0).getAlarmperson());
                             detilJqBjrPhone.setText(jqDetil.getResult().get(0).getCallingnumber());

@@ -69,7 +69,7 @@ public class UpLoadSJPhoneActivity extends BaseActivity {
 
                     @Override
                     public void onNext(String s) {
-                        LogUtil.e("result:"+s);
+                        LogUtil.d("result:"+s);
                         SomeUtil.showSnackBar(rootview,"提交成功！");
                     }
                 });

@@ -40,7 +40,7 @@ public class GetNewMsgService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-        LogUtil.e("获取新消息服务启动！");
+        LogUtil.d("获取新消息服务启动！");
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -54,11 +54,11 @@ public class GetNewMsgService extends Service {
                                 intent.putExtra("msg","newmsg");
                                 intent.setAction("service.MsgService");
                                 sendBroadcast(intent);
-                                LogUtil.e("发送广播");
+                                LogUtil.d("发送广播");
                                 newchatData.clear();
                             }else {
                                 if (ifHasNotify){
-                                    LogUtil.e("nothing");
+                                    LogUtil.d("nothing");
                                 }else {
 
                                     NotificationManager manager = (NotificationManager)getApplication().getSystemService(Context.NOTIFICATION_SERVICE);
@@ -115,13 +115,13 @@ public class GetNewMsgService extends Service {
 
                     @Override
                     public void onError(Throwable e) {
-                    LogUtil.e("error: " + e.toString());
+                    LogUtil.d("error: " + e.toString());
                     }
 
                     @Override
                     public void onNext(ChatMsg chatMsg) {
                         newchatData = chatMsg.getRes();
-                        LogUtil.e("newchatData  ：" +chatMsg.getRes().size()+" 条");
+                        LogUtil.d("newchatData  ：" +chatMsg.getRes().size()+" 条");
                         if (newchatData.size()>0){
                             ifHasNew = true;
 

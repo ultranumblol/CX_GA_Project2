@@ -144,28 +144,28 @@ public class AskForLeaveActivity extends BaseActivity {
                             public void onOptionsSelect(int options1, int option2, int options3) {
                                 String result = options2Items.get(options1).get(option2);
                                 mLeaveType.setText(result);
-                                //LogUtil.e("leaveTypeRes : "+leaveTypeRes.toString());
+                                //LogUtil.d("leaveTypeRes : "+leaveTypeRes.toString());
                               for (int i = 0 ; i <leaveTypeRes.size();i++)
                                   if (leaveTypeRes.get(i).getValname().equals(result)){
 
                                       valueCode = leaveTypeRes.get(i).getValcode();
                                   }
 
-                                LogUtil.e("valuecode : "+valueCode);
+                                LogUtil.d("valuecode : "+valueCode);
                             }
                         });
                     }
 
                     @Override
                     public void onError(Throwable e) {
-                        LogUtil.e("leavetype  error: "+e.toString());
+                        LogUtil.d("leavetype  error: "+e.toString());
                     }
 
                     @Override
                     public void onNext(LeaveType leaveType) {
                         leaveTypeRes.clear();
                         leaveTypeRes = leaveType.getRes();
-                        LogUtil.e("leavetype : "+leaveType.getRes().toString());
+                        LogUtil.d("leavetype : "+leaveType.getRes().toString());
                         ArrayList<String> options2Items_01 = new ArrayList<>();
                         for (int i = 0 ; i <leaveType.getRes().size(); i++){
                             options2Items_01.add(leaveType.getRes().get(i).getValname());
@@ -231,7 +231,7 @@ public class AskForLeaveActivity extends BaseActivity {
                 .subscribe(new Action1<String>() {
                     @Override
                     public void call(String s) {
-                        LogUtil.e("leaveApply :" +s);
+                        LogUtil.d("leaveApply :" +s);
                         if (s.contains("200")) {
                             SomeUtil.showSnackBar(rootview, "提交申请成功！");
 
@@ -266,7 +266,7 @@ public class AskForLeaveActivity extends BaseActivity {
             return date;
         } catch (ParseException e) {
             e.printStackTrace();
-            LogUtil.e("DATE error" + e.toString());
+            LogUtil.d("DATE error" + e.toString());
             return null;
         }
     }

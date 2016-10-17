@@ -22,6 +22,7 @@ import wgz.com.cx_ga_project.entity.CallerInfo;
 import wgz.com.cx_ga_project.entity.JQDetil;
 import wgz.com.cx_ga_project.util.RxUtil;
 import wgz.com.cx_ga_project.util.SPUtils;
+import wgz.com.cx_ga_project.util.SomeUtil;
 import wgz.datatom.com.utillibrary.util.LogUtil;
 
 public class JQListActivity extends BaseActivity {
@@ -83,7 +84,7 @@ public class JQListActivity extends BaseActivity {
 
                     @Override
                     public void onNext(String s) {
-                        LogUtil.e("jqdetil result :"+s);
+                        LogUtil.d("nearjqdetil result :"+s);
                     }
                 });
 
@@ -103,9 +104,30 @@ public class JQListActivity extends BaseActivity {
 
                     @Override
                     public void onNext(CallerInfo callerInfo) {
-                        LogUtil.e("callerinfo resutl : "+callerInfo.getCode());
+                        LogUtil.d("callerinfo resutl : "+callerInfo.getCode());
                     }
                 });
+
+
+        //涉警人关联警情
+        app.jqAPIService.getPoliceJqInfo(SomeUtil.getUserId())
+        .compose(RxUtil.<String>applySchedulers())
+        .subscribe(new Subscriber<String>() {
+            @Override
+            public void onCompleted() {
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                LogUtil.d("getPoliceJqInfo error: "+e.toString());
+            }
+
+            @Override
+            public void onNext(String s) {
+                LogUtil.d("getPoliceJqInfo result: "+s.toString());
+            }
+        });
 
     }
 

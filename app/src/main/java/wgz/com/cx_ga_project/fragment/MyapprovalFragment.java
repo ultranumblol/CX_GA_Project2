@@ -94,14 +94,14 @@ public class MyapprovalFragment extends BaseFragment implements SwipeRefreshLayo
                 .map(new Func1<Apply, List<Apply.Result>>() {
                     @Override
                     public List<Apply.Result> call(Apply apply) {
-                       // LogUtil.e("approval map_result::"+apply.getResult().toString());
+                       // LogUtil.d("approval map_result::"+apply.getResult().toString());
                         return apply.getResult();
                     }
                 })
                 .flatMap(new Func1<List<Apply.Result>, Observable<Apply.Result>>() {
                     @Override
                     public Observable<Apply.Result> call(List<Apply.Result> results) {
-                        //LogUtil.e("approval flatMap_result::"+results.size());
+                        //LogUtil.d("approval flatMap_result::"+results.size());
                         return Observable.from(results);
                     }
                 })
@@ -115,7 +115,7 @@ public class MyapprovalFragment extends BaseFragment implements SwipeRefreshLayo
                     @Override
                     public List<Apply.Result> call(Apply.Result result) {
                         list.add(result);
-                        //LogUtil.e("approval result list :"+list.toString());
+                        //LogUtil.d("approval result list :"+list.toString());
                         return list;
                     }
                 }).subscribe(new Observer<List<Apply.Result>>() {
@@ -126,12 +126,12 @@ public class MyapprovalFragment extends BaseFragment implements SwipeRefreshLayo
 
             @Override
             public void onError(Throwable e) {
-                LogUtil.e("error"+e.toString());
+                LogUtil.d("error"+e.toString());
             }
 
             @Override
             public void onNext(List<Apply.Result> results) {
-                LogUtil.e("approval result:"+results.toString());
+                LogUtil.d("approval result:"+results.toString());
             }
         });
 

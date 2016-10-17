@@ -111,14 +111,14 @@ public class MyApplyQingjiaFragment extends BaseFragment implements SwipeRefresh
                 .map(new Func1<Apply, List<Apply.Result>>() {
                     @Override
                     public List<Apply.Result> call(Apply apply) {
-                        LogUtil.e("map_result::"+apply.getResult().toString());
+                        LogUtil.d("map_result::"+apply.getResult().toString());
                         return apply.getResult();
                     }
                 })
                 .flatMap(new Func1<List<Apply.Result>, Observable<Apply.Result>>() {
                     @Override
                     public Observable<Apply.Result> call(List<Apply.Result> results) {
-                        LogUtil.e("flatMap_result::"+results.size());
+                        LogUtil.d("flatMap_result::"+results.size());
                         return Observable.from(results);
                     }
                 })
@@ -142,12 +142,12 @@ public class MyApplyQingjiaFragment extends BaseFragment implements SwipeRefresh
 
             @Override
             public void onError(Throwable e) {
-                LogUtil.e("error"+e.toString());
+                LogUtil.d("error"+e.toString());
             }
 
             @Override
             public void onNext(List<Apply.Result> results) {
-                LogUtil.e("QingjiaResult:"+results.toString());
+                LogUtil.d("QingjiaResult:"+results.toString());
             }
         });
 

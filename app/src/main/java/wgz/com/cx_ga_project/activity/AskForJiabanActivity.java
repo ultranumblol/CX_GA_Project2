@@ -144,7 +144,7 @@ public class AskForJiabanActivity extends BaseActivity {
             return;
         }*/
         //cancle = false;
-        LogUtil.e("curredate:"+curredate);
+        LogUtil.d("curredate:"+curredate);
         if (!cancle){
             app.apiService.upOverTime("overTimeApply",stime,
                     etime,mJiabanReason.getText().toString()
@@ -164,7 +164,7 @@ public class AskForJiabanActivity extends BaseActivity {
 
                         @Override
                         public void onNext(String s) {
-                            LogUtil.e("result:"+s);
+                            LogUtil.d("result:"+s);
                             if (s.contains("200")){
                                 SomeUtil.showSnackBar(rootview,"提交申请成功！");
                                 finish();
@@ -220,7 +220,7 @@ public class AskForJiabanActivity extends BaseActivity {
             return date;
         } catch (ParseException e) {
             e.printStackTrace();
-            LogUtil.e("DATE error"+e.toString());
+            LogUtil.d("DATE error"+e.toString());
             return null;
         }
     }

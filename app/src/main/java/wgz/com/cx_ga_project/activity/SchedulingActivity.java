@@ -84,12 +84,12 @@ public class SchedulingActivity extends BaseActivity {
 
                     @Override
                     public void onError(Throwable e) {
-                        LogUtil.e("schedulingError : " + e.toString());
+                        LogUtil.d("schedulingError : " + e.toString());
                     }
 
                     @Override
                     public void onNext(Scheduling scheduling) {
-                        LogUtil.e("scheduling : " + scheduling.getRes().toString());
+                        LogUtil.d("scheduling : " + scheduling.getRes().toString());
                     }
                 });
 
@@ -167,14 +167,14 @@ public class SchedulingActivity extends BaseActivity {
 
                         @Override
                         public void onError(Throwable e) {
-                            LogUtil.e("schedulingOneDay error :" + e.toString());
+                            LogUtil.d("schedulingOneDay error :" + e.toString());
                         }
 
                         @Override
                         public void onNext(SchedulingOneDay schedulingOneDay) {
-                            LogUtil.e("schedulingOneDay  :" + schedulingOneDay.getRes().toString());
-                            LogUtil.e("schedulingOneDay  :" + schedulingOneDay.getRes1().toString());
-                            LogUtil.e("schedulingOneDay  :" + schedulingOneDay.getRes2().toString());
+                            LogUtil.d("schedulingOneDay  :" + schedulingOneDay.getRes().toString());
+                            LogUtil.d("schedulingOneDay  :" + schedulingOneDay.getRes1().toString());
+                            LogUtil.d("schedulingOneDay  :" + schedulingOneDay.getRes2().toString());
                             mSchefulingPeople.setText(schedulingOneDay.getRes().get(0).getPolicename());
                             mSchefulingPeople1.setText(schedulingOneDay.getRes1().get(0).getPolicename());
 

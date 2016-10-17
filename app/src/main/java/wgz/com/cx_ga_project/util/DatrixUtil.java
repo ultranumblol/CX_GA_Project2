@@ -41,7 +41,7 @@ public class DatrixUtil {
     }
 
     public void DatrixUpLoadPic(){
-        LogUtil.e("datrixUtil pathssize:"+paths.size());
+        LogUtil.d("datrixUtil pathssize:"+paths.size());
         paths.remove(paths.size()-1);
         for (int i = 0 ; i <paths.size(); i++){
 
@@ -52,7 +52,7 @@ public class DatrixUtil {
     }
     //只传一张图片
     public void DatrixUpLoadPic2(){
-        LogUtil.e("datrixUtil pathssize:"+paths.size());
+        LogUtil.d("datrixUtil pathssize:"+paths.size());
         for (int i = 0 ; i <paths.size(); i++){
 
             DatrixCreate(paths.get(i));
@@ -73,17 +73,17 @@ public class DatrixUtil {
 
                     @Override
                     public void onError(Throwable e) {
-                        LogUtil.e("Detrix_upPic_error:" + e.toString());
+                        LogUtil.d("Detrix_upPic_error:" + e.toString());
                     }
 
                     @Override
                     public void onNext(DatrixCreat datrixCreat) {
-                        LogUtil.e("Detrix_upPic_create : code :" +datrixCreat.getCode().toString());
+                        LogUtil.d("Detrix_upPic_create : code :" +datrixCreat.getCode().toString());
                         if (datrixCreat.getCode().equals(200)){
-                            LogUtil.e("Detrix_upPic_create :"+datrixCreat.getResult().getFileid());
+                            LogUtil.d("Detrix_upPic_create :"+datrixCreat.getResult().getFileid());
                             fileid = datrixCreat.getResult().getFileid();
                             ids.add(fileid);
-                            LogUtil.e("Detrix_upPic_create :" +datrixCreat.getResult().toString());
+                            LogUtil.d("Detrix_upPic_create :" +datrixCreat.getResult().toString());
                             DatrixDoWrite(path,fileid);
 
                         }else{
@@ -105,8 +105,8 @@ public class DatrixUtil {
                 size = file.length()+"";
 
 
-        LogUtil.e("file size : " +size);
-        LogUtil.e("fileid  : " +fileid);
+        LogUtil.d("file size : " +size);
+        LogUtil.d("fileid  : " +fileid);
         app.apiService.detrixWrite(fileid,"0",size,bodyMap)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -118,12 +118,12 @@ public class DatrixUtil {
 
                     @Override
                     public void onError(Throwable e) {
-                        LogUtil.e("detrix_write_Response_error :" + e.toString());
+                        LogUtil.d("detrix_write_Response_error :" + e.toString());
                     }
 
                     @Override
                     public void onNext(String s) {
-                        LogUtil.e("detrix_write_Response :" + s);
+                        LogUtil.d("detrix_write_Response :" + s);
                         if (s.contains("\t\"code\":\t200")){
                             DatrixDoFinish();
                         }else

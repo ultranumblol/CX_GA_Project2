@@ -113,12 +113,12 @@ public class AddJQActivity extends BaseActivity {
 
                     @Override
                     public void onError(Throwable e) {
-                        LogUtil.e("upPic_error:" + e.toString());
+                        LogUtil.d("upPic_error:" + e.toString());
                     }
 
                     @Override
                     public void onNext(String s) {
-                        LogUtil.e("upPic:" + s);
+                        LogUtil.d("upPic:" + s);
                         if (s.contains("\"code\":200")) {
                             SomeUtil.showSnackBar(rootview, "提交成功！").setCallback(new Snackbar.Callback() {
                                 @Override
@@ -146,16 +146,16 @@ public class AddJQActivity extends BaseActivity {
 
                     @Override
                     public void onError(Throwable e) {
-                        LogUtil.e("Detrix_upPic_error:" + e.toString());
+                        LogUtil.d("Detrix_upPic_error:" + e.toString());
                     }
 
                     @Override
                     public void onNext(DatrixCreat datrixCreat) {
-                        LogUtil.e("Detrix_upPic_create : code :" +datrixCreat.getCode().toString());
+                        LogUtil.d("Detrix_upPic_create : code :" +datrixCreat.getCode().toString());
                         if (datrixCreat.getCode().equals(200)){
-                            LogUtil.e("Detrix_upPic_create :"+datrixCreat.getResult().getFileid());
+                            LogUtil.d("Detrix_upPic_create :"+datrixCreat.getResult().getFileid());
                             fileid = datrixCreat.getResult().getFileid();
-                            LogUtil.e("Detrix_upPic_create :" +datrixCreat.getResult().toString());
+                            LogUtil.d("Detrix_upPic_create :" +datrixCreat.getResult().toString());
                             DatrixDoWrite(paths,fileid);
 
                         }else{
@@ -177,7 +177,7 @@ public class AddJQActivity extends BaseActivity {
                 size = file.length()+"";
             }
         }
-        LogUtil.e("file size : " +size);
+        LogUtil.d("file size : " +size);
         app.apiService.detrixWrite(fileid,"0",size,bodyMap)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -189,12 +189,12 @@ public class AddJQActivity extends BaseActivity {
 
                     @Override
                     public void onError(Throwable e) {
-                        LogUtil.e("detrix_write_Response_error :" + e.toString());
+                        LogUtil.d("detrix_write_Response_error :" + e.toString());
                     }
 
                     @Override
                     public void onNext(String s) {
-                        LogUtil.e("detrix_write_Response :" + s);
+                        LogUtil.d("detrix_write_Response :" + s);
                         if (s.contains("\t\"code\":\t200")){
                             DatrixDoFinish();
                         }else
@@ -260,12 +260,12 @@ public class AddJQActivity extends BaseActivity {
 
                     @Override
                     public void onError(Throwable e) {
-                        LogUtil.e("upPic_error:" + e.toString());
+                        LogUtil.d("upPic_error:" + e.toString());
                     }
 
                     @Override
                     public void onNext(String s) {
-                        LogUtil.e("upPic:" + s);
+                        LogUtil.d("upPic:" + s);
                         if (s.contains("\"code\":200")) {
                             uploadpics(files);
                         } else {
@@ -285,11 +285,11 @@ public class AddJQActivity extends BaseActivity {
                     }
                     @Override
                     public void onError(Throwable e) {
-                        LogUtil.e("upPic_error:"+e.toString());
+                        LogUtil.d("upPic_error:"+e.toString());
                     }
                     @Override
                     public void onNext(String s) {
-                        LogUtil.e("upPic:"+s);
+                        LogUtil.d("upPic:"+s);
                         if (s.contains("\"code\":200")){
                             SomeUtil.showSnackBar(rootview,"提交成功！").setCallback(new Snackbar.Callback() {
                                 @Override
@@ -324,7 +324,7 @@ public class AddJQActivity extends BaseActivity {
             }
 
         } catch (Exception e) {
-            LogUtil.e("error : " + e);
+            LogUtil.d("error : " + e);
 
         }
 

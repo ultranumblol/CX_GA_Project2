@@ -114,14 +114,14 @@ public class MyapprovalHistoryFragment extends BaseFragment implements SwipeRefr
                 .map(new Func1<Apply, List<Apply.Result>>() {
                     @Override
                     public List<Apply.Result> call(Apply apply) {
-                        //LogUtil.e("map_result::" + apply.getResult().toString());
+                        //LogUtil.d("map_result::" + apply.getResult().toString());
                         return apply.getResult();
                     }
                 })
                 .flatMap(new Func1<List<Apply.Result>, Observable<Apply.Result>>() {
                     @Override
                     public Observable<Apply.Result> call(List<Apply.Result> results) {
-                        //LogUtil.e("flatMap_result::" + results.size());
+                        //LogUtil.d("flatMap_result::" + results.size());
                         return Observable.from(results);
                     }
                 })
@@ -144,8 +144,8 @@ public class MyapprovalHistoryFragment extends BaseFragment implements SwipeRefr
                         }).subscribe(new Subscriber<List<Apply.Result>>() {
             @Override
             public void onCompleted() {
-                //LogUtil.e("approvalHistory list : "+list.toString());
-                //LogUtil.e("approvalHistory list  size : "+list.size());
+                //LogUtil.d("approvalHistory list : "+list.toString());
+                //LogUtil.d("approvalHistory list  size : "+list.size());
                 if (list.size()>1){
                     adapter.setNoMore(R.layout.view_nomore);
                 }
@@ -156,13 +156,13 @@ public class MyapprovalHistoryFragment extends BaseFragment implements SwipeRefr
 
             @Override
             public void onError(Throwable e) {
-                LogUtil.e("ApprovalhistoryERROR:" + e.toString());
+                LogUtil.d("ApprovalhistoryERROR:" + e.toString());
             }
 
             @Override
             public void onNext(List<Apply.Result> results) {
-                //LogUtil.e("approvalHistory list : "+list.toString());
-                LogUtil.e("approvalHistory results : "+results.toString());
+                //LogUtil.d("approvalHistory list : "+list.toString());
+                LogUtil.d("approvalHistory results : "+results.toString());
             }
         });
 
@@ -180,13 +180,13 @@ public class MyapprovalHistoryFragment extends BaseFragment implements SwipeRefr
 
                     @Override
                     public void onError(Throwable e) {
-                        LogUtil.e("ApprovalhistoryERROR:"+e.toString());
+                        LogUtil.d("ApprovalhistoryERROR:"+e.toString());
                     }
 
                     @Override
                     public void onNext(Apply apply) {
                         list =  apply.getResult();
-                        LogUtil.e("ApprovalhistoryRESULT:"+apply.getResult().size());
+                        LogUtil.d("ApprovalhistoryRESULT:"+apply.getResult().size());
                     }
                 });*/
     }

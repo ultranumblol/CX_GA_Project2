@@ -76,7 +76,7 @@ public class MySubordinateLogAcitvity extends BaseActivity {
     public void initView() {
         toolbarWprklog.setTitle("xxx的工作日志");
         fabAddworklog.setVisibility(View.GONE);
-        LogUtil.e("xxx的日志开始初始化");
+        LogUtil.d("xxx的日志开始初始化");
         setSupportActionBar(toolbarWprklog);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         initCalendar();
@@ -96,15 +96,15 @@ public class MySubordinateLogAcitvity extends BaseActivity {
 
                     @Override
                     public void onError(Throwable e) {
-                        LogUtil.e("getLogData error : "+e);
+                        LogUtil.d("getLogData error : "+e);
                     }
 
                     @Override
                     public void onNext(WorkLog workLog) {
-                        LogUtil.e("worklog : "+workLog.toString());
+                        LogUtil.d("worklog : "+workLog.toString());
                         if (workLog.getCode().toString().contains("200")){
                             mylogs = workLog.getLogs();
-                            LogUtil.e("logs : "+mylogs.toString());
+                            LogUtil.d("logs : "+mylogs.toString());
                             String nowdate = OtherUtils.formatDate(calendar.getTime());
                             app.apiService.getLogDataToDay(APIservice.CHECK_ONESSUMMARY_BYDAYS,"10001",nowdate)
                                     .subscribeOn(Schedulers.io())
@@ -152,7 +152,7 @@ public class MySubordinateLogAcitvity extends BaseActivity {
 
             eventDays.add( OtherUtils.formatDate(SomeUtil.getStrToDate(date)));
         }
-        LogUtil.e("eventDays :" + eventDays.toString());
+        LogUtil.d("eventDays :" + eventDays.toString());
         calendarView.setEventDays(eventDays);
     }
     private void initCalendar() {
@@ -228,7 +228,7 @@ public class MySubordinateLogAcitvity extends BaseActivity {
         public void onPageSelected(int position) {
             final CalendarView calendarView = (CalendarView) calenderViews.get(position % 3);
             txToday.setText(calendarView.getCurrentDay());
-            LogUtil.e("当前月份 ： " +calendarView.getCurrentDay());
+            LogUtil.d("当前月份 ： " +calendarView.getCurrentDay());
             app.apiService.getLogData(APIservice.CHECK_ONESSUMMARY,"10001",calendarView.getCurrentDay())
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
@@ -247,7 +247,7 @@ public class MySubordinateLogAcitvity extends BaseActivity {
                         public void onNext(WorkLog workLog) {
                             if (workLog.getCode().toString().contains("200")){
                                 mylogs = workLog.getLogs();
-                                LogUtil.e("logs : "+mylogs.toString());
+                                LogUtil.d("logs : "+mylogs.toString());
                                 initEventDays(calendarView);
                             }else {
                                 SomeUtil.showSnackBar(mRootview,"没有记录！");

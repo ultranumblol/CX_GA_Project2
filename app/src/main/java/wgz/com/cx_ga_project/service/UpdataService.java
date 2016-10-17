@@ -43,7 +43,7 @@ public class UpdataService extends Service {
 
         receiver = new DownloadCompleteReceiver();
         String url = (String) SPUtils.get(app.getApp().getApplicationContext(), Constant.UPDATEURL, "error!");
-        LogUtil.e("updateUrl : "+url);
+        LogUtil.d("updateUrl : "+url);
         //设置下载地址
         DownloadManager.Request down = new DownloadManager.Request(
                 Uri.parse(url));
