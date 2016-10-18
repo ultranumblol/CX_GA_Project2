@@ -271,7 +271,7 @@ public class NewFightActivity extends BaseActivity {
                         //LogUtil.d("jqDetil : " + jqDetil.getCode().toString());
 
                         if (jqDetil.getCode().equals(200)) {
-                            //LogUtil.d("jqDetil :" + jqDetil.getResult().toString());
+                            LogUtil.d("jqDetil :" + jqDetil.getResult().toString());
                             detilJqAddress.setText(jqDetil.getResult().get(0).getJqaddr());
                             detilJqBjrName.setText(jqDetil.getResult().get(0).getAlarmperson());
                             detilJqBjrPhone.setText(jqDetil.getResult().get(0).getCallingnumber());

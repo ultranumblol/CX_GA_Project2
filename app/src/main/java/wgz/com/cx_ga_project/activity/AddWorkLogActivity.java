@@ -144,7 +144,7 @@ public class AddWorkLogActivity extends BaseActivity {
     private void ChangeWorkLog() {
 
         if (paths.size()>1){
-            DatrixUtil datrixUtil = new DatrixUtil(fileid,paths,rootview);
+            DatrixUtil datrixUtil = new DatrixUtil(paths,rootview);
             datrixUtil.DatrixUpLoadPic();
             datrixUtil.setOnAfterFinish(new DatrixUtil.AfterFinish() {
                 @Override
@@ -197,7 +197,7 @@ public class AddWorkLogActivity extends BaseActivity {
     private void UpLoadWorkLog() {
         LogUtil.d("pathsize : "+paths.size());
         if (paths.size()>1){
-            DatrixUtil datrixUtil = new DatrixUtil(fileid,paths,rootview);
+            DatrixUtil datrixUtil = new DatrixUtil(paths,rootview);
             datrixUtil.DatrixUpLoadPic();
             datrixUtil.setOnAfterFinish(new DatrixUtil.AfterFinish() {
                 @Override

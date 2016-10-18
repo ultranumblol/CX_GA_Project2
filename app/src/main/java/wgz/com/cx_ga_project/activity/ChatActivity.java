@@ -121,10 +121,12 @@ public class ChatActivity extends BaseActivity {
     List<String> paths = new ArrayList<>();
     private String fileid = "";
     private String videoPath = "";
+
     @Override
     public int getLayoutId() {
         return R.layout.activity_chat;
     }
+
     private String datrixUrl = "http://101.231.77.242:9001/preview/getImage?fileid=";
     private String datrixurl2 = "&token=X7yABwjE20sUJLefATUFqU0iUs8mJPqEJo6iRnV63mI=";
 
@@ -192,10 +194,11 @@ public class ChatActivity extends BaseActivity {
                     @Override
                     public void call(Void aVoid) {
                         Sendmsg();
+                        hideKeyboard();
                     }
                 });
 
-       getmsg();
+        getmsg();
 
 
     }
@@ -260,14 +263,14 @@ public class ChatActivity extends BaseActivity {
         Date currentdate = new Date(System.currentTimeMillis());
         String curredate = AskForLeaveActivity.getTime(currentdate);
 
-        app.jqAPIService.sendMsg("2016072100100000060", etSendmessage.getText().toString(),"", "213", curredate, "030283")
+        app.jqAPIService.sendMsg("2016072100100000060", etSendmessage.getText().toString(), "", "213", curredate, "030283")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<String>() {
                     @Override
                     public void onCompleted() {
                         etSendmessage.setText("");
-                       getNewmsg();
+                        getNewmsg();
                     }
 
                     @Override
@@ -283,19 +286,20 @@ public class ChatActivity extends BaseActivity {
                 });
 
     }
+
     private void SendPicmsg() {
 
         //DatrixCreate();
-        DatrixUtil datrixUtil = new DatrixUtil(fileid,paths,rootview);
+        DatrixUtil datrixUtil = new DatrixUtil(paths, rootview);
         datrixUtil.DatrixUpLoadPic2();
         datrixUtil.setOnAfterFinish(new DatrixUtil.AfterFinish() {
             @Override
-            public void afterfinish(String fileid ,List<String> ids) {
+            public void afterfinish(String fileid, List<String> ids) {
                 Date currentdate = new Date(System.currentTimeMillis());
                 String curredate = AskForLeaveActivity.getTime(currentdate);
 
 
-                app.jqAPIService.sendMsg("2016072100100000060", "",datrixUrl+fileid+datrixurl2, "213", curredate, SomeUtil.getUserId())
+                app.jqAPIService.sendMsg("2016072100100000060", "", datrixUrl + fileid + datrixurl2, "213", curredate, SomeUtil.getUserId())
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(new Subscriber<String>() {
@@ -314,8 +318,9 @@ public class ChatActivity extends BaseActivity {
                             @Override
                             public void onError(Throwable e) {
                                 //SomeUtil.showSnackBar(rootview, "error:" + e.toString());
-                                LogUtil.d("error:"+ e.toString());
+                                LogUtil.d("error:" + e.toString());
                             }
+
                             @Override
                             public void onNext(String s) {
                                 LogUtil.d("Finish result:" + s);
@@ -327,16 +332,22 @@ public class ChatActivity extends BaseActivity {
 
     }
 
-    private void SendVideoMsg(){
-
-
+    private void SendVideoMsg() {
+        DatrixUtil datrixUtil = new DatrixUtil(videoPath, rootview);
+        datrixUtil.DatrixUpLoadVideo();
+        datrixUtil.setOnAfterFinish(new DatrixUtil.AfterFinish() {
+            @Override
+            public void afterfinish(String fileid, List<String> ids) {
+                LogUtil.d("UpLoad Video finish  id : " + fileid);
+                SomeUtil.showSnackBarLong(rootview, "视频id：" + fileid);
+            }
+        });
 
 
     }
 
     @Override
-    protected void onStop()
-    {
+    protected void onStop() {
 
         super.onStop();
     }
@@ -346,7 +357,7 @@ public class ChatActivity extends BaseActivity {
         super.onResume();
         //注册广播
         receiver = new MsgReceiver();
-        IntentFilter filter=new IntentFilter();
+        IntentFilter filter = new IntentFilter();
         filter.addAction("service.MsgService");
         registerReceiver(receiver, filter);
         LogUtil.d("广播注册成功！");
@@ -361,9 +372,9 @@ public class ChatActivity extends BaseActivity {
     private class MsgReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
-            Bundle bundle  = intent.getExtras();
+            Bundle bundle = intent.getExtras();
             String msg = bundle.getString("msg");
-            if (msg.equals("newmsg")){
+            if (msg.equals("newmsg")) {
                /* NotificationManager manager = (NotificationManager)context.getSystemService(Context.NOTIFICATION_SERVICE);
                 PendingIntent pendingIntent3 = PendingIntent.getActivity(context, 0,
                         new Intent(context, ChatActivity.class), 0);
@@ -378,7 +389,7 @@ public class ChatActivity extends BaseActivity {
 
                 notify3.flags |= Notification.FLAG_AUTO_CANCEL; // FLAG_AUTO_CANCEL表明当通知被用户点击时，通知将被清除。
                 manager.notify(1, notify3);// 步骤4：通过通知管理器来发起通知。如果id不同，则每click，在status哪里增加一个提示*/
-                 getNewmsg();
+                getNewmsg();
 
             }
         }
@@ -396,7 +407,7 @@ public class ChatActivity extends BaseActivity {
         }
     }
 
-    @OnClick({ R.id.btn_set_mode_keyboard, R.id.btn_more,R.id.view_photo,R.id.view_camera,R.id.view_video})
+    @OnClick({R.id.btn_set_mode_keyboard, R.id.btn_more, R.id.view_photo, R.id.view_camera, R.id.view_video})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.btn_set_mode_keyboard:
@@ -407,7 +418,7 @@ public class ChatActivity extends BaseActivity {
                     System.out.println("more gone");
                     hideKeyboard();
                     more.setVisibility(View.VISIBLE);
-                   llBtnContainer.setVisibility(View.VISIBLE);
+                    llBtnContainer.setVisibility(View.VISIBLE);
 
                 } else {
                     more.setVisibility(View.GONE);
@@ -433,19 +444,21 @@ public class ChatActivity extends BaseActivity {
                 break;
         }
     }
-    private List<File> makeFiles(){
+
+    private List<File> makeFiles() {
         final List<File> files = new ArrayList<>();
         for (int i = 0; i < paths.size(); i++) {
             File file = new File(paths.get(i));
             files.add(file);
         }
-        return  files;
+        return files;
 
     }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         try {
-            if (resultCode==7){
+            if (resultCode == 7) {
                 if (data.getStringExtra("result").equals("addpic")) {
                     if (more.getVisibility() == View.VISIBLE) {
                         more.setVisibility(View.GONE);
@@ -472,16 +485,16 @@ public class ChatActivity extends BaseActivity {
 
             }
 
-            if (requestCode==4){
+            if (requestCode == 4) {
                 if (more.getVisibility() == View.VISIBLE) {
                     more.setVisibility(View.GONE);
                 }
                 newchatData.clear();
 
                 Uri uri = data.getData();
-                videoPath  = UriUtils.getPath(getApplicationContext(),uri);
+                videoPath = UriUtils.getPath(getApplicationContext(), uri);
                 // 视频文件路径
-                SomeUtil.showSnackBarLong(rootview,"视频地址："+videoPath);
+
 
                 ChatMsg re = new ChatMsg();
                 ChatMsg.Re pic = re.new Re();
@@ -495,9 +508,8 @@ public class ChatActivity extends BaseActivity {
                 newchatData.add(pic);
                 adapter.addAll(newchatData);
                 recyclerview.scrollToPosition(adapter.getCount() - 1);
-
-
-
+                // TODO: 2016/10/18 上传 video
+                SendVideoMsg();
 
 
             }
@@ -511,7 +523,7 @@ public class ChatActivity extends BaseActivity {
     }
 
     private void uploadpic(List<File> files) {
-        app.apiService.uploadFileWithRequestBody("saveAppPics",SomeUtil.filesToMultipartBody(files))
+        app.apiService.uploadFileWithRequestBody("saveAppPics", SomeUtil.filesToMultipartBody(files))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<String>() {
@@ -519,15 +531,17 @@ public class ChatActivity extends BaseActivity {
                     public void onCompleted() {
 
                     }
+
                     @Override
                     public void onError(Throwable e) {
                         LogUtil.d("uploadpic error : " + e.toString());
                         adapter.remove(adapter.getCount() - 1);
                     }
+
                     @Override
                     public void onNext(String s) {
-                        LogUtil.d("upPic :"+s);
-                        if (s.contains("\"code\":200")){
+                        LogUtil.d("upPic :" + s);
+                        if (s.contains("\"code\":200")) {
 
                             SendPicmsg();
                            /* SomeUtil.showSnackBar(rootview,"提交成功！").setCallback(new Snackbar.Callback() {
@@ -536,9 +550,8 @@ public class ChatActivity extends BaseActivity {
                                     finish();
                                 }
                             });*/
-                        }
-                        else {
-                            SomeUtil.showSnackBar(rootview,"网络错误，请再试！");
+                        } else {
+                            SomeUtil.showSnackBar(rootview, "网络错误，请再试！");
                         }
                     }
                 });
@@ -548,6 +561,7 @@ public class ChatActivity extends BaseActivity {
 
     /**
      * 获取视频缩略图
+     *
      * @param filePath
      * @return
      */
@@ -557,18 +571,14 @@ public class ChatActivity extends BaseActivity {
         try {
             retriever.setDataSource(filePath);
             bitmap = retriever.getFrameAtTime();
-        }
-        catch(IllegalArgumentException e) {
+        } catch (IllegalArgumentException e) {
             e.printStackTrace();
-        }
-        catch (RuntimeException e) {
+        } catch (RuntimeException e) {
             e.printStackTrace();
-        }
-        finally {
+        } finally {
             try {
                 retriever.release();
-            }
-            catch (RuntimeException e) {
+            } catch (RuntimeException e) {
                 e.printStackTrace();
             }
         }
@@ -592,16 +602,16 @@ public class ChatActivity extends BaseActivity {
 
                     @Override
                     public void onNext(DatrixCreat datrixCreat) {
-                        LogUtil.d("Detrix_upPic_create : code :" +datrixCreat.getCode().toString());
-                        if (datrixCreat.getCode().equals(200)){
-                            LogUtil.d("Detrix_upPic_create :"+datrixCreat.getResult().getFileid());
+                        LogUtil.d("Detrix_upPic_create : code :" + datrixCreat.getCode().toString());
+                        if (datrixCreat.getCode().equals(200)) {
+                            LogUtil.d("Detrix_upPic_create :" + datrixCreat.getResult().getFileid());
                             fileid = datrixCreat.getResult().getFileid();
-                            LogUtil.d("Detrix_upPic_create :" +datrixCreat.getResult().toString());
-                            DatrixDoWrite(paths,fileid);
+                            LogUtil.d("Detrix_upPic_create :" + datrixCreat.getResult().toString());
+                            DatrixDoWrite(paths, fileid);
 
-                        }else{
+                        } else {
 
-                            SomeUtil.showSnackBar(rootview,"创建上传图片失败!");
+                            SomeUtil.showSnackBar(rootview, "创建上传图片失败!");
                         }
 
                     }
@@ -615,12 +625,12 @@ public class ChatActivity extends BaseActivity {
             for (int i = 0; i < 1; i++) {
                 File file = new File(paths.get(i));
                 bodyMap.put("file" + i + "\" ; filename=\"" + file.getName(), RequestBody.create(MediaType.parse("image/*"), file));
-                size = file.length()+"";
+                size = file.length() + "";
             }
         }
-        LogUtil.d("file size : " +size);
-        LogUtil.d("fileid  : " +fileid);
-        app.apiService.detrixWrite(fileid,"0",size,bodyMap)
+        LogUtil.d("file size : " + size);
+        LogUtil.d("fileid  : " + fileid);
+        app.apiService.detrixWrite(fileid, "0", size, bodyMap)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<String>() {
@@ -637,11 +647,10 @@ public class ChatActivity extends BaseActivity {
                     @Override
                     public void onNext(String s) {
                         LogUtil.d("detrix_write_Response :" + s);
-                        if (s.contains("\t\"code\":\t200")){
+                        if (s.contains("\t\"code\":\t200")) {
                             DatrixDoFinish();
-                        }else
-                        {
-                            SomeUtil.showSnackBar(rootview,"图片上传失败!");
+                        } else {
+                            SomeUtil.showSnackBar(rootview, "图片上传失败!");
                         }
                     }
                 });
@@ -650,7 +659,7 @@ public class ChatActivity extends BaseActivity {
     }
 
     private void DatrixDoFinish() {
-        app.apiService.detrixfinish(fileid," ")
+        app.apiService.detrixfinish(fileid, " ")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<String>() {
@@ -666,12 +675,12 @@ public class ChatActivity extends BaseActivity {
 
                     @Override
                     public void onNext(String s) {
-                        if (s.contains("200")){
+                        if (s.contains("200")) {
                             Date currentdate = new Date(System.currentTimeMillis());
                             String curredate = AskForLeaveActivity.getTime(currentdate);
 
 
-                            app.jqAPIService.sendMsg("2016072100100000060", " ",datrixUrl+fileid+datrixurl2, "213", curredate, "030283")
+                            app.jqAPIService.sendMsg("2016072100100000060", " ", datrixUrl + fileid + datrixurl2, "213", curredate, "030283")
                                     .subscribeOn(Schedulers.io())
                                     .observeOn(AndroidSchedulers.mainThread())
                                     .subscribe(new Subscriber<String>() {
@@ -691,7 +700,7 @@ public class ChatActivity extends BaseActivity {
                                         @Override
                                         public void onError(Throwable e) {
                                             //SomeUtil.showSnackBar(rootview, "error:" + e.toString());
-                                            LogUtil.d("error:"+ e.toString());
+                                            LogUtil.d("error:" + e.toString());
                                         }
 
                                         @Override
@@ -704,12 +713,9 @@ public class ChatActivity extends BaseActivity {
                                     });
 
 
-
-
                             //SomeUtil.showSnackBar(rootview,"上传图片成功！");
-                        }
-                        else {
-                            SomeUtil.showSnackBar(rootview,"网络错误，请稍后！");
+                        } else {
+                            SomeUtil.showSnackBar(rootview, "网络错误，请稍后！");
                         }
                     }
                 });

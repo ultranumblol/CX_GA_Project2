@@ -4,6 +4,7 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Build;
 import android.support.design.widget.Snackbar;
 import android.text.TextUtils;
@@ -95,11 +96,13 @@ public class LoginActivity extends BaseActivity {
         // TODO: 2016/8/5  系统读入内容帮助用户输入用户名
         //系统读入内容帮助用户输入用户名
         ArrayList<String> arrayList = new ArrayList<>();
-//        for (int i = 0; i < 9; i++) {
-//            arrayList.add("36140137" + i + "@qq.com");
-//        }
+       /* for (int i = 0; i < 9; i++) {
+            arrayList.add("03028"+i);
+        }*/
+
+
         ArrayAdapter<String> adapter = new ArrayAdapter<>(getApplication(),
-                android.R.layout.simple_spinner_dropdown_item, arrayList);
+                android.R.layout.simple_list_item_1, arrayList);
 
         actvUsername.setAdapter(adapter);
     }

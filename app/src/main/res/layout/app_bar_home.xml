@@ -77,13 +77,21 @@
                 app:cardCornerRadius="10dp"
                 android:id="@+id/to_jiechujing"
                 app:contentPaddingLeft="10dp">
+                <ImageView
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
+                    android:layout_gravity="center_vertical"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/zuozhan_icon"
+                    />
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:text="接处警作战"
-                    android:textSize="18dp"
+                    android:textSize="16dp"
+                    android:layout_marginLeft="32dp"
                     android:textColor="@color/goldenrod"
 
                     />
@@ -98,13 +106,20 @@
                 app:cardCornerRadius="10dp"
                 android:id="@+id/id_toWorkLog"
                 app:contentPaddingLeft="10dp">
-
+                <ImageView
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
+                    android:layout_gravity="center_vertical"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/worklog_icon"
+                    />
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:text="工作日志"
-                    android:textSize="18dp"
+                    android:textSize="16dp"
+                    android:layout_marginLeft="32dp"
                     android:textColor="@color/goldenrod"
 
                     />
@@ -119,13 +134,20 @@
                 app:cardCornerRadius="10dp"
                 android:id="@+id/id_myscheduling"
                 app:contentPaddingLeft="10dp">
-
+                <ImageView
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
+                    android:layout_gravity="center_vertical"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/zhiban_icon"
+                    />
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:text="我的值班"
-                    android:textSize="18dp"
+                    android:textSize="16dp"
+                    android:layout_marginLeft="32dp"
                     android:textColor="@color/goldenrod"
 
                     />
@@ -140,13 +162,21 @@
                 app:cardCornerRadius="10dp"
                 android:id="@+id/id_myApply"
                 app:contentPaddingLeft="10dp">
+                <ImageView
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
+                    android:layout_gravity="center_vertical"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/apply_icon"
+                    />
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:text="我的申请"
-                    android:textSize="18dp"
+                    android:textSize="16dp"
+                    android:layout_marginLeft="32dp"
                     android:textColor="@color/goldenrod"
 
                     />
@@ -161,13 +191,21 @@
                 app:cardCornerRadius="10dp"
                 android:id="@+id/id_shenhe"
                 app:contentPaddingLeft="10dp">
+                <ImageView
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
+                    android:layout_gravity="center_vertical"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/shenhe_icon"
+                    />
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:text="我的审核"
-                    android:textSize="18dp"
+                    android:textSize="16dp"
+                    android:layout_marginLeft="32dp"
                     android:textColor="@color/goldenrod"
 
                     />
@@ -183,13 +221,21 @@
                 app:cardCornerRadius="10dp"
                 android:id="@+id/id_xiashu"
                 app:contentPaddingLeft="10dp">
+                <ImageView
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
+                    android:layout_gravity="center_vertical"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/xiashu_icon"
+                    />
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:text="我的下属"
-                    android:textSize="18dp"
+                    android:layout_marginLeft="32dp"
+                    android:textSize="16dp"
                     android:textColor="@color/goldenrod"
 
                     />
@@ -205,13 +251,21 @@
                 app:cardCornerRadius="10dp"
                 android:id="@+id/id_fighttrack"
                 app:contentPaddingLeft="10dp">
+                <ImageView
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
+                    android:layout_gravity="center_vertical"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/guiji_icon"
+                    />
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:text="我的作战轨迹"
-                    android:textSize="18dp"
+                    android:textSize="16dp"
+                    android:layout_marginLeft="32dp"
                     android:textColor="@color/goldenrod"
 
                     />
@@ -229,7 +283,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="16dp"
-        app:backgroundTint="@color/olivedrab"
+        app:backgroundTint="@color/colorPrimary"
 
         app:srcCompat="@drawable/ic_add_white_18dp" />
 

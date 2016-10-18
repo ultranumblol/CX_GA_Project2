@@ -1,8 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ImageView xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/img_welcome"
-    android:scaleType="centerCrop"
     android:fitsSystemWindows="true"
-    android:src="@drawable/welcome_thirdly" />
+   >
+    <ImageView
+        android:layout_width="match_parent"
+        android:id="@+id/img_welcome"
+        android:fitsSystemWindows="true"
+        android:src="@drawable/login_bg"
+        android:scaleType="centerCrop"
+        android:layout_height="match_parent" />
+    <ImageView
+        android:layout_width="200dp"
+        android:layout_height="70dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/app_logo"
+        android:layout_marginTop="68dp"
+        android:layout_gravity="center_horizontal"
+        />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="12dp"
+        android:textColor="@color/white"
+        android:text="主办单位:楚雄市公安局"
+        android:layout_gravity="center_horizontal|bottom"
+        android:layout_marginBottom="38dp"
+        />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="12dp"
+        android:textColor="@color/white"
+        android:text="技术支持:上海德拓信息技术有限公司"
+        android:layout_gravity="center_horizontal|bottom"
+        android:layout_marginBottom="18dp"
+        />
+    </FrameLayout>

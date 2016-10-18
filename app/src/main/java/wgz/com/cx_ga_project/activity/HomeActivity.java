@@ -110,7 +110,7 @@ public class HomeActivity extends AppCompatActivity
         drawer.setDrawerListener(toggle);
         toggle.syncState();
         drawer.setStatusBarBackground(Color.TRANSPARENT);
-        toolbarHome.setTitle("智慧警务APP");
+        toolbarHome.setTitle("");
         setSupportActionBar(toolbarHome);
         toolbarHome.setTitleTextColor(Color.WHITE);
         idColltoollayout.setCollapsedTitleTextColor(Color.WHITE);
@@ -203,7 +203,7 @@ public class HomeActivity extends AppCompatActivity
 
     private class BannerAdapter extends StaticPagerAdapter {
         // private List<Integer> list;
-        int[] imageId = new int[]{R.drawable.ad1, R.drawable.ad2, R.drawable.ad3};
+        int[] imageId = new int[]{R.drawable.ad11, R.drawable.ad22, R.drawable.ad33};
 
         public BannerAdapter() {
             int[] src = imageId;
@@ -227,7 +227,7 @@ public class HomeActivity extends AppCompatActivity
             imageView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    SomeUtil.showSnackBar(homeRootView, "维护中。。。");
+                    //SomeUtil.showSnackBar(homeRootView, "维护中。。。");
                     //startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(list.get(position).getUrl())));
                 }
             });
