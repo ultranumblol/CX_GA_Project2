@@ -85,7 +85,9 @@ public interface APIservice {
     @POST("http://101.231.77.242:9001/api/cluster/tracker/file/create?uid=10098")
     @Headers("ACCESS-TOKEN:X7yABwjE20sUJLefATUFqU0iUs8mJPqEJo6iRnV63mI=")
     Observable<DatrixCreat> uploadFileWithRequestBodyTest(
-            @Field("filename") String filename);
+            @Field("filename") String filename,
+            @Field("filesize") String filesize
+    );
 
 
     /**

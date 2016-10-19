@@ -135,7 +135,7 @@ public class AddJQActivity extends BaseActivity {
     }
 
     private void DatrixCreate() {
-        app.apiService.uploadFileWithRequestBodyTest("testtestwgzwgz")
+        app.apiService.uploadFileWithRequestBodyTest("testtestwgzwgz","0")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<DatrixCreat>() {

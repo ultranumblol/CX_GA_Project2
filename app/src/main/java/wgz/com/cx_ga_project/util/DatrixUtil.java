@@ -1,11 +1,10 @@
 package wgz.com.cx_ga_project.util;
 
+import android.support.v7.app.AlertDialog;
 import android.view.View;
-import android.widget.Toast;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,8 +14,6 @@ import okhttp3.RequestBody;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
-import wgz.com.cx_ga_project.activity.AskForLeaveActivity;
-import wgz.com.cx_ga_project.adapter.chatAdapter.ChatAdapter;
 import wgz.com.cx_ga_project.app;
 import wgz.com.cx_ga_project.entity.DatrixCreat;
 import wgz.datatom.com.utillibrary.util.LogUtil;
@@ -37,6 +34,15 @@ public class DatrixUtil {
     private View rootview;
     private AfterFinish afterFinish;
     private String path = "";
+    private static final int UPLOADLENGTH = 4 * 1024 * 1024;
+
+    private int filesize = 0;
+    private int filePieces = 0;
+    private int currentPieces = 0;
+    private int offset = 0;
+    private int startsize = 0;
+    private int endsize = 0;
+    private int currentfilesize = 0;
 
     /**
      * 根据图片地址list上传多个图片
@@ -67,7 +73,7 @@ public class DatrixUtil {
         paths.remove(paths.size() - 1);
         for (int i = 0; i < paths.size(); i++) {
 
-            DatrixCreate(paths.get(i),UPLOADPIC);
+            DatrixCreate(paths.get(i), UPLOADPIC);
         }
 
 
@@ -80,7 +86,7 @@ public class DatrixUtil {
         LogUtil.d("datrixUtil pathssize:" + paths.size());
         for (int i = 0; i < paths.size(); i++) {
 
-            DatrixCreate(paths.get(i),UPLOADPIC);
+            DatrixCreate(paths.get(i), UPLOADPIC);
         }
 
 
@@ -92,12 +98,66 @@ public class DatrixUtil {
     public void DatrixUpLoadVideo() {
         LogUtil.d("datrixUtil path:" + path);
 
-        DatrixCreate(path,UPLOADVIDEO);
+        DatrixCreate(path, UPLOADVIDEO);
+    }
+
+    private void writeByPiece( final Map<String, RequestBody> bodyMap) {
+        startsize = endsize;
+        endsize+=UPLOADLENGTH;
+        if (endsize>filesize)
+            endsize = filesize;
+        currentfilesize+=endsize-startsize;
+        LogUtil.d(" startsize:"+startsize +"uploadSize : "+(endsize-startsize) +"currentPieces :"+currentPieces);
+        app.apiService.detrixWrite(fileid, startsize + "", endsize-startsize + "", bodyMap)
+                .compose(RxUtil.<String>applySchedulers())
+                .subscribe(new Subscriber<String>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+                    @Override
+                    public void onError(Throwable e) {
+                        LogUtil.d("detrix_write_Response_error :" + e.toString());
+                    }
+
+                    @Override
+                    public void onNext(String s) {
+                        LogUtil.d("detrix_write_Response :" + s);
+                        if (s.contains("\t\"code\":\t200")) {
+
+
+
+                            if (currentPieces==filePieces){
+                                DatrixDoFinish();
+                            }else {
+                                writeByPiece(bodyMap);
+                                currentPieces+=1;
+                            }
+
+
+                            // DatrixDoFinish();
+                        } else {
+                            SomeUtil.showSnackBar(rootview, "第" + currentPieces  + "块文件写入失败!");
+
+                            //ToastUtil.showLong(app.getApp().getApplicationContext(),"current:"+currentfilesize+"filesize : "+filesize);
+                            ToastUtil.showLong(app.getApp().getApplicationContext(),s);
+                        }
+                    }
+                });
     }
 
 
     private void DatrixCreate(final String path, final int type) {
-        app.apiService.uploadFileWithRequestBodyTest(SomeUtil.getUserId())
+        filesize = 0;
+        filePieces = 0;
+        currentPieces = 1;
+        offset = 0;
+        startsize = 0;
+        endsize = 0;
+        currentfilesize=0;
+        File file = new File(path);
+
+        app.apiService.uploadFileWithRequestBodyTest(SomeUtil.getUserId(),""+file.length())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<DatrixCreat>() {
@@ -119,7 +179,7 @@ public class DatrixUtil {
                             fileid = datrixCreat.getResult().getFileid();
                             ids.add(fileid);
                             LogUtil.d("Detrix_upPic_create :" + datrixCreat.getResult().toString());
-                            DatrixDoWrite(path, fileid,type);
+                            DatrixDoWrite(path, fileid, type);
 
                         } else {
 
@@ -130,26 +190,114 @@ public class DatrixUtil {
                 });
     }
 
-    private void DatrixDoWrite(String path, String fileid,int type) {
-        String size = "";
+    private void DatrixDoWrite(String path, String fileid, int type) {
+
         Map<String, RequestBody> bodyMap = new HashMap<>();
 
-        if (type==UPLOADPIC){
+        if (type == UPLOADPIC) {
             File file = new File(path);
             bodyMap.put("file" + 1 + "\" ; filename=\"" + file.getName(), RequestBody.create(MediaType.parse("image/*"), file));
-            size = file.length() + "";
+            filesize = (int) file.length();
+            app.apiService.detrixWrite(fileid, "0", filesize + "", bodyMap)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new Subscriber<String>() {
+                        @Override
+                        public void onCompleted() {
+
+                        }
+
+                        @Override
+                        public void onError(Throwable e) {
+                            LogUtil.d("detrix_write_Response_error :" + e.toString());
+                        }
+
+                        @Override
+                        public void onNext(String s) {
+                            LogUtil.d("detrix_writePic_Response :" + s);
+                            if (s.contains("\t\"code\":\t200")) {
+                                DatrixDoFinish();
+                            } else {
+                                SomeUtil.showSnackBar(rootview, "写入文件失败!");
+                                //ToastUtil.showLong(app.getApp().getApplicationContext()," code ："+s);
+                            }
+                        }
+                    });
         }
-        if (type==UPLOADVIDEO){
+        if (type == UPLOADVIDEO) {
             File file = new File(path);
             bodyMap.put("file" + 1 + "\" ; filename=\"" + file.getName(), RequestBody.create(MediaType.parse("video/*"), file));
-            size = file.length() + "";
+            filesize = (int) file.length();
+            LogUtil.d("Video file size : " + filesize);
+            if (filesize > 4 * 1024 * 1024) {
+                long k = filesize / 4 / 1024 / 1024;
+                filePieces = (int) Math.floor(k) + 1;
+                LogUtil.d("Video file Pieces  : " + filePieces);
+
+                writeByPiece(bodyMap);
+                /*app.apiService.detrixWrite(fileid, startsize + "", endsize-startsize + "", bodyMap)
+                        .compose(RxUtil.<String>applySchedulers())
+                        .subscribe(new Subscriber<String>() {
+                            @Override
+                            public void onCompleted() {
+
+                            }
+
+                            @Override
+                            public void onError(Throwable e) {
+                                LogUtil.d("detrix_write_Response_error :" + e.toString());
+                            }
+
+                            @Override
+                            public void onNext(String s) {
+                                LogUtil.d("detrix_write_Response :" + s);
+                                if (s.contains("\t\"code\":\t200")) {
+                                    // DatrixDoFinish();
+                                } else {
+                                    SomeUtil.showSnackBar(rootview, "第" + currentPieces+ "块文件写入失败!");
+                                    //ToastUtil.showLong(app.getApp().getApplicationContext()," code ："+s);
+                                }
+                            }
+                        });
+*/
+
+
+
+                  /*  if (i == o){
+                        SomeUtil.showSnackBar(rootview, "offset:"+offset +"endsize:"+(size-(i*UPLOADLENGTH)));
+                        app.apiService.detrixWrite(fileid, offset+"", size-(i*UPLOADLENGTH)+"", bodyMap)
+                                .compose(RxUtil.<String>applySchedulers())
+                                .subscribe(new Subscriber<String>() {
+                                    @Override
+                                    public void onCompleted() {
+
+                                    }
+
+                                    @Override
+                                    public void onError(Throwable e) {
+                                        LogUtil.d("detrix_write_Response_error :" + e.toString());
+                                    }
+
+                                    @Override
+                                    public void onNext(String s) {
+                                        LogUtil.d("detrix_write_Response :" + s);
+                                        if (s.contains("\t\"code\":\t200")) {
+                                            DatrixDoFinish();
+                                        } else {
+                                            SomeUtil.showSnackBar(rootview, "第"+ (finalI+1) +"块文件写入失败!");
+                                            //ToastUtil.showLong(app.getApp().getApplicationContext()," code ："+s);
+                                        }
+                                    }
+                                });
+
+                    }*/
+            }
+
         }
 
-
-
-        LogUtil.d("file size : " + size);
-        LogUtil.d("fileid  : " + fileid);
-        app.apiService.detrixWrite(fileid, "0", size, bodyMap)
+        // LogUtil.d("file size : " + size);
+        //LogUtil.d("fileid  : " + fileid);
+        /*app.apiService.detrixWrite(fileid, "0", size+"", bodyMap)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<String>() {
@@ -173,7 +321,7 @@ public class DatrixUtil {
                             ToastUtil.showLong(app.getApp().getApplicationContext()," code ："+s);
                         }
                     }
-                });
+                });*/
 
 
     }

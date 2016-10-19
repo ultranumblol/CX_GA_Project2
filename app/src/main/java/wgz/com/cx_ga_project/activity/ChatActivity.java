@@ -586,7 +586,7 @@ public class ChatActivity extends BaseActivity {
     }
 
     private void DatrixCreate() {
-        app.apiService.uploadFileWithRequestBodyTest("testtestwgzwgz")
+        app.apiService.uploadFileWithRequestBodyTest("testtestwgzwgz","")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<DatrixCreat>() {

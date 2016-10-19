@@ -62,9 +62,9 @@ public class app extends Application {
     }
     public static OkHttpClient defaultOkHttpClient() {
         OkHttpClient client = new OkHttpClient.Builder()
-                .connectTimeout(3, TimeUnit.SECONDS)
-                .writeTimeout(3, TimeUnit.SECONDS)
-                .readTimeout(3, TimeUnit.SECONDS)
+                .connectTimeout(5, TimeUnit.SECONDS)
+                .writeTimeout(5, TimeUnit.SECONDS)
+                .readTimeout(5, TimeUnit.SECONDS)
                 .addNetworkInterceptor(new Interceptor() {
                     @Override
                     public okhttp3.Response intercept(Chain chain) throws IOException {
