@@ -15,11 +15,12 @@ import java.util.Properties;
  */
 
 public class fileUtil {
-    private static final int SIZE = 4 * 1024 * 1024;// 定义单个文件的大小这里采用1m
+    private static final int SIZE = 4 * 1024 * 1024;// 定义单个文件的大小这里采用4m
 
 
-    private static void splitFile(File file) {
+    public static void splitFile(File file) {
         try {
+            delAllFile("/storage/sdcard0/temp");
             FileInputStream fs = new FileInputStream(file);
             // 定义缓冲区
             byte[] b = new byte[SIZE];
@@ -33,25 +34,25 @@ public class fileUtil {
              */
             Properties pro = new Properties();
             // 定义输出的文件夹路径
-            File dir = new File("C:/parfiles");
+            File dir = new File("/storage/sdcard0/temp");
             // 判断文件夹是否存在，不存在则创建
             if (!dir.exists()) {
                 dir.mkdirs();
             }
             // 切割文件
             while ((len = fs.read(b)) != -1) {
-                fo = new FileOutputStream(new File(dir, (count++) + ".part"));
+                fo = new FileOutputStream(new File(dir, (count++) + ".3gp"));
                 fo.write(b, 0, len);
                 fo.close();
             }
-            // 将被切割的文件信息保存到properties中
+           /* // 将被切割的文件信息保存到properties中
             pro.setProperty("partCount", count + "");
             pro.setProperty("fileName", file.getName());
             fo = new FileOutputStream(new File(dir, (count++) + ".properties"));
             // 写入properties文件
             pro.store(fo, "save file info");
             fo.close();
-            fs.close();
+            fs.close();*/
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -59,44 +60,46 @@ public class fileUtil {
     }
 
 
-    public static void read() {
-        long from = 4 + 1;//从该字节开始读，自己测注意中文是两个字节
+    public static void delFolder(String folderPath) {
         try {
-            File file = new File("d:\\文件上传\\ss.txt");
-            FileInputStream bis = new FileInputStream(file);
-            bis.skip(from - 1);//文件指向前一字节
-            @SuppressWarnings("resource")
-//指定文件位置读取的文件流
-                    InputStream sbs = new BufferedInputStream(bis);
-//存入文件，以便检测
-            File file1 = new File("d:\\文件上传\\ss1.txt");
-            OutputStream os = null;
-            try {
-                os = new FileOutputStream(file1);
-                byte buffer[] = new byte[4 * 1024];
-                int len = 0;
-                while ((len = sbs.read(buffer)) != -1)//
-                {
-                    os.write(buffer, 0, len);
-                }
-                os.flush();
-            } catch (Exception e) {
-                e.printStackTrace();
-            } finally {
-                try {
-                    os.close();
-                } catch (IOException e) {
-// TODO Auto-generated catch block
-                    e.printStackTrace();
-                }
-            }
-        } catch (FileNotFoundException e) {
+            delAllFile(folderPath); //删除完里面所有内容
+            String filePath = folderPath;
+            filePath = filePath.toString();
+            java.io.File myFilePath = new java.io.File(filePath);
+            myFilePath.delete(); //删除空文件夹
+        } catch (Exception e) {
             e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
         }
     }
 
-
+    //删除指定文件夹下所有文件
+//param path 文件夹完整绝对路径
+    public static boolean delAllFile(String path) {
+        boolean flag = false;
+        File file = new File(path);
+        if (!file.exists()) {
+            return flag;
+        }
+        if (!file.isDirectory()) {
+            return flag;
+        }
+        String[] tempList = file.list();
+        File temp = null;
+        for (int i = 0; i < tempList.length; i++) {
+            if (path.endsWith(File.separator)) {
+                temp = new File(path + tempList[i]);
+            } else {
+                temp = new File(path + File.separator + tempList[i]);
+            }
+            if (temp.isFile()) {
+                temp.delete();
+            }
+            if (temp.isDirectory()) {
+                delAllFile(path + "/" + tempList[i]);//先删除文件夹里面的文件
+                delFolder(path + "/" + tempList[i]);//再删除空文件夹
+                flag = true;
+            }
+        }
+        return flag;
+    }
 }

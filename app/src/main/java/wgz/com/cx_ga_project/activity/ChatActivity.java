@@ -1,24 +1,23 @@
 package wgz.com.cx_ga_project.activity;
 
-import android.app.Notification;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
+
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.database.Cursor;
+
 import android.graphics.Bitmap;
 import android.media.MediaMetadataRetriever;
-import android.media.RingtoneManager;
+
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
+
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+
+
 import android.text.Editable;
-import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.View;
 import android.view.WindowManager;
@@ -41,7 +40,7 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.Bind;
-import butterknife.ButterKnife;
+
 import butterknife.OnClick;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
@@ -63,6 +62,8 @@ import wgz.com.cx_ga_project.util.UriUtils;
 import wgz.datatom.com.utillibrary.util.LogUtil;
 
 import static wgz.com.cx_ga_project.activity.PickPhotoActivity.HTTP_URL;
+import static wgz.com.cx_ga_project.util.fileUtil.delAllFile;
+import static wgz.com.cx_ga_project.util.fileUtil.delFolder;
 
 /**
  * 指挥通讯
@@ -188,6 +189,7 @@ public class ChatActivity extends BaseActivity {
             public void afterTextChanged(Editable s) {
 
             }
+
         });
         RxView.clicks(btnSend).throttleFirst(500, TimeUnit.MILLISECONDS)
                 .subscribe(new Action1<Void>() {
@@ -434,6 +436,7 @@ public class ChatActivity extends BaseActivity {
             case R.id.view_camera:
                 break;
             case R.id.view_video:
+                delFolder("/storage/sdcard0/temp");
                 Intent intent2 = new Intent();
                 intent2.setType("video/*");
                 intent2.setAction(Intent.ACTION_GET_CONTENT);
