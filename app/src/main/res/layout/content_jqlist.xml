@@ -8,7 +8,7 @@
     android:layout_height="match_parent"
     tools:context="wgz.com.cx_ga_project.activity.JQListActivity"
     tools:showIn="@layout/activity_jqlist">
-<com.jude.easyrecyclerview.EasyRecyclerView
+    <com.jude.easyrecyclerview.EasyRecyclerView
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/id_jq_rv"

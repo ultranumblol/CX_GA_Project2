@@ -13,7 +13,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:scrollbarStyle="insideOverlay"
-        app:layout_progress="@layout/view_progress"
         app:layout_empty="@layout/view_empty"
         android:id="@+id/id_newmsg_lv"
         >

@@ -10,7 +10,7 @@ import wgz.com.cx_ga_project.R;
 /**
  * Created by qwerr on 2016/9/5.
  */
-public class JQCallbackSJRViewHolder extends BaseViewHolder<String> {
+public class JQCallbackSJRViewHolder extends BaseViewHolder<Object> {
 
 
     public JQCallbackSJRViewHolder(ViewGroup parent) {
@@ -18,7 +18,7 @@ public class JQCallbackSJRViewHolder extends BaseViewHolder<String> {
     }
 
     @Override
-    public void setData(String data) {
+    public void setData(Object data) {
         super.setData(data);
     }
 }

@@ -2,6 +2,7 @@ package wgz.com.cx_ga_project.adapter;
 
 import android.support.annotation.LayoutRes;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.jude.easyrecyclerview.adapter.BaseViewHolder;
@@ -13,7 +14,8 @@ import wgz.com.cx_ga_project.R;
  */
 
 public class JQViewHolder extends BaseViewHolder<String> {
-    private TextView jqid,jqstate;
+    private TextView jqid;
+    private ImageView jqstate;
 
 
 

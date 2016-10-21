@@ -1,5 +1,6 @@
 package wgz.com.cx_ga_project.activity;
 
+import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.ColorStateList;
@@ -14,7 +15,7 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AlertDialog;
+
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
@@ -23,6 +24,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -36,11 +38,16 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import rx.Observable;
+import rx.Observer;
 import rx.Subscriber;
+import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import wgz.com.cx_ga_project.R;
 import wgz.com.cx_ga_project.app;
 import wgz.com.cx_ga_project.base.Constant;
+import wgz.com.cx_ga_project.entity.AppVersion;
+import wgz.com.cx_ga_project.service.UpdataService;
+import wgz.com.cx_ga_project.util.SPBuild;
 import wgz.com.cx_ga_project.util.SPUtils;
 import wgz.com.cx_ga_project.util.SomeUtil;
 import wgz.datatom.com.utillibrary.util.LogUtil;
@@ -103,7 +110,7 @@ public class HomeActivity extends AppCompatActivity
         drawer.setDrawerListener(toggle);
         toggle.syncState();
         drawer.setStatusBarBackground(Color.TRANSPARENT);
-        toolbarHome.setTitle("智慧警务APP");
+        toolbarHome.setTitle("");
         setSupportActionBar(toolbarHome);
         toolbarHome.setTitleTextColor(Color.WHITE);
         idColltoollayout.setCollapsedTitleTextColor(Color.WHITE);
@@ -113,22 +120,27 @@ public class HomeActivity extends AppCompatActivity
         ColorStateList csl = (ColorStateList) resource.getColorStateList(R.drawable.navigation_menu_item_color);
         navView.setItemTextColor(csl);
         navView.setItemIconTintList(csl);
-        LogUtil.e("userhead_url: " +SPUtils.get(app.getApp().getApplicationContext(), Constant.USERHEAD, ""));
+        //LogUtil.d("userhead_url: " +SPUtils.get(app.getApp().getApplicationContext(), Constant.USERHEAD, ""));
         ImageView userhead = (ImageView) navView.getHeaderView(0).findViewById(R.id.imageView);
         // TODO: 2016/9/18 获取用户头像地址
+        //String userheadurl = "http://"+SPUtils.get(app.getApp().getApplicationContext(), Constant.USERHEAD, "");
+        //LogUtil.d("userheadurl : "+userheadurl);
         Glide.with(this)
-                .load("http://192.168.1.193:8004/avantar/10001.png")
-                //.load("http://"+SPUtils.get(app.getApp().getApplicationContext(), Constant.USERHEAD, ""))
+                .load(Constant.USERHEADURL)
                 .placeholder(R.mipmap.ic_launcher)
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .thumbnail(0.4f)
                 .dontAnimate()
                 .into(userhead);
 
+        TextView username = (TextView) navView.getHeaderView(0).findViewById(R.id.username_head);
+        TextView userdepartment = (TextView) navView.getHeaderView(0).findViewById(R.id.departmant_head);
+        username.setText((String) SPUtils.get(app.getApp().getApplicationContext(), Constant.USERNAME, "未知"));
+        userdepartment.setText((String) SPUtils.get(app.getApp().getApplicationContext(), Constant.USEROFFICENAME, "未知"));
 
     }
 
-    @OnClick({R.id.id_fighttrack,R.id.fab, R.id.to_jiechujing, R.id.id_toWorkLog, R.id.id_myscheduling, R.id.id_myApply, R.id.id_shenhe, R.id.id_xiashu})
+    @OnClick({R.id.id_fighttrack, R.id.fab, R.id.to_jiechujing, R.id.id_toWorkLog, R.id.id_myscheduling, R.id.id_myApply, R.id.id_shenhe, R.id.id_xiashu})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.id_fighttrack:
@@ -151,6 +163,25 @@ public class HomeActivity extends AppCompatActivity
                 break;
             case R.id.fab:
                 // TODO: 2016/8/3 社会信息采集功能
+                app.apiService.getdatrixPic().subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(new Subscriber<String>() {
+                            @Override
+                            public void onCompleted() {
+
+                            }
+
+                            @Override
+                            public void onError(Throwable e) {
+
+                            }
+
+                            @Override
+                            public void onNext(String s) {
+                                LogUtil.d("datrixPix : " + s.toString());
+                            }
+                        });
+                //uploadpicsTest();
                 //startActivity(new Intent(HomeActivity.this, FullscreenActivity.class));
                 // Snackbar.make(homeRootView, "社会信息采集开发中。。", Snackbar.LENGTH_SHORT).show();
                 break;
@@ -161,7 +192,6 @@ public class HomeActivity extends AppCompatActivity
                 break;
         }
     }
-
    /* private ArrayList<Integer> initData() {
         ArrayList<Integer> list = new ArrayList<>();
 
@@ -173,7 +203,7 @@ public class HomeActivity extends AppCompatActivity
 
     private class BannerAdapter extends StaticPagerAdapter {
         // private List<Integer> list;
-        int[] imageId = new int[]{R.drawable.ad1, R.drawable.ad2, R.drawable.ad3};
+        int[] imageId = new int[]{R.drawable.ad11, R.drawable.ad22, R.drawable.ad33};
 
         public BannerAdapter() {
             int[] src = imageId;
@@ -197,7 +227,7 @@ public class HomeActivity extends AppCompatActivity
             imageView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    SomeUtil.showSnackBar(homeRootView, "维护中。。。");
+                    //SomeUtil.showSnackBar(homeRootView, "维护中。。。");
                     //startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(list.get(position).getUrl())));
                 }
             });
@@ -269,9 +299,59 @@ public class HomeActivity extends AppCompatActivity
 
 
         } else if (id == R.id.nav_updateAPP) {
+            final int versionCode = SomeUtil.getVersionCode(this);
+            LogUtil.d("versionCode:" + versionCode);
+            app.apiService.checkVersion().subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new Subscriber<AppVersion>() {
+                        @Override
+                        public void onCompleted() {
 
-            int versionCode = SomeUtil.getVersionCode(this);
-            LogUtil.e("versionCode:" + versionCode);
+                        }
+
+                        @Override
+                        public void onError(Throwable e) {
+                            LogUtil.d("checkVersion error:  " + e.toString());
+                        }
+
+                        @Override
+                        public void onNext(AppVersion appVersion) {
+                            if (appVersion.getCode().equals(200)) {
+                                String code = appVersion.getRes().get(0).getApkVersioncode();
+                                int a = Integer.parseInt(code);
+                                LogUtil.d("serviceCode : " + a);
+                                if (a > versionCode) {
+                                    // TODO: 2016/10/10 下载更新
+                                    String url = appVersion.getRes().get(0).getApkUrl();
+                                    url.replaceAll("\\\\","");
+                                    new SPBuild(getApplicationContext())
+                                            .addData(Constant.UPDATEURL,url).build();
+                                    AlertDialog.Builder alertDialog = new AlertDialog.Builder(HomeActivity.this);
+                                    alertDialog.setTitle("版本更新")
+                                            .setMessage("检查到新版本，现在更新吗？")
+                                            .setPositiveButton("立即更新", new DialogInterface.OnClickListener() {
+                                                @Override
+                                                public void onClick(DialogInterface dialog, int which) {
+                                                    startService(new Intent(HomeActivity.this, UpdataService.class));
+
+
+                                                }
+                                            }).setNegativeButton("稍后更新", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+
+                                        }
+                                    }).show();
+
+                                }else{
+                                    SomeUtil.showSnackBar(homeRootView,"当前已经是最新版本！");
+                                }
+
+                            }
+                        }
+                    });
+
+
             //startService(new Intent(HomeActivity.this, UpdataService.class));
 
 
@@ -284,13 +364,13 @@ public class HomeActivity extends AppCompatActivity
 
         } else if (id == R.id.nav_logout) {
             SPUtils.clear(getApplicationContext());
-            startActivity(new Intent(HomeActivity.this, WelcomeActivity.class));
+            startActivity(new Intent(HomeActivity.this, LoginActivity.class));
+            HomeActivity.this.finish();
 
 
-        }
-        else if (id==R.id.nav_saoyisao){
+        } else if (id == R.id.nav_saoyisao) {
             // TODO: 2016/9/3 扫一扫
-            startActivity(new Intent(HomeActivity.this,SaoYiSaoActivity.class));
+            startActivityForResult(new Intent(HomeActivity.this, SaoYiSaoActivity.class),9);
 
         }
 
@@ -321,7 +401,7 @@ public class HomeActivity extends AppCompatActivity
                                 .subscribe(new Subscriber<Void>() {
                                     @Override
                                     public void onCompleted() {
-                                        LogUtil.e("clearCache_oncompleted");
+                                        LogUtil.d("clearCache_oncompleted");
                                         SomeUtil.showSnackBar(homeRootView, "清理完成！");
 
                                     }
@@ -333,7 +413,7 @@ public class HomeActivity extends AppCompatActivity
 
                                     @Override
                                     public void onNext(Void aVoid) {
-                                        LogUtil.e("clearCache_onNext");
+                                        LogUtil.d("clearCache_onNext");
                                         Glide.get(getApplicationContext()).clearDiskCache();
                                         //
                                     }

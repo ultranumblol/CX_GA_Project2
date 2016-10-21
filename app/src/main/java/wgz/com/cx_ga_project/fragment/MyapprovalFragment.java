@@ -2,6 +2,7 @@ package wgz.com.cx_ga_project.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -28,6 +29,7 @@ import wgz.com.cx_ga_project.adapter.MyRecyclerArrayAdapter;
 import wgz.com.cx_ga_project.app;
 import wgz.com.cx_ga_project.base.BaseFragment;
 import wgz.com.cx_ga_project.entity.Apply;
+import wgz.com.cx_ga_project.util.SomeUtil;
 import wgz.datatom.com.utillibrary.util.LogUtil;
 
 import static wgz.com.cx_ga_project.base.Constant.UNAPPROVAL;
@@ -42,6 +44,7 @@ public class MyapprovalFragment extends BaseFragment implements SwipeRefreshLayo
     EasyRecyclerView recyclerview;
     ApplyAdapter adapter;
     List<Apply.Result> list = new ArrayList<Apply.Result>();
+    private Handler handler = new Handler();
     @Override
     public void initview(View view) {
         recyclerview.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -56,6 +59,7 @@ public class MyapprovalFragment extends BaseFragment implements SwipeRefreshLayo
                 Bundle bundle = new Bundle();
                 bundle.putString("id",adapter.getItem(position).getId());
                 bundle.putString("poiceid",adapter.getItem(position).getPoliceid());
+                bundle.putString("poicename",adapter.getItem(position).getPolicename());
                 bundle.putString("applytime",adapter.getItem(position).getApplytime());
                 bundle.putString("starttime",adapter.getItem(position).getStart());
                 bundle.putString("endtime",adapter.getItem(position).getEnd());
@@ -64,12 +68,14 @@ public class MyapprovalFragment extends BaseFragment implements SwipeRefreshLayo
                 bundle.putString("status",adapter.getItem(position).getStatus());
                 bundle.putString("upperid",adapter.getItem(position).getUpperid());
                 bundle.putString("reasontype",adapter.getItem(position).getReasontype());
+                bundle.putString("head","http://"+adapter.getItem(position).getUrl());
                 intent.putExtra("detil",bundle);
                 //intent.putExtra("type","qingjia");
 
 
 
                 intent.putExtra("type",adapter.getItem(position).getType());
+                intent.putExtra("ifhis",false);
                 ActivityCompat.startActivity(getActivity(),
                         intent, ActivityOptionsCompat
                                 .makeSceneTransitionAnimation(getActivity(),
@@ -82,20 +88,20 @@ public class MyapprovalFragment extends BaseFragment implements SwipeRefreshLayo
     }
 
     private void initdata(){
-        app.apiService.getBeanData("getDepLeaveOverApply","007")
+        app.apiService.getBeanData("getDepLeaveOverApply", SomeUtil.getUserId())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .map(new Func1<Apply, List<Apply.Result>>() {
                     @Override
                     public List<Apply.Result> call(Apply apply) {
-                        //LogUtil.e("map_result::"+apply.getResult().toString());
+                       // LogUtil.d("approval map_result::"+apply.getResult().toString());
                         return apply.getResult();
                     }
                 })
                 .flatMap(new Func1<List<Apply.Result>, Observable<Apply.Result>>() {
                     @Override
                     public Observable<Apply.Result> call(List<Apply.Result> results) {
-                        //LogUtil.e("flatMap_result::"+results.size());
+                        //LogUtil.d("approval flatMap_result::"+results.size());
                         return Observable.from(results);
                     }
                 })
@@ -109,22 +115,23 @@ public class MyapprovalFragment extends BaseFragment implements SwipeRefreshLayo
                     @Override
                     public List<Apply.Result> call(Apply.Result result) {
                         list.add(result);
+                        //LogUtil.d("approval result list :"+list.toString());
                         return list;
                     }
                 }).subscribe(new Observer<List<Apply.Result>>() {
             @Override
             public void onCompleted() {
-                adapter.addAll(list);
+               adapter.addAll(list);
             }
 
             @Override
             public void onError(Throwable e) {
-                LogUtil.e("error"+e.toString());
+                LogUtil.d("error"+e.toString());
             }
 
             @Override
             public void onNext(List<Apply.Result> results) {
-                LogUtil.e("resultCOUNT:"+results.size());
+                LogUtil.d("approval result:"+results.toString());
             }
         });
 
@@ -144,8 +151,13 @@ public class MyapprovalFragment extends BaseFragment implements SwipeRefreshLayo
 
     @Override
     public void onRefresh() {
-        list.clear();
-        adapter.clear();
-        initdata();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                list.clear();
+                adapter.clear();
+                initdata();
+            }
+        }, 2000);
     }
 }

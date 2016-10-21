@@ -21,10 +21,11 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
             <ImageView
-                android:layout_width="50dp"
+                android:layout_width="1dp"
                 android:layout_height="50dp"
                 android:id="@+id/user_face"
                 android:layout_centerVertical="true"
+                android:visibility="invisible"
                 android:src="@drawable/ic_broken_image_grey_400_48dp"
                 />
             <TextView
@@ -35,7 +36,7 @@
                 android:id="@+id/jqid"
                 android:textColor="@color/cadetblue"
                 android:layout_marginTop="4dp"
-                android:layout_marginLeft="8dp"
+
                 android:textSize="14dp"
                 />
             <TextView
@@ -43,23 +44,23 @@
                 android:layout_height="wrap_content"
                 android:text="报警日期"
                 android:layout_marginTop="6dp"
-                android:layout_marginLeft="8dp"
+
                 android:layout_below="@id/jqid"
                 android:textColor="@color/cadetblue"
                 android:textSize="12dp"
                 android:layout_toRightOf="@id/user_face"
                 android:id="@+id/jq_bjdate" />
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="进行中"
-                android:textColor="@color/brown"
+            <ImageView
+                android:layout_width="46dp"
+                android:layout_height="46dp"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
-                android:layout_marginRight="10dp"
+                android:layout_marginRight="20dp"
                 android:id="@+id/jq_state"
-                />
+                android:scaleType="centerCrop"
+                android:src="@drawable/jqing"
 
+                />
         </RelativeLayout>
 
 

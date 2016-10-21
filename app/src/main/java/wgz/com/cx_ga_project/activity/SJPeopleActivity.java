@@ -65,12 +65,12 @@ public class SJPeopleActivity extends BaseActivity {
 
                     @Override
                     public void onError(Throwable e) {
-                        LogUtil.e("error:"+e.toString());
+                        LogUtil.d("error:"+e.toString());
                     }
 
                     @Override
                     public void onNext(String s) {
-                        LogUtil.e("result:"+s);
+                        LogUtil.d("result:"+s);
 
                     }
                 });

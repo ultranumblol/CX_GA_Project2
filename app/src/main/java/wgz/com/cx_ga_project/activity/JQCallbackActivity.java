@@ -2,13 +2,11 @@ package wgz.com.cx_ga_project.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.constraint.ConstraintLayout;
-import android.support.v4.widget.NestedScrollView;
-import android.support.v7.widget.LinearLayoutManager;
+import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
-import android.widget.LinearLayout;
 
-import com.jude.easyrecyclerview.EasyRecyclerView;
 import com.lzp.floatingactionbuttonplus.FabTagLayout;
 import com.lzp.floatingactionbuttonplus.FloatingActionButtonPlus;
 
@@ -17,9 +15,20 @@ import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import rx.Subscriber;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 import wgz.com.cx_ga_project.R;
-import wgz.com.cx_ga_project.adapter.JQCallbackDetilAdapter;
+import wgz.com.cx_ga_project.adapter.MyFragmentPagerAdapter;
+import wgz.com.cx_ga_project.app;
 import wgz.com.cx_ga_project.base.BaseActivity;
+import wgz.com.cx_ga_project.entity.Apply;
+import wgz.com.cx_ga_project.entity.JqCallBack;
+import wgz.com.cx_ga_project.fragment.SjCarFragment;
+import wgz.com.cx_ga_project.fragment.SjMsgFragment;
+import wgz.com.cx_ga_project.fragment.SjPhoneFragment;
+import wgz.com.cx_ga_project.fragment.SjrFragment;
+
 
 /**
  * 警情回告
@@ -29,20 +38,19 @@ public class JQCallbackActivity extends BaseActivity {
 
     @Bind(R.id.toolbar)
     Toolbar toolbar;
-    @Bind(R.id.content_jqcallback)
-    NestedScrollView rootview;
     @Bind(R.id.FabPlus)
     FloatingActionButtonPlus FabPlus;
-    @Bind(R.id.sjr_rv)
-    EasyRecyclerView sjrRv;
-    @Bind(R.id.sjCar_rv)
-    EasyRecyclerView sjCarRv;
-    @Bind(R.id.sjPhone_rv)
-    EasyRecyclerView sjPhoneRv;
-    @Bind(R.id.callbackContent_rv)
-    EasyRecyclerView callbackContentRv;
-    private JQCallbackDetilAdapter adapter;
-    private List<String> mdata = new ArrayList<>();
+    @Bind(R.id.tab_jqcallback)
+    TabLayout tabJqcallback;
+    @Bind(R.id.jqcallback_vp)
+    ViewPager jqcallbackVp;
+    private ArrayList<Fragment> fragments;
+    private List<String> titles;
+    private SjCarFragment sjCarFragment;
+    private SjMsgFragment sjMsgFragment;
+    private SjPhoneFragment sjPhoneFragment;
+    private SjrFragment sjrFragment;
+
 
     @Override
     public int getLayoutId() {
@@ -54,6 +62,26 @@ public class JQCallbackActivity extends BaseActivity {
         toolbar.setTitle("警情回告");
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        fragments = new ArrayList<>();
+        titles = new ArrayList<>();
+        titles.add("涉警人员");
+        titles.add("涉警车辆");
+        titles.add("涉警电话");
+        titles.add("警情回告");
+        sjCarFragment = new SjCarFragment();
+        sjMsgFragment = new SjMsgFragment();
+        sjPhoneFragment = new SjPhoneFragment();
+        sjrFragment = new SjrFragment();
+        fragments.add(sjrFragment);
+        fragments.add(sjCarFragment);
+        fragments.add(sjPhoneFragment);
+        fragments.add(sjMsgFragment);
+
+
+
+        jqcallbackVp.setAdapter(new MyFragmentPagerAdapter(getSupportFragmentManager(), fragments, titles));
+        jqcallbackVp.setCurrentItem(0);
+        tabJqcallback.setupWithViewPager(jqcallbackVp);
         FabPlus.setOnItemClickListener(new FloatingActionButtonPlus.OnItemClickListener() {
             @Override
             public void onItemClick(FabTagLayout tagView, int position) {
@@ -68,7 +96,7 @@ public class JQCallbackActivity extends BaseActivity {
 
                         break;
                     case R.id.fabtag_addsjPhone:
-                        startActivity(new Intent(JQCallbackActivity.this, SJPeopleActivity.class));
+                        startActivity(new Intent(JQCallbackActivity.this, UpLoadSJPhoneActivity.class));
                         break;
                     case R.id.fabtag_addjqMsg:
                         startActivity(new Intent(JQCallbackActivity.this, AddJQActivity.class));
@@ -76,30 +104,45 @@ public class JQCallbackActivity extends BaseActivity {
                 }
             }
         });
-        sjCarRv.setLayoutManager(new LinearLayoutManager(this));
-        sjPhoneRv.setLayoutManager(new LinearLayoutManager(this));
-        sjrRv.setLayoutManager(new LinearLayoutManager(this));
-        callbackContentRv.setLayoutManager(new LinearLayoutManager(this));
-        sjCarRv.setAdapter(adapter = new JQCallbackDetilAdapter(this));
-        sjPhoneRv.setAdapter(adapter);
-        callbackContentRv.setAdapter(adapter);
-        sjrRv.setAdapter(adapter);
-        adapter.addAll(initData());
 
+        tabJqcallback.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                switch (tab.getPosition()) {
+                    case 0:
+                        jqcallbackVp.setCurrentItem(0);
+                        break;
+                    case 1:
+                        jqcallbackVp.setCurrentItem(1);
+                        break;
+                    case 2:
+                        jqcallbackVp.setCurrentItem(2);
+                        break;
+                    case 3:
+                        jqcallbackVp.setCurrentItem(3);
+                        break;
+                }
+            }
 
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
 
+            }
 
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
     }
 
-    private List<String> initData() {
-        for (int i = 0 ; i<5 ; i++){
-            mdata.add(i+"");
-
-        }
 
 
-        return mdata;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        // TODO: add setContentView(...) invocation
+        ButterKnife.bind(this);
     }
-
-
 }

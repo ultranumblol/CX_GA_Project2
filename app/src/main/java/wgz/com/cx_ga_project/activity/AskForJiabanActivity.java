@@ -31,6 +31,8 @@ import wgz.com.cx_ga_project.app;
 import wgz.com.cx_ga_project.base.BaseActivity;
 import com.jakewharton.rxbinding.view.RxView;
 
+import wgz.com.cx_ga_project.base.Constant;
+import wgz.com.cx_ga_project.util.SPUtils;
 import wgz.com.cx_ga_project.util.SomeUtil;
 import wgz.datatom.com.utillibrary.util.LogUtil;
 
@@ -111,6 +113,17 @@ public class AskForJiabanActivity extends BaseActivity {
         Date CUDDATE = getStrToDate(curredate);
         String stime = AskForLeaveActivity.getTime(startdate);
         String etime = AskForLeaveActivity.getTime(enddate);
+        if (mJiabanReason.getText().toString().equals("")) {
+            Snackbar.make(rootview, "请填写加班内容!", Snackbar.LENGTH_SHORT).show();
+            cancle = true;
+            return;
+        }else if (mJiabanStarttime.getText().toString().equals("")
+                ||mJiabanEndtime.getText().toString().equals(""))
+        {
+            Snackbar.make(rootview, "请选择日期！", Snackbar.LENGTH_SHORT).show();
+            cancle = true;
+            return;
+        }
         /*if (mJiabanReason.getText().toString().equals("")) {
             Snackbar.make(rootview, "请填写加班内容!", Snackbar.LENGTH_SHORT).show();
             cancle = true;
@@ -130,12 +143,12 @@ public class AskForJiabanActivity extends BaseActivity {
             cancle = true;
             return;
         }*/
-        cancle = false;
-        LogUtil.e("curredate:"+curredate);
+        //cancle = false;
+        LogUtil.d("curredate:"+curredate);
         if (!cancle){
             app.apiService.upOverTime("overTimeApply",stime,
-                    etime,"content"
-                    ,"007",curredate,"11")
+                    etime,mJiabanReason.getText().toString()
+                    ,(String) SPUtils.get(app.getApp().getApplicationContext(), Constant.USERID,""),curredate,"030283")
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(new Observer<String>() {
@@ -151,9 +164,10 @@ public class AskForJiabanActivity extends BaseActivity {
 
                         @Override
                         public void onNext(String s) {
-                            LogUtil.e("result:"+s);
+                            LogUtil.d("result:"+s);
                             if (s.contains("200")){
                                 SomeUtil.showSnackBar(rootview,"提交申请成功！");
+                                finish();
                             }else {
                                 SomeUtil.showSnackBar(rootview,"网络错误！");
                             }
@@ -206,7 +220,7 @@ public class AskForJiabanActivity extends BaseActivity {
             return date;
         } catch (ParseException e) {
             e.printStackTrace();
-            LogUtil.e("DATE error"+e.toString());
+            LogUtil.d("DATE error"+e.toString());
             return null;
         }
     }

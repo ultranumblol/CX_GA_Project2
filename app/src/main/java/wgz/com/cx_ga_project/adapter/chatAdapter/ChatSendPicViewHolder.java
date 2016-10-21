@@ -1,5 +1,6 @@
 package wgz.com.cx_ga_project.adapter.chatAdapter;
 
+import android.content.Intent;
 import android.support.annotation.LayoutRes;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,9 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.jude.easyrecyclerview.adapter.BaseViewHolder;
 
 import wgz.com.cx_ga_project.R;
+import wgz.com.cx_ga_project.activity.ChatActivity;
+import wgz.com.cx_ga_project.activity.ShowBigImage;
+import wgz.com.cx_ga_project.base.Constant;
 import wgz.com.cx_ga_project.entity.ChatMsg;
 
 /**
@@ -29,11 +33,21 @@ public class ChatSendPicViewHolder extends BaseViewHolder<ChatMsg.Re> {
         mSendPicture = $(R.id.iv_sendPicture);
         timestamp = $(R.id.timestamp);
         progressBar = $(R.id.progressBar);
+        userhead = $(R.id.iv_userhead);
     }
 
 
     @Override
-    public void setData(ChatMsg.Re data) {
+    public void setData(final ChatMsg.Re data) {
+        Glide.with(getContext())
+                //.load("http://192.168.1.193:8004/avantar/10001.png")
+                // .load("http://192.168.1.193:8004/avantar/030283.png")
+                .load(Constant.USERHEADURL)
+                .placeholder(R.drawable.ic_account_circle_gray_48dp)
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .thumbnail(0.4f)
+                .dontAnimate()
+                .into(userhead);
         Glide.with(getContext())
                 .load(data.getPic())
                 .dontAnimate()
@@ -41,6 +55,13 @@ public class ChatSendPicViewHolder extends BaseViewHolder<ChatMsg.Re> {
                 .thumbnail(0.4f)
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(mSendPicture);
+
+        mSendPicture.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getContext().startActivity(new Intent(getContext(), ShowBigImage.class).putExtra("url",data.getPic()));
+            }
+        });
         timestamp.setText(data.getSendtime());
         if (data.getIssend().equals("2")){
             progressBar.setVisibility(View.VISIBLE);

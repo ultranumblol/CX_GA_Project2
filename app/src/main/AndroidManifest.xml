@@ -32,14 +32,14 @@
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
     <uses-permission android:name="android.permission.GET_TASKS" />
-
+    <uses-permission android:name="android.permission.VIBRATE"></uses-permission>
     <uses-feature android:name="android.hardware.camera" />
     <uses-feature android:name="android.hardware.camera.autofocus" />
 
     <application
         android:name=".app"
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/logoicon"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
@@ -70,12 +70,15 @@
         <activity
             android:name=".activity.SchedulingActivity"
             android:label="@string/title_activity_scheduling"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar_notrans" />
         <activity
             android:name=".activity.WorkLogActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar_notrans" />
         <activity
             android:name=".activity.MySubordinateLogAcitvity"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar_notrans" />
         <activity
             android:name=".activity.AddWorkLogActivity"
@@ -83,45 +86,56 @@
             android:theme="@style/AppTheme.NoActionBar_notrans" />
         <activity
             android:name=".activity.LoginActivity"
+            android:screenOrientation="portrait"
             android:label="登录" />
         <activity
             android:name=".base.BaseActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
             android:name=".activity.SelectFileUploadActivity"
             android:label="@string/title_activity_select_file_upload"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activity.WorkMagActivity"
             android:label="@string/title_activity_work_mag"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activity.MyWorkApplyActivity"
             android:label="@string/title_activity_my_work_apply"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activity.AskForLeaveActivity"
             android:label="@string/title_activity_ask_for_leave"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activity.AskForJiabanActivity"
             android:label="@string/title_activity_ask_for_jiaban"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activity.JiabanLeaveDetilActivity"
             android:label="@string/title_activity_jiaban_leave_detil"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activity.HomeActivity"
-            android:launchMode="singleTask"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activity.MySubordinateActivity"
             android:label="@string/title_activity_my_subordinate"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activity.MyApprovalActivity"
             android:label="@string/title_activity_my_approval"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activity.ApprovalDetilActivity"
@@ -129,14 +143,17 @@
         <activity
             android:name=".activity.FightActivity"
             android:label="@string/title_activity_fight"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activity.StartNewFightActivity"
             android:label="@string/title_activity_start_new_fight"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activity.ScrollingActivity"
             android:label="@string/title_activity_scrolling"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar_notrans" />
 
         <service android:name=".service.GetGPSService" />
@@ -144,76 +161,107 @@
         <activity
             android:name=".activity.PickPhotoActivity"
             android:label="@string/title_activity_pick_photo"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activity.AddJQActivity"
             android:label="@string/title_activity_add_jq"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activity.JQListActivity"
             android:label="@string/title_activity_jqlist"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activity.NewFightActivity"
             android:label="@string/title_activity_new_fight"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activity.FullscreenActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/title_activity_fullscreen"
+            android:screenOrientation="portrait"
             android:theme="@style/FullscreenTheme" />
         <activity
             android:name=".activity.MyWorkingTrackActivity"
             android:label="@string/title_activity_my_working_track"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activity.NearlyVideoCamActivity"
             android:label="@string/title_activity_nearly_video_cam"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activity.ChangeCodeActivity"
             android:label="@string/title_activity_change_code"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activity.SJPeopleActivity"
             android:label="@string/title_activity_sjpeople"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activity.UpLoadSJCarActivity"
             android:label="@string/title_activity_up_load_sjcar"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activity.JQCallbackActivity"
             android:label="@string/title_activity_jqcallback"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activity.CamPlayerActivity"
             android:label="@string/title_activity_cam_player"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".activity.CamLoginActivity" />
         <activity
             android:name=".activity.ChatActivity"
             android:label="@string/title_activity_chat"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activity.SaoYiSaoActivity"
             android:configChanges="orientation|keyboardHidden"
             android:label="@string/title_activity_sao_yi_sao"
+
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="stateAlwaysHidden" />
         <activity
             android:name=".activity.NewMsgActivity"
             android:label="@string/title_activity_new_msg"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activity.HelpAndFeedBackActivity"
             android:label="@string/title_activity_help_and_feed_back"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activity.AboutAppActivity"
             android:label="@string/title_activity_about_app"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activity.UpLoadSJPhoneActivity"
+            android:label="@string/title_activity_up_load_sjphone"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activity.CamMapHtmlActivity"
+            android:label="@string/title_activity_cam_map_html"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity android:name=".activity.ShowBigImage"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"
+            />
     </application>
 
 </manifest>

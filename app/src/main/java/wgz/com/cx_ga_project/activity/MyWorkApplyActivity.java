@@ -30,15 +30,14 @@ public class MyWorkApplyActivity extends BaseActivity {
 
     @Bind(R.id.FabPlus)
     FloatingActionButtonPlus FabPlus;
-    private ArrayList<Fragment> fragments;
-    private List<String> titles;
     @Bind(R.id.toolbar)
     Toolbar toolbar;
     @Bind(R.id.tab_myapply)
     TabLayout tabMyapply;
     @Bind(R.id.myapple_vp)
     ViewPager myappleVp;
-
+    private ArrayList<Fragment> fragments;
+    private List<String> titles;
     private MyApplyJiabanFragment jiabanFragment;
     private MyApplyQingjiaFragment qingjiaFragment;
 
@@ -110,10 +109,4 @@ public class MyWorkApplyActivity extends BaseActivity {
 
     }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        // TODO: add setContentView(...) invocation
-        ButterKnife.bind(this);
-    }
 }

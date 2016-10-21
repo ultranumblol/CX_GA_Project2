@@ -154,7 +154,7 @@ public class PickPhotoActivity extends BaseActivity {
                     putStringArrayListExtra("paths", (ArrayList<String>) paths)
                     .putExtra("result", "addpic"));
 
-            LogUtil.e("paths== "+paths.toString());
+            LogUtil.d("paths== "+paths.toString());
             finish();
             return true;
         }

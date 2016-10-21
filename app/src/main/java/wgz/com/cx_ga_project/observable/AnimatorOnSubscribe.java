@@ -44,14 +44,14 @@ public class AnimatorOnSubscribe implements Observable.OnSubscribe<String> {
                 boolean isLogin = (Boolean) SPUtils.get(app.getApp().getApplicationContext(), Constant.ISLOGIN, false);
                 Long lastTime = (Long) SPUtils.get(app.getApp().getApplicationContext(), Constant.LOGINTIME, 0L);
                 long dTime = System.currentTimeMillis() - lastTime;
-                LogUtil.e("dTime= " + dTime + " default: " + mTimeDifference);
-                LogUtil.e("isLogin: "+isLogin);
+                LogUtil.d("dTime= " + dTime + " default: " + mTimeDifference);
+                LogUtil.d("isLogin: "+isLogin);
                 // TODO: 2016/8/19 是否登陆的判断先写为true
-                if (true) {
+                if (isLogin) {
                     if (dTime < mTimeDifference) {
                         subscriber.onCompleted();
-                    }
-                } else subscriber.onError(new Exception("error"));
+                    }else subscriber.onError(new Exception("登录超时！"));
+                } else subscriber.onError(new Exception("未登录！"));
             }
         };
 

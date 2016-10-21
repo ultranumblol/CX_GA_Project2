@@ -15,6 +15,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.jakewharton.rxbinding.view.RxView;
 
 import java.util.concurrent.TimeUnit;
@@ -28,6 +30,7 @@ import rx.schedulers.Schedulers;
 import wgz.com.cx_ga_project.R;
 import wgz.com.cx_ga_project.app;
 import wgz.com.cx_ga_project.base.BaseActivity;
+import wgz.com.cx_ga_project.base.Constant;
 import wgz.com.cx_ga_project.util.SomeUtil;
 
 import static wgz.com.cx_ga_project.base.Constant.APPROVAL_PASS;
@@ -99,18 +102,21 @@ public class ApprovalDetilActivity extends BaseActivity {
     public void initView() {
 
         Intent intent = getIntent();
-        int type = intent.getIntExtra("type",-1);
+        //int type = intent.getIntExtra("type",-1);
+        String type = intent.getStringExtra("type");
+        boolean ifhis = intent.getBooleanExtra("ifhis",true);
         Bundle bundle = intent.getBundleExtra("detil");
         approvalMakesrue.setVisibility(View.VISIBLE);
         mId = bundle.getString("id");
         switch (type) {
-            case 0:
+            case "2":
                 toolbar.setTitle("加班明细");
                 jiabanLeaveDetilJiaban.setVisibility(View.VISIBLE);
                 ViewCompat.setTransitionName(userPicJiaban, "share_img");
                 jiabanLeaveDetilQingjia.setVisibility(View.GONE);
                 jiabanLeaveDetilQingjia.setVisibility(View.GONE);
-                userNameJiaban.setText(bundle.getString("poiceid"));
+                SomeUtil.GlidePic(this,userPicJiaban,bundle.getString("head"));
+                userNameJiaban.setText(bundle.getString("poicename"));
                 detilJiabanCommittime.setText(bundle.getString("applytime"));
                 detilJiabanStarttime.setText(bundle.getString("starttime"));
                 detilJiabanEndtime.setText(bundle.getString("endtime"));
@@ -125,12 +131,14 @@ public class ApprovalDetilActivity extends BaseActivity {
                     detilJiabanState.setText("审批未通过");
 
                 break;
-            case 1:
+            case "1":
                 toolbar.setTitle("请假明细");
                 jiabanLeaveDetilJiaban.setVisibility(View.GONE);
                 ViewCompat.setTransitionName(userPic, "share_img");
                 jiabanLeaveDetilQingjia.setVisibility(View.VISIBLE);
-                userName.setText(bundle.getString("poiceid"));
+                userName.setText(bundle.getString("poicename"));
+                SomeUtil.GlidePic(this,userPic,bundle.getString("head"));
+
                 detilLeaveCommittime.setText(bundle.getString("applytime"));
                 detilLeaveStarttime.setText(bundle.getString("starttime"));
                 detilLeaveEndtime.setText(bundle.getString("endtime"));
@@ -146,7 +154,10 @@ public class ApprovalDetilActivity extends BaseActivity {
                 else if (bundle.getString("status").equals(APPROVAL_UNPASS))
                     detilQingjiaState.setText("审批未通过");
         }
+        if (ifhis){
+            approvalMakesrue.setVisibility(View.GONE);
 
+        }else approvalMakesrue.setVisibility(View.VISIBLE);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         RxView.clicks(approvalMakesrue)
@@ -167,7 +178,7 @@ public class ApprovalDetilActivity extends BaseActivity {
                 .setPositiveButton("审核通过", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                       app.apiService.approvalApply("approvalApply",mId,"1")
+                       app.apiService.approvalApply("approvalApply",mId,"1","")
                                .subscribeOn(Schedulers.io())
                                .observeOn(AndroidSchedulers.mainThread())
                                .subscribe(new Subscriber<String>() {
@@ -213,14 +224,14 @@ public class ApprovalDetilActivity extends BaseActivity {
     }
 
     private void whyRefuse() {
-        EditText input = new EditText(this);
+        final EditText input = new EditText(this);
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("请输入未通过原因")
                 .setView(input)
                 .setPositiveButton("提交", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        app.apiService.approvalApply("approvalApply",mId,"2")
+                        app.apiService.approvalApply("approvalApply",mId,"2",input.getText().toString())
                                 .subscribeOn(Schedulers.io())
                                 .observeOn(AndroidSchedulers.mainThread())
                                 .subscribe(new Subscriber<String>() {
@@ -248,11 +259,4 @@ public class ApprovalDetilActivity extends BaseActivity {
                 }).setNegativeButton("取消", null).show();
     }
 
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        // TODO: add setContentView(...) invocation
-        ButterKnife.bind(this);
-    }
 }

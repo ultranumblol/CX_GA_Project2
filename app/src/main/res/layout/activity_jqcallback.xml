@@ -14,7 +14,23 @@
 
         <include layout="@layout/title_toolbar"></include>
 
-        <include layout="@layout/content_jqcallback" />
+        <android.support.design.widget.TabLayout
+            android:id="@+id/tab_jqcallback"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/ghostwhite"
+            app:tabIndicatorColor="@color/colorPrimary"
+            app:tabSelectedTextColor="@color/colorPrimary"
+            app:tabTextColor="@color/grey"
+            app:tabMode="fixed"
+            />
+
+        <android.support.v4.view.ViewPager
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/jqcallback_vp"
+            android:layout_weight="1"
+            ></android.support.v4.view.ViewPager>
 
     </LinearLayout>
 <include layout="@layout/fab_btns_addjq"></include>

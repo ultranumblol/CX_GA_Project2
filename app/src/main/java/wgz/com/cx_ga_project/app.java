@@ -1,6 +1,7 @@
 package wgz.com.cx_ga_project;
 
 import android.app.Application;
+import android.content.Intent;
 import android.os.Looper;
 
 import java.io.IOException;
@@ -17,6 +18,7 @@ import retrofit2.converter.scalars.ScalarsConverterFactory;
 import wgz.com.cx_ga_project.API.APIservice;
 import wgz.com.cx_ga_project.API.JqAPIService;
 import wgz.com.cx_ga_project.entity.ChatMsg;
+import wgz.com.cx_ga_project.service.GetGPSService;
 import wgz.com.cx_ga_project.util.ProgressListener;
 import wgz.com.cx_ga_project.util.ProgressResponseBody;
 import wgz.datatom.com.utillibrary.util.LogUtil;
@@ -39,7 +41,7 @@ public class app extends Application {
         mApp = this;
         ToastUtil.isShow =true;
         //开启定位服务
-        //startService(new Intent(getApplicationContext(), GetGPSService.class));
+        startService(new Intent(getApplicationContext(), GetGPSService.class));
         LogUtil.isDebug=true;
 
         //配置程序异常退出处理
@@ -60,9 +62,9 @@ public class app extends Application {
     }
     public static OkHttpClient defaultOkHttpClient() {
         OkHttpClient client = new OkHttpClient.Builder()
-                .connectTimeout(3, TimeUnit.SECONDS)
-                .writeTimeout(3, TimeUnit.SECONDS)
-                .readTimeout(3, TimeUnit.SECONDS)
+                .connectTimeout(5, TimeUnit.SECONDS)
+                .writeTimeout(5, TimeUnit.SECONDS)
+                .readTimeout(5, TimeUnit.SECONDS)
                 .addNetworkInterceptor(new Interceptor() {
                     @Override
                     public okhttp3.Response intercept(Chain chain) throws IOException {
@@ -72,8 +74,8 @@ public class app extends Application {
                                 .body(new ProgressResponseBody(orginalResponse.body(), new ProgressListener() {
                                     @Override
                                     public void onProgress(long progress, long total, boolean done) {
-                                        LogUtil.e(Looper.myLooper()+"");
-                                        LogUtil.e("onProgress: " + "total ---->" + total + "done ---->" + progress);
+                                       // LogUtil.d(Looper.myLooper()+"");
+                                       // LogUtil.d("onProgress: " + "total ---->" + total + "done ---->" + progress);
                                     }
                                 }))
                                 .build();

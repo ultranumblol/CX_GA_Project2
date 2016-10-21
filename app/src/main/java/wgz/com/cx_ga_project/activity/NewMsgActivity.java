@@ -28,6 +28,9 @@ public class NewMsgActivity extends BaseActivity {
 
     @Override
     public void initView() {
+        toolbar.setTitle("新消息");
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
     }
 

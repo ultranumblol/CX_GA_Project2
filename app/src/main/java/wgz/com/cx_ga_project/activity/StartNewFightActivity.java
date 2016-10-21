@@ -3,14 +3,10 @@ package wgz.com.cx_ga_project.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
-import android.support.design.widget.AppBarLayout;
-import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageView;
 
 import com.jude.easyrecyclerview.EasyRecyclerView;
 
@@ -23,7 +19,6 @@ import wgz.com.cx_ga_project.R;
 import wgz.com.cx_ga_project.adapter.JQAdapter;
 import wgz.com.cx_ga_project.adapter.MyRecyclerArrayAdapter;
 import wgz.com.cx_ga_project.base.BaseActivity;
-import wgz.com.cx_ga_project.util.SomeUtil;
 
 /**
  * 开始新作战任务
@@ -32,20 +27,15 @@ import wgz.com.cx_ga_project.util.SomeUtil;
 public class StartNewFightActivity extends BaseActivity {
 
 
-    @Bind(R.id.app_bar_image)
-    ImageView appBarImage;
-    @Bind(R.id.toolbar_fight)
-    Toolbar toolbarFight;
-    @Bind(R.id.id_fight_colltoollayout)
-    CollapsingToolbarLayout idFightColltoollayout;
-    @Bind(R.id.id_appbar_fight)
-    AppBarLayout idAppbarFight;
-    @Bind(R.id.content_start_new_fight)
-    ConstraintLayout rootview;
     @Bind(R.id.id_newjqRv)
     EasyRecyclerView recyclerView;
+    @Bind(R.id.toolbar)
+    Toolbar toolbar;
+    @Bind(R.id.content_start_new_fight)
+    ConstraintLayout rootview;
     private JQAdapter adapter;
     private List<String> list = new ArrayList<>();
+
     @Override
     public int getLayoutId() {
         return R.layout.activity_start_new_fight;
@@ -53,18 +43,11 @@ public class StartNewFightActivity extends BaseActivity {
 
     @Override
     public void initView() {
-        Intent intent = getIntent();
-        String title = intent.getStringExtra("title");
-        if (title.equals("new")){
-            toolbarFight.setTitle("新警情");
-        }else if (title.equals("bjr"))
-            toolbarFight.setTitle("报警人关联警情");
-        else if (title.equals("sjr"))
-            toolbarFight.setTitle("涉警人关联警情");
+
+        toolbar.setTitle("警情信息");
 
 
-
-        setSupportActionBar(toolbarFight);
+        setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -81,8 +64,6 @@ public class StartNewFightActivity extends BaseActivity {
         adapter.addAll(list);
 
 
-
-
     }
 
     private void initdata() {
@@ -92,24 +73,13 @@ public class StartNewFightActivity extends BaseActivity {
 
     }
 
-    private void gofight() {
-        SomeUtil.showSnackBar(rootview, "是否开始作战？").setAction("确定", new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // TODO: 2016/8/15 开始作战
-                startActivity(new Intent(StartNewFightActivity.this, NewFightActivity.class));
-            }
-        });
 
-    }
-
-
-    @Override
+  /*  @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.jqhistory, menu);
         return true;
-    }
+    }*/
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -119,20 +89,15 @@ public class StartNewFightActivity extends BaseActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.jq_history) {
+        /*if (id == R.id.jq_history) {
             SomeUtil.showSnackBar(rootview, "开发中。。。");
             return true;
-        }
+        }*/
         if (id == android.R.id.home) {
             onBackPressed();
         }
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        // TODO: add setContentView(...) invocation
-        ButterKnife.bind(this);
-    }
+
 }

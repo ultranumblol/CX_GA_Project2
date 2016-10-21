@@ -32,7 +32,9 @@ import wgz.com.cx_ga_project.adapter.MyRecyclerArrayAdapter;
 import wgz.com.cx_ga_project.app;
 import wgz.com.cx_ga_project.base.BaseFragment;
 
+import wgz.com.cx_ga_project.base.Constant;
 import wgz.com.cx_ga_project.entity.Apply;
+import wgz.com.cx_ga_project.util.SPUtils;
 import wgz.datatom.com.utillibrary.util.LogUtil;
 
 import static wgz.com.cx_ga_project.base.Constant.TYPE_QINGJIA;
@@ -75,6 +77,7 @@ public class MyApplyQingjiaFragment extends BaseFragment implements SwipeRefresh
                 intent.setClass(getActivity(), JiabanLeaveDetilActivity.class);
                 Bundle bundle = new Bundle();
                 bundle.putString("poiceid",adapter.getItem(position).getPoliceid());
+                bundle.putString("poicename",adapter.getItem(position).getPolicename());
                 bundle.putString("applytime",adapter.getItem(position).getApplytime());
                 bundle.putString("starttime",adapter.getItem(position).getStart());
                 bundle.putString("endtime",adapter.getItem(position).getEnd());
@@ -83,6 +86,7 @@ public class MyApplyQingjiaFragment extends BaseFragment implements SwipeRefresh
                 bundle.putString("status",adapter.getItem(position).getStatus());
                 bundle.putString("upperid",adapter.getItem(position).getUpperid());
                 bundle.putString("reasontype",adapter.getItem(position).getReasontype());
+                bundle.putString("head","http://"+adapter.getItem(position).getUrl());
                 intent.putExtra("detil",bundle);
                 intent.putExtra("type",adapter.getItem(position).getType());
 
@@ -101,20 +105,20 @@ public class MyApplyQingjiaFragment extends BaseFragment implements SwipeRefresh
      */
     private void initData() {
 
-        app.apiService.getBeanData("getOverLeaveStatus","501")
+        app.apiService.getBeanData("getOverLeaveStatus",(String) SPUtils.get(app.getApp().getApplicationContext(), Constant.USERID,""))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .map(new Func1<Apply, List<Apply.Result>>() {
                     @Override
                     public List<Apply.Result> call(Apply apply) {
-                        LogUtil.e("map_result::"+apply.getResult().toString());
+                        LogUtil.d("map_result::"+apply.getResult().toString());
                         return apply.getResult();
                     }
                 })
                 .flatMap(new Func1<List<Apply.Result>, Observable<Apply.Result>>() {
                     @Override
                     public Observable<Apply.Result> call(List<Apply.Result> results) {
-                        LogUtil.e("flatMap_result::"+results.size());
+                        LogUtil.d("flatMap_result::"+results.size());
                         return Observable.from(results);
                     }
                 })
@@ -138,12 +142,12 @@ public class MyApplyQingjiaFragment extends BaseFragment implements SwipeRefresh
 
             @Override
             public void onError(Throwable e) {
-                LogUtil.e("error"+e.toString());
+                LogUtil.d("error"+e.toString());
             }
 
             @Override
             public void onNext(List<Apply.Result> results) {
-                LogUtil.e("resultCOUNT:"+results.size());
+                LogUtil.d("QingjiaResult:"+results.toString());
             }
         });
 

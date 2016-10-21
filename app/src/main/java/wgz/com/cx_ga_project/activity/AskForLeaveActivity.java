@@ -20,18 +20,24 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 import wgz.com.cx_ga_project.R;
 import wgz.com.cx_ga_project.app;
 import wgz.com.cx_ga_project.base.BaseActivity;
+import wgz.com.cx_ga_project.base.Constant;
 import wgz.com.cx_ga_project.bean.AskForLeaveBean;
+import wgz.com.cx_ga_project.entity.LeaveType;
+import wgz.com.cx_ga_project.util.RxUtil;
+import wgz.com.cx_ga_project.util.SPUtils;
 import wgz.com.cx_ga_project.util.SomeUtil;
 import wgz.datatom.com.utillibrary.util.LogUtil;
 
@@ -55,6 +61,8 @@ public class AskForLeaveActivity extends BaseActivity {
     OptionsPickerView pvOptions;
     private ArrayList<AskForLeaveBean> options1Items = new ArrayList<>();
     private ArrayList<ArrayList<String>> options2Items = new ArrayList<>();
+    private List<LeaveType.LeaveTypeRe> leaveTypeRes = new ArrayList<>();
+    private String valueCode = "0";
 
 
     @Bind(R.id.toolbar)
@@ -119,32 +127,62 @@ public class AskForLeaveActivity extends BaseActivity {
         //选项1
         options1Items.add(new AskForLeaveBean(1, "请假类型"));
         //选项2
-        ArrayList<String> options2Items_01 = new ArrayList<>();
-        options2Items_01.add("事假");
-        options2Items_01.add("病假");
-        options2Items_01.add("调休");
-        options2Items_01.add("出差");
-        options2Items_01.add("其他");
-        options2Items.add(options2Items_01);
-        pvOptions.setPicker(options1Items, options2Items, null, true);
 
-        //pvOptions.setTitle("选择假别");
-        pvOptions.setCyclic(false, false, false);
-        //设置默认选中的项目
-        //监听确定选择按钮
-        pvOptions.setSelectOptions(0, 1, 0);
-        pvOptions.setOnoptionsSelectListener(new OptionsPickerView.OnOptionsSelectListener() {
-            @Override
-            public void onOptionsSelect(int options1, int option2, int options3) {
-                String result = options2Items.get(options1).get(option2);
-                mLeaveType.setText(result);
-            }
-        });
+        app.apiService.getLeaveType()
+                .compose(RxUtil.<LeaveType>applySchedulers())
+                .subscribe(new Subscriber<LeaveType>() {
+                    @Override
+                    public void onCompleted() {
+                        pvOptions.setPicker(options1Items, options2Items, null, true);
+                        //pvOptions.setTitle("选择假别");
+                        pvOptions.setCyclic(false, false, false);
+                        //设置默认选中的项目
+                        //监听确定选择按钮
+                        pvOptions.setSelectOptions(0, 1, 0);
+                        pvOptions.setOnoptionsSelectListener(new OptionsPickerView.OnOptionsSelectListener() {
+                            @Override
+                            public void onOptionsSelect(int options1, int option2, int options3) {
+                                String result = options2Items.get(options1).get(option2);
+                                mLeaveType.setText(result);
+                                //LogUtil.d("leaveTypeRes : "+leaveTypeRes.toString());
+                              for (int i = 0 ; i <leaveTypeRes.size();i++)
+                                  if (leaveTypeRes.get(i).getValname().equals(result)){
+
+                                      valueCode = leaveTypeRes.get(i).getValcode();
+                                  }
+
+                                LogUtil.d("valuecode : "+valueCode);
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        LogUtil.d("leavetype  error: "+e.toString());
+                    }
+
+                    @Override
+                    public void onNext(LeaveType leaveType) {
+                        leaveTypeRes.clear();
+                        leaveTypeRes = leaveType.getRes();
+                        LogUtil.d("leavetype : "+leaveType.getRes().toString());
+                        ArrayList<String> options2Items_01 = new ArrayList<>();
+                        for (int i = 0 ; i <leaveType.getRes().size(); i++){
+                            options2Items_01.add(leaveType.getRes().get(i).getValname());
+                        }
+                        options2Items.add(options2Items_01);
+                    }
+                });
     }
 
     public static String getTime(Date date) {
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        return format.format(date);
+        try {
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            return format.format(date);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "";
+        }
     }
 
     @Override
@@ -173,11 +211,11 @@ public class AskForLeaveActivity extends BaseActivity {
         if (mLeaveReason.getText().toString().equals("")) {
             Snackbar.make(rootview, "请填写请假事由!", Snackbar.LENGTH_SHORT).show();
             return;
-        } else if (mLeaveStarttime.getText().toString().contains("请选择")
-                || mLeaveEndtime.getText().toString().contains("请选择")) {
+        } else if (mLeaveStarttime.getText().toString().equals("")
+                || mLeaveEndtime.getText().toString().equals("")) {
             Snackbar.make(rootview, "请选择日期!", Snackbar.LENGTH_SHORT).show();
             return;
-        } else if (mLeaveType.getText().toString().contains("请选择")) {
+        } else if (mLeaveType.getText().toString().equals("")) {
             Snackbar.make(rootview, "请选择请假类型！", Snackbar.LENGTH_SHORT).show();
             return;
         } else if (!compareDate(startdate, enddate)) {
@@ -187,15 +225,19 @@ public class AskForLeaveActivity extends BaseActivity {
 
         // TODO: 2016/8/5 提交请假申请
         app.apiService.upLoadLeave("leaveApply", stime, etime, mLeaveReason.getText().toString(),
-                "501", curredate, "101", mLeaveType.getText().toString(), mLeaveDaycount.getText().toString()).subscribeOn(Schedulers.io())
+                SomeUtil.getUserId(), curredate, "030283",valueCode, mLeaveDaycount.getText().toString())
+                .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Action1<String>() {
                     @Override
                     public void call(String s) {
-                        LogUtil.e("leaveApply :" +s);
+                        LogUtil.d("leaveApply :" +s);
                         if (s.contains("200")) {
                             SomeUtil.showSnackBar(rootview, "提交申请成功！");
-                        } else {
+
+
+                            finish();
+                         } else {
                             SomeUtil.showSnackBar(rootview, "服务器错误！");
                         }
                     }
@@ -224,7 +266,7 @@ public class AskForLeaveActivity extends BaseActivity {
             return date;
         } catch (ParseException e) {
             e.printStackTrace();
-            LogUtil.e("DATE error" + e.toString());
+            LogUtil.d("DATE error" + e.toString());
             return null;
         }
     }

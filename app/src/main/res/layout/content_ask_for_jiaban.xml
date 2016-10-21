@@ -88,7 +88,7 @@
             android:textSize="16dp"
             android:layout_gravity="center_vertical"
             android:layout_alignParentRight="true"
-            android:text="请选择(必填)"
+            android:hint="请选择(必填)"
             android:layout_marginRight="16dp"
             android:id="@+id/id_jiaban_starttime"
 
@@ -132,7 +132,7 @@
             android:textSize="16dp"
             android:layout_gravity="center_vertical"
             android:layout_alignParentRight="true"
-            android:text="请选择(必填)"
+            android:hint="请选择(必填)"
             android:layout_marginRight="16dp"
             android:id="@+id/id_jiaban_endtime"
 

@@ -38,7 +38,8 @@ public class ApplyAdapter extends MyRecyclerArrayAdapter<Apply.Result> {
                 return new QingjiaViewholder(parent);
             case TYPE_JIABAN:
                 return new JiabanViewholder(parent);
-            default:throw new InvalidParameterException();
+           default:throw new InvalidParameterException();
+            //default:  return new JiabanViewholder(parent);
         }
     }
 
@@ -46,8 +47,8 @@ public class ApplyAdapter extends MyRecyclerArrayAdapter<Apply.Result> {
     public int getViewType(int position) {
         if (getItem(position).getType().equals("1"))
             return TYPE_LEAVE;
-        if (getItem(position).getType().equals("0"))
+        if (getItem(position).getType().equals("2"))
             return TYPE_JIABAN;
-        return TYPE_INVALID;
+        else return TYPE_INVALID;
     }
 }

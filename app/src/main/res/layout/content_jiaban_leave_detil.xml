@@ -47,9 +47,11 @@
                 >
 
                 <ImageView
-                    android:layout_width="66dp"
-                    android:layout_height="66dp"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_margin="5dp"
                     android:id="@+id/userPic"
+
                     android:scaleType="fitCenter"
                     android:src="@drawable/ic_account_circle_gray_48dp"
                     />
@@ -79,7 +81,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="1sp"
-
+                android:layout_marginTop="2dp"
                 android:background="@color/gainsboro"
                 />
             <RelativeLayout
@@ -181,16 +183,7 @@
                         />
 
                 </LinearLayout>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:text="已审核"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:paddingRight="14dp"
-                    android:textSize="18dp"
-                    android:id="@+id/detil_qingjia_state"
-                    android:textColor="@color/orangered"
-                    android:layout_height="wrap_content" />
+
 
             </RelativeLayout>
 
@@ -198,12 +191,23 @@
 
 
     </android.support.v7.widget.CardView>
-    <LinearLayout
+    <FrameLayout
         android:id="@+id/detil_qingjia_shenheren"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:text="已审核"
+            android:textSize="18dp"
+            android:layout_gravity="right"
+            android:layout_marginRight="24dp"
+            android:layout_marginTop="14dp"
+            android:id="@+id/detil_qingjia_state"
+            android:textColor="@color/orangered"
+            android:layout_height="wrap_content" />
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -211,6 +215,7 @@
             android:layout_marginTop="14dp"
             android:textSize="16dp"
             android:textColor="@color/goldenrod"
+            android:visibility="gone"
             android:text="审批人："
             />
 
@@ -220,10 +225,11 @@
             android:layout_marginLeft="8dp"
             android:layout_marginTop="14dp"
             android:text="name"
+            android:visibility="gone"
             android:id="@+id/detil_qingjia_shenherenname"
             android:textSize="16dp"
             />
-    </LinearLayout>
+    </FrameLayout>
 
 </LinearLayout>
     <LinearLayout
@@ -257,8 +263,9 @@
         >
 
         <ImageView
-            android:layout_width="66dp"
-            android:layout_height="66dp"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_margin="5dp"
             android:id="@+id/userPic_jiaban"
             android:scaleType="fitCenter"
             android:src="@drawable/ic_account_circle_gray_48dp"
@@ -288,7 +295,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="1sp"
-
+        android:layout_marginTop="2dp"
         android:background="@color/gainsboro"
         />
 
@@ -367,16 +374,7 @@
                 />
 
         </LinearLayout>
-        <TextView
-            android:layout_width="wrap_content"
-            android:text="已审核"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:paddingRight="14dp"
-            android:textSize="18dp"
-            android:id="@+id/detil_jiaban_state"
-            android:textColor="@color/orangered"
-            android:layout_height="wrap_content" />
+
 
     </RelativeLayout>
 
@@ -384,11 +382,22 @@
 
 
         </android.support.v7.widget.CardView>
-        <LinearLayout
+        <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             >
+            <TextView
+                android:layout_width="wrap_content"
+                android:text="已审核"
+                android:layout_gravity="right"
+                android:layout_marginRight="24dp"
+                android:layout_marginTop="14dp"
+                android:textSize="18dp"
+                android:id="@+id/detil_jiaban_state"
+                android:textColor="@color/orangered"
+                android:layout_height="wrap_content" />
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -396,6 +405,7 @@
                 android:layout_marginTop="14dp"
                 android:textColor="@color/goldenrod"
                 android:text="审批人："
+                android:visibility="gone"
                 android:textSize="16dp"
                 />
 
@@ -406,9 +416,10 @@
                 android:layout_marginTop="14dp"
                 android:id="@+id/detil_jiaban_shenherenname"
                 android:text="name"
+                android:visibility="gone"
                 android:textSize="16dp"
                 />
-        </LinearLayout>
+        </FrameLayout>
 
     </LinearLayout>
 

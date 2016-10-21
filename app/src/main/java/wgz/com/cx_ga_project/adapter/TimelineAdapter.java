@@ -6,6 +6,8 @@ import android.view.ViewGroup;
 
 import com.jude.easyrecyclerview.adapter.BaseViewHolder;
 
+import wgz.com.cx_ga_project.entity.JqOrbit;
+
 /**
  * Created by wgz on 2016/8/22.
  */

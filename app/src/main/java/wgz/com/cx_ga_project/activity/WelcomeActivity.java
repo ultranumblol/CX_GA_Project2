@@ -51,58 +51,34 @@ public class WelcomeActivity extends BaseActivity {
         animation.setTarget(imgWelcome);
         Observable<String> observable =  Observable.create(new AnimatorOnSubscribe(animation));
         observable
-                .subscribeOn(AndroidSchedulers.mainThread())//指定订阅的Observable对象的call方法运行在ui线程中
-                .observeOn(AndroidSchedulers.mainThread())//最后统一回到UI线程中处理
+                .subscribeOn(AndroidSchedulers.mainThread())
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<String>() {
                     @Override
                     public void onCompleted() {
-                        LogUtil.e("onCompleted!");
+                        LogUtil.d("onCompleted!");
                         startActivity(new Intent(WelcomeActivity.this,HomeActivity.class));
+                        saveinfo();
                         finish();
                     }
 
                     @Override
                     public void onError(Throwable e) {
-                        LogUtil.e("error:"+e);
+                        LogUtil.d("error:"+e);
                         startActivity(new Intent(WelcomeActivity.this,LoginActivity.class));
                         finish();
                     }
 
                     @Override
                     public void onNext(String str) {
-                        LogUtil.e(str);
-                        saveinfo();
-                        getuserhead();
+                        LogUtil.d(str);
+
+
                     }
                 });
     }
 
-    private void getuserhead() {
-        app.apiService.getUserhead(APIservice.GET_USER_HEAD,"10001").subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<String>() {
-                    @Override
-                    public void onCompleted() {
 
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-
-                    }
-
-                    @Override
-                    public void onNext(String s) {
-                        LogUtil.e("userhead : " + s);
-                        String s2 = s.replace("\"","");
-                        LogUtil.e("userhead : " + s2);
-                        userhead = s2;
-                        saveUserHead();
-                    }
-                });
-
-
-    }
 
 
     @Override
@@ -117,10 +93,5 @@ public class WelcomeActivity extends BaseActivity {
                 .addData(Constant.LOGINTIME, System.currentTimeMillis())
                 .build();
     }
-    private void saveUserHead(){
-        new SPBuild(getApplicationContext())
-                .addData(Constant.USERHEAD, userhead)
-                .build();
 
-    }
 }

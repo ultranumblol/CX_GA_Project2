@@ -84,7 +84,20 @@ public class ChatMsg {
         @SerializedName("video")
 
         private String video;
+        @SerializedName("videopic")
+
+        private String videopic;
+
+        public String getVideopic() {
+            return videopic;
+        }
+
+        public void setVideopic(String videopic) {
+            this.videopic = videopic;
+        }
+
         @SerializedName("sendtime")
+
 
         private String sendtime;
         @SerializedName("frompolicename")
@@ -102,6 +115,28 @@ public class ChatMsg {
         @SerializedName("policename")
 
         private String policename;
+
+        @Override
+        public String toString() {
+            return "Re{" +
+                    "id='" + id + '\'' +
+                    ", jqid='" + jqid + '\'' +
+                    ", taskid='" + taskid + '\'' +
+                    ", fromPoliceid='" + fromPoliceid + '\'' +
+                    ", toPoliceid='" + toPoliceid + '\'' +
+                    ", txt='" + txt + '\'' +
+                    ", issend='" + issend + '\'' +
+                    ", pic='" + pic + '\'' +
+                    ", video='" + video + '\'' +
+                    ", videopic='" + videopic + '\'' +
+                    ", sendtime='" + sendtime + '\'' +
+                    ", frompolicename='" + frompolicename + '\'' +
+                    ", mark=" + mark +
+                    ", policeid='" + policeid + '\'' +
+                    ", remark=" + remark +
+                    ", policename='" + policename + '\'' +
+                    '}';
+        }
 
         /**
          * @return The id

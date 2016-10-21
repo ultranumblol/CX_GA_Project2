@@ -7,6 +7,7 @@ import android.widget.TextView;
 import com.jude.easyrecyclerview.adapter.BaseViewHolder;
 
 import wgz.com.cx_ga_project.R;
+import wgz.com.cx_ga_project.entity.JqOrbit;
 import wgz.com.cx_ga_project.view.TimeLineMarker;
 
 /**
@@ -14,15 +15,16 @@ import wgz.com.cx_ga_project.view.TimeLineMarker;
  */
 
 public class TimelineViewHolder extends BaseViewHolder<String> {
-    private TextView desc_tv;
+    private TextView desc_tv,time;
     private TimeLineMarker timeLineMarker;
 
 
 
     public TimelineViewHolder(ViewGroup parent) {
         super(parent, R.layout.item_timeline);
-        desc_tv = (TextView) $(R.id.desc_tv);
-        timeLineMarker = (TimeLineMarker) $(R.id.timeLineMarker);
+        desc_tv =  $(R.id.desc_tv);
+        timeLineMarker =  $(R.id.timeLineMarker);
+        time = $(R.id.id_timelineTime);
     }
 
     @Override
@@ -33,8 +35,22 @@ public class TimelineViewHolder extends BaseViewHolder<String> {
         }else {
             timeLineMarker.setText(""+(getAdapterPosition()+1));
         }
-
-
-      desc_tv.setText(data);
+        //time.setText("2016-9-18 11:43:22");
+        desc_tv.setText(data);
     }
+
+   /* @Override
+    public void setData(JqOrbit.Re data) {
+
+
+        if (getAdapterPosition()==0){
+            timeLineMarker.setText(""+(getAdapterPosition()+1));
+            timeLineMarker.setBeginLine(null);
+        }else {
+            timeLineMarker.setText(""+(getAdapterPosition()+1));
+        }
+        time.setText(data.getSendtime());
+        desc_tv.setText(data.getTreatmentdep());
+    }*/
+
 }

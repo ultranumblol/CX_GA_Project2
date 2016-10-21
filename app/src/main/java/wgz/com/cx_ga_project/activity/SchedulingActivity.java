@@ -1,5 +1,6 @@
 package wgz.com.cx_ga_project.activity;
 
+import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
@@ -12,7 +13,12 @@ import java.util.Calendar;
 import java.util.List;
 
 import butterknife.Bind;
+import butterknife.ButterKnife;
+import rx.Subscriber;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 import wgz.com.cx_ga_project.R;
+import wgz.com.cx_ga_project.app;
 import wgz.com.cx_ga_project.base.BaseActivity;
 import wgz.com.cx_ga_project.calendarView.adapter.CalendarAdapter;
 import wgz.com.cx_ga_project.calendarView.adapter.TopViewPagerAdapter;
@@ -20,11 +26,11 @@ import wgz.com.cx_ga_project.calendarView.utils.DateBean;
 import wgz.com.cx_ga_project.calendarView.utils.OtherUtils;
 import wgz.com.cx_ga_project.calendarView.view.CalendarView;
 import wgz.com.cx_ga_project.calendarView.view.ContainerLayout;
-import wgz.com.cx_ga_project.util.httpUtil;
+import wgz.com.cx_ga_project.entity.Scheduling;
+import wgz.com.cx_ga_project.entity.SchedulingOneDay;
 import wgz.datatom.com.utillibrary.util.LogUtil;
 
 /**
- *
  * 查看排班
  * Created by wgz on 2016/8/1.
  */
@@ -45,6 +51,10 @@ public class SchedulingActivity extends BaseActivity {
     ConstraintLayout contentScheduling;
     @Bind(R.id.id_schefulingPeople)
     TextView mSchefulingPeople;
+    @Bind(R.id.id_schefulingPeople1)
+    TextView mSchefulingPeople1;
+    @Bind(R.id.id_schefulingPeople2)
+    TextView mSchefulingPeople2;
     private List<View> calenderViews = new ArrayList<>();
     /**
      * 日历向左或向右可翻动的天数
@@ -63,28 +73,25 @@ public class SchedulingActivity extends BaseActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         initCalendar();
-          /*  new Thread(new Runnable() {
-                @Override
-                public void run() {
-                   String result =  httpUtil.getStr("http://192.168.1.88/demojob/getAppAllSch","utf_8");
-                    LogUtil.e("jsonStr:"+result);
-                }
-            }).start();*/
-      /*  Call<String> call = app.apiService.getZhiBan();
-        call.enqueue(new Callback<String>() {
-            @Override
-            public void onResponse(Call<String> call, Response<String> response) {
-                String jsonStr = response.body();
-                LogUtil.e("jsonStr:"+jsonStr);
-            }
+        app.apiService.getAllScheduling("2016-09-20", "2016-11-03", "030689")
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<Scheduling>() {
+                    @Override
+                    public void onCompleted() {
 
-            @Override
-            public void onFailure(Call<String> call, Throwable t)
-            {
-                LogUtil.e("jsonStr===error");
-                LogUtil.e("error:"+t.toString());
-            }
-        });*/
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        LogUtil.d("schedulingError : " + e.toString());
+                    }
+
+                    @Override
+                    public void onNext(Scheduling scheduling) {
+                        LogUtil.d("scheduling : " + scheduling.getRes().toString());
+                    }
+                });
 
     }
 
@@ -133,6 +140,13 @@ public class SchedulingActivity extends BaseActivity {
 
     }
 
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        // TODO: add setContentView(...) invocation
+        ButterKnife.bind(this);
+    }
+
 
     /**
      * 点击某个日期回调
@@ -142,12 +156,50 @@ public class SchedulingActivity extends BaseActivity {
         public void onCalendarClick(int position, DateBean dateBean) {
             txToday.setText(OtherUtils.formatDate(dateBean.getDate()));
             //ToastUtil.showShort(SchedulingActivity.this, "poision:" + position);
-            if (dateBean.getTag()) {
+            app.apiService.getOneDayScheduling(OtherUtils.formatDate(dateBean.getDate()))
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new Subscriber<SchedulingOneDay>() {
+                        @Override
+                        public void onCompleted() {
+
+                        }
+
+                        @Override
+                        public void onError(Throwable e) {
+                            LogUtil.d("schedulingOneDay error :" + e.toString());
+                        }
+
+                        @Override
+                        public void onNext(SchedulingOneDay schedulingOneDay) {
+                            LogUtil.d("schedulingOneDay  :" + schedulingOneDay.getRes().toString());
+                            LogUtil.d("schedulingOneDay  :" + schedulingOneDay.getRes1().toString());
+                            LogUtil.d("schedulingOneDay  :" + schedulingOneDay.getRes2().toString());
+                            mSchefulingPeople.setText(schedulingOneDay.getRes().get(0).getPolicename());
+                            mSchefulingPeople1.setText(schedulingOneDay.getRes1().get(0).getPolicename());
+
+                            StringBuffer sb = new StringBuffer(256);
+                            for (int i = 0 ; i <schedulingOneDay.getRes2().size(); i++){
+                                if (i<schedulingOneDay.getRes2().size()-1){
+                                    sb.append(schedulingOneDay.getRes2().get(i).getPolicename());
+                                    sb.append(" ; ");
+                                }
+                                else {
+                                    sb.append(schedulingOneDay.getRes2().get(i).getPolicename());
+                                }
+
+                            }
+                            mSchefulingPeople2.setText(sb.toString());
+
+                        }
+                    });
+
+            /*if (dateBean.getTag()) {
                 mSchefulingPeople.setText("值班人员：" + "张三，李三，王三");
 
             } else {
                 mSchefulingPeople.setText("今日无值班人员");
-            }
+            }*/
 
         }
     }
@@ -174,12 +226,12 @@ public class SchedulingActivity extends BaseActivity {
             //设置含有事件的日期 1-9号
             CalendarAdapter adapter = calendarView.initFirstDayPosition(0);
 
-            for (int i=0;i<42;i++){
+            for (int i = 0; i < 42; i++) {
                 DateBean dateBean = (DateBean) adapter.getItem(i);
-                if (dateBean.getTag()){
+                if (dateBean.getTag()) {
                     mSchefulingPeople.setText("值班人员：\" + \"张三，李三，王三");
                     return;
-                }else {
+                } else {
                     mSchefulingPeople.setText("今日无值班人员");
                 }
 

@@ -73,7 +73,7 @@ public class ScrollingActivity extends BaseActivity {
         timelineRv.setLayoutManager(new LinearLayoutManager(this));
         timelineRv.setAdapter(adapter = new TimelineAdapter(this));
         initData();
-        adapter.addAll(list);
+        //adapter.addAll(list);
         mTbToolbar.setTitle("");
         // AppBar的监听
         mAblAppBar.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
