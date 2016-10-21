@@ -76,8 +76,8 @@ public class MyapprovalFragment extends BaseFragment implements SwipeRefreshLayo
 
                 intent.putExtra("type",adapter.getItem(position).getType());
                 intent.putExtra("ifhis",false);
-                ActivityCompat.startActivity(getActivity(),
-                        intent, ActivityOptionsCompat
+                ActivityCompat.startActivityForResult(getActivity(),
+                        intent,1002,ActivityOptionsCompat
                                 .makeSceneTransitionAnimation(getActivity(),
                                         im_face, "share_img").toBundle());
             }
@@ -159,5 +159,19 @@ public class MyapprovalFragment extends BaseFragment implements SwipeRefreshLayo
                 initdata();
             }
         }, 2000);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (data == null)
+            return;
+        // TODO: 2016/10/21 刷新
+        if (requestCode == 1002) {
+            String result = data.getStringExtra("result");
+            if (result.equals("refresh")){
+                onRefresh();
+
+            }
+        }
     }
 }

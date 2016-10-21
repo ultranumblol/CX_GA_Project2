@@ -78,7 +78,7 @@ public class JQCallbackActivity extends BaseActivity {
         fragments.add(sjMsgFragment);
 
 
-
+        jqcallbackVp.setOffscreenPageLimit(4);
         jqcallbackVp.setAdapter(new MyFragmentPagerAdapter(getSupportFragmentManager(), fragments, titles));
         jqcallbackVp.setCurrentItem(0);
         tabJqcallback.setupWithViewPager(jqcallbackVp);

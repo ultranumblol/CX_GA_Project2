@@ -196,8 +196,10 @@ public class ApprovalDetilActivity extends BaseActivity {
                                    public void onNext(String s) {
                                         if (s.contains("200")){
                                             SomeUtil.showSnackBar(detilRoot, "审批通过！").setCallback(new Snackbar.Callback() {
+
                                                 @Override
                                                 public void onDismissed(Snackbar snackbar, int event) {
+                                                    setResult(1002,new Intent(ApprovalDetilActivity.this,MyApprovalActivity.class).putExtra("result", "refresh"));
                                                     finish();
                                                 }
                                             }).show();
@@ -249,6 +251,8 @@ public class ApprovalDetilActivity extends BaseActivity {
                                     public void onNext(String s) {
                                         if (s.contains("200")){
                                             SomeUtil.showSnackBar(detilRoot, "提交成功").show();
+                                            setResult(1002,new Intent(ApprovalDetilActivity.this,MyApprovalActivity.class).putExtra("result", "refresh"));
+                                            finish();
 
                                         }else{
                                             SomeUtil.showSnackBar(detilRoot, "服务器错误！").show();

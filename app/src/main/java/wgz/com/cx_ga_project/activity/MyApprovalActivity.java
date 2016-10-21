@@ -1,5 +1,6 @@
 package wgz.com.cx_ga_project.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.TabLayout;
@@ -33,6 +34,7 @@ public class MyApprovalActivity extends BaseActivity {
     ViewPager viewpager;
     @Bind(R.id.toolbar)
     Toolbar toolbar;
+
     @Override
     public int getLayoutId() {
         return R.layout.activity_my_approval;
@@ -52,13 +54,13 @@ public class MyApprovalActivity extends BaseActivity {
         fragments.add(myapprovalFragment);
         fragments.add(myapprovalHistoryFragment);
         viewpager.setAdapter(new MyFragmentPagerAdapter(getSupportFragmentManager()
-                ,fragments,titles));
+                , fragments, titles));
         viewpager.setCurrentItem(0);
         tabMyapproval.setupWithViewPager(viewpager);
         tabMyapproval.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                switch (tab.getPosition()){
+                switch (tab.getPosition()) {
                     case 0:
                         viewpager.setCurrentItem(0);
                         break;
@@ -81,4 +83,17 @@ public class MyApprovalActivity extends BaseActivity {
 
     }
 
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == 1002) {
+            MyapprovalFragment myapprovalFragment = (MyapprovalFragment) fragments.get(0);
+            MyapprovalHistoryFragment myapprovalHistoryFragment = (MyapprovalHistoryFragment) fragments.get(1);
+            myapprovalFragment.onActivityResult(requestCode, resultCode, data);
+            myapprovalHistoryFragment.onActivityResult(requestCode, resultCode, data);
+
+        }
+
+
+    }
 }

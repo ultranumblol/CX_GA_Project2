@@ -1,5 +1,6 @@
 package wgz.com.cx_ga_project.activity;
 
+import android.content.Intent;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
@@ -105,7 +106,7 @@ public class AskForJiabanActivity extends BaseActivity {
                 });
     }
     private void docommit() {
-        boolean cancle = true;
+        boolean cancle = false;
         Date startdate = getStrToDate(mJiabanStarttime.getText().toString());
         Date enddate = getStrToDate(mJiabanEndtime.getText().toString());
         Date currentdate = new Date(System.currentTimeMillis());
@@ -143,7 +144,7 @@ public class AskForJiabanActivity extends BaseActivity {
             cancle = true;
             return;
         }*/
-        //cancle = false;
+        cancle = false;
         LogUtil.d("curredate:"+curredate);
         if (!cancle){
             app.apiService.upOverTime("overTimeApply",stime,
@@ -159,15 +160,21 @@ public class AskForJiabanActivity extends BaseActivity {
 
                         @Override
                         public void onError(Throwable e) {
-
+                            LogUtil.d("result error:"+e.toString());
                         }
 
                         @Override
                         public void onNext(String s) {
                             LogUtil.d("result:"+s);
                             if (s.contains("200")){
-                                SomeUtil.showSnackBar(rootview,"提交申请成功！");
-                                finish();
+                                SomeUtil.showSnackBar(rootview,"提交申请成功！").setCallback(new Snackbar.Callback() {
+                                    @Override
+                                    public void onDismissed(Snackbar snackbar, int event) {
+                                        setResult(1001,new Intent(AskForJiabanActivity.this,MyWorkApplyActivity.class).putExtra("result","refresh"));
+                                        finish();
+                                    }
+                                });
+
                             }else {
                                 SomeUtil.showSnackBar(rootview,"网络错误！");
                             }
@@ -175,7 +182,7 @@ public class AskForJiabanActivity extends BaseActivity {
                     });
         }
         // TODO: 2016/8/5 提交加班内容！
-        Snackbar.make(rootview, "正在提交!", Snackbar.LENGTH_SHORT).show();
+       // Snackbar.make(rootview, "正在提交!", Snackbar.LENGTH_SHORT).show();
     }
 
 
