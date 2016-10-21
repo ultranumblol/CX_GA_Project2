@@ -6,8 +6,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 
-import android.graphics.Bitmap;
-import android.media.MediaMetadataRetriever;
 
 import android.net.Uri;
 import android.os.Bundle;
@@ -31,19 +29,17 @@ import android.widget.RelativeLayout;
 import com.jakewharton.rxbinding.view.RxView;
 import com.jude.easyrecyclerview.EasyRecyclerView;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
+
 import java.util.List;
-import java.util.Map;
+
 import java.util.concurrent.TimeUnit;
 
 import butterknife.Bind;
 
 import butterknife.OnClick;
-import okhttp3.MediaType;
-import okhttp3.RequestBody;
+
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
@@ -53,7 +49,6 @@ import wgz.com.cx_ga_project.adapter.chatAdapter.ChatAdapter;
 import wgz.com.cx_ga_project.app;
 import wgz.com.cx_ga_project.base.BaseActivity;
 import wgz.com.cx_ga_project.entity.ChatMsg;
-import wgz.com.cx_ga_project.entity.DatrixCreat;
 import wgz.com.cx_ga_project.fragment.PhotoPickerFragment;
 import wgz.com.cx_ga_project.service.GetNewMsgService;
 import wgz.com.cx_ga_project.util.DatrixUtil;
@@ -62,7 +57,6 @@ import wgz.com.cx_ga_project.util.UriUtils;
 import wgz.datatom.com.utillibrary.util.LogUtil;
 
 import static wgz.com.cx_ga_project.activity.PickPhotoActivity.HTTP_URL;
-import static wgz.com.cx_ga_project.util.fileUtil.delAllFile;
 import static wgz.com.cx_ga_project.util.fileUtil.delFolder;
 
 /**
@@ -130,6 +124,10 @@ public class ChatActivity extends BaseActivity {
 
     private String datrixUrl = "http://101.231.77.242:9001/preview/getImage?fileid=";
     private String datrixurl2 = "&token=X7yABwjE20sUJLefATUFqU0iUs8mJPqEJo6iRnV63mI=";
+    private String datrixVideoPicdurl1 = "http://101.231.77.242:9001/preview/coverMedium?fileid=";
+    private String datrixPlayVideo = "http://101.231.77.242:9001/file/previewFileHtml?fileid=";
+    private String datrixPlayVideo2 = "&filetype=2&token=X7yABwjE20sUJLefATUFqU0iUs8mJPqEJo6iRnV63mI=";
+
 
     @Override
     public void initView() {
@@ -214,6 +212,7 @@ public class ChatActivity extends BaseActivity {
                     @Override
                     public void onCompleted() {
                         recyclerview.scrollToPosition(adapter.getCount() - 1);
+                        hideKeyboard();
                     }
 
                     @Override
@@ -240,6 +239,7 @@ public class ChatActivity extends BaseActivity {
                     @Override
                     public void onCompleted() {
                         recyclerview.scrollToPosition(adapter.getCount() - 1);
+                        hideKeyboard();
                     }
 
                     @Override
@@ -265,7 +265,7 @@ public class ChatActivity extends BaseActivity {
         Date currentdate = new Date(System.currentTimeMillis());
         String curredate = AskForLeaveActivity.getTime(currentdate);
 
-        app.jqAPIService.sendMsg("2016072100100000060", etSendmessage.getText().toString(), "", "213", curredate, "030283")
+        app.jqAPIService.sendMsg("2016072100100000060", etSendmessage.getText().toString(),"","","", "213", curredate, "030283")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<String>() {
@@ -301,7 +301,7 @@ public class ChatActivity extends BaseActivity {
                 String curredate = AskForLeaveActivity.getTime(currentdate);
 
 
-                app.jqAPIService.sendMsg("2016072100100000060", "", datrixUrl + fileid + datrixurl2, "213", curredate, SomeUtil.getUserId())
+                app.jqAPIService.sendMsg("2016072100100000060", "", datrixUrl + fileid + datrixurl2,"" ,"","213", curredate, SomeUtil.getUserId())
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(new Subscriber<String>() {
@@ -341,7 +341,41 @@ public class ChatActivity extends BaseActivity {
             @Override
             public void afterfinish(String fileid, List<String> ids) {
                 LogUtil.d("UpLoad Video finish  id : " + fileid);
-                SomeUtil.showSnackBarLong(rootview, "视频id：" + fileid);
+                Date currentdate = new Date(System.currentTimeMillis());
+                String curredate = AskForLeaveActivity.getTime(currentdate);
+
+
+                app.jqAPIService.sendMsg("2016072100100000060", "", "",datrixPlayVideo+fileid+datrixPlayVideo2 ,datrixVideoPicdurl1+fileid+datrixurl2,"213", curredate, SomeUtil.getUserId())
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(new Subscriber<String>() {
+                            @Override
+                            public void onCompleted() {
+                                etSendmessage.setText("");
+                                // TODO: 2016/9/12 获取新消息 删除本地 换成服务器请求的
+                                //adapter.getHeader()
+                                //getNewmsg();
+                                //LogUtil.d("recyclerview count:"+recyclerview.getChildCount());
+                                //recyclerview.getChildCount();
+                                adapter.remove(adapter.getCount() - 1);
+                                getNewmsg();
+                            }
+
+                            @Override
+                            public void onError(Throwable e) {
+                                //SomeUtil.showSnackBar(rootview, "error:" + e.toString());
+                                LogUtil.d("error:" + e.toString());
+                            }
+
+                            @Override
+                            public void onNext(String s) {
+                                LogUtil.d("Finish result:" + s);
+                               // SomeUtil.showSnackBar(rootview,"result:"+s);
+                            }
+                        });
+
+                //SomeUtil.showSnackBarLong(rootview, "视频id：" + fileid);
+
             }
         });
 
@@ -448,15 +482,6 @@ public class ChatActivity extends BaseActivity {
         }
     }
 
-    private List<File> makeFiles() {
-        final List<File> files = new ArrayList<>();
-        for (int i = 0; i < paths.size(); i++) {
-            File file = new File(paths.get(i));
-            files.add(file);
-        }
-        return files;
-
-    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -514,217 +539,10 @@ public class ChatActivity extends BaseActivity {
                 // TODO: 2016/10/18 上传 video
                 SendVideoMsg();
 
-
             }
-
-
         } catch (Exception e) {
             LogUtil.d("error : " + e);
 
         }
-
     }
-
-    private void uploadpic(List<File> files) {
-        app.apiService.uploadFileWithRequestBody("saveAppPics", SomeUtil.filesToMultipartBody(files))
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<String>() {
-                    @Override
-                    public void onCompleted() {
-
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        LogUtil.d("uploadpic error : " + e.toString());
-                        adapter.remove(adapter.getCount() - 1);
-                    }
-
-                    @Override
-                    public void onNext(String s) {
-                        LogUtil.d("upPic :" + s);
-                        if (s.contains("\"code\":200")) {
-
-                            SendPicmsg();
-                           /* SomeUtil.showSnackBar(rootview,"提交成功！").setCallback(new Snackbar.Callback() {
-                                @Override
-                                public void onDismissed(Snackbar snackbar, int event) {
-                                    finish();
-                                }
-                            });*/
-                        } else {
-                            SomeUtil.showSnackBar(rootview, "网络错误，请再试！");
-                        }
-                    }
-                });
-
-    }
-
-
-    /**
-     * 获取视频缩略图
-     *
-     * @param filePath
-     * @return
-     */
-    public Bitmap getVideoThumbnail(String filePath) {
-        Bitmap bitmap = null;
-        MediaMetadataRetriever retriever = new MediaMetadataRetriever();
-        try {
-            retriever.setDataSource(filePath);
-            bitmap = retriever.getFrameAtTime();
-        } catch (IllegalArgumentException e) {
-            e.printStackTrace();
-        } catch (RuntimeException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                retriever.release();
-            } catch (RuntimeException e) {
-                e.printStackTrace();
-            }
-        }
-        return bitmap;
-    }
-
-    private void DatrixCreate() {
-        app.apiService.uploadFileWithRequestBodyTest("testtestwgzwgz","")
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<DatrixCreat>() {
-                    @Override
-                    public void onCompleted() {
-
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        LogUtil.d("Detrix_upPic_error:" + e.toString());
-                    }
-
-                    @Override
-                    public void onNext(DatrixCreat datrixCreat) {
-                        LogUtil.d("Detrix_upPic_create : code :" + datrixCreat.getCode().toString());
-                        if (datrixCreat.getCode().equals(200)) {
-                            LogUtil.d("Detrix_upPic_create :" + datrixCreat.getResult().getFileid());
-                            fileid = datrixCreat.getResult().getFileid();
-                            LogUtil.d("Detrix_upPic_create :" + datrixCreat.getResult().toString());
-                            DatrixDoWrite(paths, fileid);
-
-                        } else {
-
-                            SomeUtil.showSnackBar(rootview, "创建上传图片失败!");
-                        }
-
-                    }
-                });
-    }
-
-    private void DatrixDoWrite(List<String> paths, String fileid) {
-        String size = "";
-        Map<String, RequestBody> bodyMap = new HashMap<>();
-        if (paths.size() > 0) {
-            for (int i = 0; i < 1; i++) {
-                File file = new File(paths.get(i));
-                bodyMap.put("file" + i + "\" ; filename=\"" + file.getName(), RequestBody.create(MediaType.parse("image/*"), file));
-                size = file.length() + "";
-            }
-        }
-        LogUtil.d("file size : " + size);
-        LogUtil.d("fileid  : " + fileid);
-        app.apiService.detrixWrite(fileid, "0", size, bodyMap)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<String>() {
-                    @Override
-                    public void onCompleted() {
-
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        LogUtil.d("detrix_write_Response_error :" + e.toString());
-                    }
-
-                    @Override
-                    public void onNext(String s) {
-                        LogUtil.d("detrix_write_Response :" + s);
-                        if (s.contains("\t\"code\":\t200")) {
-                            DatrixDoFinish();
-                        } else {
-                            SomeUtil.showSnackBar(rootview, "图片上传失败!");
-                        }
-                    }
-                });
-
-
-    }
-
-    private void DatrixDoFinish() {
-        app.apiService.detrixfinish(fileid, " ")
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<String>() {
-                    @Override
-                    public void onCompleted() {
-
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-
-                    }
-
-                    @Override
-                    public void onNext(String s) {
-                        if (s.contains("200")) {
-                            Date currentdate = new Date(System.currentTimeMillis());
-                            String curredate = AskForLeaveActivity.getTime(currentdate);
-
-
-                            app.jqAPIService.sendMsg("2016072100100000060", " ", datrixUrl + fileid + datrixurl2, "213", curredate, "030283")
-                                    .subscribeOn(Schedulers.io())
-                                    .observeOn(AndroidSchedulers.mainThread())
-                                    .subscribe(new Subscriber<String>() {
-                                        @Override
-                                        public void onCompleted() {
-                                            etSendmessage.setText("");
-                                            // TODO: 2016/9/12 获取新消息 删除本地 换成服务器请求的
-                                            //adapter.getHeader()
-                                            //getNewmsg();
-                                            //LogUtil.d("recyclerview count:"+recyclerview.getChildCount());
-                                            //recyclerview.getChildCount();
-                                            adapter.remove(adapter.getCount() - 1);
-
-                                            getNewmsg();
-                                        }
-
-                                        @Override
-                                        public void onError(Throwable e) {
-                                            //SomeUtil.showSnackBar(rootview, "error:" + e.toString());
-                                            LogUtil.d("error:" + e.toString());
-                                        }
-
-                                        @Override
-                                        public void onNext(String s) {
-                                            LogUtil.d("添加图片聊天记录result:" + s);
-
-
-                                            // SomeUtil.showSnackBar(rootview,"result:"+s);
-                                        }
-                                    });
-
-
-                            //SomeUtil.showSnackBar(rootview,"上传图片成功！");
-                        } else {
-                            SomeUtil.showSnackBar(rootview, "网络错误，请稍后！");
-                        }
-                    }
-                });
-
-
-    }
-
-
 }

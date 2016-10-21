@@ -1,5 +1,6 @@
 package wgz.com.cx_ga_project.adapter;
 
+import android.content.Intent;
 import android.support.annotation.LayoutRes;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +11,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.jude.easyrecyclerview.adapter.BaseViewHolder;
 
 import wgz.com.cx_ga_project.R;
+import wgz.com.cx_ga_project.activity.ShowBigImage;
 
 /**
  * Created by wgz on 2016/8/16.
@@ -25,7 +27,7 @@ public class AddPictureViewHolder extends BaseViewHolder<String> {
     }
 
     @Override
-    public void setData(String data) {
+    public void setData(final String data) {
         if (data.equals("end")){
             //imageView.setImageResource(R.drawable.ic_add_box_red_400_36dp);
             Glide.with(getContext())
@@ -34,6 +36,14 @@ public class AddPictureViewHolder extends BaseViewHolder<String> {
                     .dontAnimate()
                     .into(imageView);
         }else{
+
+            imageView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    getContext().startActivity(new Intent(getContext(), ShowBigImage.class).putExtra("url",data));
+                }
+            });
+
             Glide.with(getContext())
                     .load(data)
                     .thumbnail(0.7f)

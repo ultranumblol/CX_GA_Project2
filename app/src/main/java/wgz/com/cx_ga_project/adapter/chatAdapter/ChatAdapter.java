@@ -55,40 +55,8 @@ public class ChatAdapter extends MyRecyclerArrayAdapter<ChatMsg.Re> {
 
     @Override
     public int getViewType(int position) {
-        /*if (getItem(position).get("from").equals("send")){
-            if (getItem(position).get("type").equals("msg")){
-                return SEND_MSG;
-            }
-        }
-        if (getItem(position).get("from").equals("send")){
-            if (getItem(position).get("type").equals("pic")){
-                return SEND_PIC;
-            }
-        }
-        if (getItem(position).get("from").equals("send")){
-            if (getItem(position).get("type").equals("video")){
-                return SEND_VIDEO;
-            }
-        }
-        if (getItem(position).get("from").equals("recieve")){
-            if (getItem(position).get("type").equals("msg")){
-                return RECIEVE_MSG;
-            }
-        }
-        if (getItem(position).get("from").equals("recieve")){
-            if (getItem(position).get("type").equals("pic")){
-                return RECIEVE_PIC;
-            }
-        }
-        if (getItem(position).get("from").equals("recieve")){
-            if (getItem(position).get("type").equals("video")){
-                return RECIEVE_VIDEO;
-            }
-        }
-*/
         if (getItem(position).getMark().equals(1)){
             return RECIEVE_MSG;
-
         }
         if (getItem(position).getMark().equals(0)){
             if (!getItem(position).getPic().equals("")&&!getItem(position).getPic().equals("null")){

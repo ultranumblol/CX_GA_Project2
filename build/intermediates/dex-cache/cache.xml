@@ -21,15 +21,6 @@
     </item>
     <item
         is-multidex="false"
-        jar="C:\Users\wgz\Desktop\ant\CX_GA_Project\app\build\intermediates\exploded-aar\com.jakewharton.rxbinding\rxbinding-appcompat-v7\0.4.0\jars\classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="23.0.1"
-        sha1="cea3c0edbda1279bc261187fb3b6f874bfc841f4">
-        <dex dex="C:\Users\wgz\Desktop\ant\CX_GA_Project\app\build\intermediates\pre-dexed\debug\com.jakewharton.rxbinding-rxbinding-appcompat-v7-0.4.0_b61e3eeafd2a1a613c51dd9b00b9d26893ac8e9b.jar" />
-    </item>
-    <item
-        is-multidex="false"
         jar="C:\Users\wgz\Desktop\ant\CX_GA_Project\app\build\intermediates\exploded-aar\com.android.support.constraint\constraint-layout\1.0.0-alpha4\jars\classes.jar"
         jumboMode="true"
         optimize="true"
@@ -45,15 +36,6 @@
         revision="23.0.1"
         sha1="a37a445ce723dba5d5f6cf87d2ede6729c7f7972">
         <dex dex="C:\Users\wgz\Desktop\ant\CX_GA_Project\app\build\intermediates\pre-dexed\debug\com.jude-easyrecyclerview-4.0.6_6f11960a09b9ca41ba5cac73fb933f0385f2579e.jar" />
-    </item>
-    <item
-        is-multidex="false"
-        jar="C:\Users\wgz\.gradle\caches\modules-2\files-2.1\com.alibaba\fastjson\1.1.52.android\6fcd2df42d3576368514855c72baabe3b6e318e0\fastjson-1.1.52.android.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="23.0.1"
-        sha1="6fcd2df42d3576368514855c72baabe3b6e318e0">
-        <dex dex="C:\Users\wgz\Desktop\ant\CX_GA_Project\app\build\intermediates\pre-dexed\debug\fastjson-1.1.52.android_0ffc67721ae004ba64de2d5bfd7759c19289f7a7.jar" />
     </item>
     <item
         is-multidex="false"
@@ -216,15 +198,6 @@
         revision="23.0.1"
         sha1="a1b4b8e4dc5f7bfa9186e79f9e267c1539a847b0">
         <dex dex="C:\Users\wgz\Desktop\ant\CX_GA_Project\app\build\intermediates\pre-dexed\debug\logging-interceptor-3.1.2_6269804a386ebb915707f297296bc25aff7a76f9.jar" />
-    </item>
-    <item
-        is-multidex="false"
-        jar="C:\Users\wgz\Desktop\ant\CX_GA_Project\app\build\intermediates\exploded-aar\com.jakewharton.rxbinding\rxbinding-appcompat-v7\0.4.0\jars\classes.jar"
-        jumboMode="false"
-        optimize="true"
-        revision="23.0.1"
-        sha1="cea3c0edbda1279bc261187fb3b6f874bfc841f4">
-        <dex dex="C:\Users\wgz\Desktop\ant\CX_GA_Project\app\build\intermediates\pre-dexed\debug\com.jakewharton.rxbinding-rxbinding-appcompat-v7-0.4.0_b61e3eeafd2a1a613c51dd9b00b9d26893ac8e9b.jar" />
     </item>
     <item
         is-multidex="false"
@@ -444,15 +417,6 @@
     </item>
     <item
         is-multidex="false"
-        jar="C:\Users\wgz\.gradle\caches\modules-2\files-2.1\org.ligboy.retrofit2\converter-fastjson-android\2.1.0\8576271d8e8564b7a45d93be11f3bf5d695f02cf\converter-fastjson-android-2.1.0.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="23.0.1"
-        sha1="8576271d8e8564b7a45d93be11f3bf5d695f02cf">
-        <dex dex="C:\Users\wgz\Desktop\ant\CX_GA_Project\app\build\intermediates\pre-dexed\debug\converter-fastjson-android-2.1.0_5277d4d379dd93d0b4e6d61e4de0a62cde3af1e2.jar" />
-    </item>
-    <item
-        is-multidex="false"
         jar="C:\Users\wgz\.gradle\caches\modules-2\files-2.1\com.squareup.okio\okio\1.8.0\5ea7af56cc7c567ed9856d99efb30740e9b17ff\okio-1.8.0.jar"
         jumboMode="false"
         optimize="true"
@@ -468,24 +432,6 @@
         revision="23.0.1"
         sha1="a882fef6a6b9e3efbb0b6b001895a5fc7c35b391">
         <dex dex="C:\Users\wgz\Desktop\ant\CX_GA_Project\app\build\intermediates\pre-dexed\debug\constraint-layout-solver-1.0.0-alpha4_d118192c5f7cc86890b49af08970ba3cfb549000.jar" />
-    </item>
-    <item
-        is-multidex="false"
-        jar="C:\Users\wgz\Desktop\ant\CX_GA_Project\app\build\intermediates\exploded-aar\com.jakewharton.rxbinding\rxbinding-design\0.4.0\jars\classes.jar"
-        jumboMode="false"
-        optimize="true"
-        revision="23.0.1"
-        sha1="d875246afc9be5798bf65fd61fb42af06fee4553">
-        <dex dex="C:\Users\wgz\Desktop\ant\CX_GA_Project\app\build\intermediates\pre-dexed\debug\com.jakewharton.rxbinding-rxbinding-design-0.4.0_b542551edf1a4c061fe5b729fd43564f687fa902.jar" />
-    </item>
-    <item
-        is-multidex="false"
-        jar="C:\Users\wgz\Desktop\ant\CX_GA_Project\app\build\intermediates\exploded-aar\com.jakewharton.rxbinding\rxbinding-support-v4\0.4.0\jars\classes.jar"
-        jumboMode="false"
-        optimize="true"
-        revision="23.0.1"
-        sha1="417b075934c24fa45ba94be0f451fd6dec69feb8">
-        <dex dex="C:\Users\wgz\Desktop\ant\CX_GA_Project\app\build\intermediates\pre-dexed\debug\com.jakewharton.rxbinding-rxbinding-support-v4-0.4.0_981d78a11520458df0d2c8913a7a505ed5b38dcc.jar" />
     </item>
     <item
         is-multidex="false"
@@ -561,30 +507,12 @@
     </item>
     <item
         is-multidex="false"
-        jar="C:\Users\wgz\.gradle\caches\modules-2\files-2.1\org.ligboy.retrofit2\converter-fastjson-android\2.1.0\8576271d8e8564b7a45d93be11f3bf5d695f02cf\converter-fastjson-android-2.1.0.jar"
-        jumboMode="false"
-        optimize="true"
-        revision="23.0.1"
-        sha1="8576271d8e8564b7a45d93be11f3bf5d695f02cf">
-        <dex dex="C:\Users\wgz\Desktop\ant\CX_GA_Project\app\build\intermediates\pre-dexed\debug\converter-fastjson-android-2.1.0_5277d4d379dd93d0b4e6d61e4de0a62cde3af1e2.jar" />
-    </item>
-    <item
-        is-multidex="false"
         jar="C:\Users\wgz\Desktop\ant\CX_GA_Project\app\libs\tssdk.jar"
         jumboMode="true"
         optimize="true"
         revision="23.0.1"
         sha1="064cb089033fd69080c357c2a6120de1ef6b9d2b">
         <dex dex="C:\Users\wgz\Desktop\ant\CX_GA_Project\app\build\intermediates\pre-dexed\debug\tssdk_168aed1b2085243cbedf265f77328af7b4d48b10.jar" />
-    </item>
-    <item
-        is-multidex="false"
-        jar="C:\Users\wgz\.gradle\caches\modules-2\files-2.1\com.alibaba\fastjson\1.1.52.android\6fcd2df42d3576368514855c72baabe3b6e318e0\fastjson-1.1.52.android.jar"
-        jumboMode="false"
-        optimize="true"
-        revision="23.0.1"
-        sha1="6fcd2df42d3576368514855c72baabe3b6e318e0">
-        <dex dex="C:\Users\wgz\Desktop\ant\CX_GA_Project\app\build\intermediates\pre-dexed\debug\fastjson-1.1.52.android_0ffc67721ae004ba64de2d5bfd7759c19289f7a7.jar" />
     </item>
     <item
         is-multidex="false"
@@ -637,7 +565,7 @@
         jumboMode="true"
         optimize="true"
         revision="23.0.1"
-        sha1="ac799baf16db8f1d75a5e4d123cab12c7900bd2e">
+        sha1="5d559a20ab40cd7181dcba9a838825f4a2e4536c">
         <dex dex="C:\Users\wgz\Desktop\ant\CX_GA_Project\app\build\intermediates\pre-dexed\debug\instant-run_ca6aac7c44a6cb161fc18e987e177f51579936c0.jar" />
     </item>
     <item
@@ -655,17 +583,8 @@
         jumboMode="true"
         optimize="true"
         revision="23.0.1"
-        sha1="33ba3de39cde525fa5de8b7ea72c8daeb2c17f18">
+        sha1="d0f6a33c45e17c2774cd186d3b2379b3624361ad">
         <dex dex="C:\Users\wgz\Desktop\ant\CX_GA_Project\app\build\intermediates\pre-dexed\debug\instant-run-bootstrap_c7600d048a61ee78ca7df4259586661317da9f89.jar" />
-    </item>
-    <item
-        is-multidex="false"
-        jar="C:\Users\wgz\Desktop\ant\CX_GA_Project\app\build\intermediates\exploded-aar\com.jakewharton.rxbinding\rxbinding-support-v4\0.4.0\jars\classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="23.0.1"
-        sha1="417b075934c24fa45ba94be0f451fd6dec69feb8">
-        <dex dex="C:\Users\wgz\Desktop\ant\CX_GA_Project\app\build\intermediates\pre-dexed\debug\com.jakewharton.rxbinding-rxbinding-support-v4-0.4.0_981d78a11520458df0d2c8913a7a505ed5b38dcc.jar" />
     </item>
     <item
         is-multidex="false"
@@ -693,15 +612,6 @@
         revision="23.0.1"
         sha1="7c0d7c8f6e52115bb82fa018d81a8d0cae35dde5">
         <dex dex="C:\Users\wgz\Desktop\ant\CX_GA_Project\app\build\intermediates\pre-dexed\debug\converter-scalars-2.1.0_f8a110b01069490ec8c193bb153f9a63883ecb4c.jar" />
-    </item>
-    <item
-        is-multidex="false"
-        jar="C:\Users\wgz\Desktop\ant\CX_GA_Project\app\build\intermediates\exploded-aar\com.jakewharton.rxbinding\rxbinding-design\0.4.0\jars\classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="23.0.1"
-        sha1="d875246afc9be5798bf65fd61fb42af06fee4553">
-        <dex dex="C:\Users\wgz\Desktop\ant\CX_GA_Project\app\build\intermediates\pre-dexed\debug\com.jakewharton.rxbinding-rxbinding-design-0.4.0_b542551edf1a4c061fe5b729fd43564f687fa902.jar" />
     </item>
     <item
         is-multidex="false"

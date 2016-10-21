@@ -26,6 +26,8 @@
             android:background="#aaffffff"
             android:gravity="center_vertical"
             android:orientation="horizontal"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
             android:paddingTop="4dp">
             <Button
                 android:id="@+id/btn_more"

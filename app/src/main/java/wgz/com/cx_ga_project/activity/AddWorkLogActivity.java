@@ -213,27 +213,32 @@ public class AddWorkLogActivity extends BaseActivity {
     // TODO: 2016/10/13 循环取ids值上传
     private void addsummaryPic(final String fileid, final List<String> ids) {
         LogUtil.d(" addwork log ids :"+ids.toString());
-        /*app.apiService.upWorkLog("addSummary", getUserId(), worklogText.getText().toString(),"", time)
+        final int k = ids.size()-1;
+        app.apiService.upWorkLog("addSummary", getUserId(), worklogText.getText().toString(),"", time)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<String>() {
                     @Override
                     public void onCompleted() {
                         for (int i = 0 ; i<ids.size() ; i++){
+                          final int j = i;
+
                             app.apiService.upWorkLog("addSummary", getUserId(), "",datrixUrl+ids.get(i)+datrixurl2, time)
                                     .compose(RxUtil.<String>applySchedulers())
                                     .subscribe(new Subscriber<String>() {
                                         @Override
                                         public void onCompleted() {
-                                            SomeUtil.showSnackBar(rootview, "添加成功！").setCallback(new Snackbar.Callback() {
-                                                @Override
-                                                public void onDismissed(Snackbar snackbar, int event) {
-                                                    setResult(1, new Intent(AddWorkLogActivity.this, WorkLogActivity.class)
-                                                            .putExtra("text", edittext)
-                                                            .putExtra("result", "refresh"));
-                                                    finish();
-                                                }
-                                            });
+                                           if (j==k){
+                                               SomeUtil.showSnackBar(rootview, "添加成功！").setCallback(new Snackbar.Callback() {
+                                                   @Override
+                                                   public void onDismissed(Snackbar snackbar, int event) {
+                                                       setResult(1, new Intent(AddWorkLogActivity.this, WorkLogActivity.class)
+                                                               .putExtra("text", edittext)
+                                                               .putExtra("result", "refresh"));
+                                                       finish();
+                                                   }
+                                               });
+                                           }
                                         }
 
                                         @Override
@@ -269,7 +274,7 @@ public class AddWorkLogActivity extends BaseActivity {
                             LogUtil.d("执行上传图片！！！！！！！");
                         } else onError(new Exception(s));
                     }
-                });*/
+                });
 
 
 

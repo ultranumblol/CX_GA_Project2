@@ -1,6 +1,5 @@
 package wgz.com.cx_ga_project.util;
 
-import android.support.v7.app.AlertDialog;
 import android.view.View;
 
 import java.io.File;
@@ -19,7 +18,6 @@ import wgz.com.cx_ga_project.entity.DatrixCreat;
 import wgz.datatom.com.utillibrary.util.LogUtil;
 import wgz.datatom.com.utillibrary.util.ToastUtil;
 
-import static wgz.com.cx_ga_project.util.fileUtil.delAllFile;
 import static wgz.com.cx_ga_project.util.fileUtil.delFolder;
 
 /**
@@ -47,6 +45,7 @@ public class DatrixUtil {
     private int startsize = 0;
     private int endsize = 0;
     private int currentfilesize = 0;
+    private boolean flag = false;
 
     /**
      * 根据图片地址list上传多个图片
@@ -56,6 +55,7 @@ public class DatrixUtil {
      */
     public DatrixUtil(List<String> paths, View rootview) {
         ids.clear();
+        flag=true;
         this.paths = paths;
         this.rootview = rootview;
 
@@ -64,6 +64,7 @@ public class DatrixUtil {
     public DatrixUtil(String path, View rootview) {
         this.path = path;
         ids.clear();
+        flag=true;
         this.rootview = rootview;
 
     }
@@ -137,7 +138,6 @@ public class DatrixUtil {
 
                         } else {
                             SomeUtil.showSnackBar(rootview, "第" + currentPieces  + "块文件写入失败!");
-
                             //ToastUtil.showLong(app.getApp().getApplicationContext(),"current:"+currentfilesize+"filesize : "+filesize);
                             //ToastUtil.showLong(app.getApp().getApplicationContext(),s);
                         }
@@ -197,7 +197,7 @@ public class DatrixUtil {
         currentfilesize=0;
         File file = new File(path);
 
-        app.apiService.uploadFileWithRequestBodyTest(SomeUtil.getUserId(),""+file.length())
+        app.apiService.uploadFileWithRequestBodyTest(file.getName(),""+file.length())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<DatrixCreat>() {
@@ -299,7 +299,12 @@ public class DatrixUtil {
                     public void onNext(String s) {
                         if (s.contains("200")) {
                             if (afterFinish != null) {
-                                afterFinish.afterfinish(fileid, ids);
+
+                                if (flag){
+                                    afterFinish.afterfinish(fileid, ids);
+                                    flag=false;
+                                }
+
                             }
 
 

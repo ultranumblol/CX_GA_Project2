@@ -126,6 +126,8 @@ public interface JqAPIService {
     Observable<String> sendMsg(@Field("jqid") String jqid,
                                @Field("msg") String msg,
                                @Field("pic") String pic,
+                               @Field("video") String video,
+                               @Field("videopic") String videopic,
                                @Field("taskid") String taskid,
                                @Field("time") String time,
                                @Field("policeid") String policeid);

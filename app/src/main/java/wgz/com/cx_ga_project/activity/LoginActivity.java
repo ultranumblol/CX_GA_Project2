@@ -185,6 +185,7 @@ public class LoginActivity extends BaseActivity {
                         }
                         else {
                             SomeUtil.showSnackBar(scrollLoginForm,"用户名或密码错误！");
+                            showProgress(false);
                         }
                     }
                 });
