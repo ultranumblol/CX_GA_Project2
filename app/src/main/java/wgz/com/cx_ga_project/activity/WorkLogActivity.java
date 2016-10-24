@@ -45,6 +45,10 @@ import wgz.com.cx_ga_project.util.RxUtil;
 import wgz.com.cx_ga_project.util.SomeUtil;
 import wgz.datatom.com.utillibrary.util.LogUtil;
 
+import static wgz.com.cx_ga_project.base.Constant.CHECK_ONESSUMMARY;
+import static wgz.com.cx_ga_project.base.Constant.CHECK_ONESSUMMARYPIC_BYDAYS;
+import static wgz.com.cx_ga_project.base.Constant.CHECK_ONESSUMMARY_BYDAYS;
+
 
 /**
  * 工作日志
@@ -99,7 +103,7 @@ public class WorkLogActivity extends BaseActivity {
     private void iniData() {
         final Calendar calendar = Calendar.getInstance();
         LogUtil.d("initData : " + OtherUtils.formatMonth(calendar.getTime()).toString());
-        app.apiService.getLogData(APIservice.CHECK_ONESSUMMARY,SomeUtil.getUserId(), OtherUtils.formatMonth(calendar.getTime()))
+        app.apiService.getLogData(CHECK_ONESSUMMARY,SomeUtil.getUserId(), OtherUtils.formatMonth(calendar.getTime()))
 
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -121,7 +125,7 @@ public class WorkLogActivity extends BaseActivity {
                             mylogs = workLog.getLogs();
                             LogUtil.d("logs : " + mylogs.toString());
                             String nowdate = OtherUtils.formatDate(calendar.getTime());
-                            app.apiService.getLogDataToDay(APIservice.CHECK_ONESSUMMARY_BYDAYS, SomeUtil.getUserId(), nowdate)
+                            app.apiService.getLogDataToDay(SomeUtil.getUserId(), nowdate)
                                     .subscribeOn(Schedulers.io())
                                     .observeOn(AndroidSchedulers.mainThread())
                                     .subscribe(new Subscriber<WorkLog>() {
@@ -266,7 +270,7 @@ public class WorkLogActivity extends BaseActivity {
             txToday.setText(OtherUtils.formatDate(dateBean.getDate()));
 
             //查询日志图片内容
-            app.apiService.getLogPicData(APIservice.CHECK_ONESSUMMARYPIC_BYDAYS,SomeUtil.getUserId(),OtherUtils.formatDate(dateBean.getDate()))
+            app.apiService.getLogPicData(CHECK_ONESSUMMARYPIC_BYDAYS,SomeUtil.getUserId(),OtherUtils.formatDate(dateBean.getDate()))
                     .compose(RxUtil.<WorkLog>applySchedulers())
                     .subscribe(new Subscriber<WorkLog>() {
                         @Override
@@ -302,7 +306,7 @@ public class WorkLogActivity extends BaseActivity {
 
 
             //查询日志文字内容
-            app.apiService.getLogDataToDay(APIservice.CHECK_ONESSUMMARY_BYDAYS, SomeUtil.getUserId(), OtherUtils.formatDate(dateBean.getDate()))
+            app.apiService.getLogDataToDay( SomeUtil.getUserId(), OtherUtils.formatDate(dateBean.getDate()))
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(new Subscriber<WorkLog>() {
@@ -346,7 +350,7 @@ public class WorkLogActivity extends BaseActivity {
             final CalendarView calendarView = (CalendarView) calenderViews.get(position % 3);
             txToday.setText(calendarView.getCurrentDay());
             LogUtil.d("当前月份 ： " + calendarView.getCurrentDay());
-            app.apiService.getLogData(APIservice.CHECK_ONESSUMMARY, SomeUtil.getUserId(), calendarView.getCurrentDay())
+            app.apiService.getLogData(CHECK_ONESSUMMARY, SomeUtil.getUserId(), calendarView.getCurrentDay())
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(new Subscriber<WorkLog>() {

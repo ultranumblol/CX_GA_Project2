@@ -57,6 +57,7 @@ import wgz.com.cx_ga_project.util.UriUtils;
 import wgz.datatom.com.utillibrary.util.LogUtil;
 
 import static wgz.com.cx_ga_project.activity.PickPhotoActivity.HTTP_URL;
+import static wgz.com.cx_ga_project.app.DATRIX_BASE_URL;
 import static wgz.com.cx_ga_project.util.fileUtil.delFolder;
 
 /**
@@ -122,10 +123,10 @@ public class ChatActivity extends BaseActivity {
         return R.layout.activity_chat;
     }
 
-    private String datrixUrl = "http://101.231.77.242:9001/preview/getImage?fileid=";
+    private String datrixUrl = DATRIX_BASE_URL+"preview/getImage?fileid=";
     private String datrixurl2 = "&token=X7yABwjE20sUJLefATUFqU0iUs8mJPqEJo6iRnV63mI=";
-    private String datrixVideoPicdurl1 = "http://101.231.77.242:9001/preview/coverMedium?fileid=";
-    private String datrixPlayVideo = "http://101.231.77.242:9001/file/previewFileHtml?fileid=";
+    private String datrixVideoPicdurl1 = DATRIX_BASE_URL+"preview/coverMedium?fileid=";
+    private String datrixPlayVideo = DATRIX_BASE_URL+"file/previewFileHtml?fileid=";
     private String datrixPlayVideo2 = "&filetype=2&token=X7yABwjE20sUJLefATUFqU0iUs8mJPqEJo6iRnV63mI=";
 
 
@@ -264,7 +265,6 @@ public class ChatActivity extends BaseActivity {
     private void Sendmsg() {
         Date currentdate = new Date(System.currentTimeMillis());
         String curredate = AskForLeaveActivity.getTime(currentdate);
-
         app.jqAPIService.sendMsg("2016072100100000060", etSendmessage.getText().toString(),"","","", "213", curredate, "030283")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

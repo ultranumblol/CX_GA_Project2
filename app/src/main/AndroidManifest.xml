@@ -141,11 +141,6 @@
             android:name=".activity.ApprovalDetilActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".activity.FightActivity"
-            android:label="@string/title_activity_fight"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
             android:name=".activity.StartNewFightActivity"
             android:label="@string/title_activity_start_new_fight"
             android:screenOrientation="portrait"

@@ -40,6 +40,9 @@ import wgz.com.cx_ga_project.entity.WorkLog;
 import wgz.com.cx_ga_project.util.SomeUtil;
 import wgz.datatom.com.utillibrary.util.LogUtil;
 
+import static wgz.com.cx_ga_project.base.Constant.CHECK_ONESSUMMARY;
+import static wgz.com.cx_ga_project.base.Constant.CHECK_ONESSUMMARY_BYDAYS;
+
 /**
  * Created by wgz on 2016/8/9.
  */
@@ -85,7 +88,7 @@ public class MySubordinateLogAcitvity extends BaseActivity {
 
     private void initData() {
         final Calendar calendar = Calendar.getInstance();
-        app.apiService.getLogData(APIservice.CHECK_ONESSUMMARY,"10001",OtherUtils.formatMonth(calendar.getTime()))
+        app.apiService.getLogData(CHECK_ONESSUMMARY,"10001",OtherUtils.formatMonth(calendar.getTime()))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<WorkLog>() {
@@ -106,7 +109,7 @@ public class MySubordinateLogAcitvity extends BaseActivity {
                             mylogs = workLog.getLogs();
                             LogUtil.d("logs : "+mylogs.toString());
                             String nowdate = OtherUtils.formatDate(calendar.getTime());
-                            app.apiService.getLogDataToDay(APIservice.CHECK_ONESSUMMARY_BYDAYS,"10001",nowdate)
+                            app.apiService.getLogDataToDay("10001",nowdate)
                                     .subscribeOn(Schedulers.io())
                                     .observeOn(AndroidSchedulers.mainThread())
                                     .subscribe(new Subscriber<WorkLog>() {
@@ -190,7 +193,7 @@ public class MySubordinateLogAcitvity extends BaseActivity {
         public void onCalendarClick(int position, DateBean dateBean) {
             txToday.setText(OtherUtils.formatDate(dateBean.getDate()));
 
-            app.apiService.getLogDataToDay(APIservice.CHECK_ONESSUMMARY_BYDAYS,"10001",OtherUtils.formatDate(dateBean.getDate()))
+            app.apiService.getLogDataToDay("10001",OtherUtils.formatDate(dateBean.getDate()))
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(new Subscriber<WorkLog>() {
@@ -229,7 +232,7 @@ public class MySubordinateLogAcitvity extends BaseActivity {
             final CalendarView calendarView = (CalendarView) calenderViews.get(position % 3);
             txToday.setText(calendarView.getCurrentDay());
             LogUtil.d("当前月份 ： " +calendarView.getCurrentDay());
-            app.apiService.getLogData(APIservice.CHECK_ONESSUMMARY,"10001",calendarView.getCurrentDay())
+            app.apiService.getLogData(CHECK_ONESSUMMARY,"10001",calendarView.getCurrentDay())
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(new Subscriber<WorkLog>() {

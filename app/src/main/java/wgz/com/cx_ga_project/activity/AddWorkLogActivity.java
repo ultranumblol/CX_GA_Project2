@@ -40,6 +40,7 @@ import wgz.com.cx_ga_project.util.SomeUtil;
 import wgz.datatom.com.utillibrary.util.LogUtil;
 
 import static wgz.com.cx_ga_project.activity.PickPhotoActivity.HTTP_URL;
+import static wgz.com.cx_ga_project.app.DATRIX_BASE_URL;
 import static wgz.com.cx_ga_project.util.SomeUtil.getUserId;
 
 
@@ -67,7 +68,7 @@ public class AddWorkLogActivity extends BaseActivity {
     private AddPictureAdapter adapter;
     List<String> paths = new ArrayList<>();
     private String fileid = "";
-    private String datrixUrl = "http://101.231.77.242:9001/preview/getImage?fileid=";
+    private String datrixUrl = DATRIX_BASE_URL+"preview/getImage?fileid=";
     private String datrixurl2 = "&token=X7yABwjE20sUJLefATUFqU0iUs8mJPqEJo6iRnV63mI=";
     @Override
     public int getLayoutId() {

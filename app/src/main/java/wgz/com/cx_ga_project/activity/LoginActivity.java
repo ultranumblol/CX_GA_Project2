@@ -30,7 +30,6 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.functions.Func1;
 import rx.schedulers.Schedulers;
-import wgz.com.cx_ga_project.API.APIservice;
 import wgz.com.cx_ga_project.R;
 import wgz.com.cx_ga_project.app;
 import wgz.com.cx_ga_project.base.BaseActivity;
@@ -40,6 +39,7 @@ import wgz.com.cx_ga_project.util.SPBuild;
 import wgz.com.cx_ga_project.util.SPUtils;
 import wgz.com.cx_ga_project.util.SomeUtil;
 import wgz.datatom.com.utillibrary.util.LogUtil;
+import static wgz.com.cx_ga_project.base.Constant.GET_USER_HEAD;
 
 /**
  * 登陆
@@ -192,7 +192,7 @@ public class LoginActivity extends BaseActivity {
     }
     private void getuserhead(String userid) {
         LogUtil.d("userid : "+userid);
-        app.apiService.getUserhead(APIservice.GET_USER_HEAD,userid).subscribeOn(Schedulers.io())
+        app.apiService.getUserhead(userid).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<String>() {
                     @Override

@@ -26,5 +26,11 @@ public class Constant {
     public static final String USERHEADURL = "http://" + SPUtils.get(app.getApp().getApplicationContext(), Constant.USERHEAD, "");
     public static final String LONGITUDE = "longitude";
     public static final String LATITUDE = "latitude";
+    public static final String DATRIXUID ="?uid=10098";
 
+    public static final String GET_USER_HEAD = "getAvantar";
+    public static final String CHECK_ONESSUMMARY_BYDAYS = "checkOnceSummaryBydays";
+    public static final String CHECK_ONESSUMMARY = "checkOnceSummary";
+    public static final String CHECK_ONESSUMMARYPIC_BYDAYS = "checkOnceSummaryPicBydays";
+    public static final String UPLOAD_PICS = "saveAppPics";
 }

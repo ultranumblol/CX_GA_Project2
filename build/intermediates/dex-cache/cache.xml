@@ -417,6 +417,15 @@
     </item>
     <item
         is-multidex="false"
+        jar="C:\Users\wgz\Desktop\ant\CX_GA_Project\app\libs\badgeview.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="23.0.1"
+        sha1="f77b0850a8adcf49b273a8f29ba481612aaaa19f">
+        <dex dex="C:\Users\wgz\Desktop\ant\CX_GA_Project\app\build\intermediates\pre-dexed\debug\badgeview_806b67e504ea33e35570e21460ea4898eb1a7f21.jar" />
+    </item>
+    <item
+        is-multidex="false"
         jar="C:\Users\wgz\.gradle\caches\modules-2\files-2.1\com.squareup.okio\okio\1.8.0\5ea7af56cc7c567ed9856d99efb30740e9b17ff\okio-1.8.0.jar"
         jumboMode="false"
         optimize="true"
@@ -565,7 +574,7 @@
         jumboMode="true"
         optimize="true"
         revision="23.0.1"
-        sha1="5d559a20ab40cd7181dcba9a838825f4a2e4536c">
+        sha1="7860edf39449bf4960579a4e532ee32149d96aca">
         <dex dex="C:\Users\wgz\Desktop\ant\CX_GA_Project\app\build\intermediates\pre-dexed\debug\instant-run_ca6aac7c44a6cb161fc18e987e177f51579936c0.jar" />
     </item>
     <item
@@ -583,7 +592,7 @@
         jumboMode="true"
         optimize="true"
         revision="23.0.1"
-        sha1="d0f6a33c45e17c2774cd186d3b2379b3624361ad">
+        sha1="ba1aae3ba0c729570296f822519cec8a9580d5b7">
         <dex dex="C:\Users\wgz\Desktop\ant\CX_GA_Project\app\build\intermediates\pre-dexed\debug\instant-run-bootstrap_c7600d048a61ee78ca7df4259586661317da9f89.jar" />
     </item>
     <item

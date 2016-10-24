@@ -28,6 +28,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.jauker.widget.BadgeView;
 import com.jude.rollviewpager.RollPagerView;
 import com.jude.rollviewpager.adapter.StaticPagerAdapter;
 import com.jude.rollviewpager.hintview.ColorPointHintView;
@@ -138,6 +139,14 @@ public class HomeActivity extends AppCompatActivity
         username.setText((String) SPUtils.get(app.getApp().getApplicationContext(), Constant.USERNAME, "未知"));
         userdepartment.setText((String) SPUtils.get(app.getApp().getApplicationContext(), Constant.USEROFFICENAME, "未知"));
 
+
+        BadgeView badgeView = new BadgeView(this);
+        //btn是控件
+        badgeView.setTargetView(mToJiechujing);
+        //设置相对位置
+        badgeView.setBadgeMargin(0, 22, 10, 0);
+        //设置显示未读消息条数
+        badgeView.setBadgeCount(3);
     }
 
     @OnClick({R.id.id_fighttrack, R.id.fab, R.id.to_jiechujing, R.id.id_toWorkLog, R.id.id_myscheduling, R.id.id_myApply, R.id.id_shenhe, R.id.id_xiashu})
@@ -467,5 +476,8 @@ public class HomeActivity extends AppCompatActivity
         }
         return size;
     }
+
+
+
 
 }

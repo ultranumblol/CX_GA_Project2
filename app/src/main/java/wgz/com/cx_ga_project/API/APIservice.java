@@ -34,18 +34,16 @@ import wgz.com.cx_ga_project.entity.SchedulingOneDay;
 import wgz.com.cx_ga_project.entity.UserInfo;
 import wgz.com.cx_ga_project.entity.WorkLog;
 
+import static wgz.com.cx_ga_project.app.DATRIX_BASE_URL;
+import static wgz.com.cx_ga_project.base.Constant.CHECK_ONESSUMMARY_BYDAYS;
+import static wgz.com.cx_ga_project.base.Constant.DATRIXUID;
+import static wgz.com.cx_ga_project.base.Constant.GET_USER_HEAD;
+
 /**
  * Created by wgz on 2016/8/1.
  */
 
 public interface APIservice {
-
-    public static final String GET_USER_HEAD = "getAvantar";
-    public static final String CHECK_ONESSUMMARY_BYDAYS = "checkOnceSummaryBydays";
-    public static final String CHECK_ONESSUMMARY = "checkOnceSummary";
-    public static final String CHECK_ONESSUMMARYPIC_BYDAYS = "checkOnceSummaryPicBydays";
-    public static final String UPLOAD_PICS = "saveAppPics";
-
 
     /**
      * 通过 List<MultipartBody.Part> 传入多个part实现多文件上传
@@ -65,14 +63,11 @@ public interface APIservice {
      * @param multipartBody MultipartBody包含多个Part
      * @return 状态信息
      */
-    @POST("{type}")
+    @POST("appworkmanager/{type}")
     Observable<String> uploadFileWithRequestBody(@Path("type") String type,
                                                  @Body MultipartBody multipartBody);
 
 
-    @POST("http://222.85.131.142:3007/apps/task/saveattachment")
-    @Headers("ACCESS-TOKEN:X7yABwjE20sUJLefATUFqU0iUs8mJPqEJo6iRnV63mI=")
-    Observable<String> testdatrix(@Body MultipartBody multipartBody);
 
 
     /**
@@ -82,7 +77,7 @@ public interface APIservice {
      * @return
      */
     @FormUrlEncoded
-    @POST("http://101.231.77.242:9001/api/cluster/tracker/file/create?uid=10098")
+    @POST(DATRIX_BASE_URL+"api/cluster/tracker/file/create"+DATRIXUID)
     @Headers("ACCESS-TOKEN:X7yABwjE20sUJLefATUFqU0iUs8mJPqEJo6iRnV63mI=")
     Observable<DatrixCreat> uploadFileWithRequestBodyTest(
             @Field("filename") String filename,
@@ -96,7 +91,7 @@ public interface APIservice {
      * @return
      */
     @Multipart
-    @POST("http://101.231.77.242:9001/api/cluster/storage/file/write")
+    @POST(DATRIX_BASE_URL+"api/cluster/storage/file/write")
     @Headers("ACCESS-TOKEN:X7yABwjE20sUJLefATUFqU0iUs8mJPqEJo6iRnV63mI=")
     Observable<String> detrixWrite(
             @Part("fileid") String fileid,
@@ -113,20 +108,12 @@ public interface APIservice {
      * @return
      */
     @FormUrlEncoded
-    @POST("http://101.231.77.242:9001/upload/finish")
+    @POST(DATRIX_BASE_URL+"upload/finish")
     @Headers("ACCESS-TOKEN:X7yABwjE20sUJLefATUFqU0iUs8mJPqEJo6iRnV63mI=")
     Observable<String> detrixfinish(
             @Field("fileid") String fileid,
             @Field("customjson") String customjson
     );
-
-/*
-    @Multipart
-    @POST("{type}")
-    Observable<ResponseBody> uploadPic(
-            @Path("type") String type,
-            @Part MultipartBody.Part file);*/
-
 
     /**
      * 修改工作日志
@@ -137,7 +124,7 @@ public interface APIservice {
      * @return
      */
     @FormUrlEncoded
-    @POST("{type}")
+    @POST("appworkmanager/{type}")
     Observable<String> changeWorkLog(@Path("type") String type,
                                      @Field("id") String id,
                                      @Field("summary") String summary);
@@ -151,7 +138,7 @@ public interface APIservice {
      * @return
      */
     @FormUrlEncoded
-    @POST("{type}")
+    @POST("appworkmanager/{type}")
     Observable<String> approvalApply(@Path("type") String type,
                                      @Field("id") String id,
                                      @Field("status") String status,
@@ -169,7 +156,7 @@ public interface APIservice {
      * @return
      */
     @FormUrlEncoded
-    @POST("{type}")
+    @POST("appworkmanager/{type}")
     Observable<String> upWorkLog(@Path("type") String type,
                                  @Field("loginid") String loginid,
                                  @Field("summary") String summary,
@@ -180,7 +167,7 @@ public interface APIservice {
      * 提交加班申请
      */
     @FormUrlEncoded
-    @POST("{type}")
+    @POST("appworkmanager/{type}")
     Observable<String> upOverTime(@Path("type") String type,
                                   @Field("starttime") String starttime,
                                   @Field("endtime") String endtime,
@@ -203,7 +190,7 @@ public interface APIservice {
      * @return
      */
     @FormUrlEncoded
-    @POST("{type}")
+    @POST("appworkmanager/{type}")
     Observable<String> upLoadLeave(@Path("type") String type,
                                    @Field("starttime") String starttime,
                                    @Field("endtime") String endtime,
@@ -223,7 +210,7 @@ public interface APIservice {
      * @return
      */
     @FormUrlEncoded
-    @POST("{type}")
+    @POST("appworkmanager/{type}")
     Observable<Apply> getBeanData(@Path("type") String type,
                                   @Field("policeid") String policeid
 
@@ -237,7 +224,7 @@ public interface APIservice {
      * @return
      */
     @FormUrlEncoded
-    @POST("{type}")
+    @POST("appworkmanager/{type}")
     Observable<WorkLog> getLogData(@Path("type") String type,
                                    @Field("loginid") String loginid,
                                    @Field("time") String time
@@ -251,7 +238,7 @@ public interface APIservice {
      * @return
      */
     @FormUrlEncoded
-    @POST("{type}")
+    @POST("appworkmanager/{type}")
     Observable<WorkLog> getLogPicData(@Path("type") String type,
                                    @Field("loginid") String loginid,
                                    @Field("time") String time
@@ -262,13 +249,11 @@ public interface APIservice {
     /**
      * 获取某天工作日志
      *
-     * @param type
      * @return
      */
     @FormUrlEncoded
-    @POST("{type}")
-    Observable<WorkLog> getLogDataToDay(@Path("type") String type,
-                                        @Field("loginid") String loginid,
+    @POST("appworkmanager/"+CHECK_ONESSUMMARY_BYDAYS)
+    Observable<WorkLog> getLogDataToDay(@Field("loginid") String loginid,
                                         @Field("time") String time
     );
 
@@ -289,14 +274,12 @@ public interface APIservice {
     /**
      * 获取用户头像
      *
-     * @param type
      * @param policeid
      * @return
      */
     @FormUrlEncoded
-    @POST("{type}")
-    Observable<String> getUserhead(@Path("type") String type,
-                                   @Field("policeid") String policeid
+    @POST("http://53.20.31.31:8788/appworkmanager/getAvantar")
+    Observable<String> getUserhead(@Field("policeid") String policeid
     );
 
 
@@ -308,7 +291,7 @@ public interface APIservice {
      * @return
      */
     @FormUrlEncoded
-    @POST("http://192.168.1.193:8004/demojob/getAppAllSch")
+    @POST("demojob/getAppAllSch")
     Observable<Scheduling> getAllScheduling(
             @Field("start") String start,
             @Field("end") String end,
@@ -321,7 +304,7 @@ public interface APIservice {
      * @return
      */
     @FormUrlEncoded
-    @POST("http://192.168.1.193:8004/apponduty/getWeekLeaderByDay")
+    @POST("apponduty/getWeekLeaderByDay")
     Observable<SchedulingOneDay> getOneDayScheduling(
             @Field("day") String day
     );
@@ -330,7 +313,7 @@ public interface APIservice {
      * 显示datrix上的图片
      * @return
      */
-    @GET("http://101.231.77.242:9001/preview/getImage?fileid=c1b09c7c-6e9f-43cc-8f16-780713066cc0&token=X7yABwjE20sUJLefATUFqU0iUs8mJPqEJo6iRnV63mI=")
+    @GET(DATRIX_BASE_URL+"preview/getImage?fileid=c1b09c7c-6e9f-43cc-8f16-780713066cc0&token=X7yABwjE20sUJLefATUFqU0iUs8mJPqEJo6iRnV63mI=")
     Observable<String> getdatrixPic();
 
     /**
@@ -340,7 +323,7 @@ public interface APIservice {
      * @return
      */
     @FormUrlEncoded
-    @POST("http://192.168.1.193:8004/applogin/appLogin")
+    @POST("applogin/appLogin")
     Observable<UserInfo> login(@Field("username") String username,
                                @Field("pwd") String pwd);
 
@@ -351,7 +334,7 @@ public interface APIservice {
      * @return
      */
     @FormUrlEncoded
-    @POST("http://192.168.1.193:8004/applogin/appChangePwd")
+    @POST("applogin/appChangePwd")
     Observable<String> changePass(@Field("username") String username,
                                   @Field("newpwd") String newpwd);
 
@@ -359,7 +342,7 @@ public interface APIservice {
      * 检查版本
      * @return
      */
-    @GET("http://192.168.1.193:8004/appupload/checkAppVersion")
+    @GET("appupload/checkAppVersion")
     Observable<AppVersion> checkVersion();
 
 
@@ -367,7 +350,7 @@ public interface APIservice {
      * 获取请假类型
      * @return
      */
-    @GET("http://192.168.1.193:8004/appworkmanager/getLeaveType")
+    @GET("appworkmanager/getLeaveType")
     Observable<LeaveType> getLeaveType();
 
 

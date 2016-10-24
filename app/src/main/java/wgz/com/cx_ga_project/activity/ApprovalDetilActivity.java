@@ -129,7 +129,6 @@ public class ApprovalDetilActivity extends BaseActivity {
                     detilJiabanState.setText("审批通过");
                 else if (bundle.getString("status").equals(APPROVAL_UNPASS))
                     detilJiabanState.setText("审批未通过");
-
                 break;
             case "1":
                 toolbar.setTitle("请假明细");
