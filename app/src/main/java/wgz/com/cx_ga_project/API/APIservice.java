@@ -31,6 +31,7 @@ import wgz.com.cx_ga_project.entity.DatrixFinish;
 import wgz.com.cx_ga_project.entity.LeaveType;
 import wgz.com.cx_ga_project.entity.Scheduling;
 import wgz.com.cx_ga_project.entity.SchedulingOneDay;
+import wgz.com.cx_ga_project.entity.Subordinate;
 import wgz.com.cx_ga_project.entity.UserInfo;
 import wgz.com.cx_ga_project.entity.WorkLog;
 
@@ -278,7 +279,7 @@ public interface APIservice {
      * @return
      */
     @FormUrlEncoded
-    @POST("http://53.20.31.31:8788/appworkmanager/getAvantar")
+    @POST("appworkmanager/getAvantar")
     Observable<String> getUserhead(@Field("policeid") String policeid
     );
 
@@ -353,7 +354,14 @@ public interface APIservice {
     @GET("appworkmanager/getLeaveType")
     Observable<LeaveType> getLeaveType();
 
-
+    /**
+     * 获取某人的上下级关系
+     * @param policeid
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("apponduty/getSupAndSub")
+    Observable<Subordinate> getSupAndSub(@Field("policeid") String policeid);
     //获取某个人的时间银行
    /* appworkmanager/getOnceTimeBankDetail
             $policeid = $this ->param('policeid');

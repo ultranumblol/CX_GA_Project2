@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
@@ -19,6 +20,7 @@ import wgz.com.cx_ga_project.R;
 import wgz.com.cx_ga_project.adapter.JQAdapter;
 import wgz.com.cx_ga_project.adapter.MyRecyclerArrayAdapter;
 import wgz.com.cx_ga_project.base.BaseActivity;
+import wgz.com.cx_ga_project.util.SomeUtil;
 
 /**
  * 开始新作战任务
@@ -74,12 +76,12 @@ public class StartNewFightActivity extends BaseActivity {
     }
 
 
-  /*  @Override
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.jqhistory, menu);
         return true;
-    }*/
+    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -89,10 +91,11 @@ public class StartNewFightActivity extends BaseActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        /*if (id == R.id.jq_history) {
-            SomeUtil.showSnackBar(rootview, "开发中。。。");
+        if (id == R.id.jq_history) {
+           // SomeUtil.showSnackBar(rootview, "开发中。。。");
+            startActivity(new Intent(StartNewFightActivity.this, JQListActivity.class).putExtra("title", "jqhistory"));
             return true;
-        }*/
+        }
         if (id == android.R.id.home) {
             onBackPressed();
         }

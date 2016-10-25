@@ -6,17 +6,25 @@ import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.TextView;
 
 import com.jude.easyrecyclerview.EasyRecyclerView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import rx.Subscriber;
 import wgz.com.cx_ga_project.R;
 import wgz.com.cx_ga_project.adapter.MyRecyclerArrayAdapter;
 import wgz.com.cx_ga_project.adapter.SubordinateAdapter;
+import wgz.com.cx_ga_project.app;
 import wgz.com.cx_ga_project.base.BaseActivity;
+import wgz.com.cx_ga_project.entity.Subordinate;
+import wgz.com.cx_ga_project.util.RxUtil;
+import wgz.com.cx_ga_project.util.SomeUtil;
+import wgz.datatom.com.utillibrary.util.LogUtil;
 
 /**
  * 我的下属
@@ -31,6 +39,7 @@ public class MySubordinateActivity extends BaseActivity {
     @Bind(R.id.content_my_subordinate)
     ConstraintLayout contentMySubordinate;
     private SubordinateAdapter  adapter;
+    private List<Subordinate.Resdown> list = new ArrayList<>();
 
     @Override
     public int getLayoutId() {
@@ -50,19 +59,40 @@ public class MySubordinateActivity extends BaseActivity {
         adapter.setOnItemClickListener(new MyRecyclerArrayAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(int position, View itemView) {
-                startActivity(new Intent(MySubordinateActivity.this,MySubordinateLogAcitvity.class));
+                TextView  policeidview  = (TextView) itemView.findViewById(R.id.subordinate_zhiwu);
+                TextView policeidname = (TextView) itemView.findViewById(R.id.subordinate_name);
+                startActivity(new Intent(MySubordinateActivity.this,MySubordinateLogAcitvity.class)
+                .putExtra("policeid", policeidview.getText().toString())
+                .putExtra("policename",policeidname.getText().toString()));
+
+            }
+        });
+        initData();
+
+    }
+    private void initData() {
+
+        app.apiService.getSupAndSub(SomeUtil.getUserId())
+        .compose(RxUtil.<Subordinate>applySchedulers())
+        .subscribe(new Subscriber<Subordinate>() {
+            @Override
+            public void onCompleted() {
+                adapter.addAll(list);
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                LogUtil.d("Subordinate : "+e.toString());
+            }
+
+            @Override
+            public void onNext(Subordinate s) {
+                LogUtil.d("Subordinate : "+s.toString());
+                list = s.getResdown();
 
             }
         });
 
-        adapter.addAll(initData());
-    }
-    private ArrayList<String> initData() {
-        ArrayList<String> list = new ArrayList<>();
-        for (int i = 0; i < 4; i++) {
-            list.add("i");
-        }
-        return list;
     }
 
 }

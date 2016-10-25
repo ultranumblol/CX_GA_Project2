@@ -3,6 +3,7 @@ package wgz.com.cx_ga_project.activity;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.Toolbar;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import com.jakewharton.rxbinding.view.RxView;
@@ -27,8 +28,8 @@ public class UpLoadSJPhoneActivity extends BaseActivity {
 
     @Bind(R.id.toolbar)
     Toolbar toolbar;
-    @Bind(R.id.content_up_load_sjphone)
-    RelativeLayout rootview;
+    @Bind(R.id.content_sjphone)
+    LinearLayout rootview;
     @Bind(R.id.fab_addSJPhone)
     FloatingActionButton fab;
 

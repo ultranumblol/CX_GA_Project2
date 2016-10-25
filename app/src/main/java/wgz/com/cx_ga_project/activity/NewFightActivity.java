@@ -1,10 +1,12 @@
 package wgz.com.cx_ga_project.activity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -83,6 +85,7 @@ public class NewFightActivity extends BaseActivity {
     @Bind(R.id.app_bar)
     AppBarLayout appBar;
     private HomeAdapter mAdapter;
+    private String JQid = "";
 
 
     @Override
@@ -106,6 +109,9 @@ public class NewFightActivity extends BaseActivity {
                     case R.id.fabtag_nearjq:
                         startActivity(new Intent(NewFightActivity.this, JQListActivity.class).putExtra("title", "nearjq"));
                         break;
+                    case R.id.fabtag_sjrJQ:
+                        startActivity(new Intent(NewFightActivity.this, JQListActivity.class).putExtra("title", "sjr"));
+                        break;
 
                 }
             }
@@ -127,9 +133,43 @@ public class NewFightActivity extends BaseActivity {
                 .subscribe(new Action1<Void>() {
                     @Override
                     public void call(Void aVoid) {
-                        StartFight();
+                        ShowDialog();
+
+
                     }
                 });
+
+    }
+
+    private void ShowDialog() {
+        final StringBuilder sb = new StringBuilder();
+        final String[] names = new String[]{"213","31212","4324","111","213","31212","4324","111","213","31212","4324","111"};
+        final boolean[] ifchacken = new boolean[]{false,false,false,false,false,false,false,false,false,false,false,false};
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("请选择出警人员:")
+                .setMultiChoiceItems(names, ifchacken, new DialogInterface.OnMultiChoiceClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which, boolean isChecked) {
+                        ifchacken[which] = isChecked;
+                    }
+                }).setPositiveButton("确认", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                for (int i = 0 ; i <ifchacken.length; i ++){
+                    if (ifchacken[i]){
+                        sb.append(names[i]);
+                    }
+                }
+                LogUtil.d("sb : "+sb.toString());
+               // StartFight();
+            }
+        }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        }).show();
+
 
     }
 
@@ -222,13 +262,6 @@ public class NewFightActivity extends BaseActivity {
     }
 
     private void initData() {
-        list2.add("东城派出所\n将该情况通告各派出所值班室、警务室");
-        list2.add("西城派出所\n将该情况通告各派出所值班室、警务室");
-        list2.add("开发区派出所\n将该情况通告各派出所值班室、警务室");
-        list2.add("东城派出所\n将该情况通告各派出所值班室、警务室");
-        list2.add("西城派出所\n将该情况通告各派出所值班室、警务室");
-        list2.add("开发区派出所\n将该情况通告各派出所值班室、警务室");
-
 
         app.jqAPIService.getJqOrbit("2016072100100000060")
                 .compose(RxUtil.<JqOrbit>applySchedulers())
@@ -278,6 +311,9 @@ public class NewFightActivity extends BaseActivity {
                             detilJqNature.setText(jqDetil.getResult().get(0).getJqnature());
                             detilJqType.setText(jqDetil.getResult().get(0).getJqtype());
                             detilJqBjtime.setText(jqDetil.getResult().get(0).getCallpolicetime());
+
+                            JQid = jqDetil.getResult().get(0).getJqid();
+
                         }
 
                     }
@@ -295,7 +331,7 @@ public class NewFightActivity extends BaseActivity {
 
                 break;
             case R.id.id_fight_talk:
-                startActivity(new Intent(NewFightActivity.this, ChatActivity.class));
+                startActivity(new Intent(NewFightActivity.this, ChatActivity.class).putExtra("jqid",JQid));
                 break;
         }
     }

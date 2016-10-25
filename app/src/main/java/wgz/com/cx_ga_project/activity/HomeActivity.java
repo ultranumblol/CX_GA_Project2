@@ -47,6 +47,7 @@ import wgz.com.cx_ga_project.R;
 import wgz.com.cx_ga_project.app;
 import wgz.com.cx_ga_project.base.Constant;
 import wgz.com.cx_ga_project.entity.AppVersion;
+import wgz.com.cx_ga_project.service.GetNewMsgService;
 import wgz.com.cx_ga_project.service.UpdataService;
 import wgz.com.cx_ga_project.util.SPBuild;
 import wgz.com.cx_ga_project.util.SPUtils;
@@ -139,7 +140,7 @@ public class HomeActivity extends AppCompatActivity
         username.setText((String) SPUtils.get(app.getApp().getApplicationContext(), Constant.USERNAME, "未知"));
         userdepartment.setText((String) SPUtils.get(app.getApp().getApplicationContext(), Constant.USEROFFICENAME, "未知"));
 
-
+       // startService(new Intent(this, GetNewMsgService.class));
         BadgeView badgeView = new BadgeView(this);
         //btn是控件
         badgeView.setTargetView(mToJiechujing);

@@ -134,7 +134,7 @@ public class ChatActivity extends BaseActivity {
     public void initView() {
         manager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         toolbar.setTitle("指挥通讯");
-        toolbar.setSubtitle("警情2134323");
+        toolbar.setSubtitle(getIntent().getStringExtra("jqid"));
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         recyclerview.setLayoutManager(new LinearLayoutManager(this));

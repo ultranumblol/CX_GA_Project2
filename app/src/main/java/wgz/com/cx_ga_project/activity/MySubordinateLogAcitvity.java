@@ -1,47 +1,46 @@
 package wgz.com.cx_ga_project.activity;
 
 import android.content.Intent;
-import android.support.constraint.ConstraintLayout;
+import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
-import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.NestedScrollView;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ScrollView;
 import android.widget.TextView;
+
+import com.jude.easyrecyclerview.EasyRecyclerView;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
 import butterknife.Bind;
-import butterknife.OnClick;
+import butterknife.ButterKnife;
 import rx.Observer;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
-import wgz.com.cx_ga_project.API.APIservice;
 import wgz.com.cx_ga_project.R;
+import wgz.com.cx_ga_project.adapter.AddPictureAdapter;
 import wgz.com.cx_ga_project.app;
 import wgz.com.cx_ga_project.base.BaseActivity;
-import wgz.com.cx_ga_project.calendarView.adapter.CalendarAdapter;
 import wgz.com.cx_ga_project.calendarView.adapter.TopViewPagerAdapter;
 import wgz.com.cx_ga_project.calendarView.utils.DateBean;
 import wgz.com.cx_ga_project.calendarView.utils.OtherUtils;
 import wgz.com.cx_ga_project.calendarView.view.CalendarView;
 import wgz.com.cx_ga_project.calendarView.view.ContainerLayout;
 import wgz.com.cx_ga_project.entity.WorkLog;
+import wgz.com.cx_ga_project.util.RxUtil;
 import wgz.com.cx_ga_project.util.SomeUtil;
 import wgz.datatom.com.utillibrary.util.LogUtil;
 
 import static wgz.com.cx_ga_project.base.Constant.CHECK_ONESSUMMARY;
-import static wgz.com.cx_ga_project.base.Constant.CHECK_ONESSUMMARY_BYDAYS;
+import static wgz.com.cx_ga_project.base.Constant.CHECK_ONESSUMMARYPIC_BYDAYS;
 
 /**
  * Created by wgz on 2016/8/9.
@@ -64,12 +63,18 @@ public class MySubordinateLogAcitvity extends BaseActivity {
     CoordinatorLayout mRootview;
     @Bind(R.id.fab_addworklog)
     FloatingActionButton fabAddworklog;
+    @Bind(R.id.worklog_pics)
+    EasyRecyclerView worklogPics;
     private List<View> calenderViews = new ArrayList<>();
     private List<WorkLog.Mylog> mylogs = new ArrayList<>();
+    private String policeid = "";
+    private AddPictureAdapter adapter;
+    List<String> paths = new ArrayList<>();
     /**
      * 日历向左或向右可翻动的天数
      */
     private int INIT_PAGER_INDEX = 120;
+
     @Override
     public int getLayoutId() {
         return R.layout.activity_work_log;
@@ -77,18 +82,29 @@ public class MySubordinateLogAcitvity extends BaseActivity {
 
     @Override
     public void initView() {
-        toolbarWprklog.setTitle("xxx的工作日志");
+        Intent intent = getIntent();
+        String name = intent.getStringExtra("policename");
+        policeid = intent.getStringExtra("policeid");
+        toolbarWprklog.setTitle(name + "的工作日志");
         fabAddworklog.setVisibility(View.GONE);
         LogUtil.d("xxx的日志开始初始化");
         setSupportActionBar(toolbarWprklog);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        worklogPics.setLayoutManager(new GridLayoutManager(this,3));
+        worklogPics.setAdapter(adapter=new AddPictureAdapter(this));
+
+
         initCalendar();
-        initData();
+       // initData();
     }
 
-    private void initData() {
-        final Calendar calendar = Calendar.getInstance();
-        app.apiService.getLogData(CHECK_ONESSUMMARY,"10001",OtherUtils.formatMonth(calendar.getTime()))
+    /**
+     * @param calendarView
+     */
+    private void initEventDays(final CalendarView calendarView) {
+      final Calendar calendar = Calendar.getInstance();
+        app.apiService.getLogData(CHECK_ONESSUMMARY, policeid, calendarView.getCurrentDay())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<WorkLog>() {
@@ -99,23 +115,31 @@ public class MySubordinateLogAcitvity extends BaseActivity {
 
                     @Override
                     public void onError(Throwable e) {
-                        LogUtil.d("getLogData error : "+e);
+                        LogUtil.d("getLogData error : " + e);
                     }
 
                     @Override
                     public void onNext(WorkLog workLog) {
-                        LogUtil.d("worklog : "+workLog.toString());
-                        if (workLog.getCode().toString().contains("200")){
+                        LogUtil.d("worklog : " + workLog.toString());
+                        if (workLog.getCode().toString().contains("200")) {
                             mylogs = workLog.getLogs();
-                            LogUtil.d("logs : "+mylogs.toString());
+                            LogUtil.d("logs : " + mylogs.toString());
                             String nowdate = OtherUtils.formatDate(calendar.getTime());
-                            app.apiService.getLogDataToDay("10001",nowdate)
+                            app.apiService.getLogDataToDay("10001", nowdate)
                                     .subscribeOn(Schedulers.io())
                                     .observeOn(AndroidSchedulers.mainThread())
                                     .subscribe(new Subscriber<WorkLog>() {
                                         @Override
                                         public void onCompleted() {
+                                            //设置含有事件的日期
+                                            List<String> eventDays = new ArrayList<>();//根据实际情况调整，传入时间格式(yyyy-MM)
+                                            for (int i = 0; i < mylogs.size(); i++) {
+                                                String date = mylogs.get(i).getTime().toString();
 
+                                                eventDays.add(OtherUtils.formatDate(SomeUtil.getStrToDate(date)));
+                                            }
+                                            // LogUtil.d("eventDays :" + eventDays.toString());
+                                            calendarView.setEventDays(eventDays);
                                         }
 
                                         @Override
@@ -125,39 +149,27 @@ public class MySubordinateLogAcitvity extends BaseActivity {
 
                                         @Override
                                         public void onNext(WorkLog workLog) {
-                                            if (workLog.getCode().equals(200)){
+                                            if (workLog.getCode().equals(200)) {
                                                 idWorkLogText.setText(workLog.getLogs().get(0).getSummary());
-                                            }else {
+                                            } else {
                                                 idWorkLogText.setText("没有工作记录");
                                             }
                                         }
                                     });
-                            initCalendar();
-                        }else {
-                            SomeUtil.showSnackBar(mRootview,"服务器错误！");
-                            initCalendar();
+                           // initCalendar();
+                        } else {
+                            SomeUtil.showSnackBar(mRootview, "服务器错误！");
+                            //initCalendar();
                         }
 
                     }
                 });
 
+
+
+
     }
 
-    /**
-     * @param calendarView
-     */
-    private void initEventDays(CalendarView calendarView) {
-
-        //设置含有事件的日期 1-9号
-        List<String> eventDays = new ArrayList<>();//根据实际情况调整，传入时间格式(yyyy-MM)
-        for (int i =0;i<mylogs.size();i++){
-            String date =  mylogs.get(i).getTime().toString();
-
-            eventDays.add( OtherUtils.formatDate(SomeUtil.getStrToDate(date)));
-        }
-        LogUtil.d("eventDays :" + eventDays.toString());
-        calendarView.setEventDays(eventDays);
-    }
     private void initCalendar() {
         Calendar calendar = Calendar.getInstance();
         txToday.setText(OtherUtils.formatDate(calendar.getTime()));
@@ -168,7 +180,7 @@ public class MySubordinateLogAcitvity extends BaseActivity {
         for (int i = 0; i < 3; i++) {
             CalendarView calendarView = new CalendarView(MySubordinateLogAcitvity.this, i, year, month);
 
-            calendarView.setOnCalendarClickListener(new MySubordinateLogAcitvity.OnMyCalendarClickerListener());
+            calendarView.setOnCalendarClickListener(new OnMyCalendarClickerListener());
             if (i == 0) {
                 container.setRowNum(calendarView.getColorDataPosition() / 7);
             }
@@ -177,14 +189,22 @@ public class MySubordinateLogAcitvity extends BaseActivity {
         final TopViewPagerAdapter adapter = new TopViewPagerAdapter(this, calenderViews, INIT_PAGER_INDEX, calendar);
         calenderLog.setAdapter(adapter);
         calenderLog.setCurrentItem(INIT_PAGER_INDEX);
-        calenderLog.addOnPageChangeListener(new MySubordinateLogAcitvity.OnMyViewPageChangeListener());
+        calenderLog.addOnPageChangeListener(new OnMyViewPageChangeListener());
         calenderLog.post(new Runnable() {
             @Override
             public void run() {
-                initEventDays((CalendarView) adapter.getChildView(0));
+                initEventDays( adapter.getChildView(0));
             }
         });
     }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        // TODO: add setContentView(...) invocation
+        ButterKnife.bind(this);
+    }
+
     /**
      * 点击某个日期回调
      */
@@ -193,7 +213,43 @@ public class MySubordinateLogAcitvity extends BaseActivity {
         public void onCalendarClick(int position, DateBean dateBean) {
             txToday.setText(OtherUtils.formatDate(dateBean.getDate()));
 
-            app.apiService.getLogDataToDay("10001",OtherUtils.formatDate(dateBean.getDate()))
+            //查询日志图片内容
+            app.apiService.getLogPicData(CHECK_ONESSUMMARYPIC_BYDAYS, SomeUtil.getUserId(), OtherUtils.formatDate(dateBean.getDate()))
+                    .compose(RxUtil.<WorkLog>applySchedulers())
+                    .subscribe(new Subscriber<WorkLog>() {
+                        @Override
+                        public void onCompleted() {
+                            adapter.clear();
+                            adapter.addAll(paths);
+                            LogUtil.d("显示图片");
+                        }
+
+                        @Override
+                        public void onError(Throwable e) {
+
+                        }
+
+                        @Override
+                        public void onNext(WorkLog workLog) {
+                            paths.clear();
+                            if (workLog.getCode().equals(200)) {
+                                for (int i = 0; i < workLog.getLogs().size(); i++) {
+                                    paths.add(workLog.getLogs().get(i).getSummary_pic());
+                                }
+                                LogUtil.d("PIC path :" + paths.toString());
+
+                                // idWorkLogText.setText(workLog.getLogs().get(0).getSummary());
+                                //id = workLog.getLogs().get(0).getId();
+                            } else {
+                                //idWorkLogText.setText("没有工作记录");
+                                LogUtil.d("没有工作日志图片");
+                            }
+                        }
+                    });
+
+
+            //查询日志文字内容
+            app.apiService.getLogDataToDay(SomeUtil.getUserId(), OtherUtils.formatDate(dateBean.getDate()))
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(new Subscriber<WorkLog>() {
@@ -209,9 +265,11 @@ public class MySubordinateLogAcitvity extends BaseActivity {
 
                         @Override
                         public void onNext(WorkLog workLog) {
-                            if (workLog.getCode().equals(200)){
+                            LogUtil.d("worklogByday code: " + workLog.getCode().toString());
+                            if (workLog.getCode().equals(200)) {
                                 idWorkLogText.setText(workLog.getLogs().get(0).getSummary());
-                            }else {
+                                LogUtil.d("worklogByday : " + workLog.getLogs().toString());
+                            } else {
                                 idWorkLogText.setText("没有工作记录");
                             }
                         }
@@ -220,6 +278,7 @@ public class MySubordinateLogAcitvity extends BaseActivity {
 
         }
     }
+
     /**
      * 日期滚动时回调
      */
@@ -227,12 +286,13 @@ public class MySubordinateLogAcitvity extends BaseActivity {
         @Override
         public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
         }
+
         @Override
         public void onPageSelected(int position) {
             final CalendarView calendarView = (CalendarView) calenderViews.get(position % 3);
             txToday.setText(calendarView.getCurrentDay());
-            LogUtil.d("当前月份 ： " +calendarView.getCurrentDay());
-            app.apiService.getLogData(CHECK_ONESSUMMARY,"10001",calendarView.getCurrentDay())
+            LogUtil.d("当前月份 ： " + calendarView.getCurrentDay());
+            app.apiService.getLogData(CHECK_ONESSUMMARY, policeid, calendarView.getCurrentDay())
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(new Subscriber<WorkLog>() {
@@ -248,12 +308,12 @@ public class MySubordinateLogAcitvity extends BaseActivity {
 
                         @Override
                         public void onNext(WorkLog workLog) {
-                            if (workLog.getCode().toString().contains("200")){
+                            if (workLog.getCode().toString().contains("200")) {
                                 mylogs = workLog.getLogs();
-                                LogUtil.d("logs : "+mylogs.toString());
+                                LogUtil.d("logs : " + mylogs.toString());
                                 initEventDays(calendarView);
-                            }else {
-                                SomeUtil.showSnackBar(mRootview,"没有记录！");
+                            } else {
+                                SomeUtil.showSnackBar(mRootview, "没有记录！");
                             }
 
                             initEventDays(calendarView);
@@ -267,17 +327,20 @@ public class MySubordinateLogAcitvity extends BaseActivity {
 
 
         }
+
         @Override
         public void onPageScrollStateChanged(int state) {
 
         }
     }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.subordinate, menu);
         return true;
     }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
@@ -287,7 +350,7 @@ public class MySubordinateLogAcitvity extends BaseActivity {
         //noinspection SimplifiableIfStatement
         if (id == R.id.Statistics) {
             // TODO: 2016/8/9 统计详情功能
-            SomeUtil.showSnackBar(mRootview,"开发中。。。");
+            SomeUtil.showSnackBar(mRootview, "开发中。。。");
             return true;
         }
         if (id == android.R.id.home) {

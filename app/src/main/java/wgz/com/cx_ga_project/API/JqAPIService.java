@@ -242,7 +242,7 @@ public interface JqAPIService {
      */
     @FormUrlEncoded
     @POST("appjqreport/getNearHisJq")
-    Observable<String> getNearHisJq(@Field("gps_e") String gps_e,
+    Observable<JQDetil> getNearHisJq(@Field("gps_e") String gps_e,
                                     @Field("gps_n") String gps_n,
                                     @Field("page") String page,
                                     @Field("perpage") String perpage);
@@ -264,4 +264,14 @@ public interface JqAPIService {
     @FormUrlEncoded
     @POST("appjqreport/getPoliceJqInfo")
     Observable<String> getPoliceJqInfo(@Field("policeid") String policeid);
+
+
+    /**
+     * 获取某人的上下级关系
+     * @param policeid
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("apponduty/getSupAndSub")
+    Observable<String> getSupAndSub(@Field("policeid") String policeid);
 }

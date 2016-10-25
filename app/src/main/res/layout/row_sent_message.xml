@@ -24,7 +24,6 @@
             android:layout_alignParentRight="true"
             android:layout_alignParentTop="true"
             android:layout_marginRight="5dp"
-            android:background="@drawable/head"
             android:scaleType="fitXY" />
 
        <TextView

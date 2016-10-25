@@ -112,7 +112,7 @@
                     <com.jude.easyrecyclerview.EasyRecyclerView
                         android:id="@+id/worklog_pics"
                         android:layout_width="match_parent"
-                        android:layout_height="80dp"
+                        android:layout_height="220dp"
                         ></com.jude.easyrecyclerview.EasyRecyclerView>
 
 
