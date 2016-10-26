@@ -18,6 +18,7 @@ public class Constant {
     public static final String USERID = "userID";
     public static final String USERNAME = "userName";
     public static final String USERHEAD = "userHead";
+    public static final String NEWJQCOUNT = "jqcount";
     public static final String USERDATRIXID = "userDatrixID";
     public static final String USERPASSWORD = "userPassWord";
     public static final String USERPHONENUM = "userPhoneNum";

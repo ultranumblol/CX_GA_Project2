@@ -1,5 +1,7 @@
 package wgz.com.cx_ga_project.util;
 
+import android.app.ActivityManager;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
@@ -27,6 +29,8 @@ import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import wgz.com.cx_ga_project.R;
+import wgz.com.cx_ga_project.activity.ChatActivity;
+import wgz.com.cx_ga_project.activity.HomeActivity;
 import wgz.com.cx_ga_project.app;
 import wgz.com.cx_ga_project.base.Constant;
 import wgz.datatom.com.utillibrary.util.LogUtil;
@@ -55,6 +59,7 @@ public class SomeUtil {
                     @Override
                     public void onClick(View v) {
                         Intent intent = new Intent(Settings.ACTION_SETTINGS);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
                         context.startActivity(intent);
                     }
                 })
@@ -238,6 +243,20 @@ public class SomeUtil {
                 .into(view);
 
     }
+    //判断一个activity是否在运行
+    public  static  boolean isActivityRunning(Context context,Class clazz){
+        ActivityManager activityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+        List<ActivityManager.RunningTaskInfo> info = activityManager.getRunningTasks(1);
+        if (info!=null&&info.size()>0){
+            ComponentName component = info.get(0).topActivity;
+            if (clazz.getName().equals(component.getClassName())){
+                return true;
+            }
+        }
+
+        return false;
+    }
+
 
 
     public static String getSysTime(){
@@ -254,5 +273,10 @@ public class SomeUtil {
     public static String getUserId(){
 
         return (String) SPUtils.get(app.getApp().getApplicationContext(), Constant.USERID, "未知");
+    }
+
+    public static  int getNewJQMSgCount(){
+        return (int) SPUtils.get(app.getApp().getApplicationContext(),Constant.NEWJQCOUNT, 0);
+
     }
 }

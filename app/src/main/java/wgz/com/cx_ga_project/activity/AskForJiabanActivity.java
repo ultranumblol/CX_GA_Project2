@@ -33,6 +33,7 @@ import wgz.com.cx_ga_project.base.BaseActivity;
 import com.jakewharton.rxbinding.view.RxView;
 
 import wgz.com.cx_ga_project.base.Constant;
+import wgz.com.cx_ga_project.base.RxBus;
 import wgz.com.cx_ga_project.util.SPUtils;
 import wgz.com.cx_ga_project.util.SomeUtil;
 import wgz.datatom.com.utillibrary.util.LogUtil;
@@ -167,10 +168,11 @@ public class AskForJiabanActivity extends BaseActivity {
                         public void onNext(String s) {
                             LogUtil.d("result:"+s);
                             if (s.contains("200")){
+                                RxBus.getDefault().post("jiabanflush");
                                 SomeUtil.showSnackBar(rootview,"提交申请成功！").setCallback(new Snackbar.Callback() {
                                     @Override
                                     public void onDismissed(Snackbar snackbar, int event) {
-                                        setResult(1001,new Intent(AskForJiabanActivity.this,MyWorkApplyActivity.class).putExtra("result","refresh"));
+                                       // setResult(1001,new Intent(AskForJiabanActivity.this,MyWorkApplyActivity.class).putExtra("result","refresh"));
                                         finish();
                                     }
                                 });

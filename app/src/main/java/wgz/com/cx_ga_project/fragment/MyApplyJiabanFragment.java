@@ -21,8 +21,10 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import rx.Observable;
 import rx.Observer;
+import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 
+import rx.functions.Action1;
 import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 import wgz.com.cx_ga_project.R;
@@ -35,6 +37,7 @@ import wgz.com.cx_ga_project.app;
 import wgz.com.cx_ga_project.base.BaseFragment;
 
 import wgz.com.cx_ga_project.base.Constant;
+import wgz.com.cx_ga_project.base.RxBus;
 import wgz.com.cx_ga_project.entity.Apply;
 import wgz.com.cx_ga_project.util.SPUtils;
 import wgz.datatom.com.utillibrary.util.LogUtil;
@@ -52,6 +55,7 @@ public class MyApplyJiabanFragment extends BaseFragment implements SwipeRefreshL
     ApplyAdapter adapter;
     List<Apply.Result> list = new ArrayList<Apply.Result>();
     private Handler handler = new Handler();
+    private Subscription rxSubscription;
 
     @Override
     public void initview(View view) {
@@ -103,6 +107,14 @@ public class MyApplyJiabanFragment extends BaseFragment implements SwipeRefreshL
 
         recyclerView.setRefreshListener(this);
         initData();
+        rxSubscription = RxBus.getDefault().toObservable(String.class)
+                .subscribe(new Action1<String>() {
+                    @Override
+                    public void call(String s) {
+                        if (s.equals("jiabanflush"))
+                        onRefresh();
+                    }
+                });
 
     }
     @Override
@@ -125,7 +137,7 @@ public class MyApplyJiabanFragment extends BaseFragment implements SwipeRefreshL
                 adapter.clear();
                initData();
             }
-        }, 2000);
+        }, 1500);
     }
 
     /**

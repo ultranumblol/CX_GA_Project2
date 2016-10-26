@@ -134,7 +134,7 @@ public class NewFightActivity extends BaseActivity {
                     @Override
                     public void call(Void aVoid) {
                         ShowDialog();
-
+                        //StartFight();
 
                     }
                 });
@@ -143,8 +143,17 @@ public class NewFightActivity extends BaseActivity {
 
     private void ShowDialog() {
         final StringBuilder sb = new StringBuilder();
-        final String[] names = new String[]{"213","31212","4324","111","213","31212","4324","111","213","31212","4324","111"};
-        final boolean[] ifchacken = new boolean[]{false,false,false,false,false,false,false,false,false,false,false,false};
+        final String[] names = new String[]{"213","31212","4324","111","213","31212","4324"};
+        final boolean[] ifchacken = new boolean[]{false,false,false,false,false,false,false};
+        final String[] ids = new String[]{"030021","030022","030023","030283","030025","030026","030027"};
+        for (int i = 0 ; i <names.length ; i++){
+            if (SomeUtil.getUserId().equals(ids[i])){
+                ifchacken[i] = true;
+            }
+
+        }
+
+
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("请选择出警人员:")
                 .setMultiChoiceItems(names, ifchacken, new DialogInterface.OnMultiChoiceClickListener() {
@@ -157,7 +166,7 @@ public class NewFightActivity extends BaseActivity {
             public void onClick(DialogInterface dialog, int which) {
                 for (int i = 0 ; i <ifchacken.length; i ++){
                     if (ifchacken[i]){
-                        sb.append(names[i]);
+                        sb.append(ids[i]+"&");
                     }
                 }
                 LogUtil.d("sb : "+sb.toString());

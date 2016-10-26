@@ -111,7 +111,7 @@ public class MyWorkApplyActivity extends BaseActivity {
 
     }
 
-    @Override
+   /* @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == 1001) {
             MyApplyJiabanFragment myApplyJiabanFragment = (MyApplyJiabanFragment) fragments.get(0);
@@ -122,5 +122,5 @@ public class MyWorkApplyActivity extends BaseActivity {
         }
 
 
-    }
+    }*/
 }

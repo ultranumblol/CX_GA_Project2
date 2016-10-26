@@ -10,6 +10,7 @@ import wgz.com.cx_ga_project.entity.ChuJingRen;
 import wgz.com.cx_ga_project.entity.JQDetil;
 import wgz.com.cx_ga_project.entity.JqCallBack;
 import wgz.com.cx_ga_project.entity.JqOrbit;
+import wgz.com.cx_ga_project.entity.NewJQPush;
 
 /**
  * Created by wgz on 2016/8/31.
@@ -274,4 +275,16 @@ public interface JqAPIService {
     @FormUrlEncoded
     @POST("apponduty/getSupAndSub")
     Observable<String> getSupAndSub(@Field("policeid") String policeid);
+
+
+    /**
+     * 获取新警情消息
+     * @param policeid
+     * @param depid  部门id 532301590000
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("appjqreport/msgPush")
+    Observable<NewJQPush> jqmsgPush(@Field("policeid") String policeid,
+                                    @Field("depid") String depid);
 }
