@@ -191,7 +191,7 @@ public class MyApplyJiabanFragment extends BaseFragment implements SwipeRefreshL
         });
 
     }
-    @Override
+    /*@Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (data == null)
             return;
@@ -203,5 +203,5 @@ public class MyApplyJiabanFragment extends BaseFragment implements SwipeRefreshL
 
             }
         }
-    }
+    }*/
 }

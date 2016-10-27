@@ -41,6 +41,9 @@ public class JQListActivity extends BaseActivity {
     private int page = 1;
     private String title = "";
     private List<String> list = new ArrayList<>();
+    private List<CallerInfo.Resjq> bjrdata = new ArrayList<>();
+    private List<JQDetil.JQResult> sjrdata = new ArrayList<>();
+    private List<JQDetil.JQResult> nearjqdata = new ArrayList<>();
     @Override
     public int getLayoutId() {
         return R.layout.activity_jqlist;
@@ -83,10 +86,7 @@ public class JQListActivity extends BaseActivity {
                     .subscribe(new Subscriber<JQDetil>() {
                         @Override
                         public void onCompleted() {
-                            list.add("1");
-                            list.add("2");
-                            list.add("3");
-                            adapter.addAll(list);
+
                         }
 
                         @Override
@@ -98,6 +98,9 @@ public class JQListActivity extends BaseActivity {
                         public void onNext(JQDetil jqDetil) {
                            // String url = appVersion.getRes().get(0).getApkUrl();
                             //url.replaceAll("\\\\","");
+                            nearjqdata  = jqDetil.getResult();
+                            adapter.addAll(nearjqdata);
+                            LogUtil.d("nearjq : "+jqDetil.getResult().toString());
                         }
                     });
 
@@ -110,10 +113,7 @@ public class JQListActivity extends BaseActivity {
                     .subscribe(new Subscriber<CallerInfo>() {
                         @Override
                         public void onCompleted() {
-                            list.add("1");
-                            list.add("2");
-                            list.add("3");
-                            adapter.addAll(list);
+
                         }
 
                         @Override
@@ -123,22 +123,21 @@ public class JQListActivity extends BaseActivity {
 
                         @Override
                         public void onNext(CallerInfo callerInfo) {
-                            LogUtil.d("callerinfo resutl : "+callerInfo.toString());
+                            LogUtil.d("callerinfo resutl : "+callerInfo.getResjq().toString());
+                            bjrdata = callerInfo.getResjq();
+                            adapter.addAll(bjrdata);
                         }
                     });
         }
-            //toolbar.setTitle("报警人关联警情");
+
         else if (title.equals("sjr")){
             //涉警人关联警情
             app.jqAPIService.getPoliceJqInfo(SomeUtil.getUserId())
-                    .compose(RxUtil.<String>applySchedulers())
-                    .subscribe(new Subscriber<String>() {
+                    .compose(RxUtil.<JQDetil>applySchedulers())
+                    .subscribe(new Subscriber<JQDetil>() {
                         @Override
                         public void onCompleted() {
-                            list.add("1");
-                            list.add("2");
-                            list.add("3");
-                            adapter.addAll(list);
+
                         }
 
                         @Override
@@ -147,22 +146,22 @@ public class JQListActivity extends BaseActivity {
                         }
 
                         @Override
-                        public void onNext(String s) {
+                        public void onNext(JQDetil s) {
+                            sjrdata = s.getResult();
+                            adapter.addAll(sjrdata);
                             LogUtil.d("getPoliceJqInfo result: "+s.toString());
                         }
                     });
         }
         else if (title.equals("jqhistory")){
-            //涉警人关联警情
+            //历史警情
             app.jqAPIService.getPoliceJqInfo(SomeUtil.getUserId())
-                    .compose(RxUtil.<String>applySchedulers())
-                    .subscribe(new Subscriber<String>() {
+                    .compose(RxUtil.<JQDetil>applySchedulers())
+                    .subscribe(new Subscriber<JQDetil>() {
                         @Override
                         public void onCompleted() {
-                            list.add("1");
-                            list.add("2");
-                            list.add("3");
-                            adapter.addAll(list);
+
+
                         }
 
                         @Override
@@ -171,8 +170,9 @@ public class JQListActivity extends BaseActivity {
                         }
 
                         @Override
-                        public void onNext(String s) {
-                            LogUtil.d("getPoliceJqInfo result: "+s.toString());
+                        public void onNext(JQDetil s) {
+                            sjrdata = s.getResult();
+                            adapter.addAll(sjrdata);
                         }
                     });
         }

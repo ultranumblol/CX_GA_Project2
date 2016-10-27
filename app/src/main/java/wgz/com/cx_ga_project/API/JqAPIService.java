@@ -8,6 +8,7 @@ import wgz.com.cx_ga_project.entity.CallerInfo;
 import wgz.com.cx_ga_project.entity.ChatMsg;
 import wgz.com.cx_ga_project.entity.ChuJingRen;
 import wgz.com.cx_ga_project.entity.JQDetil;
+import wgz.com.cx_ga_project.entity.JQOnDutyPeople;
 import wgz.com.cx_ga_project.entity.JqCallBack;
 import wgz.com.cx_ga_project.entity.JqOrbit;
 import wgz.com.cx_ga_project.entity.NewJQPush;
@@ -264,7 +265,7 @@ public interface JqAPIService {
      */
     @FormUrlEncoded
     @POST("appjqreport/getPoliceJqInfo")
-    Observable<String> getPoliceJqInfo(@Field("policeid") String policeid);
+    Observable<JQDetil> getPoliceJqInfo(@Field("policeid") String policeid);
 
 
     /**
@@ -287,4 +288,17 @@ public interface JqAPIService {
     @POST("appjqreport/msgPush")
     Observable<NewJQPush> jqmsgPush(@Field("policeid") String policeid,
                                     @Field("depid") String depid);
+
+
+    /**
+     * 获取某警情值班人员
+     * @param depid departmentId
+     * @param stime sendTime
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("apponduty/getDepOnduty")
+    Observable<JQOnDutyPeople> getPeoOnduty(@Field("depid") String depid,
+                                            @Field("stime") String stime);
+
 }

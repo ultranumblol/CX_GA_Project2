@@ -262,6 +262,29 @@ public class Resjq {
     @Expose
     private String talktime;
 
+    @Override
+    public String toString() {
+        return "Resjq{" +
+                "briefcase='" + briefcase + '\'' +
+                ", jqgps=" + jqgps +
+                ", jqlaiyuan=" + jqlaiyuan +
+                ", gpsE=" + gpsE +
+                ", gpsN=" + gpsN +
+                ", jqid='" + jqid + '\'' +
+                ", callpolicetime='" + callpolicetime + '\'' +
+                ", jqaddr='" + jqaddr + '\'' +
+                ", callingnumber='" + callingnumber + '\'' +
+                ", callednumber='" + callednumber + '\'' +
+                ", jqtype='" + jqtype + '\'' +
+                ", jqnature='" + jqnature + '\'' +
+                ", propertyClassification=" + propertyClassification +
+                ", alarmperson='" + alarmperson + '\'' +
+                ", attendant='" + attendant + '\'' +
+                ", ringingduration='" + ringingduration + '\'' +
+                ", talktime='" + talktime + '\'' +
+                '}';
+    }
+
     /**
      *
      * @return

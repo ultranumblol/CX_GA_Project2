@@ -89,6 +89,7 @@
         <activity
             android:name=".activity.LoginActivity"
             android:label="登录"
+            android:theme="@style/AppTheme.NoActionBar"
             android:screenOrientation="portrait" />
         <activity
             android:name=".base.BaseActivity"

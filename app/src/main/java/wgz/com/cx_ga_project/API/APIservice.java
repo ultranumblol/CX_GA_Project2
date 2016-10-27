@@ -328,6 +328,18 @@ public interface APIservice {
     Observable<UserInfo> login(@Field("username") String username,
                                @Field("pwd") String pwd);
 
+
+    /**
+     * 登录2
+     * @param username
+     * @param pwd
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("http://192.168.1.100:8004/sysadmin/panel/newlogin.php")
+    Observable<String> login2(@Field("user_name") String username,
+                               @Field("password") String pwd);
+
     /**
      * 修改用户密码
      * @param username

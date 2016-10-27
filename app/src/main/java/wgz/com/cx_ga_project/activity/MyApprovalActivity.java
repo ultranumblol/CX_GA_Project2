@@ -84,7 +84,7 @@ public class MyApprovalActivity extends BaseActivity {
     }
 
 
-    @Override
+   /* @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == 1002) {
             MyapprovalFragment myapprovalFragment = (MyapprovalFragment) fragments.get(0);
@@ -95,5 +95,5 @@ public class MyApprovalActivity extends BaseActivity {
         }
 
 
-    }
+    }*/
 }
