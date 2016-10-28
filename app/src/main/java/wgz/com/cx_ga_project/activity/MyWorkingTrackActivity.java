@@ -40,7 +40,7 @@ public class MyWorkingTrackActivity extends BaseActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter = new TimelineAdapter(this));
         initData();
-       adapter.addAll(list);
+        adapter.addAll(list);
     }
     private void initData() {
         list.add("东城派出所\n将该情况通告各派出所值班室、警务室");

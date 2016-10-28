@@ -36,8 +36,8 @@
 
             <ImageView
                 android:id="@+id/iv_sendPicture"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
                 android:background="@drawable/chatto_bg"
             	android:padding="17dp"
                 android:scaleType="fitCenter"

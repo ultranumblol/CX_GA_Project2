@@ -22,16 +22,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.Bind;
-import butterknife.ButterKnife;
 import rx.Subscriber;
 import wgz.com.cx_ga_project.R;
 import wgz.com.cx_ga_project.adapter.JQAdapter;
 import wgz.com.cx_ga_project.adapter.MyRecyclerArrayAdapter;
 import wgz.com.cx_ga_project.app;
 import wgz.com.cx_ga_project.base.BaseActivity;
-import wgz.com.cx_ga_project.base.Constant;
+import wgz.com.cx_ga_project.entity.NewJQ;
 import wgz.com.cx_ga_project.util.RxUtil;
-import wgz.com.cx_ga_project.util.SPBuild;
 import wgz.com.cx_ga_project.util.SomeUtil;
 import wgz.datatom.com.utillibrary.util.LogUtil;
 
@@ -51,6 +49,8 @@ public class StartNewFightActivity extends BaseActivity {
     private JQAdapter adapter;
     private List<String> list = new ArrayList<>();
     private JQReceiver receiver;
+    private List<NewJQ.NewjqRe> data = new ArrayList<>();
+
     @Override
     public int getLayoutId() {
         return R.layout.activity_start_new_fight;
@@ -76,15 +76,63 @@ public class StartNewFightActivity extends BaseActivity {
             }
         });
         initdata();
-        adapter.addAll(list);
 
 
     }
 
     private void initdata() {
-        list.add("1");
-        list.add("2");
-        list.add("3");
+
+        app.jqAPIService.getNewJqlist(SomeUtil.getUserId(),"532301000000")
+                .compose(RxUtil.<String>applySchedulers())
+                .subscribe(new Subscriber<String>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        LogUtil.d("newjq error:" +e.toString());
+                    }
+
+                    @Override
+                    public void onNext(String newJQ) {
+                        LogUtil.d("newjq1 :" +newJQ);
+                       /* if (newJQ.getCode().equals(200)) {
+                            data = newJQ.getRes();
+                            adapter.addAll(data);
+                        } else {
+                            SomeUtil.showSnackBar(rootview, "没有新警情!");
+                        }*/
+                    }
+                });
+        app.jqAPIService.getNewJqlist1(SomeUtil.getUserId())
+                .compose(RxUtil.<NewJQ>applySchedulers())
+                .subscribe(new Subscriber<NewJQ>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        LogUtil.d("newjq2 error:" +e.toString());
+                    }
+
+                    @Override
+                    public void onNext(NewJQ newJQ) {
+                        LogUtil.d("newjq2 :" +newJQ.getRes().toString());
+                        if (newJQ.getCode().equals(200)) {
+                            data = newJQ.getRes();
+                            adapter.addAll(data);
+                        } else {
+                            SomeUtil.showSnackBar(rootview, "没有新警情!");
+                        }
+                    }
+                });
+
+
+
     }
 
 
@@ -96,9 +144,10 @@ public class StartNewFightActivity extends BaseActivity {
         IntentFilter filter = new IntentFilter();
         filter.addAction("service.JQpush");
         registerReceiver(receiver, filter);
-       // LogUtil.d("广播注册成功！");
+        // LogUtil.d("广播注册成功！");
 
     }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -115,7 +164,7 @@ public class StartNewFightActivity extends BaseActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.jq_history) {
-           // SomeUtil.showSnackBar(rootview, "开发中。。。");
+            // SomeUtil.showSnackBar(rootview, "开发中。。。");
             startActivity(new Intent(StartNewFightActivity.this, JQListActivity.class).putExtra("title", "jqhistory"));
             return true;
         }
@@ -124,13 +173,25 @@ public class StartNewFightActivity extends BaseActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        unregisterReceiver(receiver);
+    }
+
+    private void getNewJq() {
+
+
+    }
+
     private class JQReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
             Bundle bundle = intent.getExtras();
             String msg = bundle.getString("jq");
             if (msg.equals("newjq")) {
-                NotificationManager manager = (NotificationManager)context.getSystemService(Context.NOTIFICATION_SERVICE);
+                NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
                 Uri ringUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
                 // 通过Notification.Builder来创建通知，注意API Level
                 // API16之后才支持
@@ -146,15 +207,6 @@ public class StartNewFightActivity extends BaseActivity {
 
             }
         }
-    }
-    @Override
-    protected void onPause() {
-        super.onPause();
-        unregisterReceiver(receiver);
-    }
-    private void getNewJq() {
-
-
     }
 
 }

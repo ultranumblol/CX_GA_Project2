@@ -2,6 +2,7 @@ package wgz.com.cx_ga_project.activity;
 
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v7.widget.Toolbar;
 import android.widget.LinearLayout;
 
@@ -18,6 +19,7 @@ import rx.schedulers.Schedulers;
 import wgz.com.cx_ga_project.R;
 import wgz.com.cx_ga_project.app;
 import wgz.com.cx_ga_project.base.BaseActivity;
+import wgz.com.cx_ga_project.base.RxBus;
 import wgz.com.cx_ga_project.util.SomeUtil;
 import wgz.datatom.com.utillibrary.util.LogUtil;
 
@@ -73,7 +75,14 @@ public class UpLoadSJCarActivity extends BaseActivity {
                     @Override
                     public void onNext(String s) {
                         LogUtil.d("result:"+s);
-                        SomeUtil.showSnackBar(rootview,"提交成功！");
+                        RxBus.getDefault().post("sjcarflush");
+
+                        SomeUtil.showSnackBar(rootview,"提交成功！").setCallback(new Snackbar.Callback() {
+                            @Override
+                            public void onDismissed(Snackbar snackbar, int event) {
+                                finish();
+                            }
+                        });
                     }
                 });
     }

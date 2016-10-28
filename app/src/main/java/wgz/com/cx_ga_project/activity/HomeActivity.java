@@ -188,7 +188,7 @@ public class HomeActivity extends AppCompatActivity
                 LogUtil.d("count :"+SomeUtil.getNewJQMSgCount());
                 BadgeViewCount(0);
                 startActivity(new Intent(HomeActivity.this, StartNewFightActivity.class).putExtra("title", "new"));
-                //Snackbar.make(homeRootView, "开发中。。。", Snackbar.LENGTH_SHORT).show();
+
                 break;
         }
     }

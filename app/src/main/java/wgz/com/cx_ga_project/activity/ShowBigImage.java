@@ -16,6 +16,7 @@ import wgz.com.cx_ga_project.view.PinchImageView;
 
 
 /**
+ * 查看大图
  * Created by wgz on 2016/10/21.
  */
 

@@ -133,7 +133,7 @@ public class GetNewMsgService extends Service {
                         if (newchatData.size()>0){
                             ifHasNew = true;
 
-                        }else ifHasNew = true;
+                        }else ifHasNew = false;
                     }
                 });
     }

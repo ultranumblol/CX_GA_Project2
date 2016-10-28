@@ -324,6 +324,37 @@ public class ChatActivity extends BaseActivity {
                     }
                 });
     }
+    private void getPicVideoNewmsg() {
+        LogUtil.d("获取新消息");
+        chatData.clear();
+        app.jqAPIService.GetNewMsg("213213123", "1231231233").subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<ChatMsg>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onNext(ChatMsg chatMsg) {
+
+                        adapter.remove(adapter.getCount() - 1);
+                        LogUtil.d("chatNewmsg:" + chatMsg.getRes().size());
+                        chatData = chatMsg.getRes();
+                        adapter.addAll(chatData);
+                        recyclerview.scrollToPosition(adapter.getCount() - 1);
+                        hideKeyboard();
+
+                    }
+                });
+    }
+
+
 
 
     private void Sendmsg() {
@@ -378,8 +409,9 @@ public class ChatActivity extends BaseActivity {
                                 //getNewmsg();
                                 //LogUtil.d("recyclerview count:"+recyclerview.getChildCount());
                                 //recyclerview.getChildCount();
-                                adapter.remove(adapter.getCount() - 1);
-                                getNewmsg();
+
+                                //adapter.remove(adapter.getCount() - 1);
+                                getPicVideoNewmsg();
                             }
 
                             @Override
@@ -422,8 +454,8 @@ public class ChatActivity extends BaseActivity {
                                 //getNewmsg();
                                 //LogUtil.d("recyclerview count:"+recyclerview.getChildCount());
                                 //recyclerview.getChildCount();
-                                adapter.remove(adapter.getCount() - 1);
-                                getNewmsg();
+                                //adapter.remove(adapter.getCount() - 1);
+                                getPicVideoNewmsg();
                             }
 
                             @Override

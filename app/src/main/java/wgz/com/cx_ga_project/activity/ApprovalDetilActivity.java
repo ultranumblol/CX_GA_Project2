@@ -201,7 +201,7 @@ public class ApprovalDetilActivity extends BaseActivity {
 
                                                     finish();
                                                 }
-                                            }).show();
+                                            });
 
                                         } else {
                                             SomeUtil.showSnackBar(detilRoot, "服务器错误！请稍后再试");

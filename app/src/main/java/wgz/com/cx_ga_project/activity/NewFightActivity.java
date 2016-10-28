@@ -234,6 +234,10 @@ public class NewFightActivity extends BaseActivity {
                                         sb.append(lid[i] + "&");
                                     }
                                 }
+                                addCjPerson(lid);
+
+
+
                                 LogUtil.d("sb : " + sb.toString());
                                 // StartFight();
                             }
@@ -245,6 +249,19 @@ public class NewFightActivity extends BaseActivity {
                         }).show();
                     }
                 });
+    }
+
+    private void addCjPerson(String[] lid) {
+        app.jqAPIService.addCjPerson("","532301000000",lid)
+                .compose(RxUtil.<String>applySchedulers())
+                .subscribe(new Action1<String>() {
+                    @Override
+                    public void call(String s) {
+                        LogUtil.d("addcjperson result : "+s);
+                    }
+                });
+
+
     }
 
 

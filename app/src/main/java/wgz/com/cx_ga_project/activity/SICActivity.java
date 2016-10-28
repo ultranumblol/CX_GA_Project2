@@ -27,8 +27,6 @@ public class SICActivity extends BaseActivity {
     CardView sicPicInput;
     @Bind(R.id.sic_video_input)
     CardView sicVideoInput;
-    @Bind(R.id.sic_sound_input)
-    CardView sicSoundInput;
     @Bind(R.id.sic_rootview)
     LinearLayout rootview;
 

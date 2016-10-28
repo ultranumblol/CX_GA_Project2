@@ -3,6 +3,7 @@ package wgz.com.cx_ga_project.API;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.POST;
+import retrofit2.http.Query;
 import rx.Observable;
 import wgz.com.cx_ga_project.entity.CallerInfo;
 import wgz.com.cx_ga_project.entity.ChatMsg;
@@ -11,6 +12,7 @@ import wgz.com.cx_ga_project.entity.JQDetil;
 import wgz.com.cx_ga_project.entity.JQOnDutyPeople;
 import wgz.com.cx_ga_project.entity.JqCallBack;
 import wgz.com.cx_ga_project.entity.JqOrbit;
+import wgz.com.cx_ga_project.entity.NewJQ;
 import wgz.com.cx_ga_project.entity.NewJQPush;
 
 /**
@@ -20,9 +22,12 @@ import wgz.com.cx_ga_project.entity.NewJQPush;
 public interface JqAPIService {
     /**
      * 上传警情详情
-     * 通过 MultipartBody和@body作为参数来上传
      *
-     * @return 状态信息
+     * @param taskid
+     * @param policeid
+     * @param content
+     * @param time
+     * @return
      */
     @FormUrlEncoded
     @POST("appjqreport/addJqReport")
@@ -34,7 +39,7 @@ public interface JqAPIService {
     );
 
     /**
-     * 添加涉警 车辆信息回传
+     * 添加涉警车辆信息回传
      *
      * @param jqid                   警情id
      * @param taskid                 taskid
@@ -236,6 +241,7 @@ public interface JqAPIService {
 
     /**
      * 获取附近警情列表
+     *
      * @param gps_e   //   longitude
      * @param gps_n   //   latitude
      * @param page
@@ -245,12 +251,13 @@ public interface JqAPIService {
     @FormUrlEncoded
     @POST("appjqreport/getNearHisJq")
     Observable<JQDetil> getNearHisJq(@Field("gps_e") String gps_e,
-                                    @Field("gps_n") String gps_n,
-                                    @Field("page") String page,
-                                    @Field("perpage") String perpage);
+                                     @Field("gps_n") String gps_n,
+                                     @Field("page") String page,
+                                     @Field("perpage") String perpage);
 
     /**
      * 获取报警人警情列表
+     *
      * @param caller
      * @return
      */
@@ -260,6 +267,7 @@ public interface JqAPIService {
 
     /**
      * 获取涉警人警情列表
+     *
      * @param policeid
      * @return
      */
@@ -270,6 +278,7 @@ public interface JqAPIService {
 
     /**
      * 获取某人的上下级关系
+     *
      * @param policeid
      * @return
      */
@@ -280,8 +289,9 @@ public interface JqAPIService {
 
     /**
      * 获取新警情消息
+     *
      * @param policeid
-     * @param depid  部门id 532301590000
+     * @param depid    部门id 532301590000
      * @return
      */
     @FormUrlEncoded
@@ -292,8 +302,9 @@ public interface JqAPIService {
 
     /**
      * 获取某警情值班人员
-     * @param depid departmentId
-     * @param stime sendTime
+     *
+     * @param depid 部门id
+     * @param stime 发送时间
      * @return
      */
     @FormUrlEncoded
@@ -301,4 +312,41 @@ public interface JqAPIService {
     Observable<JQOnDutyPeople> getPeoOnduty(@Field("depid") String depid,
                                             @Field("stime") String stime);
 
+    /**
+     * 选择添加出警人
+     *
+     * @param taskid
+     * @param policeid
+     * @param depid
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("appjqreport/addCjPerson")
+    Observable<String> addCjPerson(@Field("taskid") String taskid,
+                                   //@Field("policeid") String policeid,
+                                   @Field("depid") String depid,
+                                   @Field("policeid[]") String...policeid
+    );
+
+    /**
+     * 查询新警情还没有出警人的
+     * @param policeid
+     * @param depid
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("appjqreport/getNewJqlist")
+    Observable<String> getNewJqlist(@Field("policeid") String policeid,
+                                   @Field("depid") String depid);
+
+
+    /**
+     * 查询新警情还没有出警人的
+     * @param policeid
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("appjqreport/getNewJqlist")
+    Observable<NewJQ> getNewJqlist1(@Field("policeid") String policeid
+                                  );
 }

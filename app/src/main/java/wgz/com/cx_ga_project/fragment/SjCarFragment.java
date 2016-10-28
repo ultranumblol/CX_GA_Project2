@@ -15,13 +15,16 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import rx.Subscriber;
+import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 import wgz.com.cx_ga_project.R;
 import wgz.com.cx_ga_project.adapter.ApplyAdapter;
 import wgz.com.cx_ga_project.adapter.JQCallbackDetilAdapter;
 import wgz.com.cx_ga_project.app;
 import wgz.com.cx_ga_project.base.BaseFragment;
+import wgz.com.cx_ga_project.base.RxBus;
 import wgz.com.cx_ga_project.entity.Apply;
 import wgz.com.cx_ga_project.entity.JqCallBack;
 import wgz.datatom.com.utillibrary.util.LogUtil;
@@ -35,6 +38,7 @@ public class SjCarFragment extends BaseFragment implements SwipeRefreshLayout.On
     private Handler handler = new Handler();
     private JQCallbackDetilAdapter adapter;
     List<JqCallBack.Rescar> list = new ArrayList<>();
+    private Subscription rxSubscription;
 
     @Override
     public void initview(View view) {
@@ -44,6 +48,15 @@ public class SjCarFragment extends BaseFragment implements SwipeRefreshLayout.On
 
 
         initData();
+
+        rxSubscription = RxBus.getDefault().toObservable(String.class)
+                .subscribe(new Action1<String>() {
+                    @Override
+                    public void call(String s) {
+                        if (s.equals("sjcarflush"))
+                            onRefresh();
+                    }
+                });
     }
 
     @Override

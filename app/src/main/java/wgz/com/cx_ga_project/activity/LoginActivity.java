@@ -141,7 +141,6 @@ public class LoginActivity extends BaseActivity {
         if (cancel) {
             focusView.requestFocus();
         }else {
-            // TODO: 2016/8/5 登录功能还差联网
             httpLogin(username, MD5.md5(password));
             //LogUtil.d("md5 : " + MD5.md5(password));
         }

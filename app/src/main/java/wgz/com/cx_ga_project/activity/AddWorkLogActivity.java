@@ -2,7 +2,6 @@ package wgz.com.cx_ga_project.activity;
 
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
@@ -17,12 +16,10 @@ import com.jakewharton.rxbinding.view.RxView;
 import com.jude.easyrecyclerview.EasyRecyclerView;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.Bind;
-import butterknife.ButterKnife;
 import rx.Observer;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
@@ -61,15 +58,16 @@ public class AddWorkLogActivity extends BaseActivity {
     EasyRecyclerView addworklogRV;
     @Bind(R.id.content_add_worklog)
     LinearLayout rootview;
+    List<String> paths = new ArrayList<>();
     private String time = "";
     private String worklog = "";
     private String id = "";
     private String edittext = "";
     private AddPictureAdapter adapter;
-    List<String> paths = new ArrayList<>();
     private String fileid = "";
-    private String datrixUrl = DATRIX_BASE_URL+"preview/getImage?fileid=";
+    private String datrixUrl = DATRIX_BASE_URL + "preview/getImage?fileid=";
     private String datrixurl2 = "&token=X7yABwjE20sUJLefATUFqU0iUs8mJPqEJo6iRnV63mI=";
+
     @Override
     public int getLayoutId() {
         return R.layout.activity_add_work_log;
@@ -144,16 +142,16 @@ public class AddWorkLogActivity extends BaseActivity {
 
     private void ChangeWorkLog() {
 
-        if (paths.size()>1){
-            DatrixUtil datrixUtil = new DatrixUtil(paths,rootview);
+        if (paths.size() > 1) {
+            DatrixUtil datrixUtil = new DatrixUtil(paths, rootview);
             datrixUtil.DatrixUpLoadPic();
             datrixUtil.setOnAfterFinish(new DatrixUtil.AfterFinish() {
                 @Override
-                public void afterfinish(String fileid,List<String> ids) {
+                public void afterfinish(String fileid, List<String> ids) {
 
                 }
             });
-        }else
+        } else
 
 
             changeOnesSummary();
@@ -163,83 +161,83 @@ public class AddWorkLogActivity extends BaseActivity {
 
     private void changeOnesSummary() {
         app.apiService.changeWorkLog("changeOnceSummary", id, worklogText.getText().toString())
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(new Observer<String>() {
-                @Override
-                public void onCompleted() {
-                    SomeUtil.showSnackBar(rootview, "提交修改成功！").setCallback(new Snackbar.Callback() {
-                        @Override
-                        public void onDismissed(Snackbar snackbar, int event) {
-                            setResult(1, new Intent(AddWorkLogActivity.this, WorkLogActivity.class)
-                                    .putExtra("text", edittext)
-                                    .putExtra("result", "refresh"));
-                            finish();
-                        }
-                    });
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<String>() {
+                    @Override
+                    public void onCompleted() {
+                        SomeUtil.showSnackBar(rootview, "提交修改成功！").setCallback(new Snackbar.Callback() {
+                            @Override
+                            public void onDismissed(Snackbar snackbar, int event) {
+                                setResult(1, new Intent(AddWorkLogActivity.this, WorkLogActivity.class)
+                                        .putExtra("text", edittext)
+                                        .putExtra("result", "refresh"));
+                                finish();
+                            }
+                        });
 
-                }
+                    }
 
-                @Override
-                public void onError(Throwable e) {
+                    @Override
+                    public void onError(Throwable e) {
 
-                }
+                    }
 
-                @Override
-                public void onNext(String s) {
-                    LogUtil.d("Xiugairesult:" + s);
-                    if (s.contains("200")) {
-                        onCompleted();
-                    } else onError(new Exception(s));
-                }
-            });
+                    @Override
+                    public void onNext(String s) {
+                        LogUtil.d("Xiugairesult:" + s);
+                        if (s.contains("200")) {
+                            onCompleted();
+                        } else onError(new Exception(s));
+                    }
+                });
     }
 
     private void UpLoadWorkLog() {
-        LogUtil.d("pathsize : "+paths.size());
-        if (paths.size()>1){
-            DatrixUtil datrixUtil = new DatrixUtil(paths,rootview);
+        LogUtil.d("pathsize : " + paths.size());
+        if (paths.size() > 1) {
+            DatrixUtil datrixUtil = new DatrixUtil(paths, rootview);
             datrixUtil.DatrixUpLoadPic();
             datrixUtil.setOnAfterFinish(new DatrixUtil.AfterFinish() {
                 @Override
-                public void afterfinish(String fileid,List<String> ids) {
-                    addsummaryPic(fileid,ids);
+                public void afterfinish(String fileid, List<String> ids) {
+                    addsummaryPic(fileid, ids);
                 }
             });
-        }else{
+        } else {
             addsummary();
         }
     }
 
     // TODO: 2016/10/13 循环取ids值上传
     private void addsummaryPic(final String fileid, final List<String> ids) {
-        LogUtil.d(" addwork log ids :"+ids.toString());
-        final int k = ids.size()-1;
-        app.apiService.upWorkLog("addSummary", getUserId(), worklogText.getText().toString(),"", time)
+        LogUtil.d(" addwork log ids :" + ids.toString());
+        final int k = ids.size() - 1;
+        app.apiService.upWorkLog("addSummary", getUserId(), worklogText.getText().toString(), "", time)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<String>() {
                     @Override
                     public void onCompleted() {
-                        for (int i = 0 ; i<ids.size() ; i++){
-                          final int j = i;
+                        for (int i = 0; i < ids.size(); i++) {
+                            final int j = i;
 
-                            app.apiService.upWorkLog("addSummary", getUserId(), "",datrixUrl+ids.get(i)+datrixurl2, time)
+                            app.apiService.upWorkLog("addSummary", getUserId(), "", datrixUrl + ids.get(i) + datrixurl2, time)
                                     .compose(RxUtil.<String>applySchedulers())
                                     .subscribe(new Subscriber<String>() {
                                         @Override
                                         public void onCompleted() {
-                                           if (j==k){
-                                               SomeUtil.showSnackBar(rootview, "添加成功！").setCallback(new Snackbar.Callback() {
-                                                   @Override
-                                                   public void onDismissed(Snackbar snackbar, int event) {
-                                                       setResult(1, new Intent(AddWorkLogActivity.this, WorkLogActivity.class)
-                                                               .putExtra("text", edittext)
-                                                               .putExtra("result", "refresh"));
-                                                       finish();
-                                                   }
-                                               });
-                                           }
+                                            if (j == k) {
+                                                SomeUtil.showSnackBar(rootview, "添加成功！").setCallback(new Snackbar.Callback() {
+                                                    @Override
+                                                    public void onDismissed(Snackbar snackbar, int event) {
+                                                        setResult(1, new Intent(AddWorkLogActivity.this, WorkLogActivity.class)
+                                                                .putExtra("text", edittext)
+                                                                .putExtra("result", "refresh"));
+                                                        finish();
+                                                    }
+                                                });
+                                            }
                                         }
 
                                         @Override
@@ -256,10 +254,7 @@ public class AddWorkLogActivity extends BaseActivity {
                                             } else onError(new Exception(s));
                                         }
                                     });
-
                         }
-
-
                     }
 
                     @Override
@@ -271,19 +266,15 @@ public class AddWorkLogActivity extends BaseActivity {
                     public void onNext(String s) {
                         LogUtil.d("result:" + s);
                         if (s.contains("200")) {
-                           // onCompleted();
+                            // onCompleted();
                             LogUtil.d("执行上传图片！！！！！！！");
                         } else onError(new Exception(s));
                     }
                 });
-
-
-
-
     }
 
     private void addsummary() {
-        app.apiService.upWorkLog("addSummary", getUserId(), worklogText.getText().toString(),"", time)
+        app.apiService.upWorkLog("addSummary", getUserId(), worklogText.getText().toString(), "", time)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<String>() {
@@ -364,10 +355,4 @@ public class AddWorkLogActivity extends BaseActivity {
 
     }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        // TODO: add setContentView(...) invocation
-        ButterKnife.bind(this);
-    }
 }

@@ -18,12 +18,15 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import rx.Subscriber;
+import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 import wgz.com.cx_ga_project.R;
 import wgz.com.cx_ga_project.adapter.JQCallbackDetilAdapter;
 import wgz.com.cx_ga_project.app;
 import wgz.com.cx_ga_project.base.BaseFragment;
+import wgz.com.cx_ga_project.base.RxBus;
 import wgz.com.cx_ga_project.entity.JqCallBack;
 import wgz.datatom.com.utillibrary.util.LogUtil;
 
@@ -36,6 +39,7 @@ public class SjrFragment extends BaseFragment implements SwipeRefreshLayout.OnRe
     private Handler handler = new Handler();
     private JQCallbackDetilAdapter adapter;
     List<JqCallBack.Resperson> list = new ArrayList<>();
+    private Subscription rxSubscription;
 
     @Override
     public void initview(View view) {
@@ -43,6 +47,14 @@ public class SjrFragment extends BaseFragment implements SwipeRefreshLayout.OnRe
         recyclerview.setAdapterWithProgress(adapter = new JQCallbackDetilAdapter(getActivity()));
         recyclerview.setRefreshListener(this);
         initData();
+        rxSubscription = RxBus.getDefault().toObservable(String.class)
+                .subscribe(new Action1<String>() {
+                    @Override
+                    public void call(String s) {
+                        if (s.equals("sjrflush"))
+                            onRefresh();
+                    }
+                });
     }
 
     @Override
