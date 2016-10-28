@@ -49,4 +49,36 @@
 
             app:fabSize="mini" />
     </com.lzp.floatingactionbuttonplus.FabTagLayout>
+    <com.lzp.floatingactionbuttonplus.FabTagLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:tagText="涉警人关联警情"
+        android:id="@+id/fabtag_sjrJQ"
+        >
+        <android.support.design.widget.FloatingActionButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_contact_phone_white_48dp"
+            app:backgroundTint="#4BB7A7"
+
+            app:fabSize="mini" />
+    </com.lzp.floatingactionbuttonplus.FabTagLayout>
+
+
+    <com.lzp.floatingactionbuttonplus.FabTagLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:tagText="警情转移"
+        android:id="@+id/fabtag_zyJQ"
+        >
+        <android.support.design.widget.FloatingActionButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_transform_white_48dp"
+            app:backgroundTint="#4BB7A7"
+
+            app:fabSize="mini" />
+    </com.lzp.floatingactionbuttonplus.FabTagLayout>
+
+
 </com.lzp.floatingactionbuttonplus.FloatingActionButtonPlus>

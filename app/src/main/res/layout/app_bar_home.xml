@@ -203,7 +203,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:text="我的审核"
+                    android:text="我的审批"
                     android:textSize="16dp"
                     android:layout_marginLeft="32dp"
                     android:textColor="@color/goldenrod"

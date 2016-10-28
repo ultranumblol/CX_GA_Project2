@@ -61,5 +61,6 @@
     <string name="title_activity_about_app">AboutAppActivity</string>
     <string name="title_activity_up_load_sjphone">UpLoadSJPhoneActivity</string>
     <string name="title_activity_cam_map_html">CamMapHtmlActivity</string>
+    <string name="title_activity_sic">SICActivity</string>
 
 </resources>

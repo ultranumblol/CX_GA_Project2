@@ -2,9 +2,8 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/action_settings"
+        android:id="@+id/id_sic_log"
         android:orderInCategory="100"
-        android:title="新消息"
-        android:icon="@drawable/ic_mail_white_24dp"
-        app:showAsAction="always" />
+        android:title="采集日志"
+        app:showAsAction="never" />
 </menu>

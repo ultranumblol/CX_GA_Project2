@@ -15,14 +15,11 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.jakewharton.rxbinding.view.RxView;
 
 import java.util.concurrent.TimeUnit;
 
 import butterknife.Bind;
-import butterknife.ButterKnife;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
@@ -30,7 +27,7 @@ import rx.schedulers.Schedulers;
 import wgz.com.cx_ga_project.R;
 import wgz.com.cx_ga_project.app;
 import wgz.com.cx_ga_project.base.BaseActivity;
-import wgz.com.cx_ga_project.base.Constant;
+import wgz.com.cx_ga_project.base.RxBus;
 import wgz.com.cx_ga_project.util.SomeUtil;
 
 import static wgz.com.cx_ga_project.base.Constant.APPROVAL_PASS;
@@ -93,6 +90,7 @@ public class ApprovalDetilActivity extends BaseActivity {
     @Bind(R.id.userName_jiaban)
     TextView userNameJiaban;
     private String mId = "";
+
     @Override
     public int getLayoutId() {
         return R.layout.activity_jiaban_leave_detil;
@@ -104,7 +102,7 @@ public class ApprovalDetilActivity extends BaseActivity {
         Intent intent = getIntent();
         //int type = intent.getIntExtra("type",-1);
         String type = intent.getStringExtra("type");
-        boolean ifhis = intent.getBooleanExtra("ifhis",true);
+        boolean ifhis = intent.getBooleanExtra("ifhis", true);
         Bundle bundle = intent.getBundleExtra("detil");
         approvalMakesrue.setVisibility(View.VISIBLE);
         mId = bundle.getString("id");
@@ -115,7 +113,7 @@ public class ApprovalDetilActivity extends BaseActivity {
                 ViewCompat.setTransitionName(userPicJiaban, "share_img");
                 jiabanLeaveDetilQingjia.setVisibility(View.GONE);
                 jiabanLeaveDetilQingjia.setVisibility(View.GONE);
-                SomeUtil.GlidePic(this,userPicJiaban,bundle.getString("head"));
+                SomeUtil.GlidePic(this, userPicJiaban, bundle.getString("head"));
                 userNameJiaban.setText(bundle.getString("poicename"));
                 detilJiabanCommittime.setText(bundle.getString("applytime"));
                 detilJiabanStarttime.setText(bundle.getString("starttime"));
@@ -129,7 +127,6 @@ public class ApprovalDetilActivity extends BaseActivity {
                     detilJiabanState.setText("审批通过");
                 else if (bundle.getString("status").equals(APPROVAL_UNPASS))
                     detilJiabanState.setText("审批未通过");
-
                 break;
             case "1":
                 toolbar.setTitle("请假明细");
@@ -137,7 +134,7 @@ public class ApprovalDetilActivity extends BaseActivity {
                 ViewCompat.setTransitionName(userPic, "share_img");
                 jiabanLeaveDetilQingjia.setVisibility(View.VISIBLE);
                 userName.setText(bundle.getString("poicename"));
-                SomeUtil.GlidePic(this,userPic,bundle.getString("head"));
+                SomeUtil.GlidePic(this, userPic, bundle.getString("head"));
 
                 detilLeaveCommittime.setText(bundle.getString("applytime"));
                 detilLeaveStarttime.setText(bundle.getString("starttime"));
@@ -154,10 +151,10 @@ public class ApprovalDetilActivity extends BaseActivity {
                 else if (bundle.getString("status").equals(APPROVAL_UNPASS))
                     detilQingjiaState.setText("审批未通过");
         }
-        if (ifhis){
+        if (ifhis) {
             approvalMakesrue.setVisibility(View.GONE);
 
-        }else approvalMakesrue.setVisibility(View.VISIBLE);
+        } else approvalMakesrue.setVisibility(View.VISIBLE);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         RxView.clicks(approvalMakesrue)
@@ -178,38 +175,39 @@ public class ApprovalDetilActivity extends BaseActivity {
                 .setPositiveButton("审核通过", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                       app.apiService.approvalApply("approvalApply",mId,"1","")
-                               .subscribeOn(Schedulers.io())
-                               .observeOn(AndroidSchedulers.mainThread())
-                               .subscribe(new Subscriber<String>() {
-                                   @Override
-                                   public void onCompleted() {
+                        app.apiService.approvalApply("approvalApply", mId, "1", "")
+                                .subscribeOn(Schedulers.io())
+                                .observeOn(AndroidSchedulers.mainThread())
+                                .subscribe(new Subscriber<String>() {
+                                    @Override
+                                    public void onCompleted() {
 
-                                   }
+                                    }
 
-                                   @Override
-                                   public void onError(Throwable e) {
+                                    @Override
+                                    public void onError(Throwable e) {
 
-                                   }
+                                    }
 
-                                   @Override
-                                   public void onNext(String s) {
-                                        if (s.contains("200")){
+                                    @Override
+                                    public void onNext(String s) {
+                                        if (s.contains("200")) {
+                                            RxBus.getDefault().post("myspflush");
                                             SomeUtil.showSnackBar(detilRoot, "审批通过！").setCallback(new Snackbar.Callback() {
+
                                                 @Override
                                                 public void onDismissed(Snackbar snackbar, int event) {
+                                                    //setResult(1002,new Intent(ApprovalDetilActivity.this,MyApprovalActivity.class).putExtra("result", "refresh"));
+
                                                     finish();
                                                 }
                                             }).show();
 
-                                        }else {
-                                            SomeUtil.showSnackBar(detilRoot,"服务器错误！请稍后再试");
+                                        } else {
+                                            SomeUtil.showSnackBar(detilRoot, "服务器错误！请稍后再试");
                                         }
-                                   }
-                               });
-
-
-
+                                    }
+                                });
 
 
                     }
@@ -231,7 +229,7 @@ public class ApprovalDetilActivity extends BaseActivity {
                 .setPositiveButton("提交", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        app.apiService.approvalApply("approvalApply",mId,"2",input.getText().toString())
+                        app.apiService.approvalApply("approvalApply", mId, "2", input.getText().toString())
                                 .subscribeOn(Schedulers.io())
                                 .observeOn(AndroidSchedulers.mainThread())
                                 .subscribe(new Subscriber<String>() {
@@ -247,10 +245,12 @@ public class ApprovalDetilActivity extends BaseActivity {
 
                                     @Override
                                     public void onNext(String s) {
-                                        if (s.contains("200")){
+                                        if (s.contains("200")) {
                                             SomeUtil.showSnackBar(detilRoot, "提交成功").show();
+                                            setResult(1002, new Intent(ApprovalDetilActivity.this, MyApprovalActivity.class).putExtra("result", "refresh"));
+                                            finish();
 
-                                        }else{
+                                        } else {
                                             SomeUtil.showSnackBar(detilRoot, "服务器错误！").show();
                                         }
                                     }

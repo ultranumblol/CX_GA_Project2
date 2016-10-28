@@ -1,15 +1,21 @@
 package wgz.com.cx_ga_project.activity;
 
 
+import android.app.Notification;
+import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 
 
+import android.content.ServiceConnection;
+import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
 
+import android.os.IBinder;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -41,6 +47,7 @@ import butterknife.Bind;
 import butterknife.OnClick;
 
 import rx.Subscriber;
+import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.schedulers.Schedulers;
@@ -48,6 +55,7 @@ import wgz.com.cx_ga_project.R;
 import wgz.com.cx_ga_project.adapter.chatAdapter.ChatAdapter;
 import wgz.com.cx_ga_project.app;
 import wgz.com.cx_ga_project.base.BaseActivity;
+import wgz.com.cx_ga_project.base.RxBus;
 import wgz.com.cx_ga_project.entity.ChatMsg;
 import wgz.com.cx_ga_project.fragment.PhotoPickerFragment;
 import wgz.com.cx_ga_project.service.GetNewMsgService;
@@ -57,6 +65,7 @@ import wgz.com.cx_ga_project.util.UriUtils;
 import wgz.datatom.com.utillibrary.util.LogUtil;
 
 import static wgz.com.cx_ga_project.activity.PickPhotoActivity.HTTP_URL;
+import static wgz.com.cx_ga_project.app.DATRIX_BASE_URL;
 import static wgz.com.cx_ga_project.util.fileUtil.delFolder;
 
 /**
@@ -111,21 +120,21 @@ public class ChatActivity extends BaseActivity {
     private InputMethodManager manager;
     private List<ChatMsg.Re> chatData = new ArrayList<>();
     private List<ChatMsg.Re> newchatData = new ArrayList<>();
-    private MsgReceiver receiver;
     //图片地址
     List<String> paths = new ArrayList<>();
     private String fileid = "";
     private String videoPath = "";
+    private Subscription rxSubscription;
 
     @Override
     public int getLayoutId() {
         return R.layout.activity_chat;
     }
 
-    private String datrixUrl = "http://101.231.77.242:9001/preview/getImage?fileid=";
+    private String datrixUrl = DATRIX_BASE_URL+"preview/getImage?fileid=";
     private String datrixurl2 = "&token=X7yABwjE20sUJLefATUFqU0iUs8mJPqEJo6iRnV63mI=";
-    private String datrixVideoPicdurl1 = "http://101.231.77.242:9001/preview/coverMedium?fileid=";
-    private String datrixPlayVideo = "http://101.231.77.242:9001/file/previewFileHtml?fileid=";
+    private String datrixVideoPicdurl1 = DATRIX_BASE_URL+"preview/coverMedium?fileid=";
+    private String datrixPlayVideo = DATRIX_BASE_URL+"file/previewFileHtml?fileid=";
     private String datrixPlayVideo2 = "&filetype=2&token=X7yABwjE20sUJLefATUFqU0iUs8mJPqEJo6iRnV63mI=";
 
 
@@ -133,13 +142,13 @@ public class ChatActivity extends BaseActivity {
     public void initView() {
         manager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         toolbar.setTitle("指挥通讯");
-        toolbar.setSubtitle("警情2134323");
+        toolbar.setSubtitle(getIntent().getStringExtra("jqid"));
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         recyclerview.setLayoutManager(new LinearLayoutManager(this));
         recyclerview.setAdapter(adapter = new ChatAdapter(this));
-
-        startService(new Intent(this, GetNewMsgService.class));
+       // startService(new Intent(this, GetNewMsgService.class));
+        bindService(new Intent(this, GetNewMsgService.class), connection, BIND_AUTO_CREATE);
 
         recyclerview.setOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -157,7 +166,8 @@ public class ChatActivity extends BaseActivity {
         });
 
         recyclerview.scrollToPosition(adapter.getCount() - 1);
-        RxView.clicks(etSendmessage).subscribe(new Action1<Void>() {
+        RxView.clicks(etSendmessage).throttleFirst(500,TimeUnit.MICROSECONDS)
+                .subscribe(new Action1<Void>() {
             @Override
             public void call(Void aVoid) {
                 recyclerview.scrollToPosition(adapter.getCount() - 1);
@@ -189,20 +199,75 @@ public class ChatActivity extends BaseActivity {
             }
 
         });
-        RxView.clicks(btnSend).throttleFirst(500, TimeUnit.MILLISECONDS)
+        RxView.clicks(btnSend).throttleFirst(200, TimeUnit.MILLISECONDS)
                 .subscribe(new Action1<Void>() {
                     @Override
                     public void call(Void aVoid) {
-                        Sendmsg();
-                        hideKeyboard();
+                        if (etSendmessage.getText().toString().equals("")){
+
+                        }else{
+                            Sendmsg();
+                            hideKeyboard();
+                        }
+
                     }
                 });
 
         getmsg();
 
 
-    }
+        rxSubscription = RxBus.getDefault().toObservable(String.class)
+                .subscribe(new Subscriber<String>() {
+                    @Override
+                    public void onCompleted() {
 
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onNext(String s) {
+                        LogUtil.d("test : "+s);
+                        if (s.equals("flush")){
+                            NotificationManager manager = (NotificationManager)ChatActivity.this.getSystemService(Context.NOTIFICATION_SERVICE);
+                            Uri ringUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+                            // 通过Notification.Builder来创建通知，注意API Level
+                            // API16之后才支持
+                            Notification notify3 = null; // 需要注意build()是在APIlevel16及之后增加的，API11可以使用getNotificatin()来替代
+                            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.JELLY_BEAN) {
+                                notify3 = new Notification.Builder(ChatActivity.this)
+                                        .setSound(ringUri).build();
+                            }
+
+                            notify3.flags |= Notification.FLAG_AUTO_CANCEL; // FLAG_AUTO_CANCEL表明当通知被用户点击时，通知将被清除。
+                            manager.notify(1, notify3);// 步骤4：通过通知管理器来发起通知。如果id不同，则每click，在status哪里增加一个提示
+                            getNewmsg();
+
+
+                        }
+
+
+
+                    }
+                });
+    }
+    private GetNewMsgService mService = new GetNewMsgService();
+
+    ServiceConnection connection = new ServiceConnection(){
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            GetNewMsgService.MyBind myBind = (GetNewMsgService.MyBind) service;
+            mService = myBind.getMyService();
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+
+        }
+    };
     private void getmsg() {
         adapter.clear();
         chatData.clear();
@@ -211,7 +276,7 @@ public class ChatActivity extends BaseActivity {
                 .subscribe(new Subscriber<ChatMsg>() {
                     @Override
                     public void onCompleted() {
-                        recyclerview.scrollToPosition(adapter.getCount() - 1);
+
                         hideKeyboard();
                     }
 
@@ -225,6 +290,7 @@ public class ChatActivity extends BaseActivity {
                         LogUtil.d("chatmsg:" + chatMsg.getRes().size());
                         chatData = chatMsg.getRes();
                         adapter.addAll(chatData);
+                        recyclerview.scrollToPosition(adapter.getCount() - 1);
 
 
                     }
@@ -232,14 +298,14 @@ public class ChatActivity extends BaseActivity {
     }
 
     private void getNewmsg() {
+        LogUtil.d("获取新消息");
         chatData.clear();
         app.jqAPIService.GetNewMsg("213213123", "1231231233").subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<ChatMsg>() {
                     @Override
                     public void onCompleted() {
-                        recyclerview.scrollToPosition(adapter.getCount() - 1);
-                        hideKeyboard();
+
                     }
 
                     @Override
@@ -251,10 +317,9 @@ public class ChatActivity extends BaseActivity {
                     public void onNext(ChatMsg chatMsg) {
                         LogUtil.d("chatNewmsg:" + chatMsg.getRes().size());
                         chatData = chatMsg.getRes();
-
-
                         adapter.addAll(chatData);
-
+                        recyclerview.scrollToPosition(adapter.getCount() - 1);
+                        hideKeyboard();
 
                     }
                 });
@@ -264,15 +329,13 @@ public class ChatActivity extends BaseActivity {
     private void Sendmsg() {
         Date currentdate = new Date(System.currentTimeMillis());
         String curredate = AskForLeaveActivity.getTime(currentdate);
-
         app.jqAPIService.sendMsg("2016072100100000060", etSendmessage.getText().toString(),"","","", "213", curredate, "030283")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<String>() {
                     @Override
                     public void onCompleted() {
-                        etSendmessage.setText("");
-                        getNewmsg();
+
                     }
 
                     @Override
@@ -283,6 +346,8 @@ public class ChatActivity extends BaseActivity {
                     @Override
                     public void onNext(String s) {
                         LogUtil.d("result:" + s);
+                        etSendmessage.setText("");
+                        getNewmsg();
                         // SomeUtil.showSnackBar(rootview,"result:"+s);
                     }
                 });
@@ -391,29 +456,28 @@ public class ChatActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        //注册广播
+       /* //注册广播
         receiver = new MsgReceiver();
         IntentFilter filter = new IntentFilter();
         filter.addAction("service.MsgService");
         registerReceiver(receiver, filter);
-        LogUtil.d("广播注册成功！");
+        LogUtil.d("广播注册成功！");*/
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        unregisterReceiver(receiver);
+       // unregisterReceiver(receiver);
     }
 
-    private class MsgReceiver extends BroadcastReceiver {
+
+   /* private class MsgReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
             Bundle bundle = intent.getExtras();
             String msg = bundle.getString("msg");
             if (msg.equals("newmsg")) {
-               /* NotificationManager manager = (NotificationManager)context.getSystemService(Context.NOTIFICATION_SERVICE);
-                PendingIntent pendingIntent3 = PendingIntent.getActivity(context, 0,
-                        new Intent(context, ChatActivity.class), 0);
+               NotificationManager manager = (NotificationManager)context.getSystemService(Context.NOTIFICATION_SERVICE);
                 Uri ringUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
                 // 通过Notification.Builder来创建通知，注意API Level
                 // API16之后才支持
@@ -424,12 +488,12 @@ public class ChatActivity extends BaseActivity {
                 }
 
                 notify3.flags |= Notification.FLAG_AUTO_CANCEL; // FLAG_AUTO_CANCEL表明当通知被用户点击时，通知将被清除。
-                manager.notify(1, notify3);// 步骤4：通过通知管理器来发起通知。如果id不同，则每click，在status哪里增加一个提示*/
+                manager.notify(1, notify3);// 步骤4：通过通知管理器来发起通知。如果id不同，则每click，在status哪里增加一个提示
                 getNewmsg();
 
             }
         }
-    }
+    }*/
 
 
     /**
@@ -481,7 +545,15 @@ public class ChatActivity extends BaseActivity {
                 break;
         }
     }
+    @Override
+    protected void onDestroy() {
 
+        super.onDestroy();
+        if(!rxSubscription.isUnsubscribed()) {
+            rxSubscription.unsubscribe();
+        }
+        unbindService(connection);
+    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -545,4 +617,5 @@ public class ChatActivity extends BaseActivity {
 
         }
     }
+
 }

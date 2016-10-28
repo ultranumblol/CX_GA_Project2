@@ -20,6 +20,8 @@ import wgz.com.cx_ga_project.adapter.MyFragmentPagerAdapter;
 import wgz.com.cx_ga_project.base.BaseActivity;
 import wgz.com.cx_ga_project.fragment.MyApplyJiabanFragment;
 import wgz.com.cx_ga_project.fragment.MyApplyQingjiaFragment;
+import wgz.com.cx_ga_project.fragment.MyapprovalFragment;
+import wgz.com.cx_ga_project.fragment.MyapprovalHistoryFragment;
 
 /**
  * 我的申请
@@ -68,10 +70,10 @@ public class MyWorkApplyActivity extends BaseActivity {
                 int id = tagView.getId();
                 switch (id){
                     case R.id.fabtag_addJiaban:
-                        startActivity(new Intent(MyWorkApplyActivity.this,AskForJiabanActivity.class));
+                        startActivityForResult(new Intent(MyWorkApplyActivity.this,AskForJiabanActivity.class),1001);
                         break;
                     case R.id.fabtag_addQj:
-                        startActivity(new Intent(MyWorkApplyActivity.this,AskForLeaveActivity.class));
+                        startActivityForResult(new Intent(MyWorkApplyActivity.this,AskForLeaveActivity.class),1001);
                         break;
                 }
             }
@@ -109,4 +111,16 @@ public class MyWorkApplyActivity extends BaseActivity {
 
     }
 
+   /* @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == 1001) {
+            MyApplyJiabanFragment myApplyJiabanFragment = (MyApplyJiabanFragment) fragments.get(0);
+            MyApplyQingjiaFragment myApplyQingjiaFragment = (MyApplyQingjiaFragment) fragments.get(1);
+            myApplyJiabanFragment.onActivityResult(requestCode, resultCode, data);
+            myApplyQingjiaFragment.onActivityResult(requestCode, resultCode, data);
+
+        }
+
+
+    }*/
 }

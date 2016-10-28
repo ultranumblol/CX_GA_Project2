@@ -30,7 +30,10 @@ import wgz.datatom.com.utillibrary.util.ToastUtil;
 
 public class app extends Application {
     private static app mApp;
-    public static final String BASE_URL = "http://192.168.1.193:8004/appworkmanager/";
+    public static final String BASE_URL = "http://192.168.1.193:8004/";
+    //public static final String BASE_URL = "http://53.20.31.31:8788/";
+    public static final String DATRIX_BASE_URL = "http://101.231.77.242:9001/";
+
     public static APIservice apiService;
     public static JqAPIService jqAPIService;
 
@@ -62,9 +65,9 @@ public class app extends Application {
     }
     public static OkHttpClient defaultOkHttpClient() {
         OkHttpClient client = new OkHttpClient.Builder()
-                .connectTimeout(5, TimeUnit.SECONDS)
-                .writeTimeout(5, TimeUnit.SECONDS)
-                .readTimeout(5, TimeUnit.SECONDS)
+                .connectTimeout(8, TimeUnit.SECONDS)
+                .writeTimeout(8, TimeUnit.SECONDS)
+                .readTimeout(8, TimeUnit.SECONDS)
                 .addNetworkInterceptor(new Interceptor() {
                     @Override
                     public okhttp3.Response intercept(Chain chain) throws IOException {

@@ -24,7 +24,7 @@
             android:layout_alignParentRight="true"
             android:layout_alignParentTop="true"
             android:layout_marginRight="5dp"
-            android:background="@drawable/head"
+            android:src="@drawable/task_person_icon"
             android:scaleType="fitXY" />
 
         <RelativeLayout

@@ -35,7 +35,7 @@
                 android:layout_toRightOf="@id/user_face"
                 android:id="@+id/jiaban_ID"
                 android:layout_marginTop="4dp"
-                android:textSize="16dp"
+                android:textSize="18dp"
                 android:textColor="@color/cadetblue"
                 />
 

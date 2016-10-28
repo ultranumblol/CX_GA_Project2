@@ -8,8 +8,10 @@ import wgz.com.cx_ga_project.entity.CallerInfo;
 import wgz.com.cx_ga_project.entity.ChatMsg;
 import wgz.com.cx_ga_project.entity.ChuJingRen;
 import wgz.com.cx_ga_project.entity.JQDetil;
+import wgz.com.cx_ga_project.entity.JQOnDutyPeople;
 import wgz.com.cx_ga_project.entity.JqCallBack;
 import wgz.com.cx_ga_project.entity.JqOrbit;
+import wgz.com.cx_ga_project.entity.NewJQPush;
 
 /**
  * Created by wgz on 2016/8/31.
@@ -23,7 +25,7 @@ public interface JqAPIService {
      * @return 状态信息
      */
     @FormUrlEncoded
-    @POST("http://192.168.1.193:8004/appjqreport/addJqReport")
+    @POST("appjqreport/addJqReport")
     Observable<String> uploadJqMsg(
             @Field("taskid") String taskid,
             @Field("policeid") String policeid,
@@ -46,7 +48,7 @@ public interface JqAPIService {
      * @return
      */
     @FormUrlEncoded
-    @POST("http://192.168.1.193:8004/appjqreport/addJqCar")
+    @POST("appjqreport/addJqCar")
     Observable<String> uploadSjCar(
             @Field("jqid") String jqid,
             @Field("taskid") String taskid,
@@ -74,7 +76,7 @@ public interface JqAPIService {
      * @return
      */
     @FormUrlEncoded
-    @POST("http://192.168.1.193:8004/appjqreport/addJqPerson")
+    @POST("appjqreport/addJqPerson")
     Observable<String> uploadSjPerson(
             @Field("jqid") String jqid,
             @Field("taskid") String taskid,
@@ -100,7 +102,7 @@ public interface JqAPIService {
      * @return
      */
     @FormUrlEncoded
-    @POST("http://192.168.1.193:8004/appjqreport/addJqPhone")
+    @POST("appjqreport/addJqPhone")
     Observable<String> uploadSjPhone(
             @Field("jqid") String jqid,
             @Field("taskid") String taskid,
@@ -122,7 +124,7 @@ public interface JqAPIService {
      * @return
      */
     @FormUrlEncoded
-    @POST("http://192.168.1.193:8004/liveshow/sendMsgToPC")
+    @POST("liveshow/sendMsgToPC")
     Observable<String> sendMsg(@Field("jqid") String jqid,
                                @Field("msg") String msg,
                                @Field("pic") String pic,
@@ -141,7 +143,7 @@ public interface JqAPIService {
      * @return
      */
     @FormUrlEncoded
-    @POST("http://192.168.1.193:8004/liveshow/getAppMsgList")
+    @POST("liveshow/getAppMsgList")
     Observable<ChatMsg> GetMsg(@Field("jqid") String jqid,
                                @Field("policeid") String msg);
 
@@ -153,7 +155,7 @@ public interface JqAPIService {
      * @return
      */
     @FormUrlEncoded
-    @POST("http://192.168.1.193:8004/liveshow/getAppNewMsg")
+    @POST("liveshow/getAppNewMsg")
     Observable<ChatMsg> GetNewMsg(@Field("jqid") String jqid,
                                   @Field("policeid") String msg);
 
@@ -165,7 +167,7 @@ public interface JqAPIService {
      * @return
      */
     @FormUrlEncoded
-    @POST("http://192.168.1.193:8004/liveshow/getAppNewMsgs")
+    @POST("liveshow/getAppNewMsgs")
     Observable<ChatMsg> GetNewMsg2(@Field("jqid") String jqid,
                                    @Field("policeid") String msg);
 
@@ -179,7 +181,7 @@ public interface JqAPIService {
      * @return
      */
     @FormUrlEncoded
-    @POST("http://192.168.1.193:8004/nearbyresources/getDetailjqInfo")
+    @POST("nearbyresources/getDetailjqInfo")
     Observable<JQDetil> GetJQDetil(@Field("key") String key);
 
 
@@ -189,7 +191,7 @@ public interface JqAPIService {
      * @return
      */
     @FormUrlEncoded
-    @POST("http://192.168.1.193:8004/appjqreport/getAllDetail")
+    @POST("appjqreport/getAllDetail")
     Observable<JqCallBack> GetAllJQDetil(@Field("jqid") String jqid);
 
 
@@ -200,7 +202,7 @@ public interface JqAPIService {
      * @return
      */
     @FormUrlEncoded
-    @POST("http://192.168.1.193:8004/appjqreport/getTaskPeople")
+    @POST("appjqreport/getTaskPeople")
     Observable<ChuJingRen> GetCJRList(@Field("taskid") String taskid);
 
 
@@ -215,7 +217,7 @@ public interface JqAPIService {
      * @return
      */
     @FormUrlEncoded
-    @POST("http://192.168.1.193:8004/appjqreport/locationBack")
+    @POST("appjqreport/locationBack")
     Observable<String> StartNewFight(@Field("jqid") String jqid,
                                      @Field("taskid") String taskid,
                                      @Field("arrivetime") String arrivetime,
@@ -229,7 +231,7 @@ public interface JqAPIService {
      * @return
      */
     @FormUrlEncoded
-    @POST("http://192.168.1.193:8004/appjqreport/getJqOrbit")
+    @POST("appjqreport/getJqOrbit")
     Observable<JqOrbit> getJqOrbit(@Field("jqid") String jqid);
 
     /**
@@ -241,8 +243,8 @@ public interface JqAPIService {
      * @return
      */
     @FormUrlEncoded
-    @POST("http://192.168.1.193:8004/appjqreport/getNearHisJq")
-    Observable<String> getNearHisJq(@Field("gps_e") String gps_e,
+    @POST("appjqreport/getNearHisJq")
+    Observable<JQDetil> getNearHisJq(@Field("gps_e") String gps_e,
                                     @Field("gps_n") String gps_n,
                                     @Field("page") String page,
                                     @Field("perpage") String perpage);
@@ -253,7 +255,7 @@ public interface JqAPIService {
      * @return
      */
     @FormUrlEncoded
-    @POST("http://192.168.1.193:8004/appjqreport/getCallerInfo")
+    @POST("appjqreport/getCallerInfo")
     Observable<CallerInfo> getCallerInfo(@Field("caller") String caller);
 
     /**
@@ -262,6 +264,41 @@ public interface JqAPIService {
      * @return
      */
     @FormUrlEncoded
-    @POST("http://192.168.1.193:8004/appjqreport/getPoliceJqInfo")
-    Observable<String> getPoliceJqInfo(@Field("policeid") String policeid);
+    @POST("appjqreport/getPoliceJqInfo")
+    Observable<JQDetil> getPoliceJqInfo(@Field("policeid") String policeid);
+
+
+    /**
+     * 获取某人的上下级关系
+     * @param policeid
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("apponduty/getSupAndSub")
+    Observable<String> getSupAndSub(@Field("policeid") String policeid);
+
+
+    /**
+     * 获取新警情消息
+     * @param policeid
+     * @param depid  部门id 532301590000
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("appjqreport/msgPush")
+    Observable<NewJQPush> jqmsgPush(@Field("policeid") String policeid,
+                                    @Field("depid") String depid);
+
+
+    /**
+     * 获取某警情值班人员
+     * @param depid departmentId
+     * @param stime sendTime
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("apponduty/getDepOnduty")
+    Observable<JQOnDutyPeople> getPeoOnduty(@Field("depid") String depid,
+                                            @Field("stime") String stime);
+
 }

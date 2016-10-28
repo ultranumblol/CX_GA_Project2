@@ -45,6 +45,10 @@ import wgz.com.cx_ga_project.util.RxUtil;
 import wgz.com.cx_ga_project.util.SomeUtil;
 import wgz.datatom.com.utillibrary.util.LogUtil;
 
+import static wgz.com.cx_ga_project.base.Constant.CHECK_ONESSUMMARY;
+import static wgz.com.cx_ga_project.base.Constant.CHECK_ONESSUMMARYPIC_BYDAYS;
+import static wgz.com.cx_ga_project.base.Constant.CHECK_ONESSUMMARY_BYDAYS;
+
 
 /**
  * 工作日志
@@ -92,14 +96,14 @@ public class WorkLogActivity extends BaseActivity {
 
 
         initCalendar();
-        iniData();
+      //  iniData();
 
     }
 
     private void iniData() {
         final Calendar calendar = Calendar.getInstance();
         LogUtil.d("initData : " + OtherUtils.formatMonth(calendar.getTime()).toString());
-        app.apiService.getLogData(APIservice.CHECK_ONESSUMMARY,SomeUtil.getUserId(), OtherUtils.formatMonth(calendar.getTime()))
+        app.apiService.getLogData(CHECK_ONESSUMMARY,SomeUtil.getUserId(), OtherUtils.formatMonth(calendar.getTime()))
 
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -121,7 +125,7 @@ public class WorkLogActivity extends BaseActivity {
                             mylogs = workLog.getLogs();
                             LogUtil.d("logs : " + mylogs.toString());
                             String nowdate = OtherUtils.formatDate(calendar.getTime());
-                            app.apiService.getLogDataToDay(APIservice.CHECK_ONESSUMMARY_BYDAYS, SomeUtil.getUserId(), nowdate)
+                            app.apiService.getLogDataToDay(SomeUtil.getUserId(), nowdate)
                                     .subscribeOn(Schedulers.io())
                                     .observeOn(AndroidSchedulers.mainThread())
                                     .subscribe(new Subscriber<WorkLog>() {
@@ -158,7 +162,133 @@ public class WorkLogActivity extends BaseActivity {
     /**
      * @param calendarView
      */
-    private void initEventDays(CalendarView calendarView) {
+    private void initEventDays(final CalendarView calendarView) {
+
+        final Calendar calendar = Calendar.getInstance();
+        app.apiService.getLogData(CHECK_ONESSUMMARY, SomeUtil.getUserId(), calendarView.getCurrentDay())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<WorkLog>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        LogUtil.d("getLogData error : " + e);
+                    }
+
+                    @Override
+                    public void onNext(WorkLog workLog) {
+                        LogUtil.d("worklog : " + workLog.toString());
+                        if (workLog.getCode().toString().contains("200")) {
+                            mylogs = workLog.getLogs();
+                            LogUtil.d("logs : " + mylogs.toString());
+                            String nowdate = OtherUtils.formatDate(calendar.getTime());
+                            app.apiService.getLogDataToDay("10001", nowdate)
+                                    .subscribeOn(Schedulers.io())
+                                    .observeOn(AndroidSchedulers.mainThread())
+                                    .subscribe(new Subscriber<WorkLog>() {
+                                        @Override
+                                        public void onCompleted() {
+                                            //设置含有事件的日期
+                                            List<String> eventDays = new ArrayList<>();//根据实际情况调整，传入时间格式(yyyy-MM)
+                                            for (int i = 0; i < mylogs.size(); i++) {
+                                                String date = mylogs.get(i).getTime().toString();
+
+                                                eventDays.add(OtherUtils.formatDate(SomeUtil.getStrToDate(date)));
+                                            }
+                                            // LogUtil.d("eventDays :" + eventDays.toString());
+                                            calendarView.setEventDays(eventDays);
+                                        }
+
+                                        @Override
+                                        public void onError(Throwable e) {
+
+                                        }
+
+                                        @Override
+                                        public void onNext(WorkLog workLog) {
+                                            if (workLog.getCode().equals(200)) {
+                                                idWorkLogText.setText(workLog.getLogs().get(0).getSummary());
+                                            } else {
+                                                idWorkLogText.setText("没有工作记录");
+                                            }
+                                        }
+                                    });
+                            // initCalendar();
+                        } else {
+                            SomeUtil.showSnackBar(container, "服务器错误！");
+                            //initCalendar();
+                        }
+
+                    }
+                });
+
+
+
+
+
+       /* final Calendar calendar = Calendar.getInstance();
+        LogUtil.d("initData : " + OtherUtils.formatMonth(calendar.getTime()).toString());
+        app.apiService.getLogData(CHECK_ONESSUMMARY,SomeUtil.getUserId(), calendarView.getCurrentDay())
+
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<WorkLog>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        LogUtil.d("getLogData error : " + e);
+                    }
+
+                    @Override
+                    public void onNext(WorkLog workLog) {
+                        LogUtil.d("workLog : " + workLog.toString());
+                        if (workLog.getCode().toString().contains("200")) {
+                            mylogs = workLog.getLogs();
+                            LogUtil.d("logs : " + mylogs.toString());
+                            String nowdate = OtherUtils.formatDate(calendar.getTime());
+                            app.apiService.getLogDataToDay(SomeUtil.getUserId(), nowdate)
+                                    .subscribeOn(Schedulers.io())
+                                    .observeOn(AndroidSchedulers.mainThread())
+                                    .subscribe(new Subscriber<WorkLog>() {
+                                        @Override
+                                        public void onCompleted() {
+
+                                        }
+
+                                        @Override
+                                        public void onError(Throwable e) {
+
+                                        }
+
+                                        @Override
+                                        public void onNext(WorkLog workLog) {
+                                            if (workLog.getCode().equals(200)) {
+                                                idWorkLogText.setText(workLog.getLogs().get(0).getSummary());
+                                            } else {
+                                                idWorkLogText.setText("没有工作记录");
+                                            }
+                                        }
+                                    });
+                            initCalendar();
+                        } else {
+                            SomeUtil.showSnackBar(container, "服务器错误！请稍后再试");
+                            LogUtil.d("logs : " + mylogs.toString());
+                            //initCalendar();
+                        }
+
+                    }
+                });
+
+
+
 
 
         //设置含有事件的日期 1-9号
@@ -169,7 +299,7 @@ public class WorkLogActivity extends BaseActivity {
             eventDays.add(OtherUtils.formatDate(SomeUtil.getStrToDate(date)));
         }
        // LogUtil.d("eventDays :" + eventDays.toString());
-        calendarView.setEventDays(eventDays);
+        calendarView.setEventDays(eventDays);*/
     }
 
     private void initCalendar() {
@@ -196,7 +326,7 @@ public class WorkLogActivity extends BaseActivity {
         calenderLog.post(new Runnable() {
             @Override
             public void run() {
-                initEventDays((CalendarView) adapter.getChildView(0));
+                initEventDays(adapter.getChildView(0));
             }
         });
     }
@@ -266,7 +396,7 @@ public class WorkLogActivity extends BaseActivity {
             txToday.setText(OtherUtils.formatDate(dateBean.getDate()));
 
             //查询日志图片内容
-            app.apiService.getLogPicData(APIservice.CHECK_ONESSUMMARYPIC_BYDAYS,SomeUtil.getUserId(),OtherUtils.formatDate(dateBean.getDate()))
+            app.apiService.getLogPicData(CHECK_ONESSUMMARYPIC_BYDAYS,SomeUtil.getUserId(),OtherUtils.formatDate(dateBean.getDate()))
                     .compose(RxUtil.<WorkLog>applySchedulers())
                     .subscribe(new Subscriber<WorkLog>() {
                         @Override
@@ -302,7 +432,7 @@ public class WorkLogActivity extends BaseActivity {
 
 
             //查询日志文字内容
-            app.apiService.getLogDataToDay(APIservice.CHECK_ONESSUMMARY_BYDAYS, SomeUtil.getUserId(), OtherUtils.formatDate(dateBean.getDate()))
+            app.apiService.getLogDataToDay( SomeUtil.getUserId(), OtherUtils.formatDate(dateBean.getDate()))
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(new Subscriber<WorkLog>() {
@@ -346,7 +476,7 @@ public class WorkLogActivity extends BaseActivity {
             final CalendarView calendarView = (CalendarView) calenderViews.get(position % 3);
             txToday.setText(calendarView.getCurrentDay());
             LogUtil.d("当前月份 ： " + calendarView.getCurrentDay());
-            app.apiService.getLogData(APIservice.CHECK_ONESSUMMARY, SomeUtil.getUserId(), calendarView.getCurrentDay())
+            app.apiService.getLogData(CHECK_ONESSUMMARY, SomeUtil.getUserId(), calendarView.getCurrentDay())
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(new Subscriber<WorkLog>() {

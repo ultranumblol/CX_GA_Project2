@@ -1,5 +1,6 @@
 package wgz.com.cx_ga_project.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.CardView;
@@ -34,6 +35,7 @@ import wgz.com.cx_ga_project.R;
 import wgz.com.cx_ga_project.app;
 import wgz.com.cx_ga_project.base.BaseActivity;
 import wgz.com.cx_ga_project.base.Constant;
+import wgz.com.cx_ga_project.base.RxBus;
 import wgz.com.cx_ga_project.bean.AskForLeaveBean;
 import wgz.com.cx_ga_project.entity.LeaveType;
 import wgz.com.cx_ga_project.util.RxUtil;
@@ -233,10 +235,15 @@ public class AskForLeaveActivity extends BaseActivity {
                     public void call(String s) {
                         LogUtil.d("leaveApply :" +s);
                         if (s.contains("200")) {
-                            SomeUtil.showSnackBar(rootview, "提交申请成功！");
+                            RxBus.getDefault().post("qingjiaflush");
+                            SomeUtil.showSnackBar(rootview, "提交申请成功！").setCallback(new Snackbar.Callback() {
+                                @Override
+                                public void onDismissed(Snackbar snackbar, int event) {
+                                    //setResult(1001,new Intent(AskForLeaveActivity.this,MyWorkApplyActivity.class).putExtra("result","refresh"));
+                                    finish();
+                                }
+                            });
 
-
-                            finish();
                          } else {
                             SomeUtil.showSnackBar(rootview, "服务器错误！");
                         }

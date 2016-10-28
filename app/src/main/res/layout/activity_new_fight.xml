@@ -121,7 +121,7 @@
                                 android:layout_marginTop="8dp"
                                 android:textSize="16dp"
                                 android:maxLines="1"
-                                android:text="2016-07-80 20:14" />
+                                android:text="---" />
 
                             <TextView
                                 android:id="@+id/detil_jq_address"
@@ -130,7 +130,7 @@
                                 android:layout_marginTop="8dp"
                                 android:maxLines="1"
                                 android:textSize="16dp"
-                                android:text="中大街181号" />
+                                android:text="---" />
 
                             <TextView
                                 android:id="@+id/detil_jq_bjrName"
@@ -139,7 +139,7 @@
                                 android:layout_marginTop="8dp"
                                 android:textSize="16dp"
                                 android:maxLines="1"
-                                android:text="范德萨" />
+                                android:text="---" />
 
                             <TextView
                                 android:id="@+id/detil_jq_bjrPhone"
@@ -148,7 +148,7 @@
                                 android:layout_marginTop="8dp"
                                 android:textSize="16dp"
                                 android:maxLines="1"
-                                android:text="18669107011" />
+                                android:text="---" />
 
                             <TextView
                                 android:id="@+id/detil_jq_nature"
@@ -157,7 +157,7 @@
                                 android:layout_marginTop="8dp"
                                 android:textSize="16dp"
                                 android:maxLines="1"
-                                android:text="刑事" />
+                                android:text="---" />
 
                             <TextView
                                 android:id="@+id/detil_jq_type"
@@ -167,7 +167,7 @@
                                 android:layout_marginTop="8dp"
                                 android:textSize="16dp"
                                 android:maxLines="1"
-                                android:text="恐怖袭击" />
+                                android:text="---" />
 
                         </LinearLayout>
 

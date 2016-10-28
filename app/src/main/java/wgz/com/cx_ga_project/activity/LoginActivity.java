@@ -9,6 +9,7 @@ import android.os.Build;
 import android.support.design.widget.Snackbar;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
@@ -30,16 +31,17 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.functions.Func1;
 import rx.schedulers.Schedulers;
-import wgz.com.cx_ga_project.API.APIservice;
 import wgz.com.cx_ga_project.R;
 import wgz.com.cx_ga_project.app;
 import wgz.com.cx_ga_project.base.BaseActivity;
 import wgz.com.cx_ga_project.base.Constant;
 import wgz.com.cx_ga_project.entity.UserInfo;
+import wgz.com.cx_ga_project.util.RxUtil;
 import wgz.com.cx_ga_project.util.SPBuild;
 import wgz.com.cx_ga_project.util.SPUtils;
 import wgz.com.cx_ga_project.util.SomeUtil;
 import wgz.datatom.com.utillibrary.util.LogUtil;
+import static wgz.com.cx_ga_project.base.Constant.GET_USER_HEAD;
 
 /**
  * 登陆
@@ -64,6 +66,9 @@ public class LoginActivity extends BaseActivity {
 
     @Override
     public void initView() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        }
         RxTextView.editorActions(editPassword, new Func1<Integer, Boolean>() {
             @Override
             public Boolean call(Integer integer) {
@@ -138,17 +143,14 @@ public class LoginActivity extends BaseActivity {
         }else {
             // TODO: 2016/8/5 登录功能还差联网
             httpLogin(username, MD5.md5(password));
+            //LogUtil.d("md5 : " + MD5.md5(password));
         }
 
     }
 
     private void httpLogin(final String username, final String password) {
-
-        //LogUtil.d("login :" +password );
-        app.apiService.login(username,password)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<UserInfo>() {
+        app.apiService.login2(username,password).compose(RxUtil.<String>applySchedulers())
+                .subscribe(new Subscriber<String>() {
                     @Override
                     public void onStart() {
                         super.onStart();
@@ -161,38 +163,70 @@ public class LoginActivity extends BaseActivity {
 
                     @Override
                     public void onError(Throwable e) {
-                        showProgress(false);
-                        LogUtil.d("Login error:"+e.toString());
                         SomeUtil.checkHttpException(getApplicationContext(),e,scrollLoginForm);
+                        showProgress(false);
+                        LogUtil.d("login : "+e.toString());
                     }
 
                     @Override
-                    public void onNext(UserInfo userInfo) {
-                        LogUtil.d("login result :" +userInfo.getRes().toString());
-                        if (userInfo.getCode().equals(200)){
-                            showProgress(false);
+                    public void onNext(String s) {
+                       LogUtil.d("login : "+s);
+                        if (s.contains("\"code\":200")){
+                            app.apiService.login(username,MD5.md5("112233"))
+                                    .subscribeOn(Schedulers.io())
+                                    .observeOn(AndroidSchedulers.mainThread())
+                                    .subscribe(new Subscriber<UserInfo>() {
 
-                            SomeUtil.showSnackBar(scrollLoginForm,"登录成功！").setCallback(new Snackbar.Callback() {
-                                @Override
-                                public void onDismissed(Snackbar snackbar, int event) {
-                                    startActivity(new Intent(LoginActivity.this,HomeActivity.class));
-                                    finish();
-                                }
-                            });
+                                        @Override
+                                        public void onCompleted() {
 
-                            getuserhead(userInfo.getRes().get(0).getUserid());
-                            saveUserInfo(userInfo.getRes().get(0),password);
+                                        }
+
+                                        @Override
+                                        public void onError(Throwable e) {
+                                            showProgress(false);
+                                            LogUtil.d("Login error:"+e.toString());
+                                            //SomeUtil.checkHttpException(getApplicationContext(),e,scrollLoginForm);
+                                        }
+
+                                        @Override
+                                        public void onNext(UserInfo userInfo) {
+                                            LogUtil.d("login result code:" +userInfo.getCode().toString());
+                                            LogUtil.d("login result :" +userInfo.getRes().toString());
+                                            if (userInfo.getCode().equals(200)){
+                                                showProgress(false);
+
+                                                SomeUtil.showSnackBar(scrollLoginForm,"登录成功！").setCallback(new Snackbar.Callback() {
+                                                    @Override
+                                                    public void onDismissed(Snackbar snackbar, int event) {
+                                                        startActivity(new Intent(LoginActivity.this,HomeActivity.class));
+                                                        finish();
+                                                    }
+                                                });
+
+                                                getuserhead(userInfo.getRes().get(0).getUserid());
+                                                saveUserInfo(userInfo.getRes().get(0),password);
+                                            }
+                                            else {
+                                                SomeUtil.showSnackBar(scrollLoginForm,"用户名或密码错误！");
+                                                showProgress(false);
+                                            }
+                                        }
+                                    });
+
+
                         }
-                        else {
+                        else{
                             SomeUtil.showSnackBar(scrollLoginForm,"用户名或密码错误！");
                             showProgress(false);
+
                         }
                     }
                 });
     }
     private void getuserhead(String userid) {
         LogUtil.d("userid : "+userid);
-        app.apiService.getUserhead(APIservice.GET_USER_HEAD,userid).subscribeOn(Schedulers.io())
+        app.apiService.getUserhead(userid).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<String>() {
                     @Override

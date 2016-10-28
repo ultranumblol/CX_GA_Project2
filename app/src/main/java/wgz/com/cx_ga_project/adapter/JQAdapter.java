@@ -10,7 +10,7 @@ import com.jude.easyrecyclerview.adapter.BaseViewHolder;
  * Created by wgz on 2016/8/22.
  */
 
-public class JQAdapter extends MyRecyclerArrayAdapter<String> {
+public class JQAdapter extends MyRecyclerArrayAdapter<Object> {
     public JQAdapter(Context context) {
         super(context);
     }

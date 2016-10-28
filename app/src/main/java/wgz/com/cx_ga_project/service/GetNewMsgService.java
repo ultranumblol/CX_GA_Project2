@@ -1,21 +1,21 @@
 package wgz.com.cx_ga_project.service;
 
-import android.app.ActivityManager;
+
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
-import android.content.ComponentName;
+
 import android.content.Context;
 import android.content.Intent;
 import android.media.RingtoneManager;
+
 import android.net.Uri;
-import android.os.Bundle;
+import android.os.Binder;
 import android.os.IBinder;
-import android.os.Parcelable;
+
 import android.support.annotation.Nullable;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,9 +25,14 @@ import rx.schedulers.Schedulers;
 import wgz.com.cx_ga_project.R;
 import wgz.com.cx_ga_project.activity.ChatActivity;
 import wgz.com.cx_ga_project.activity.HomeActivity;
+import wgz.com.cx_ga_project.activity.WelcomeActivity;
 import wgz.com.cx_ga_project.app;
+import wgz.com.cx_ga_project.base.RxBus;
 import wgz.com.cx_ga_project.entity.ChatMsg;
 import wgz.datatom.com.utillibrary.util.LogUtil;
+
+import static wgz.com.cx_ga_project.util.SomeUtil.getUserId;
+import static wgz.com.cx_ga_project.util.SomeUtil.isActivityRunning;
 
 /**
  * Created by wgz on 2016/9/11.
@@ -49,12 +54,15 @@ public class GetNewMsgService extends Service {
                         Thread.sleep(5000);
                         checkNew();
                         if (ifHasNew){
-                            if (isActivityRunning(getApplicationContext())){
-                                Intent intent = new Intent();
+                            if (isActivityRunning(getApplicationContext(), ChatActivity.class)){
+                               /* Intent intent = new Intent();
                                 intent.putExtra("msg","newmsg");
                                 intent.setAction("service.MsgService");
                                 sendBroadcast(intent);
-                                LogUtil.d("发送广播");
+                                LogUtil.d("发送广播");*/
+                                LogUtil.d("rxbus");
+                                RxBus.getDefault().post("flush");
+
                                 newchatData.clear();
                             }else {
                                 if (ifHasNotify){
@@ -63,7 +71,7 @@ public class GetNewMsgService extends Service {
 
                                     NotificationManager manager = (NotificationManager)getApplication().getSystemService(Context.NOTIFICATION_SERVICE);
                                     PendingIntent pendingIntent3 = PendingIntent.getActivity(getApplication(), 0,
-                                            new Intent(getApplication(), HomeActivity.class), 0);
+                                            new Intent(getApplication(), WelcomeActivity.class), 0);
                                     Uri ringUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
                                     // 通过Notification.Builder来创建通知，注意API Level
                                     // API16之后才支持
@@ -105,7 +113,7 @@ public class GetNewMsgService extends Service {
 
     }
     private void GetNewMsg() {
-        app.jqAPIService.GetNewMsg2("3242342","223432432").subscribeOn(Schedulers.io())
+        app.jqAPIService.GetNewMsg2("3242342",getUserId()).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<ChatMsg>() {
                     @Override
@@ -125,26 +133,21 @@ public class GetNewMsgService extends Service {
                         if (newchatData.size()>0){
                             ifHasNew = true;
 
-                        }else ifHasNew = false;
+                        }else ifHasNew = true;
                     }
                 });
     }
-    //判断一个activity是否在运行
-    public  static  boolean isActivityRunning(Context context){
-        ActivityManager activityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
-        List<ActivityManager.RunningTaskInfo> info = activityManager.getRunningTasks(1);
-        if (info!=null&&info.size()>0){
-            ComponentName component = info.get(0).topActivity;
-            if (ChatActivity.class.getName().equals(component.getClassName())){
-                return true;
-            }
-        }
 
-        return false;
-    }
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
-        return null;
+        return mBind;
+    }
+
+    private MyBind mBind = new MyBind();
+    public class MyBind extends Binder {
+        public GetNewMsgService getMyService() {
+            return GetNewMsgService.this;
+        }
     }
 }
