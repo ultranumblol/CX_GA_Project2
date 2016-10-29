@@ -39,11 +39,11 @@ public class NewJQMsgPush extends Service {
     public void onCreate() {
         super.onCreate();
         LogUtil.d("警情推送服务启动");
-        rx.Observable.interval(10, TimeUnit.SECONDS)
+        rx.Observable.interval(60, TimeUnit.SECONDS)
                 .subscribe(new Action1<Long>() {
                     @Override
                     public void call(Long aLong) {
-                        app.jqAPIService.jqmsgPush(SomeUtil.getUserId(),"532301590000")
+                        app.jqAPIService.jqmsgPush(SomeUtil.getUserId(),"532301000000")
                                 .subscribe(new Subscriber<NewJQPush>() {
                                     @Override
                                     public void onCompleted() {

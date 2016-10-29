@@ -5,6 +5,7 @@ import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 import rx.Observable;
+import wgz.com.cx_ga_project.entity.AllDep;
 import wgz.com.cx_ga_project.entity.CallerInfo;
 import wgz.com.cx_ga_project.entity.ChatMsg;
 import wgz.com.cx_ga_project.entity.ChuJingRen;
@@ -373,8 +374,29 @@ public interface JqAPIService {
     Observable<String> stopTaskJq(@Field("status") String status,
                                  @Field("id") String id);
 
-
-
+    /**
+     * 获取所有部门
+     * @return
+     */
     @GET("appjqreport/getAllDep")
-    Observable<String> getAllDep();
+    Observable<AllDep> getAllDep();
+
+
+    /**
+     * 警情转移
+     * @param jqid
+     * @param taskid
+     * @param sendtime
+     * @param depname
+     * @param depid
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("appjqreport/JqTransfer")
+    Observable<String> JqTransfer(@Field("jqid") String jqid,
+                                  @Field("taskid") String taskid ,
+                                  @Field("sendtime") String sendtime ,
+                                  @Field("depname") String depname ,
+                                  @Field("depid") String depid  );
+
 }

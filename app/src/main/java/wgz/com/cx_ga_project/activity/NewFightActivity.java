@@ -35,6 +35,7 @@ import wgz.com.cx_ga_project.app;
 import wgz.com.cx_ga_project.base.BaseActivity;
 import wgz.com.cx_ga_project.base.Constant;
 import wgz.com.cx_ga_project.base.RxBus;
+import wgz.com.cx_ga_project.entity.AllDep;
 import wgz.com.cx_ga_project.entity.JQDetil;
 import wgz.com.cx_ga_project.entity.JQOnDutyPeople;
 import wgz.com.cx_ga_project.entity.JqOrbit;
@@ -90,7 +91,9 @@ public class NewFightActivity extends BaseActivity {
     private List<JQOnDutyPeople.peoRe> mDutyPeodata = new ArrayList<>();
     private String taskid = "";
     private String jqstate = "";
-    private String jqid = "";
+    private int partNum = -1;
+    private String departmentName = "";
+    private String departmentID = "";
 
 
     @Override
@@ -149,54 +152,175 @@ public class NewFightActivity extends BaseActivity {
         Intent intent = getIntent();
         taskid = intent.getStringExtra("taskid");
         jqstate = intent.getStringExtra("jqstate");
-        jqid = intent.getStringExtra("jqid");
+        JQid = intent.getStringExtra("jqid");
 
 
-        if (jqstate.equals("2")){
+        if (jqstate.equals("2")) {
             fabNewfight.setImageResource(R.drawable.ic_stop_white_48dp);
         }
-        LogUtil.d("taskid : "+taskid);
-        LogUtil.d("jqstate : "+jqstate);
-        LogUtil.d("jqid : "+jqid);
-       // LogUtil.d("jqid : "+JQid);
+        LogUtil.d("taskid : " + taskid);
+        LogUtil.d("jqstate : " + jqstate);
+        LogUtil.d("jqid : " + JQid);
+        // LogUtil.d("jqid : "+JQid);
 
 
     }
 
     private void transferDialog() {
-        final String[] parts = new String[]{"213", "31212", "4324", "111", "213", "31212", "4324"};
-        final AlertDialog.Builder tbuilder = new AlertDialog.Builder(this);
-        tbuilder.setTitle("请确认")
-                .setMessage("是否结束当前出警任务并转移该任务？")
-                .setNegativeButton("取消", null)
-                .setPositiveButton("确认", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        tbuilder.setTitle("请选择要转移的部门")
-                                .setMessage(null)
-                                .setSingleChoiceItems(parts, -1, new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
+        final String[] parts = new String[]{"楚雄市公安局", "楚雄市森林公安局"};
 
-                                    }
-                                })
+
+        app.jqAPIService.getAllDep()
+                .compose(RxUtil.<AllDep>applySchedulers())
+                .subscribe(new Subscriber<AllDep>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onNext(AllDep result) {
+                        LogUtil.d("alldep : " + result.getRes().toString());
+                        final List<AllDep.AlldepRe> data1 = new ArrayList<>();
+                        final List<AllDep.AlldepRe> dataSL = new ArrayList<>();
+                        for (int i = 0; i < result.getRes().size(); i++) {
+                            if (result.getRes().get(i).getDepartParentid().equals("532301000000")) {
+                                data1.add(result.getRes().get(i));
+                            }
+                        }
+                        for (int i = 0; i < result.getRes().size(); i++) {
+                            if (result.getRes().get(i).getDepartParentid().equals("532301390000")) {
+                                dataSL.add(result.getRes().get(i));
+                            }
+                        }
+                        final String[] parts1 = new String[data1.size()];
+                        final String[] partsSL = new String[dataSL.size()];
+                        for (int i = 0; i < data1.size(); i++) {
+                            parts1[i] = data1.get(i).getDepartSimplename();
+                        }
+                        for (int i = 0; i < dataSL.size(); i++) {
+                            partsSL[i] = dataSL.get(i).getDepartSimplename();
+                        }
+
+                        final AlertDialog.Builder tbuilder = new AlertDialog.Builder(NewFightActivity.this);
+                        tbuilder.setTitle("请确认")
+                                .setMessage("是否结束当前出警任务并转移该任务？")
                                 .setNegativeButton("取消", null)
-                                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                                .setPositiveButton("确认", new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
-                                        tbuilder.setTitle("警告")
-                                                .setMessage("请完成警情回告后再转移该警情!")
-                                                .setPositiveButton("确认", new DialogInterface.OnClickListener() {
+                                        tbuilder.setTitle("请选择要转移的单位")
+                                                .setMessage(null)
+                                                .setSingleChoiceItems(parts, -1, new DialogInterface.OnClickListener() {
                                                     @Override
                                                     public void onClick(DialogInterface dialog, int which) {
+                                                        partNum = which;
+                                                    }
+                                                })
+                                                .setNegativeButton("取消", null)
+                                                .setPositiveButton("下一步", new DialogInterface.OnClickListener() {
+                                                    @Override
+                                                    public void onClick(DialogInterface dialog, int which) {
+                                                        LogUtil.d("which : " + which);
+                                                        switch (partNum) {
+                                                            case 0:
+                                                                tbuilder.setTitle(parts[partNum])
+                                                                        .setMessage(null)
+                                                                        .setSingleChoiceItems(parts1, -1, new DialogInterface.OnClickListener() {
+                                                                            @Override
+                                                                            public void onClick(DialogInterface dialog, int which) {
+                                                                                departmentName = parts1[which];
+                                                                                for (int i = 0; i < data1.size(); i++) {
+                                                                                    if (departmentName.equals(data1.get(i).getDepartSimplename())) {
+                                                                                        departmentID = data1.get(i).getDepartmentid();
+                                                                                    }
+                                                                                }
+
+                                                                            }
+                                                                        }).setNegativeButton("取消", null)
+                                                                        .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                                                                            @Override
+                                                                            public void onClick(DialogInterface dialog, int which) {
+                                                                                LogUtil.d("departmentName : "+departmentName);
+                                                                                LogUtil.d("departmentid : "+departmentID);
+                                                                                Jqzhuanyi();
+                                                                            }
+                                                                        }).show();
+
+                                                                break;
+                                                            case 1:
+                                                                tbuilder.setTitle(parts[partNum])
+                                                                        .setMessage(null)
+                                                                        .setSingleChoiceItems(partsSL, -1, new DialogInterface.OnClickListener() {
+                                                                            @Override
+                                                                            public void onClick(DialogInterface dialog, int which) {
+                                                                                departmentName = partsSL[which];
+                                                                                for (int i = 0; i < dataSL.size(); i++) {
+                                                                                    if (departmentName.equals(dataSL.get(i).getDepartSimplename())) {
+                                                                                        departmentID = dataSL.get(i).getDepartmentid();
+                                                                                    }
+                                                                                }
+                                                                            }
+                                                                        }).setNegativeButton("取消", null)
+                                                                        .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                                                                            @Override
+                                                                            public void onClick(DialogInterface dialog, int which) {
+                                                                                LogUtil.d("departmentName : "+departmentName);
+                                                                                LogUtil.d("departmentid : "+departmentID);
+                                                                                Jqzhuanyi();
+                                                                            }
+                                                                        }).show();
+                                                                break;
+
+                                                        }
+
+
+                                                      /*  tbuilder.setTitle("警告")
+                                                                .setMessage("请完成警情回告后再转移该警情!")
+                                                                .setPositiveButton("确认", new DialogInterface.OnClickListener() {
+                                                                    @Override
+                                                                    public void onClick(DialogInterface dialog, int which) {
+
+                                                                    }
+                                                                }).setNegativeButton("取消", null)
+                                                                .show();*/
 
                                                     }
-                                                }).setNegativeButton("取消", null)
-                                                .show();
+                                                }).show();
                                     }
                                 }).show();
+
+
                     }
-                }).show();
+                });
+
+
+    }
+
+    private void Jqzhuanyi() {
+        app.jqAPIService.JqTransfer(JQid,taskid,SomeUtil.getSysTime(),departmentName,departmentID)
+                .compose(RxUtil.<String>applySchedulers())
+                .subscribe(new Subscriber<String>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onNext(String s) {
+                        LogUtil.d("JqTransfer : "+s);
+                    }
+                });
 
 
     }
@@ -225,11 +349,11 @@ public class NewFightActivity extends BaseActivity {
                         final String[] lid = new String[mDutyPeodata.size()];
                         final boolean[] ifchaeck = new boolean[mDutyPeodata.size()];
                         for (int i = 0; i < mDutyPeodata.size(); i++) {
-                            lname[i]=mDutyPeodata.get(i).getPolicename();
-                            lid[i]=mDutyPeodata.get(i).getPoliceid();
+                            lname[i] = mDutyPeodata.get(i).getPolicename();
+                            lid[i] = mDutyPeodata.get(i).getPoliceid();
                         }
 
-                         for (int i = 0; i < lname.length; i++) {
+                        for (int i = 0; i < lname.length; i++) {
                             if (SomeUtil.getUserId().equals(lid[i])) {
                                 ifchaeck[i] = true;
                             }
@@ -251,15 +375,15 @@ public class NewFightActivity extends BaseActivity {
                                 for (int i = 0; i < ifchaeck.length; i++) {
                                     if (ifchaeck[i]) {
                                         //sb.append(lid[i] + "&");
-                                        j+=1;
+                                        j += 1;
                                     }
                                 }
                                 String[] ids = new String[j];
                                 int k = 0;
                                 for (int i = 0; i < ifchaeck.length; i++) {
                                     if (ifchaeck[i]) {
-                                       ids[k] = lid[i];
-                                        k+=1;
+                                        ids[k] = lid[i];
+                                        k += 1;
                                     }
                                 }
 
@@ -281,12 +405,12 @@ public class NewFightActivity extends BaseActivity {
     }
 
     private void addCjPerson(String[] lid) {
-        app.jqAPIService.addCjPerson("201607210010000006001","532301000000",lid)
+        app.jqAPIService.addCjPerson("201607210010000006001", "532301000000", lid)
                 .compose(RxUtil.<String>applySchedulers())
                 .subscribe(new Action1<String>() {
                     @Override
                     public void call(String s) {
-                        LogUtil.d("addcjperson result : "+s);
+                        LogUtil.d("addcjperson result : " + s);
                     }
                 });
 

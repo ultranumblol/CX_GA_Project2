@@ -236,6 +236,21 @@ public class AllDep {
             this.isparent = isparent;
         }
 
-
+        @Override
+        public String toString() {
+            return "AlldepRe{" +
+                    "departSqlid='" + departSqlid + '\'' +
+                    ", departmentid='" + departmentid + '\'' +
+                    ", departmentname='" + departmentname + '\'' +
+                    ", departSimplename='" + departSimplename + '\'' +
+                    ", departLeader='" + departLeader + '\'' +
+                    ", departLevel='" + departLevel + '\'' +
+                    ", departParentid='" + departParentid + '\'' +
+                    ", departVirtual='" + departVirtual + '\'' +
+                    ", departSort='" + departSort + '\'' +
+                    ", departDatrixGroupid=" + departDatrixGroupid +
+                    ", isparent='" + isparent + '\'' +
+                    '}';
+        }
     }
 }
