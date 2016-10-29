@@ -2,8 +2,8 @@ package wgz.com.cx_ga_project.API;
 
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
+import retrofit2.http.GET;
 import retrofit2.http.POST;
-import retrofit2.http.Query;
 import rx.Observable;
 import wgz.com.cx_ga_project.entity.CallerInfo;
 import wgz.com.cx_ga_project.entity.ChatMsg;
@@ -226,8 +226,8 @@ public interface JqAPIService {
     Observable<String> StartNewFight(@Field("jqid") String jqid,
                                      @Field("taskid") String taskid,
                                      @Field("arrivetime") String arrivetime,
-                                     @Field("arrivetime") String gps_e,
-                                     @Field("arrivetime") String gps_n);
+                                     @Field("gps_e") String gps_e,
+                                     @Field("gps_n") String gps_n);
 
     /**
      * 获取警情处理轨迹
@@ -325,28 +325,56 @@ public interface JqAPIService {
     Observable<String> addCjPerson(@Field("taskid") String taskid,
                                    //@Field("policeid") String policeid,
                                    @Field("depid") String depid,
-                                   @Field("policeid[]") String...policeid
+                                   @Field("policeid[]") String... policeid
     );
 
     /**
      * 查询新警情还没有出警人的
+     *
      * @param policeid
      * @param depid
      * @return
      */
     @FormUrlEncoded
     @POST("appjqreport/getNewJqlist")
-    Observable<String> getNewJqlist(@Field("policeid") String policeid,
-                                   @Field("depid") String depid);
+    Observable<NewJQ> getNewJqlist(@Field("policeid") String policeid,
+                                    @Field("depid") String depid);
 
 
     /**
      * 查询新警情还没有出警人的
+     *
      * @param policeid
      * @return
      */
     @FormUrlEncoded
-    @POST("appjqreport/getNewJqlist")
-    Observable<NewJQ> getNewJqlist1(@Field("policeid") String policeid
-                                  );
+    @POST("appjqreport/getNewJqlist1")
+    Observable<NewJQ> getNewJqlist1(@Field("policeid") String policeid);
+
+
+    /**
+     * 获取警员的历史警情
+     * @param policeid
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("appjqreport/getOldJqlist")
+    Observable<NewJQ> getOldJqlist(@Field("policeid") String policeid);
+
+
+    /**
+     * 停止某警情
+     * @param status
+     * @param id
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("appjqreport/stopTaskJq")
+    Observable<String> stopTaskJq(@Field("status") String status,
+                                 @Field("id") String id);
+
+
+
+    @GET("appjqreport/getAllDep")
+    Observable<String> getAllDep();
 }

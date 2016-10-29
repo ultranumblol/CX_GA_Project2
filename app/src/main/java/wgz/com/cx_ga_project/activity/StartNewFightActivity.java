@@ -15,6 +15,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 
 import com.jude.easyrecyclerview.EasyRecyclerView;
 
@@ -23,11 +24,14 @@ import java.util.List;
 
 import butterknife.Bind;
 import rx.Subscriber;
+import rx.Subscription;
+import rx.functions.Action1;
 import wgz.com.cx_ga_project.R;
 import wgz.com.cx_ga_project.adapter.JQAdapter;
 import wgz.com.cx_ga_project.adapter.MyRecyclerArrayAdapter;
 import wgz.com.cx_ga_project.app;
 import wgz.com.cx_ga_project.base.BaseActivity;
+import wgz.com.cx_ga_project.base.RxBus;
 import wgz.com.cx_ga_project.entity.NewJQ;
 import wgz.com.cx_ga_project.util.RxUtil;
 import wgz.com.cx_ga_project.util.SomeUtil;
@@ -50,7 +54,7 @@ public class StartNewFightActivity extends BaseActivity {
     private List<String> list = new ArrayList<>();
     private JQReceiver receiver;
     private List<NewJQ.NewjqRe> data = new ArrayList<>();
-
+    private Subscription rxSubscription;
     @Override
     public int getLayoutId() {
         return R.layout.activity_start_new_fight;
@@ -72,10 +76,30 @@ public class StartNewFightActivity extends BaseActivity {
         adapter.setOnItemClickListener(new MyRecyclerArrayAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(int position, View itemView) {
-                startActivity(new Intent(StartNewFightActivity.this, NewFightActivity.class));
+                TextView taskidview = (TextView) itemView.findViewById(R.id.taskid);
+                String taskid =taskidview.getText().toString();
+                TextView jqstateview = (TextView) itemView.findViewById(R.id.jqstate_id);
+                String jqstate = jqstateview.getText().toString();
+
+                TextView jqidview = (TextView) itemView.findViewById(R.id.jqid);
+                String jqid = jqidview.getText().toString();
+
+                startActivity(new Intent(StartNewFightActivity.this, NewFightActivity.class)
+                        .putExtra("taskid",taskid)
+                        .putExtra("jqstate",jqstate)
+                        .putExtra("jqid",jqid)
+                );
             }
         });
         initdata();
+        rxSubscription = RxBus.getDefault().toObservable(String.class)
+                .subscribe(new Action1<String>() {
+                    @Override
+                    public void call(String s) {
+                        if (s.equals("newjqflush"))
+                            initdata();
+                    }
+                });
 
 
     }
@@ -83,8 +107,8 @@ public class StartNewFightActivity extends BaseActivity {
     private void initdata() {
 
         app.jqAPIService.getNewJqlist(SomeUtil.getUserId(),"532301000000")
-                .compose(RxUtil.<String>applySchedulers())
-                .subscribe(new Subscriber<String>() {
+                .compose(RxUtil.<NewJQ>applySchedulers())
+                .subscribe(new Subscriber<NewJQ>() {
                     @Override
                     public void onCompleted() {
 
@@ -96,14 +120,16 @@ public class StartNewFightActivity extends BaseActivity {
                     }
 
                     @Override
-                    public void onNext(String newJQ) {
-                        LogUtil.d("newjq1 :" +newJQ);
-                       /* if (newJQ.getCode().equals(200)) {
+                    public void onNext(NewJQ newJQ) {
+                        LogUtil.d("newjq1 :" +newJQ.getRes().toString());
+                       if (newJQ.getCode().equals(200)) {
                             data = newJQ.getRes();
                             adapter.addAll(data);
+
+
                         } else {
-                            SomeUtil.showSnackBar(rootview, "没有新警情!");
-                        }*/
+                            //SomeUtil.showSnackBar(rootview, "没有新警情!");
+                        }
                     }
                 });
         app.jqAPIService.getNewJqlist1(SomeUtil.getUserId())
@@ -125,8 +151,11 @@ public class StartNewFightActivity extends BaseActivity {
                         if (newJQ.getCode().equals(200)) {
                             data = newJQ.getRes();
                             adapter.addAll(data);
+
+
+
                         } else {
-                            SomeUtil.showSnackBar(rootview, "没有新警情!");
+                           // SomeUtil.showSnackBar(rootview, "没有新警情!");
                         }
                     }
                 });

@@ -34,6 +34,7 @@ import wgz.com.cx_ga_project.adapter.TimelineAdapter;
 import wgz.com.cx_ga_project.app;
 import wgz.com.cx_ga_project.base.BaseActivity;
 import wgz.com.cx_ga_project.base.Constant;
+import wgz.com.cx_ga_project.base.RxBus;
 import wgz.com.cx_ga_project.entity.JQDetil;
 import wgz.com.cx_ga_project.entity.JQOnDutyPeople;
 import wgz.com.cx_ga_project.entity.JqOrbit;
@@ -87,6 +88,9 @@ public class NewFightActivity extends BaseActivity {
     private HomeAdapter mAdapter;
     private String JQid = "";
     private List<JQOnDutyPeople.peoRe> mDutyPeodata = new ArrayList<>();
+    private String taskid = "";
+    private String jqstate = "";
+    private String jqid = "";
 
 
     @Override
@@ -142,6 +146,20 @@ public class NewFightActivity extends BaseActivity {
 
                     }
                 });
+        Intent intent = getIntent();
+        taskid = intent.getStringExtra("taskid");
+        jqstate = intent.getStringExtra("jqstate");
+        jqid = intent.getStringExtra("jqid");
+
+
+        if (jqstate.equals("2")){
+            fabNewfight.setImageResource(R.drawable.ic_stop_white_48dp);
+        }
+        LogUtil.d("taskid : "+taskid);
+        LogUtil.d("jqstate : "+jqstate);
+        LogUtil.d("jqid : "+jqid);
+       // LogUtil.d("jqid : "+JQid);
+
 
     }
 
@@ -203,7 +221,6 @@ public class NewFightActivity extends BaseActivity {
                         LogUtil.d("JQOnDutyPeople code : " + result.getCode().toString());
                         LogUtil.d("JQOnDutyPeople code : " + result.getRes().toString());
                         mDutyPeodata = result.getRes();
-                        final StringBuilder sb = new StringBuilder();
                         String[] lname = new String[mDutyPeodata.size()];
                         final String[] lid = new String[mDutyPeodata.size()];
                         final boolean[] ifchaeck = new boolean[mDutyPeodata.size()];
@@ -229,16 +246,28 @@ public class NewFightActivity extends BaseActivity {
                                 }).setPositiveButton("确认", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
+
+                                int j = 0;
                                 for (int i = 0; i < ifchaeck.length; i++) {
                                     if (ifchaeck[i]) {
-                                        sb.append(lid[i] + "&");
+                                        //sb.append(lid[i] + "&");
+                                        j+=1;
                                     }
                                 }
-                                addCjPerson(lid);
+                                String[] ids = new String[j];
+                                int k = 0;
+                                for (int i = 0; i < ifchaeck.length; i++) {
+                                    if (ifchaeck[i]) {
+                                       ids[k] = lid[i];
+                                        k+=1;
+                                    }
+                                }
 
 
+                                addCjPerson(ids);
+                                StartFight();
 
-                                LogUtil.d("sb : " + sb.toString());
+
                                 // StartFight();
                             }
                         }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
@@ -252,7 +281,7 @@ public class NewFightActivity extends BaseActivity {
     }
 
     private void addCjPerson(String[] lid) {
-        app.jqAPIService.addCjPerson("","532301000000",lid)
+        app.jqAPIService.addCjPerson("201607210010000006001","532301000000",lid)
                 .compose(RxUtil.<String>applySchedulers())
                 .subscribe(new Action1<String>() {
                     @Override
@@ -273,7 +302,7 @@ public class NewFightActivity extends BaseActivity {
         String longitude = (String) SPUtils.get(app.getApp().getApplicationContext(), Constant.LONGITUDE, "1111");
         LogUtil.d("fight latitude:" + latitude);
         LogUtil.d("fight longitude:" + longitude);
-        app.jqAPIService.StartNewFight("2016072100100000060", "1", time, longitude, latitude)
+        app.jqAPIService.StartNewFight(JQid, taskid, time, longitude, latitude)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<String>() {
@@ -291,11 +320,13 @@ public class NewFightActivity extends BaseActivity {
                         LogUtil.d("newfight result : " + s);
                         if (s.contains("199")) {
                             SomeUtil.showSnackBarLong(rootview, "已经开始作战！");
-                            fabNewfight.setImageResource(R.drawable.ic_stop_white_48dp);
+
 
                         }
                         if (s.contains("200")) {
                             SomeUtil.showSnackBar(rootview, "开始作战！");
+                            fabNewfight.setImageResource(R.drawable.ic_stop_white_48dp);
+                            RxBus.getDefault().post("newjqflush");
 
                         }
                         if (s.contains("300")) {
@@ -327,6 +358,7 @@ public class NewFightActivity extends BaseActivity {
                         // LogUtil.d("JqOrbit result : "+jqOrbit.getRes().toString());
                         list = jqOrbit.getRes();
                         LogUtil.d("JqOrbit result : " + list.toString());
+                        JQid = jqOrbit.getRes().get(0).getJqid();
                     }
                 });
 

@@ -32,8 +32,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_toRightOf="@id/user_face"
-                android:text="警情ID"
-                android:id="@+id/jqid"
+                android:text="警情ID:"
+                android:id="@+id/jqidtitle"
                 android:textColor="@color/cadetblue"
                 android:layout_marginTop="4dp"
 
@@ -42,14 +42,69 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="报警日期"
+                android:layout_toRightOf="@id/jqidtitle"
+                android:text="警情ID"
+                android:id="@+id/jqid"
+                android:textColor="@color/cadetblue"
+                android:layout_marginTop="4dp"
+
+                android:textSize="14dp"
+                />
+
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@id/user_face"
+                android:text="taskID"
+                android:id="@+id/taskid"
+                android:textColor="@color/cadetblue"
+                android:layout_marginTop="4dp"
+                android:visibility="gone"
+                android:textSize="14dp"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@id/user_face"
+                android:text="stateID"
+                android:id="@+id/jqstate_id"
+                android:textColor="@color/cadetblue"
+                android:layout_marginTop="4dp"
+                android:visibility="gone"
+                android:textSize="14dp"
+                />
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="报警日期:"
                 android:layout_marginTop="6dp"
 
                 android:layout_below="@id/jqid"
                 android:textColor="@color/cadetblue"
                 android:textSize="12dp"
                 android:layout_toRightOf="@id/user_face"
+                android:id="@+id/jq_bjdatetitle" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="2016"
+                android:layout_marginTop="6dp"
+
+                android:layout_below="@id/jqid"
+                android:textColor="@color/cadetblue"
+                android:textSize="12dp"
+                android:layout_marginRight="8dp"
+                android:layout_toRightOf="@id/jq_bjdatetitle"
                 android:id="@+id/jq_bjdate" />
+
+
+
+
             <ImageView
                 android:layout_width="46dp"
                 android:layout_height="46dp"
