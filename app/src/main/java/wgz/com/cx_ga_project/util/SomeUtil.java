@@ -279,4 +279,13 @@ public class SomeUtil {
         return (int) SPUtils.get(app.getApp().getApplicationContext(),Constant.NEWJQCOUNT, 0);
 
     }
+
+    public static String getJQId(){
+
+        return (String) SPUtils.get(app.getApp().getApplicationContext(), Constant.JQID, "000");
+    }
+    public static String getTASKId(){
+
+        return (String) SPUtils.get(app.getApp().getApplicationContext(), Constant.TASKID, "000");
+    }
 }

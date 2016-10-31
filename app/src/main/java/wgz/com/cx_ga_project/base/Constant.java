@@ -34,4 +34,7 @@ public class Constant {
     public static final String CHECK_ONESSUMMARY = "checkOnceSummary";
     public static final String CHECK_ONESSUMMARYPIC_BYDAYS = "checkOnceSummaryPicBydays";
     public static final String UPLOAD_PICS = "saveAppPics";
+
+    public static final String JQID = "jqid";
+    public static final String TASKID = "taskid";
 }

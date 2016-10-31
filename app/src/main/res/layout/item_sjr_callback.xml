@@ -23,6 +23,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="张三"
+                android:id="@+id/sjr_name"
                 android:layout_marginLeft="12dp"
                 />
             <TextView
@@ -35,6 +36,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="男"
+                android:id="@+id/sjr_sex"
                 android:layout_marginLeft="12dp"
 
                 />
@@ -60,10 +62,35 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="18669107011"
+                android:id="@+id/sjr_mobilephone"
                 android:layout_marginLeft="12dp"
                 />
 
         </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="12dp"
+            >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="座机号:"
+
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="18669107011"
+                android:id="@+id/sjr_telphone"
+                android:layout_marginLeft="12dp"
+                />
+
+        </LinearLayout>
+
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -81,6 +108,7 @@
                 android:layout_height="wrap_content"
                 android:text="622101198911180395"
                 android:layout_marginLeft="12dp"
+                android:id="@+id/sjr_idcard"
                 />
 
 

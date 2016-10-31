@@ -31,9 +31,11 @@ import wgz.com.cx_ga_project.adapter.JQAdapter;
 import wgz.com.cx_ga_project.adapter.MyRecyclerArrayAdapter;
 import wgz.com.cx_ga_project.app;
 import wgz.com.cx_ga_project.base.BaseActivity;
+import wgz.com.cx_ga_project.base.Constant;
 import wgz.com.cx_ga_project.base.RxBus;
 import wgz.com.cx_ga_project.entity.NewJQ;
 import wgz.com.cx_ga_project.util.RxUtil;
+import wgz.com.cx_ga_project.util.SPBuild;
 import wgz.com.cx_ga_project.util.SomeUtil;
 import wgz.datatom.com.utillibrary.util.LogUtil;
 
@@ -84,11 +86,21 @@ public class StartNewFightActivity extends BaseActivity {
                 TextView jqidview = (TextView) itemView.findViewById(R.id.jqid);
                 String jqid = jqidview.getText().toString();
 
+                TextView jqstopidview = (TextView) itemView.findViewById(R.id.jqstop_id);
+                String jqstopid = jqstopidview.getText().toString();
+
                 startActivity(new Intent(StartNewFightActivity.this, NewFightActivity.class)
                         .putExtra("taskid",taskid)
                         .putExtra("jqstate",jqstate)
                         .putExtra("jqid",jqid)
+                        .putExtra("jqstopid",jqstopid)
                 );
+                new SPBuild(getApplicationContext())
+                        .addData(Constant.JQID, jqid)
+                        .addData(Constant.TASKID,taskid)
+                        .build();
+
+
             }
         });
         initdata();
@@ -105,7 +117,8 @@ public class StartNewFightActivity extends BaseActivity {
     }
 
     private void initdata() {
-
+        adapter.clear();
+        data.clear();
         app.jqAPIService.getNewJqlist(SomeUtil.getUserId(),"532301000000")
                 .compose(RxUtil.<NewJQ>applySchedulers())
                 .subscribe(new Subscriber<NewJQ>() {

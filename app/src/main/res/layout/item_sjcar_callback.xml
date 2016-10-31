@@ -24,20 +24,9 @@
                 android:layout_height="wrap_content"
                 android:text="云AE9989"
                 android:layout_marginLeft="12dp"
+                android:id="@+id/sjcar_carplate"
                 />
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="颜色:"
-                android:layout_marginLeft="40dp"
-                />
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="红色"
-                android:layout_marginLeft="12dp"
 
-                />
 
 
 
@@ -61,20 +50,9 @@
                 android:layout_height="wrap_content"
                 android:text="张三"
                 android:layout_marginLeft="12dp"
+                android:id="@+id/sjc_jsrname"
                 />
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="手机:"
-                android:layout_marginLeft="40dp"
-                />
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="186691017011"
-                android:layout_marginLeft="12dp"
 
-                />
         </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
@@ -96,6 +74,7 @@
                 android:layout_height="wrap_content"
                 android:text="622101198911180395"
                 android:layout_marginLeft="12dp"
+                android:id="@+id/jsr_idnum"
                 />
 
 
@@ -117,21 +96,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="张三"
+                android:id="@+id/cz_name"
                 android:layout_marginLeft="12dp"
                 />
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="手机:"
-                android:layout_marginLeft="40dp"
-                />
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="186691017011"
-                android:layout_marginLeft="12dp"
 
-                />
         </LinearLayout>
 
         <LinearLayout
@@ -152,6 +120,7 @@
                 android:layout_weight="3"
                 android:layout_height="wrap_content"
                 android:text="622101198911180395"
+                android:id="@+id/cz_idnum"
                 android:layout_marginLeft="12dp"
                 />
 

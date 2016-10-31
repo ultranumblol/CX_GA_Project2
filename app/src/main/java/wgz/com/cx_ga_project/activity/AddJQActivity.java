@@ -3,6 +3,7 @@ package wgz.com.cx_ga_project.activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.Toolbar;
@@ -19,13 +20,18 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.Bind;
+import rx.Subscriber;
 import rx.functions.Action1;
 import wgz.com.cx_ga_project.R;
 import wgz.com.cx_ga_project.adapter.AddPictureAdapter;
 import wgz.com.cx_ga_project.adapter.MyRecyclerArrayAdapter;
+import wgz.com.cx_ga_project.app;
 import wgz.com.cx_ga_project.base.BaseActivity;
+import wgz.com.cx_ga_project.base.RxBus;
 import wgz.com.cx_ga_project.fragment.PhotoPickerFragment;
 import wgz.com.cx_ga_project.util.DatrixUtil;
+import wgz.com.cx_ga_project.util.RxUtil;
+import wgz.com.cx_ga_project.util.SomeUtil;
 import wgz.datatom.com.utillibrary.util.LogUtil;
 
 import static wgz.com.cx_ga_project.activity.PickPhotoActivity.HTTP_URL;
@@ -103,6 +109,38 @@ public class AddJQActivity extends BaseActivity {
     }
 
     private void addjq() {
+        // TODO: 2016/10/31 部门id换成动态
+        app.jqAPIService.uploadJqMsg(SomeUtil.getJQId(),SomeUtil.getTASKId(),SomeUtil.getUserId(),
+                contenttext.getText().toString(),SomeUtil.getSysTime(),"","","","532301000000")
+        .compose(RxUtil.<String>applySchedulers())
+        .subscribe(new Subscriber<String>() {
+            @Override
+            public void onCompleted() {
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+
+            @Override
+            public void onNext(String s) {
+                LogUtil.d("addjq result : "+s);
+                if (s.contains("\"code\":200")){
+                    RxBus.getDefault().post("sjmsgflush");
+                    SomeUtil.showSnackBar(rootview,"警情回传成功！").setCallback(new Snackbar.Callback() {
+                        @Override
+                        public void onDismissed(Snackbar snackbar, int event) {
+                            finish();
+                        }
+                    });
+                }
+            }
+        });
+
+
+
 
         // TODO: 2016/10/28 上传警情文字信息
     }

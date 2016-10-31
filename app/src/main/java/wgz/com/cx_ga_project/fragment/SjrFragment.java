@@ -28,6 +28,7 @@ import wgz.com.cx_ga_project.app;
 import wgz.com.cx_ga_project.base.BaseFragment;
 import wgz.com.cx_ga_project.base.RxBus;
 import wgz.com.cx_ga_project.entity.JqCallBack;
+import wgz.com.cx_ga_project.util.SomeUtil;
 import wgz.datatom.com.utillibrary.util.LogUtil;
 
 /**
@@ -81,7 +82,8 @@ public class SjrFragment extends BaseFragment implements SwipeRefreshLayout.OnRe
     }
 
     private void initData() {
-        app.jqAPIService.GetAllJQDetil("2016072100100000060")
+
+        app.jqAPIService.GetAllJQDetil(SomeUtil.getJQId())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<JqCallBack>() {

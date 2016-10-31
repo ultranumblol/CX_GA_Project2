@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.Toolbar;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 
 import com.jakewharton.rxbinding.view.RxView;
@@ -36,6 +37,16 @@ public class UpLoadSJCarActivity extends BaseActivity {
     LinearLayout rootview;
     @Bind(R.id.fab_addSJCar)
     FloatingActionButton fab;
+    @Bind(R.id.addsjcar_carplate)
+    EditText addsjcarCarplate;
+    @Bind(R.id.addsjcar_owner)
+    EditText addsjcarOwner;
+    @Bind(R.id.addsjcar_owneridnum)
+    EditText addsjcarOwneridnum;
+    @Bind(R.id.addsjcar_driver)
+    EditText addsjcarDriver;
+    @Bind(R.id.addsjcar_driveridnum)
+    EditText addsjcarDriveridnum;
 
     @Override
     public int getLayoutId() {
@@ -51,14 +62,19 @@ public class UpLoadSJCarActivity extends BaseActivity {
                 .subscribe(new Action1<Void>() {
                     @Override
                     public void call(Void aVoid) {
-                       UpLoadcarMsg();
+                        UpLoadcarMsg();
                     }
                 });
     }
 
     private void UpLoadcarMsg() {
-        app.jqAPIService.uploadSjCar("123","123","10001","2016-9-1","云E18898","马加爵","422187198818181818",
-                "马健绝","45688761818999817").subscribeOn(Schedulers.io())
+        app.jqAPIService.uploadSjCar(SomeUtil.getJQId(), SomeUtil.getTASKId()
+                , SomeUtil.getUserId(), SomeUtil.getSysTime()
+                , addsjcarCarplate.getText().toString()
+                , addsjcarOwner.getText().toString()
+                , addsjcarOwneridnum.getText().toString()
+                , addsjcarDriver.getText().toString()
+                , addsjcarDriveridnum.getText().toString()).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<String>() {
                     @Override
@@ -68,16 +84,16 @@ public class UpLoadSJCarActivity extends BaseActivity {
 
                     @Override
                     public void onError(Throwable e) {
-                        LogUtil.d("error:"+e.toString());
-                        SomeUtil.showSnackBar(rootview,"提交失败！");
+                        LogUtil.d("error:" + e.toString());
+                        SomeUtil.showSnackBar(rootview, "提交失败！");
                     }
 
                     @Override
                     public void onNext(String s) {
-                        LogUtil.d("result:"+s);
+                        LogUtil.d("result:" + s);
                         RxBus.getDefault().post("sjcarflush");
 
-                        SomeUtil.showSnackBar(rootview,"提交成功！").setCallback(new Snackbar.Callback() {
+                        SomeUtil.showSnackBar(rootview, "提交成功！").setCallback(new Snackbar.Callback() {
                             @Override
                             public void onDismissed(Snackbar snackbar, int event) {
                                 finish();
@@ -88,4 +104,10 @@ public class UpLoadSJCarActivity extends BaseActivity {
     }
 
 
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        // TODO: add setContentView(...) invocation
+        ButterKnife.bind(this);
+    }
 }

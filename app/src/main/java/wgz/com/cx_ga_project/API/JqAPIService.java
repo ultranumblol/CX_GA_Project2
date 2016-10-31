@@ -13,6 +13,7 @@ import wgz.com.cx_ga_project.entity.JQDetil;
 import wgz.com.cx_ga_project.entity.JQOnDutyPeople;
 import wgz.com.cx_ga_project.entity.JqCallBack;
 import wgz.com.cx_ga_project.entity.JqOrbit;
+import wgz.com.cx_ga_project.entity.NearJQ;
 import wgz.com.cx_ga_project.entity.NewJQ;
 import wgz.com.cx_ga_project.entity.NewJQPush;
 
@@ -33,10 +34,16 @@ public interface JqAPIService {
     @FormUrlEncoded
     @POST("appjqreport/addJqReport")
     Observable<String> uploadJqMsg(
+            @Field("jqid") String jqid,
             @Field("taskid") String taskid,
             @Field("policeid") String policeid,
             @Field("content") String content,
-            @Field("time") String time
+            @Field("time") String time,
+            @Field("pic") String pic,
+            @Field("video") String video,
+            @Field("videopic") String videopic,
+            @Field("depid") String depid
+
     );
 
     /**
@@ -76,9 +83,9 @@ public interface JqAPIService {
      * @param cj_reporttime            回告时间
      * @param involvepeoplename        涉警人
      * @param involvepeopleidcard      涉警人idcard
-     * @param involvepeoplephone       涉警人座机
-     * @param involvepeoplemobilephone 涉警人手机
-     * @param gander                   涉警人性别
+     * @param phone       涉警人座机
+     * @param mobilephone 涉警人手机
+     * @param gander                   涉警人性别 1man 2woman
      * @return
      */
     @FormUrlEncoded
@@ -90,8 +97,8 @@ public interface JqAPIService {
             @Field("cj_reporttime") String cj_reporttime,
             @Field("involvepeoplename") String involvepeoplename,
             @Field("involvepeopleidcard") String involvepeopleidcard,
-            @Field("involvepeoplephone") String involvepeoplephone,
-            @Field("involvepeoplemobilephone") String involvepeoplemobilephone,
+            @Field("phone") String phone,
+            @Field("mobilephone") String mobilephone,
             @Field("gander") String gander
     );
 
@@ -116,7 +123,8 @@ public interface JqAPIService {
             @Field("cj_reporttime") String cj_reporttime,
             @Field("relationname") String involvepeoplename,
             @Field("relationidcard") String involvepeopleidcard,
-            @Field("mobilephone") String involvepeoplephone
+            @Field("mobilephone") String involvepeoplephone,
+            @Field("phone") String phone
     );
 
 
@@ -187,8 +195,8 @@ public interface JqAPIService {
      * @return
      */
     @FormUrlEncoded
-    @POST("nearbyresources/getDetailjqInfo")
-    Observable<JQDetil> GetJQDetil(@Field("key") String key);
+    @POST("appjqreport/getJingqingDetail")
+    Observable<JQDetil> GetJQDetil(@Field("jqid") String jqid);
 
 
     /**
@@ -251,10 +259,10 @@ public interface JqAPIService {
      */
     @FormUrlEncoded
     @POST("appjqreport/getNearHisJq")
-    Observable<JQDetil> getNearHisJq(@Field("gps_e") String gps_e,
-                                     @Field("gps_n") String gps_n,
-                                     @Field("page") String page,
-                                     @Field("perpage") String perpage);
+    Observable<NearJQ> getNearHisJq(@Field("gps_e") String gps_e,
+                                    @Field("gps_n") String gps_n,
+                                    @Field("page") String page,
+                                    @Field("perpage") String perpage);
 
     /**
      * 获取报警人警情列表
@@ -274,7 +282,7 @@ public interface JqAPIService {
      */
     @FormUrlEncoded
     @POST("appjqreport/getPoliceJqInfo")
-    Observable<JQDetil> getPoliceJqInfo(@Field("policeid") String policeid);
+    Observable<NearJQ> getPoliceJqInfo(@Field("policeid") String policeid);
 
 
     /**
@@ -372,7 +380,8 @@ public interface JqAPIService {
     @FormUrlEncoded
     @POST("appjqreport/stopTaskJq")
     Observable<String> stopTaskJq(@Field("status") String status,
-                                 @Field("id") String id);
+                                 @Field("id") String id,
+                                  @Field("taskid") String taskid);
 
     /**
      * 获取所有部门

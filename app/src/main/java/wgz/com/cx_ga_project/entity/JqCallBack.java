@@ -623,7 +623,7 @@ public class JqCallBack {
         private String relationname;
         @SerializedName("relationidcard")
 
-        private Object relationidcard;
+        private String relationidcard;
         @SerializedName("phone")
 
         private String phone;
@@ -738,14 +738,14 @@ public class JqCallBack {
         /**
          * @return The relationidcard
          */
-        public Object getRelationidcard() {
+        public String getRelationidcard() {
             return relationidcard;
         }
 
         /**
          * @param relationidcard The relationidcard
          */
-        public void setRelationidcard(Object relationidcard) {
+        public void setRelationidcard(String relationidcard) {
             this.relationidcard = relationidcard;
         }
 
@@ -825,6 +825,17 @@ public class JqCallBack {
         @SerializedName("policename")
 
         private String policename;
+
+        public String getOfficecodename() {
+            return officecodename;
+        }
+
+        public void setOfficecodename(String officecodename) {
+            this.officecodename = officecodename;
+        }
+
+        @SerializedName("officecodename")
+        private String officecodename;
 
         @Override
         public String toString() {
