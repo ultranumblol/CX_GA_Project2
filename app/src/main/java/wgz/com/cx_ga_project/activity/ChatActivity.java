@@ -271,7 +271,7 @@ public class ChatActivity extends BaseActivity {
     private void getmsg() {
         adapter.clear();
         chatData.clear();
-        app.jqAPIService.GetMsg("213213123", "1231231233").subscribeOn(Schedulers.io())
+        app.jqAPIService.GetMsg(SomeUtil.getJQId(), SomeUtil.getUserId()).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<ChatMsg>() {
                     @Override
@@ -300,7 +300,7 @@ public class ChatActivity extends BaseActivity {
     private void getNewmsg() {
         LogUtil.d("获取新消息");
         chatData.clear();
-        app.jqAPIService.GetNewMsg("213213123", "1231231233").subscribeOn(Schedulers.io())
+        app.jqAPIService.GetNewMsg(SomeUtil.getJQId(), SomeUtil.getUserId()).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<ChatMsg>() {
                     @Override
@@ -327,7 +327,7 @@ public class ChatActivity extends BaseActivity {
     private void getPicVideoNewmsg() {
         LogUtil.d("获取新消息");
         chatData.clear();
-        app.jqAPIService.GetNewMsg("213213123", "1231231233").subscribeOn(Schedulers.io())
+        app.jqAPIService.GetNewMsg(SomeUtil.getJQId(), SomeUtil.getUserId()).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<ChatMsg>() {
                     @Override
@@ -360,7 +360,7 @@ public class ChatActivity extends BaseActivity {
     private void Sendmsg() {
         Date currentdate = new Date(System.currentTimeMillis());
         String curredate = AskForLeaveActivity.getTime(currentdate);
-        app.jqAPIService.sendMsg("2016072100100000060", etSendmessage.getText().toString(),"","","", "213", curredate, "030283")
+        app.jqAPIService.sendMsg(SomeUtil.getJQId(), etSendmessage.getText().toString(),"","","",SomeUtil.getTASKId(), curredate, SomeUtil.getUserId())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<String>() {
@@ -397,7 +397,7 @@ public class ChatActivity extends BaseActivity {
                 String curredate = AskForLeaveActivity.getTime(currentdate);
 
 
-                app.jqAPIService.sendMsg("2016072100100000060", "", datrixUrl + fileid + datrixurl2,"" ,"","213", curredate, SomeUtil.getUserId())
+                app.jqAPIService.sendMsg(SomeUtil.getJQId(), "", datrixUrl + fileid + datrixurl2,"" ,"",SomeUtil.getTASKId(), curredate, SomeUtil.getUserId())
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(new Subscriber<String>() {
@@ -442,7 +442,7 @@ public class ChatActivity extends BaseActivity {
                 String curredate = AskForLeaveActivity.getTime(currentdate);
 
 
-                app.jqAPIService.sendMsg("2016072100100000060", "", "",datrixPlayVideo+fileid+datrixPlayVideo2 ,datrixVideoPicdurl1+fileid+datrixurl2,"213", curredate, SomeUtil.getUserId())
+                app.jqAPIService.sendMsg(SomeUtil.getJQId(), "", "",datrixPlayVideo+fileid+datrixPlayVideo2 ,datrixVideoPicdurl1+fileid+datrixurl2,SomeUtil.getTASKId(), curredate, SomeUtil.getUserId())
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(new Subscriber<String>() {

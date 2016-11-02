@@ -17,13 +17,16 @@ import com.jakewharton.rxbinding.view.RxView;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.Bind;
 import butterknife.OnClick;
 import rx.Observer;
+import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.schedulers.Schedulers;
@@ -34,6 +37,8 @@ import com.jakewharton.rxbinding.view.RxView;
 
 import wgz.com.cx_ga_project.base.Constant;
 import wgz.com.cx_ga_project.base.RxBus;
+import wgz.com.cx_ga_project.entity.Subordinate;
+import wgz.com.cx_ga_project.util.RxUtil;
 import wgz.com.cx_ga_project.util.SPUtils;
 import wgz.com.cx_ga_project.util.SomeUtil;
 import wgz.datatom.com.utillibrary.util.LogUtil;
@@ -64,6 +69,7 @@ public class AskForJiabanActivity extends BaseActivity {
     CardView mJiabanCommit;
     @Bind(R.id.content_ask_for_jiaban)
     LinearLayout rootview;
+    private List<Subordinate.Resup> list = new ArrayList<>();
 
     @Override
     public int getLayoutId() {
@@ -105,7 +111,33 @@ public class AskForJiabanActivity extends BaseActivity {
                         docommit();
                     }
                 });
+        initData();
     }
+
+    private void initData() {
+        app.apiService.getSupAndSub(SomeUtil.getUserId())
+                .compose(RxUtil.<Subordinate>applySchedulers())
+                .subscribe(new Subscriber<Subordinate>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        LogUtil.d("Subordinate : "+e.toString());
+                    }
+
+                    @Override
+                    public void onNext(Subordinate s) {
+                        LogUtil.d("Subordinate : "+s.getResup().toString());
+                        list = s.getResup();
+
+                    }
+                });
+
+    }
+
     private void docommit() {
         boolean cancle = false;
         Date startdate = getStrToDate(mJiabanStarttime.getText().toString());
@@ -150,7 +182,7 @@ public class AskForJiabanActivity extends BaseActivity {
         if (!cancle){
             app.apiService.upOverTime("overTimeApply",stime,
                     etime,mJiabanReason.getText().toString()
-                    ,(String) SPUtils.get(app.getApp().getApplicationContext(), Constant.USERID,""),curredate,"030283")
+                    ,(String) SPUtils.get(app.getApp().getApplicationContext(), Constant.USERID,""),curredate,list.get(0).getPolid())
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(new Observer<String>() {

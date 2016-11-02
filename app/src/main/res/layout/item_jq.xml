@@ -75,6 +75,18 @@
                 android:visibility="gone"
                 android:textSize="14dp"
                 />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@id/user_face"
+                android:text="stateID"
+                android:id="@+id/jqsendtime"
+                android:textColor="@color/cadetblue"
+                android:layout_marginTop="4dp"
+                android:visibility="gone"
+                android:textSize="14dp"
+                />
+
 
             <TextView
                 android:layout_width="wrap_content"

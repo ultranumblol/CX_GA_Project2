@@ -29,6 +29,7 @@ import wgz.com.cx_ga_project.activity.WelcomeActivity;
 import wgz.com.cx_ga_project.app;
 import wgz.com.cx_ga_project.base.RxBus;
 import wgz.com.cx_ga_project.entity.ChatMsg;
+import wgz.com.cx_ga_project.util.SomeUtil;
 import wgz.datatom.com.utillibrary.util.LogUtil;
 
 import static wgz.com.cx_ga_project.util.SomeUtil.getUserId;
@@ -51,7 +52,7 @@ public class GetNewMsgService extends Service {
             public void run() {
                 try {
                     while (true){
-                        Thread.sleep(5000);
+                        Thread.sleep(10000);
                         checkNew();
                         if (ifHasNew){
                             if (isActivityRunning(getApplicationContext(), ChatActivity.class)){
@@ -113,7 +114,7 @@ public class GetNewMsgService extends Service {
 
     }
     private void GetNewMsg() {
-        app.jqAPIService.GetNewMsg2("3242342",getUserId()).subscribeOn(Schedulers.io())
+        app.jqAPIService.GetNewMsg2(SomeUtil.getJQId(),getUserId()).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<ChatMsg>() {
                     @Override

@@ -36,6 +36,7 @@ import wgz.com.cx_ga_project.app;
 import wgz.com.cx_ga_project.base.BaseActivity;
 import wgz.com.cx_ga_project.base.Constant;
 import wgz.com.cx_ga_project.base.RxBus;
+import wgz.com.cx_ga_project.calendarView.utils.OtherUtils;
 import wgz.com.cx_ga_project.entity.AllDep;
 import wgz.com.cx_ga_project.entity.JQDetil;
 import wgz.com.cx_ga_project.entity.JQOnDutyPeople;
@@ -84,7 +85,7 @@ public class NewFightActivity extends BaseActivity {
     Toolbar toolbar;
     @Bind(R.id.app_bar)
     AppBarLayout appBar;
-    private TimelineAdapter adapter;
+
     private List<JqOrbit.Re> list = new ArrayList<>();
     private ArrayList<String> list2 = new ArrayList<>();
     private HomeAdapter mAdapter;
@@ -98,6 +99,7 @@ public class NewFightActivity extends BaseActivity {
     private String stopid = "";
     private String stopstate = "3";
     private String baojingName = "";
+    private String sendtime = "";
 
 
 
@@ -140,8 +142,6 @@ public class NewFightActivity extends BaseActivity {
         //idRecyclerview.setAdapter(mAdapter = new HomeAdapter());
 
 
-        timelineRv.setLayoutManager(new Mylayout(this));
-        timelineRv.setAdapter(adapter = new TimelineAdapter(this));
 
 
 
@@ -151,9 +151,11 @@ public class NewFightActivity extends BaseActivity {
         jqstate = intent.getStringExtra("jqstate");
         JQid = intent.getStringExtra("jqid");
         stopid = intent.getStringExtra("jqstopid");
+        sendtime = intent.getStringExtra("sendtime");
         LogUtil.d("taskid : " + taskid);
         LogUtil.d("jqstate : " + jqstate);
         LogUtil.d("jqid : " + JQid);
+        LogUtil.d("sendtime : " + sendtime);
         if (jqstate==null){
             jqstate="-1";
         }
@@ -458,7 +460,8 @@ public class NewFightActivity extends BaseActivity {
     }
 
     private void ShowDialog() {
-        app.jqAPIService.getPeoOnduty("532301000000", "2016-09-29")
+        // TODO: 2016/11/1 部门id替换 日期替换sendtime
+        app.jqAPIService.getPeoOnduty("532301000000", OtherUtils.formatDate(SomeUtil.getStrToDate(sendtime)))
                 .compose(RxUtil.<JQOnDutyPeople>applySchedulers())
                 .subscribe(new Subscriber<JQOnDutyPeople>() {
                     @Override
@@ -537,6 +540,7 @@ public class NewFightActivity extends BaseActivity {
     }
 
     private void addCjPerson(String[] lid) {
+        // TODO: 2016/11/1 部门id替换
         app.jqAPIService.addCjPerson(taskid, "532301000000", lid)
                 .compose(RxUtil.<String>applySchedulers())
                 .subscribe(new Action1<String>() {

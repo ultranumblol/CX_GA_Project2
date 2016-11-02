@@ -38,6 +38,7 @@ import wgz.com.cx_ga_project.base.Constant;
 import wgz.com.cx_ga_project.base.RxBus;
 import wgz.com.cx_ga_project.bean.AskForLeaveBean;
 import wgz.com.cx_ga_project.entity.LeaveType;
+import wgz.com.cx_ga_project.entity.Subordinate;
 import wgz.com.cx_ga_project.util.RxUtil;
 import wgz.com.cx_ga_project.util.SPUtils;
 import wgz.com.cx_ga_project.util.SomeUtil;
@@ -83,6 +84,7 @@ public class AskForLeaveActivity extends BaseActivity {
     CardView mLeaveCommit;
     @Bind(R.id.content_ask_for_leave)
     LinearLayout rootview;
+    private List<Subordinate.Resup> list = new ArrayList<>();
 
     @Override
     public int getLayoutId() {
@@ -91,7 +93,7 @@ public class AskForLeaveActivity extends BaseActivity {
 
     @Override
     public void initView() {
-        toolbar.setTitle("请销假");
+        toolbar.setTitle("请假申请");
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         //时间选择器
@@ -175,6 +177,7 @@ public class AskForLeaveActivity extends BaseActivity {
                         options2Items.add(options2Items_01);
                     }
                 });
+        initData();
     }
 
     public static String getTime(Date date) {
@@ -185,6 +188,30 @@ public class AskForLeaveActivity extends BaseActivity {
             e.printStackTrace();
             return "";
         }
+    }
+
+    private void initData() {
+        app.apiService.getSupAndSub(SomeUtil.getUserId())
+                .compose(RxUtil.<Subordinate>applySchedulers())
+                .subscribe(new Subscriber<Subordinate>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        LogUtil.d("Subordinate : "+e.toString());
+                    }
+
+                    @Override
+                    public void onNext(Subordinate s) {
+                        LogUtil.d("Subordinate : "+s.getResup().toString());
+                        list = s.getResup();
+
+                    }
+                });
+
     }
 
     @Override
@@ -227,7 +254,7 @@ public class AskForLeaveActivity extends BaseActivity {
 
         // TODO: 2016/8/5 提交请假申请
         app.apiService.upLoadLeave("leaveApply", stime, etime, mLeaveReason.getText().toString(),
-                SomeUtil.getUserId(), curredate, "030283",valueCode, mLeaveDaycount.getText().toString())
+                SomeUtil.getUserId(), curredate, list.get(0).getPolid(),valueCode, mLeaveDaycount.getText().toString())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Action1<String>() {

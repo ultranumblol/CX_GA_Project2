@@ -89,8 +89,8 @@
         <activity
             android:name=".activity.LoginActivity"
             android:label="登录"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".base.BaseActivity"
             android:screenOrientation="portrait"
@@ -262,6 +262,18 @@
         <activity
             android:name=".activity.SICActivity"
             android:label="@string/title_activity_sic"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activity.SICTypeActivity"
+            android:label="@string/title_activity_sicinput"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activity.SICInputActivity"
+            android:label="@string/title_activity_sicinput"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activity.WorkLogCloudActivity"
+            android:label="@string/title_activity_work_log_cloud"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 

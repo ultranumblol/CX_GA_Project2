@@ -288,4 +288,18 @@ public class SomeUtil {
 
         return (String) SPUtils.get(app.getApp().getApplicationContext(), Constant.TASKID, "000");
     }
+
+    public  static Date StrToDate(String str)  {
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+            Date  date = null;
+            date = sdf.parse(str);
+            return date;
+        } catch (ParseException e) {
+            e.printStackTrace();
+            LogUtil.d("DATE error"+e.toString());
+            return null;
+        }
+    }
+
 }

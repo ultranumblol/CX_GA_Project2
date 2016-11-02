@@ -29,6 +29,7 @@ import wgz.com.cx_ga_project.app;
 import wgz.com.cx_ga_project.base.BaseActivity;
 import wgz.com.cx_ga_project.base.RxBus;
 import wgz.com.cx_ga_project.util.SomeUtil;
+import wgz.datatom.com.utillibrary.util.LogUtil;
 
 import static wgz.com.cx_ga_project.base.Constant.APPROVAL_PASS;
 import static wgz.com.cx_ga_project.base.Constant.APPROVAL_UNPASS;
@@ -139,7 +140,13 @@ public class ApprovalDetilActivity extends BaseActivity {
                 detilLeaveCommittime.setText(bundle.getString("applytime"));
                 detilLeaveStarttime.setText(bundle.getString("starttime"));
                 detilLeaveEndtime.setText(bundle.getString("endtime"));
-                detilLeaveDayscount.setText(bundle.getString("days"));
+
+                String days=getResources().getString(R.string.days);
+                String day = String.format(days,bundle.getString("days"));
+                detilLeaveDayscount.setText(day);
+
+
+
                 detilLeaveReason.setText(bundle.getString("content"));
                 detilLeaveType.setText(bundle.getString("reasontype"));
                 detilQingjiaShenherenname.setText(bundle.getString("upperid"));
@@ -246,9 +253,15 @@ public class ApprovalDetilActivity extends BaseActivity {
                                     @Override
                                     public void onNext(String s) {
                                         if (s.contains("200")) {
-                                            SomeUtil.showSnackBar(detilRoot, "提交成功").show();
-                                            setResult(1002, new Intent(ApprovalDetilActivity.this, MyApprovalActivity.class).putExtra("result", "refresh"));
-                                            finish();
+                                            RxBus.getDefault().post("myspflush");
+                                            SomeUtil.showSnackBar(detilRoot, "提交成功").setCallback(new Snackbar.Callback() {
+                                                @Override
+                                                public void onDismissed(Snackbar snackbar, int event) {
+                                                    finish();
+                                                }
+                                            });
+                                            //setResult(1002, new Intent(ApprovalDetilActivity.this, MyApprovalActivity.class).putExtra("result", "refresh"));
+
 
                                         } else {
                                             SomeUtil.showSnackBar(detilRoot, "服务器错误！").show();

@@ -8,12 +8,11 @@
     tools:context="wgz.com.cx_ga_project.activity.MyWorkingTrackActivity"
     tools:showIn="@layout/activity_my_working_track">
 
-    <com.jude.easyrecyclerview.EasyRecyclerView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:scrollbarStyle="insideOverlay"
-        app:layout_progress="@layout/view_progress"
-        app:layout_empty="@layout/view_empty"
-        android:id="@+id/tracktimeline_rv"
-        ></com.jude.easyrecyclerview.EasyRecyclerView>
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/id_mytracrecyclerview"
+        android:layout_width="0dp"
+        android:scrollbarStyle="insideOverlay"
+        android:layout_height="0dp"
+        tools:layout_editor_absoluteY="8dp"
+        tools:layout_editor_absoluteX="8dp" />
 </android.support.constraint.ConstraintLayout>

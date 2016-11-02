@@ -12,6 +12,7 @@ import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.Field;
+import retrofit2.http.FieldMap;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.HEAD;
@@ -29,6 +30,7 @@ import wgz.com.cx_ga_project.entity.Apply;
 import wgz.com.cx_ga_project.entity.DatrixCreat;
 import wgz.com.cx_ga_project.entity.DatrixFinish;
 import wgz.com.cx_ga_project.entity.LeaveType;
+import wgz.com.cx_ga_project.entity.SICType;
 import wgz.com.cx_ga_project.entity.Scheduling;
 import wgz.com.cx_ga_project.entity.SchedulingOneDay;
 import wgz.com.cx_ga_project.entity.Subordinate;
@@ -286,17 +288,13 @@ public interface APIservice {
 
     /**
      * 根据时间段获取值班信息
-     * @param start
-     * @param end
-     * @param policenum
      * @return
      */
     @FormUrlEncoded
-    @POST("demojob/getAppAllSch")
+    @POST("apponduty/getAppAllSch")
     Observable<Scheduling> getAllScheduling(
-            @Field("start") String start,
-            @Field("end") String end,
-            @Field("policenum") String policenum
+            @Field("month") String month,
+            @Field("policeid") String policeid
     );
 
     /**
@@ -378,6 +376,22 @@ public interface APIservice {
    /* appworkmanager/getOnceTimeBankDetail
             $policeid = $this ->param('policeid');
     $year = $this ->param('year');*/
+
+    /**
+     * 获取社会信息采集类型
+     * @return
+     */
+
+    @GET("appinfocollect/getTypeOfSocialInfo")
+    Observable<SICType> getTypeOfSocialInfo();
+
+
+
+    @FormUrlEncoded
+    @POST("")
+    Observable<String> SICUpload(
+            @Field("policeid" )String policeid,
+            @FieldMap Map<String, String> map);
 
 
 }

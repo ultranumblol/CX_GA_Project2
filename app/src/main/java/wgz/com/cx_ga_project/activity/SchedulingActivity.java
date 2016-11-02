@@ -28,6 +28,8 @@ import wgz.com.cx_ga_project.calendarView.view.CalendarView;
 import wgz.com.cx_ga_project.calendarView.view.ContainerLayout;
 import wgz.com.cx_ga_project.entity.Scheduling;
 import wgz.com.cx_ga_project.entity.SchedulingOneDay;
+import wgz.com.cx_ga_project.util.RxUtil;
+import wgz.com.cx_ga_project.util.SomeUtil;
 import wgz.datatom.com.utillibrary.util.LogUtil;
 
 /**
@@ -48,7 +50,7 @@ public class SchedulingActivity extends BaseActivity {
     @Bind(R.id.scheduling_container)
     ContainerLayout container;
     @Bind(R.id.content_scheduling)
-    ConstraintLayout contentScheduling;
+    ConstraintLayout rootview;
     @Bind(R.id.id_schefulingPeople)
     TextView mSchefulingPeople;
     @Bind(R.id.id_schefulingPeople1)
@@ -56,6 +58,7 @@ public class SchedulingActivity extends BaseActivity {
     @Bind(R.id.id_schefulingPeople2)
     TextView mSchefulingPeople2;
     private List<View> calenderViews = new ArrayList<>();
+    private List<Scheduling.ScheduilingRe> data = new ArrayList<>();
     /**
      * 日历向左或向右可翻动的天数
      */
@@ -73,7 +76,17 @@ public class SchedulingActivity extends BaseActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         initCalendar();
-        app.apiService.getAllScheduling("2016-09-20", "2016-11-03", "030689")
+
+
+    }
+
+    /**
+     * @param calendarView
+     */
+    private void initEventDays(final CalendarView calendarView) {
+
+        final Calendar calendar = Calendar.getInstance();
+        app.apiService.getAllScheduling(OtherUtils.formatMonth(calendar.getTime()).toString(), SomeUtil.getUserId())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<Scheduling>() {
@@ -89,23 +102,73 @@ public class SchedulingActivity extends BaseActivity {
 
                     @Override
                     public void onNext(Scheduling scheduling) {
-                        LogUtil.d("scheduling : " + scheduling.getRes().toString());
+                        if (scheduling.getCode().equals(200)) {
+                            data = scheduling.getRes();
+                            LogUtil.d("scheduling data: " + data.toString());
+                            String nowdate = OtherUtils.formatDate(calendar.getTime());
+                            app.apiService.getOneDayScheduling(nowdate)
+                                    .subscribeOn(Schedulers.io())
+                                    .observeOn(AndroidSchedulers.mainThread())
+                                    .subscribe(new Subscriber<SchedulingOneDay>() {
+                                        @Override
+                                        public void onStart() {
+                                            mSchefulingPeople.setText("");
+                                            mSchefulingPeople1.setText("");
+                                            mSchefulingPeople2.setText("");
+                                        }
+
+                                        @Override
+                                        public void onCompleted() {
+                                            //设置含有事件的日期 1-9号
+                                            List<String> eventDays = new ArrayList<>();//根据实际情况调整，传入时间格式(yyyy-MM)
+                                            for (int j = 0; j < data.size(); j++) {
+                                                String date = data.get(j).getStart();
+                                                eventDays.add(OtherUtils.formatDate(SomeUtil.getStrToDate(date)));
+                                            }
+                                            calendarView.setEventDays(eventDays);
+
+
+                                        }
+
+                                        @Override
+                                        public void onError(Throwable e) {
+                                            LogUtil.d("schedulingOneDay error :" + e.toString());
+                                        }
+
+                                        @Override
+                                        public void onNext(SchedulingOneDay schedulingOneDay) {
+//                                            LogUtil.d("schedulingOneDay  :" + schedulingOneDay.getRes().toString());
+//                                            LogUtil.d("schedulingOneDay  :" + schedulingOneDay.getRes1().toString());
+//                                            LogUtil.d("schedulingOneDay  :" + schedulingOneDay.getRes2().toString());
+                                            mSchefulingPeople.setText(schedulingOneDay.getRes().get(0).getPolicename());
+                                            mSchefulingPeople1.setText(schedulingOneDay.getRes1().get(0).getPolicename());
+
+                                            StringBuffer sb = new StringBuffer(256);
+                                            for (int i = 0; i < schedulingOneDay.getRes2().size(); i++) {
+                                                if (i < schedulingOneDay.getRes2().size() - 1) {
+                                                    sb.append(schedulingOneDay.getRes2().get(i).getPolicename());
+                                                    sb.append(" ; ");
+                                                } else {
+                                                    sb.append(schedulingOneDay.getRes2().get(i).getPolicename());
+                                                }
+
+                                            }
+                                            mSchefulingPeople2.setText(sb.toString());
+
+                                        }
+                                    });
+
+
+                        } else {
+                            SomeUtil.showSnackBar(rootview, "没有值班信息！");
+
+                        }
+
+
                     }
                 });
 
-    }
 
-    /**
-     * @param calendarView
-     */
-    private void initEventDays(CalendarView calendarView) {
-        //设置含有事件的日期 1-9号
-        List<String> eventDays = new ArrayList<>();//根据实际情况调整，传入时间格式(yyyy-MM)
-        for (int j = 0; j < 10; j++) {
-            //eventDays.add(calendarView.getCurrentDay() + "-0" + j);
-            eventDays.add("2016-08" + "-0" + j);
-        }
-        calendarView.setEventDays(eventDays);
     }
 
 
@@ -134,17 +197,10 @@ public class SchedulingActivity extends BaseActivity {
         vpCalender.post(new Runnable() {
             @Override
             public void run() {
-                initEventDays((CalendarView) adapter.getChildView(0));
+                initEventDays(adapter.getChildView(0));
             }
         });
 
-    }
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        // TODO: add setContentView(...) invocation
-        ButterKnife.bind(this);
     }
 
 
@@ -160,6 +216,13 @@ public class SchedulingActivity extends BaseActivity {
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(new Subscriber<SchedulingOneDay>() {
+                        @Override
+                        public void onStart() {
+                            mSchefulingPeople.setText("");
+                            mSchefulingPeople1.setText("");
+                            mSchefulingPeople2.setText("");
+                        }
+
                         @Override
                         public void onCompleted() {
 
@@ -179,12 +242,11 @@ public class SchedulingActivity extends BaseActivity {
                             mSchefulingPeople1.setText(schedulingOneDay.getRes1().get(0).getPolicename());
 
                             StringBuffer sb = new StringBuffer(256);
-                            for (int i = 0 ; i <schedulingOneDay.getRes2().size(); i++){
-                                if (i<schedulingOneDay.getRes2().size()-1){
+                            for (int i = 0; i < schedulingOneDay.getRes2().size(); i++) {
+                                if (i < schedulingOneDay.getRes2().size() - 1) {
                                     sb.append(schedulingOneDay.getRes2().get(i).getPolicename());
                                     sb.append(" ; ");
-                                }
-                                else {
+                                } else {
                                     sb.append(schedulingOneDay.getRes2().get(i).getPolicename());
                                 }
 
@@ -193,13 +255,6 @@ public class SchedulingActivity extends BaseActivity {
 
                         }
                     });
-
-            /*if (dateBean.getTag()) {
-                mSchefulingPeople.setText("值班人员：" + "张三，李三，王三");
-
-            } else {
-                mSchefulingPeople.setText("今日无值班人员");
-            }*/
 
         }
     }
@@ -217,26 +272,10 @@ public class SchedulingActivity extends BaseActivity {
 
             CalendarView calendarView = (CalendarView) calenderViews.get(position % 3);
             txToday.setText(calendarView.getCurrentDay());
-
-
+            LogUtil.d("当前月份 ： " + calendarView.getCurrentDay());
             container.setRowNum(0);
             calendarView.initFirstDayPosition(0);
-
-
-            //设置含有事件的日期 1-9号
-            CalendarAdapter adapter = calendarView.initFirstDayPosition(0);
-
-            for (int i = 0; i < 42; i++) {
-                DateBean dateBean = (DateBean) adapter.getItem(i);
-                if (dateBean.getTag()) {
-                    mSchefulingPeople.setText("值班人员：\" + \"张三，李三，王三");
-                    return;
-                } else {
-                    mSchefulingPeople.setText("今日无值班人员");
-                }
-
-            }
-
+            initEventDays(calendarView);
 
         }
 

@@ -89,11 +89,15 @@ public class StartNewFightActivity extends BaseActivity {
                 TextView jqstopidview = (TextView) itemView.findViewById(R.id.jqstop_id);
                 String jqstopid = jqstopidview.getText().toString();
 
+                TextView sendtimeview = (TextView) itemView.findViewById(R.id.jqsendtime);
+                String sendtime = sendtimeview.getText().toString();
+
                 startActivity(new Intent(StartNewFightActivity.this, NewFightActivity.class)
                         .putExtra("taskid",taskid)
                         .putExtra("jqstate",jqstate)
                         .putExtra("jqid",jqid)
                         .putExtra("jqstopid",jqstopid)
+                        .putExtra("sendtime",sendtime)
                 );
                 new SPBuild(getApplicationContext())
                         .addData(Constant.JQID, jqid)

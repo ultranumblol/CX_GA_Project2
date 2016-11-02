@@ -32,11 +32,10 @@ public class QingjiaViewholder extends BaseViewHolder<Apply.Result> {
         userface = $(R.id.user_face);
         qingjiaID = $(R.id.qingjia_name);
     }
-
     @Override
     public void setData(Apply.Result data) {
         qingjiaID.setText(data.getPolicename());
-        qingjiaReason.setText(data.getContent());
+        qingjiaReason.setText(data.getReasontype());
         qingjiaDate.setText(data.getApplytime());
         if (data.getStatus().equals(UNAPPROVAL)){
             qingjiaState.setText("未审批");

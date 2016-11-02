@@ -85,9 +85,10 @@ public class MySubordinateLogAcitvity extends BaseActivity {
         Intent intent = getIntent();
         String name = intent.getStringExtra("policename");
         policeid = intent.getStringExtra("policeid");
+
+        LogUtil.d("subordiante policeid: "+policeid);
         toolbarWprklog.setTitle(name + "的工作日志");
         fabAddworklog.setVisibility(View.GONE);
-        LogUtil.d("xxx的日志开始初始化");
         setSupportActionBar(toolbarWprklog);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -158,7 +159,8 @@ public class MySubordinateLogAcitvity extends BaseActivity {
                                     });
                            // initCalendar();
                         } else {
-                            SomeUtil.showSnackBar(mRootview, "服务器错误！");
+                            SomeUtil.showSnackBar(container, "没有工作记录！");
+                            idWorkLogText.setText("没有工作记录");
                             //initCalendar();
                         }
 
@@ -214,7 +216,7 @@ public class MySubordinateLogAcitvity extends BaseActivity {
             txToday.setText(OtherUtils.formatDate(dateBean.getDate()));
 
             //查询日志图片内容
-            app.apiService.getLogPicData(CHECK_ONESSUMMARYPIC_BYDAYS, SomeUtil.getUserId(), OtherUtils.formatDate(dateBean.getDate()))
+            app.apiService.getLogPicData(CHECK_ONESSUMMARYPIC_BYDAYS, policeid, OtherUtils.formatDate(dateBean.getDate()))
                     .compose(RxUtil.<WorkLog>applySchedulers())
                     .subscribe(new Subscriber<WorkLog>() {
                         @Override
@@ -249,7 +251,7 @@ public class MySubordinateLogAcitvity extends BaseActivity {
 
 
             //查询日志文字内容
-            app.apiService.getLogDataToDay(SomeUtil.getUserId(), OtherUtils.formatDate(dateBean.getDate()))
+            app.apiService.getLogDataToDay(policeid, OtherUtils.formatDate(dateBean.getDate()))
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(new Subscriber<WorkLog>() {
@@ -292,34 +294,7 @@ public class MySubordinateLogAcitvity extends BaseActivity {
             final CalendarView calendarView = (CalendarView) calenderViews.get(position % 3);
             txToday.setText(calendarView.getCurrentDay());
             LogUtil.d("当前月份 ： " + calendarView.getCurrentDay());
-            app.apiService.getLogData(CHECK_ONESSUMMARY, policeid, calendarView.getCurrentDay())
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(new Subscriber<WorkLog>() {
-                        @Override
-                        public void onCompleted() {
-
-                        }
-
-                        @Override
-                        public void onError(Throwable e) {
-
-                        }
-
-                        @Override
-                        public void onNext(WorkLog workLog) {
-                            if (workLog.getCode().toString().contains("200")) {
-                                mylogs = workLog.getLogs();
-                                LogUtil.d("logs : " + mylogs.toString());
-                                initEventDays(calendarView);
-                            } else {
-                                SomeUtil.showSnackBar(mRootview, "没有记录！");
-                            }
-
-                            initEventDays(calendarView);
-                        }
-                    });
-
+            initEventDays(calendarView);
             container.setRowNum(0);
             calendarView.initFirstDayPosition(0);
 

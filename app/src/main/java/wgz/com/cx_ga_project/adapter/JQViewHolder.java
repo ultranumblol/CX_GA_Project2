@@ -20,7 +20,7 @@ import wgz.com.cx_ga_project.entity.NewJQ;
  */
 
 public class JQViewHolder extends BaseViewHolder<Object> {
-    private TextView jqid,taskid,stateid,jqdate,jqstopid;
+    private TextView jqid,taskid,stateid,jqdate,jqstopid,sendtime;
     private ImageView jqstate;
 
 
@@ -33,6 +33,7 @@ public class JQViewHolder extends BaseViewHolder<Object> {
         stateid = $(R.id.jqstate_id);
         jqdate = $(R.id.jq_bjdate);
         jqstopid = $(R.id.jqstop_id);
+        sendtime = $(R.id.jqsendtime);
     }
 
     @Override
@@ -86,6 +87,7 @@ public class JQViewHolder extends BaseViewHolder<Object> {
             jqid.setText(((NewJQ.NewjqRe) data).getJqid());
             jqdate.setText(((NewJQ.NewjqRe) data).getSendtime());
             jqstopid.setText(((NewJQ.NewjqRe) data).getId());
+            sendtime.setText(((NewJQ.NewjqRe) data).getSendtime());
 
         }
 
@@ -102,7 +104,6 @@ public class JQViewHolder extends BaseViewHolder<Object> {
 */
             jqstate.setVisibility(View.GONE);
             jqdate.setText(((NearJQ.Re) data).getCallpolicetime());
-
 
 
         }
