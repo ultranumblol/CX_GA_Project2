@@ -574,7 +574,7 @@
         jumboMode="true"
         optimize="true"
         revision="23.0.1"
-        sha1="20c18a678cfe7c255ddeb14213a5a1780c7a1644">
+        sha1="fbded98973fd8c984c6f0049ea52a93e4d67fb34">
         <dex dex="C:\Users\wgz\Desktop\ant\CX_GA_Project\app\build\intermediates\pre-dexed\debug\instant-run_ca6aac7c44a6cb161fc18e987e177f51579936c0.jar" />
     </item>
     <item
@@ -601,7 +601,7 @@
         jumboMode="true"
         optimize="true"
         revision="23.0.1"
-        sha1="2741f8a1ed435f8ffa2114e59230d88c1e3686b7">
+        sha1="60726473d63b330e9b94bd00b1bcdd736905851e">
         <dex dex="C:\Users\wgz\Desktop\ant\CX_GA_Project\app\build\intermediates\pre-dexed\debug\instant-run-bootstrap_c7600d048a61ee78ca7df4259586661317da9f89.jar" />
     </item>
     <item
@@ -702,6 +702,15 @@
         revision="23.0.1"
         sha1="5326d9a850d491714fef8cbfaa9ea3416f0bf0d2">
         <dex dex="C:\Users\wgz\Desktop\ant\CX_GA_Project\app\build\intermediates\pre-dexed\debug\com.android.support-design-23.4.0_8164c4665127b3e5bb88fa947b310010463c2282.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\wgz\Desktop\ant\CX_GA_Project\app\build\intermediates\exploded-aar\com.moxun\tagcloudlib\1.2.0\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="23.0.1"
+        sha1="daa7557f79484f11cd756fad08370a383792478b">
+        <dex dex="C:\Users\wgz\Desktop\ant\CX_GA_Project\app\build\intermediates\pre-dexed\debug\com.moxun-tagcloudlib-1.2.0_8623202a04249853504075f97c382e7cb19e4492.jar" />
     </item>
 
 </items>

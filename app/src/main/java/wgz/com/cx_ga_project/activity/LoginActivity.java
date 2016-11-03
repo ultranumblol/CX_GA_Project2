@@ -41,6 +41,8 @@ import wgz.com.cx_ga_project.util.SPBuild;
 import wgz.com.cx_ga_project.util.SPUtils;
 import wgz.com.cx_ga_project.util.SomeUtil;
 import wgz.datatom.com.utillibrary.util.LogUtil;
+
+import static wgz.com.cx_ga_project.base.Constant.DATAFUSION;
 import static wgz.com.cx_ga_project.base.Constant.GET_USER_HEAD;
 
 /**
@@ -148,7 +150,7 @@ public class LoginActivity extends BaseActivity {
     }
 
     private void httpLogin(final String username, final String password) {
-        app.apiService.login2(username,password).compose(RxUtil.<String>applySchedulers())
+        app.apiService.login2(username,password,DATAFUSION).compose(RxUtil.<String>applySchedulers())
                 .subscribe(new Subscriber<String>() {
                     @Override
                     public void onStart() {

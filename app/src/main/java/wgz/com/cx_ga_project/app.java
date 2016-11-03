@@ -1,8 +1,10 @@
 package wgz.com.cx_ga_project;
 
 import android.app.Application;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Looper;
+import android.support.multidex.MultiDex;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -37,6 +39,12 @@ public class app extends Application {
     public static APIservice apiService;
     public static JqAPIService jqAPIService;
 
+    //解决method大于64k
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(base);
+        MultiDex.install(this);
+    }
 
     @Override
     public void onCreate() {

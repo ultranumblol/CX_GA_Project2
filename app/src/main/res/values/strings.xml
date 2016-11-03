@@ -64,5 +64,6 @@
     <string name="title_activity_sic">SICActivity</string>
     <string name="title_activity_sicinput">SICInputActivity</string>
     <string name="title_activity_work_log_cloud">WorkLogCloudActivity</string>
+    <string name="title_activity_time_bank">TimeBankActivity</string>
 
 </resources>

@@ -274,6 +274,10 @@
         <activity
             android:name=".activity.WorkLogCloudActivity"
             android:label="@string/title_activity_work_log_cloud"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activity.TimeBankActivity"
+            android:label="@string/title_activity_time_bank"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 

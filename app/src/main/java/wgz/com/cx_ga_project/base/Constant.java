@@ -37,4 +37,5 @@ public class Constant {
 
     public static final String JQID = "jqid";
     public static final String TASKID = "taskid";
+    public static final String DATAFUSION = "datafusion";
 }

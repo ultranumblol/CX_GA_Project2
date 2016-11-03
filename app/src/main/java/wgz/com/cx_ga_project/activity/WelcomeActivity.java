@@ -65,7 +65,7 @@ public class WelcomeActivity extends BaseActivity {
                     @Override
                     public void onError(Throwable e) {
                         LogUtil.d("error:"+e);
-                        startActivity(new Intent(WelcomeActivity.this,HomeActivity.class));
+                        startActivity(new Intent(WelcomeActivity.this,LoginActivity.class));
                        // startActivity(new Intent(WelcomeActivity.this,LoginActivity.class));
                         finish();
                     }

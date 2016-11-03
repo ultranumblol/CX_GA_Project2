@@ -5,6 +5,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Base64;
 import android.view.MenuItem;
 import android.view.Window;
@@ -31,6 +32,13 @@ public abstract class BaseActivity extends AppCompatActivity{
     public abstract int getLayoutId();
 
     public abstract void initView();
+
+    public void setToolbarBack(Toolbar toolbar){
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+
+    };
     @Override
     protected void onDestroy() {
         super.onDestroy();

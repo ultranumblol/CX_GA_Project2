@@ -191,7 +191,7 @@ public interface JqAPIService {
     /**
      * 获取警情详情
      *
-     * @param key
+     * @param
      * @return
      */
     @FormUrlEncoded

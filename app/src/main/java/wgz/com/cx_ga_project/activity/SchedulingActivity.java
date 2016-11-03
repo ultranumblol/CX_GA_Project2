@@ -86,10 +86,16 @@ public class SchedulingActivity extends BaseActivity {
     private void initEventDays(final CalendarView calendarView) {
 
         final Calendar calendar = Calendar.getInstance();
-        app.apiService.getAllScheduling(OtherUtils.formatMonth(calendar.getTime()).toString(), SomeUtil.getUserId())
+        app.apiService.getAllScheduling(calendarView.getCurrentDay(), SomeUtil.getUserId())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<Scheduling>() {
+                    @Override
+                    public void onStart() {
+                        mSchefulingPeople.setText("");
+                        mSchefulingPeople1.setText("");
+                        mSchefulingPeople2.setText("");
+                    }
                     @Override
                     public void onCompleted() {
 
@@ -105,8 +111,7 @@ public class SchedulingActivity extends BaseActivity {
                         if (scheduling.getCode().equals(200)) {
                             data = scheduling.getRes();
                             LogUtil.d("scheduling data: " + data.toString());
-                            String nowdate = OtherUtils.formatDate(calendar.getTime());
-                            app.apiService.getOneDayScheduling(nowdate)
+                            app.apiService.getOneDayScheduling(calendarView.getCurrentDayDay())
                                     .subscribeOn(Schedulers.io())
                                     .observeOn(AndroidSchedulers.mainThread())
                                     .subscribe(new Subscriber<SchedulingOneDay>() {
@@ -119,7 +124,6 @@ public class SchedulingActivity extends BaseActivity {
 
                                         @Override
                                         public void onCompleted() {
-                                            //设置含有事件的日期 1-9号
                                             List<String> eventDays = new ArrayList<>();//根据实际情况调整，传入时间格式(yyyy-MM)
                                             for (int j = 0; j < data.size(); j++) {
                                                 String date = data.get(j).getStart();
@@ -271,7 +275,7 @@ public class SchedulingActivity extends BaseActivity {
         public void onPageSelected(int position) {
 
             CalendarView calendarView = (CalendarView) calenderViews.get(position % 3);
-            txToday.setText(calendarView.getCurrentDay());
+            txToday.setText(calendarView.getCurrentDayDay());
             LogUtil.d("当前月份 ： " + calendarView.getCurrentDay());
             container.setRowNum(0);
             calendarView.initFirstDayPosition(0);

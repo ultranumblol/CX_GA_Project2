@@ -4,6 +4,6 @@
     <item
         android:id="@+id/Statistics"
         android:orderInCategory="100"
-        android:title="统计详情"
+        android:title="时间银行"
         app:showAsAction="never" />
 </menu>

@@ -261,17 +261,6 @@ public interface APIservice {
     );
 
 
-    /**
-     * 登陆
-     *
-     * @param username
-     * @param password
-     * @return
-     */
-    @FormUrlEncoded
-    @POST("ceshi/denglu")
-    Observable<UserBean> UserLogin(@Field("username") String username,
-                                   @Field("password") String password);
 
 
     /**
@@ -334,9 +323,10 @@ public interface APIservice {
      * @return
      */
     @FormUrlEncoded
-    @POST("http://192.168.1.100:8004/sysadmin/panel/newlogin.php")
+    @POST("http://192.168.1.183:8004/sysadmin/panel/newlogin.php")
     Observable<String> login2(@Field("user_name") String username,
-                               @Field("password") String pwd);
+                               @Field("password") String pwd,
+                              @Field("syscode") String syscode);
 
     /**
      * 修改用户密码
@@ -347,7 +337,10 @@ public interface APIservice {
     @FormUrlEncoded
     @POST("applogin/appChangePwd")
     Observable<String> changePass(@Field("username") String username,
-                                  @Field("newpwd") String newpwd);
+                                  @Field("newpwd") String newpwd
+
+
+    );
 
     /**
      * 检查版本
@@ -386,6 +379,11 @@ public interface APIservice {
     Observable<SICType> getTypeOfSocialInfo();
 
 
+
+    @FormUrlEncoded
+    @POST("appworkmanager/getOnceTimeBankDetail")
+    Observable<String> getOnceTimeBankDetail(@Field("policeid") String policeid,
+                                             @Field("year") String year);
 
     @FormUrlEncoded
     @POST("")

@@ -13,6 +13,7 @@ import android.content.res.Resources;
 import android.graphics.Color;
 import android.media.RingtoneManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
@@ -22,7 +23,6 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
@@ -46,7 +46,6 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import rx.Observable;
-import rx.Observer;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -54,7 +53,6 @@ import wgz.com.cx_ga_project.R;
 import wgz.com.cx_ga_project.app;
 import wgz.com.cx_ga_project.base.Constant;
 import wgz.com.cx_ga_project.entity.AppVersion;
-import wgz.com.cx_ga_project.service.GetNewMsgService;
 import wgz.com.cx_ga_project.service.NewJQMsgPush;
 import wgz.com.cx_ga_project.service.UpdataService;
 import wgz.com.cx_ga_project.util.SPBuild;
@@ -102,6 +100,8 @@ public class HomeActivity extends AppCompatActivity
     CardView idXiashu;
     @Bind(R.id.id_fighttrack)
     CardView idFighttrack;
+    @Bind(R.id.id_tagcloudlog)
+    CardView idTagcloudlog;
     private JQReceiver receiver;
     private BadgeView badgeView;
 
@@ -128,7 +128,7 @@ public class HomeActivity extends AppCompatActivity
         idColltoollayout.setExpandedTitleColor(Color.WHITE);
         navView.setNavigationItemSelectedListener(this);
         Resources resource = getBaseContext().getResources();
-        ColorStateList csl =  resource.getColorStateList(R.drawable.navigation_menu_item_color);
+        ColorStateList csl = resource.getColorStateList(R.drawable.navigation_menu_item_color);
         navView.setItemTextColor(csl);
         navView.setItemIconTintList(csl);
         //LogUtil.d("userhead_url: " +SPUtils.get(app.getApp().getApplicationContext(), Constant.USERHEAD, ""));
@@ -149,13 +149,13 @@ public class HomeActivity extends AppCompatActivity
         username.setText((String) SPUtils.get(app.getApp().getApplicationContext(), Constant.USERNAME, "未知"));
         userdepartment.setText((String) SPUtils.get(app.getApp().getApplicationContext(), Constant.USEROFFICENAME, "未知"));
 
-       // startService(new Intent(this, GetNewMsgService.class));
+        // startService(new Intent(this, GetNewMsgService.class));
 
 
         startService(new Intent(this, NewJQMsgPush.class));
     }
 
-    @OnClick({R.id.id_fighttrack, R.id.fab, R.id.to_jiechujing, R.id.id_toWorkLog, R.id.id_myscheduling, R.id.id_myApply, R.id.id_shenhe, R.id.id_xiashu})
+    @OnClick({R.id.id_fighttrack,R.id.id_tagcloudlog, R.id.fab, R.id.to_jiechujing, R.id.id_toWorkLog, R.id.id_myscheduling, R.id.id_myApply, R.id.id_shenhe, R.id.id_xiashu})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.id_fighttrack:
@@ -163,6 +163,9 @@ public class HomeActivity extends AppCompatActivity
                 break;
             case R.id.id_toWorkLog:
                 startActivity(new Intent(HomeActivity.this, WorkLogActivity.class));
+                break;
+            case R.id.id_tagcloudlog:
+                startActivity(new Intent(HomeActivity.this, WorkLogCloudActivity.class));
                 break;
             case R.id.id_myscheduling:
                 startActivity(new Intent(HomeActivity.this, SchedulingActivity.class));
@@ -178,14 +181,14 @@ public class HomeActivity extends AppCompatActivity
                 break;
             case R.id.fab:
                 // TODO: 2016/8/3 社会信息采集功能
-               startActivity(new Intent(HomeActivity.this,SICActivity.class));
+                startActivity(new Intent(HomeActivity.this, SICActivity.class));
                 break;
             case R.id.to_jiechujing:
                 // TODO: 2016/8/5 接处警作战功能
-                LogUtil.d("count :"+SomeUtil.getNewJQMSgCount());
+                LogUtil.d("count :" + SomeUtil.getNewJQMSgCount());
                 new SPBuild(getApplicationContext())
-                        .addData(Constant.NEWJQCOUNT,0).build();
-                LogUtil.d("count :"+SomeUtil.getNewJQMSgCount());
+                        .addData(Constant.NEWJQCOUNT, 0).build();
+                LogUtil.d("count :" + SomeUtil.getNewJQMSgCount());
                 BadgeViewCount(0);
                 startActivity(new Intent(HomeActivity.this, StartNewFightActivity.class).putExtra("title", "new"));
 
@@ -250,24 +253,24 @@ public class HomeActivity extends AppCompatActivity
             super.onBackPressed();
         }
     }
+
     @Override
     protected void onPause() {
         super.onPause();
         unregisterReceiver(receiver);
     }
+
     @Override
     protected void onResume() {
         super.onResume();
         //注册广播
         BadgeViewCount(SomeUtil.getNewJQMSgCount());
-        receiver = new HomeActivity.JQReceiver();
+        receiver = new JQReceiver();
         IntentFilter filter = new IntentFilter();
         filter.addAction("service.JQpush");
         registerReceiver(receiver, filter);
         // LogUtil.d("广播注册成功！");
     }
-
-
 
 
     @Override
@@ -342,9 +345,9 @@ public class HomeActivity extends AppCompatActivity
                                 if (a > versionCode) {
                                     // TODO: 2016/10/10 下载更新
                                     String url = appVersion.getRes().get(0).getApkUrl();
-                                    url.replaceAll("\\\\","");
+                                    url.replaceAll("\\\\", "");
                                     new SPBuild(getApplicationContext())
-                                            .addData(Constant.UPDATEURL,url).build();
+                                            .addData(Constant.UPDATEURL, url).build();
                                     AlertDialog.Builder alertDialog = new AlertDialog.Builder(HomeActivity.this);
                                     alertDialog.setTitle("版本更新")
                                             .setMessage("检查到新版本，现在更新吗？")
@@ -362,8 +365,8 @@ public class HomeActivity extends AppCompatActivity
                                         }
                                     }).show();
 
-                                }else{
-                                    SomeUtil.showSnackBar(homeRootView,"当前已经是最新版本！");
+                                } else {
+                                    SomeUtil.showSnackBar(homeRootView, "当前已经是最新版本！");
                                 }
 
                             }
@@ -389,7 +392,7 @@ public class HomeActivity extends AppCompatActivity
 
         } else if (id == R.id.nav_saoyisao) {
             // TODO: 2016/9/3 扫一扫
-            startActivityForResult(new Intent(HomeActivity.this, SaoYiSaoActivity.class),9);
+            startActivityForResult(new Intent(HomeActivity.this, SaoYiSaoActivity.class), 9);
 
         }
 
@@ -494,12 +497,12 @@ public class HomeActivity extends AppCompatActivity
             String msg = bundle.getString("jq");
             int count = bundle.getInt("jqcount");
             if (msg.equals("newjq")) {
-                NotificationManager manager = (NotificationManager)context.getSystemService(Context.NOTIFICATION_SERVICE);
+                NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
                 Uri ringUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
                 // 通过Notification.Builder来创建通知，注意API Level
                 // API16之后才支持
                 Notification notify3 = null; // 需要注意build()是在APIlevel16及之后增加的，API11可以使用getNotificatin()来替代
-                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.JELLY_BEAN) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
                     notify3 = new Notification.Builder(context)
                             .setSound(ringUri).build();
                 }
@@ -512,11 +515,10 @@ public class HomeActivity extends AppCompatActivity
     }
 
     private void BadgeViewCount(int count) {
-        if (count==0){
+        if (count == 0) {
 
             badgeView.setVisibility(View.GONE);
-        }
-        else{
+        } else {
             badgeView.setVisibility(View.VISIBLE);
             //btn是控件
             badgeView.setTargetView(mToJiechujing);
@@ -525,7 +527,6 @@ public class HomeActivity extends AppCompatActivity
             //设置显示未读消息条数
             badgeView.setBadgeCount(count);
         }
-
 
 
     }

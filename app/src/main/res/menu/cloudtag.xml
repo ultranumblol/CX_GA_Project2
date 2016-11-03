@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+   >
+    <group android:checkableBehavior="none">
+        <item
+            android:id="@+id/cloudtag_week"
+
+            android:title="查看近一周" />
+       <item
+            android:id="@+id/cloudtag_month"
+
+            android:title="查看近一月" />
+        <item
+            android:id="@+id/cloudtag_year"
+
+            android:title="查看近一年" />
+        <item
+            android:id="@+id/cloudtag_selfs"
+            android:title="自定义日期" />
+    </group>
+</menu>
