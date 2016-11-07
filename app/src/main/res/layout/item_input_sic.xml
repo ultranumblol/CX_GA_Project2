@@ -28,7 +28,18 @@
                 android:id="@+id/sic_input_title"
                 android:textColor="@color/darkcyan"
                 android:textSize="16dp" />
-
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="10"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:text="123123"
+                android:maxLines="2"
+                android:ellipsize="end"
+                android:id="@+id/sic_input_titleid"
+                android:textColor="@color/darkcyan"
+                android:visibility="gone"
+                android:textSize="16dp" />
             <EditText
                 android:id="@+id/sic_input_content"
                 android:layout_width="0dp"

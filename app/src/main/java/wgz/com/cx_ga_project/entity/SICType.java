@@ -66,6 +66,18 @@ public class Re {
 
     private String ordernum;
 
+    @SerializedName("hasfiles")
+
+    private String hasfiles;
+
+    public String getHasfiles() {
+        return hasfiles;
+    }
+
+    public void setHasfiles(String hasfiles) {
+        this.hasfiles = hasfiles;
+    }
+
     /**
      *
      * @return

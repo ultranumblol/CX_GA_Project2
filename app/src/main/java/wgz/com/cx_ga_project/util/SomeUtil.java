@@ -14,6 +14,10 @@ import android.widget.ImageView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.File;
 import java.math.BigDecimal;
 import java.net.ConnectException;
@@ -23,14 +27,15 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import wgz.com.cx_ga_project.R;
-import wgz.com.cx_ga_project.activity.ChatActivity;
-import wgz.com.cx_ga_project.activity.HomeActivity;
 import wgz.com.cx_ga_project.app;
 import wgz.com.cx_ga_project.base.Constant;
 import wgz.datatom.com.utillibrary.util.LogUtil;
@@ -185,6 +190,75 @@ public class SomeUtil {
         return result4.setScale(2, BigDecimal.ROUND_HALF_UP).toPlainString() + "TB";
     }
 
+
+    public static String ListmapTojsonStr(List<Map<String, Object>> datas) {
+        JSONArray mJsonArray = new JSONArray();
+        for (int i = 0; i < datas.size(); i++) {
+            Map<String, Object> itemMap = datas.get(i);
+            Iterator<Map.Entry<String, Object>> iterator = itemMap.entrySet().iterator();
+
+            JSONObject object = new JSONObject();
+
+            while (iterator.hasNext()) {
+                Map.Entry<String, Object> entry = iterator.next();
+                try {
+                    object.put(entry.getKey(), entry.getValue());
+                } catch (JSONException e) {
+
+                }
+            }
+            mJsonArray.put(object);
+        }
+
+        return mJsonArray.toString();
+
+    }
+
+    public static String mapTojsonStr(Map<String, Object> datas) {
+
+        Iterator<Map.Entry<String, Object>> iterator = datas.entrySet().iterator();
+
+        JSONObject object = new JSONObject();
+
+        while (iterator.hasNext()) {
+            Map.Entry<String, Object> entry = iterator.next();
+            try {
+                object.put(entry.getKey(), entry.getValue());
+            } catch (JSONException e) {
+
+            }
+        }
+
+        return object.toString();
+
+    }
+
+
+    public static List<Map<String, Object>> JsonStrToListMap(String result) {
+        List<Map<String, Object>> datas = new ArrayList<Map<String, Object>>();
+        try {
+            JSONArray array = new JSONArray(result);
+            for (int i = 0; i < array.length(); i++) {
+                JSONObject itemObject = array.getJSONObject(i);
+                Map<String, Object> itemMap = new HashMap<>();
+                JSONArray names = itemObject.names();
+                if (names != null) {
+                    for (int j = 0; j < names.length(); j++) {
+                        String name = names.getString(j);
+                        String value = itemObject.getString(name);
+                        itemMap.put(name, value);
+                    }
+                }
+                datas.add(itemMap);
+            }
+        } catch (JSONException e) {
+
+        }
+
+        return datas;
+
+    }
+
     /**
      * 获取软件版本号
      *
@@ -228,10 +302,11 @@ public class SomeUtil {
 
     /**
      * 用glide加载图片 有缓存和缩略图0.4f
+     *
      * @param context
      * @param view
      */
-    public static void GlidePic(Context context, ImageView view,String loadurl){
+    public static void GlidePic(Context context, ImageView view, String loadurl) {
         Glide.with(context)
                 .load(loadurl)
                 .placeholder(R.mipmap.ic_launcher)
@@ -243,13 +318,14 @@ public class SomeUtil {
                 .into(view);
 
     }
+
     //判断一个activity是否在运行
-    public  static  boolean isActivityRunning(Context context,Class clazz){
+    public static boolean isActivityRunning(Context context, Class clazz) {
         ActivityManager activityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
         List<ActivityManager.RunningTaskInfo> info = activityManager.getRunningTasks(1);
-        if (info!=null&&info.size()>0){
+        if (info != null && info.size() > 0) {
             ComponentName component = info.get(0).topActivity;
-            if (clazz.getName().equals(component.getClassName())){
+            if (clazz.getName().equals(component.getClassName())) {
                 return true;
             }
         }
@@ -258,9 +334,8 @@ public class SomeUtil {
     }
 
 
-
-    public static String getSysTime(){
-        SimpleDateFormat formatter = new SimpleDateFormat ("yyyy-MM-dd HH:mm:ss ");
+    public static String getSysTime() {
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss ");
 
         Date curDate = new Date(System.currentTimeMillis());//获取当前时间
 
@@ -268,36 +343,38 @@ public class SomeUtil {
         return str;
 
     }
+
     //(String) SPUtils.get(app.getApp().getApplicationContext(), Constant.USERNAME, "未知")
     //获取用户id
-    public static String getUserId(){
+    public static String getUserId() {
 
         return (String) SPUtils.get(app.getApp().getApplicationContext(), Constant.USERID, "未知");
     }
 
-    public static  int getNewJQMSgCount(){
-        return (int) SPUtils.get(app.getApp().getApplicationContext(),Constant.NEWJQCOUNT, 0);
+    public static int getNewJQMSgCount() {
+        return (int) SPUtils.get(app.getApp().getApplicationContext(), Constant.NEWJQCOUNT, 0);
 
     }
 
-    public static String getJQId(){
+    public static String getJQId() {
 
         return (String) SPUtils.get(app.getApp().getApplicationContext(), Constant.JQID, "000");
     }
-    public static String getTASKId(){
+
+    public static String getTASKId() {
 
         return (String) SPUtils.get(app.getApp().getApplicationContext(), Constant.TASKID, "000");
     }
 
-    public  static Date StrToDate(String str)  {
+    public static Date StrToDate(String str) {
         try {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-            Date  date = null;
+            Date date = null;
             date = sdf.parse(str);
             return date;
         } catch (ParseException e) {
             e.printStackTrace();
-            LogUtil.d("DATE error"+e.toString());
+            LogUtil.d("DATE error" + e.toString());
             return null;
         }
     }

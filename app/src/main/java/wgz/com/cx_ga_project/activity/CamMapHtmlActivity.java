@@ -102,6 +102,7 @@ public class CamMapHtmlActivity extends BaseActivity {
         webSettings.setDefaultTextEncodingName("utf-8");
         webSettings.setBuiltInZoomControls(true);
         webView.addJavascriptInterface(getHtmlInterface(), "android");
+
         webView.loadUrl("http://192.168.1.184:12345/appmap");
 
         RxView.clicks(fab).throttleFirst(500, TimeUnit.MICROSECONDS)

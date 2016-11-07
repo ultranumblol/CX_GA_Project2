@@ -181,7 +181,7 @@ public class HomeActivity extends AppCompatActivity
                 break;
             case R.id.fab:
                 // TODO: 2016/8/3 社会信息采集功能
-                startActivity(new Intent(HomeActivity.this, SICActivity.class));
+                startActivity(new Intent(HomeActivity.this, SICTypeActivity.class));
                 break;
             case R.id.to_jiechujing:
                 // TODO: 2016/8/5 接处警作战功能

@@ -8,10 +8,16 @@
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="wgz.com.cx_ga_project.activity.TimeBankActivity"
     tools:showIn="@layout/activity_time_bank">
-
-    <com.jude.easyrecyclerview.EasyRecyclerView
-        android:id="@+id/timebank_rv"
+    <WebView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scrollbarStyle="insideOverlay"></com.jude.easyrecyclerview.EasyRecyclerView>
+        android:id="@+id/timebank_webview"
+        ></WebView>
+
+    <!--<com.jude.easyrecyclerview.EasyRecyclerView-->
+        <!--android:id="@+id/timebank_rv"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:visibility="gone"-->
+        <!--android:scrollbarStyle="insideOverlay"></com.jude.easyrecyclerview.EasyRecyclerView>-->
 </RelativeLayout>

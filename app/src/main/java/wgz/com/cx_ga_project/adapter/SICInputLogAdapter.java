@@ -6,21 +6,20 @@ import android.view.ViewGroup;
 
 import com.jude.easyrecyclerview.adapter.BaseViewHolder;
 
-import java.util.Map;
-
 /**
- * Created by wgz on 2016/11/2.
+ * Created by wgz on 2016/11/7.
  */
 
-public class SICInputAdapter extends MyRecyclerArrayAdapter<Map<String,Object>> {
-    public SICInputAdapter(Context context) {
+public class SICInputLogAdapter extends MyRecyclerArrayAdapter {
+    public SICInputLogAdapter(Context context) {
         super(context);
     }
 
     @Override
     public BaseViewHolder OnCreateViewHolder(ViewGroup parent, int viewType) {
-        return new SICInputViewHolder(parent);
+        return new SICInputLogViewholder(parent);
     }
+
 
 
 }

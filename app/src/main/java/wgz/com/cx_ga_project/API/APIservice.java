@@ -1,21 +1,15 @@
 package wgz.com.cx_ga_project.API;
 
-import android.net.http.HttpResponseCache;
-
 import java.util.List;
 import java.util.Map;
 
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
-import okhttp3.Response;
-import okhttp3.ResponseBody;
-import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.Field;
 import retrofit2.http.FieldMap;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
-import retrofit2.http.HEAD;
 import retrofit2.http.Headers;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
@@ -23,24 +17,21 @@ import retrofit2.http.Part;
 import retrofit2.http.PartMap;
 import retrofit2.http.Path;
 import rx.Observable;
-import wgz.com.cx_ga_project.bean.JiaBan;
-import wgz.com.cx_ga_project.bean.UserBean;
 import wgz.com.cx_ga_project.entity.AppVersion;
 import wgz.com.cx_ga_project.entity.Apply;
 import wgz.com.cx_ga_project.entity.DatrixCreat;
-import wgz.com.cx_ga_project.entity.DatrixFinish;
 import wgz.com.cx_ga_project.entity.LeaveType;
 import wgz.com.cx_ga_project.entity.SICType;
 import wgz.com.cx_ga_project.entity.Scheduling;
 import wgz.com.cx_ga_project.entity.SchedulingOneDay;
 import wgz.com.cx_ga_project.entity.Subordinate;
+import wgz.com.cx_ga_project.entity.TypeOfAuth;
 import wgz.com.cx_ga_project.entity.UserInfo;
 import wgz.com.cx_ga_project.entity.WorkLog;
 
 import static wgz.com.cx_ga_project.app.DATRIX_BASE_URL;
 import static wgz.com.cx_ga_project.base.Constant.CHECK_ONESSUMMARY_BYDAYS;
 import static wgz.com.cx_ga_project.base.Constant.DATRIXUID;
-import static wgz.com.cx_ga_project.base.Constant.GET_USER_HEAD;
 
 /**
  * Created by wgz on 2016/8/1.
@@ -71,8 +62,6 @@ public interface APIservice {
                                                  @Body MultipartBody multipartBody);
 
 
-
-
     /**
      * detrix 创建文件creat方法(1)
      *
@@ -80,7 +69,7 @@ public interface APIservice {
      * @return
      */
     @FormUrlEncoded
-    @POST(DATRIX_BASE_URL+"api/cluster/tracker/file/create"+DATRIXUID)
+    @POST(DATRIX_BASE_URL + "api/cluster/tracker/file/create" + DATRIXUID)
     @Headers("ACCESS-TOKEN:X7yABwjE20sUJLefATUFqU0iUs8mJPqEJo6iRnV63mI=")
     Observable<DatrixCreat> uploadFileWithRequestBodyTest(
             @Field("filename") String filename,
@@ -94,7 +83,7 @@ public interface APIservice {
      * @return
      */
     @Multipart
-    @POST(DATRIX_BASE_URL+"api/cluster/storage/file/write")
+    @POST(DATRIX_BASE_URL + "api/cluster/storage/file/write")
     @Headers("ACCESS-TOKEN:X7yABwjE20sUJLefATUFqU0iUs8mJPqEJo6iRnV63mI=")
     Observable<String> detrixWrite(
             @Part("fileid") String fileid,
@@ -111,7 +100,7 @@ public interface APIservice {
      * @return
      */
     @FormUrlEncoded
-    @POST(DATRIX_BASE_URL+"upload/finish")
+    @POST(DATRIX_BASE_URL + "upload/finish")
     @Headers("ACCESS-TOKEN:X7yABwjE20sUJLefATUFqU0iUs8mJPqEJo6iRnV63mI=")
     Observable<String> detrixfinish(
             @Field("fileid") String fileid,
@@ -235,6 +224,7 @@ public interface APIservice {
 
     /**
      * 获取工作日志图片
+     *
      * @param type
      * @param loginid
      * @param time
@@ -243,10 +233,9 @@ public interface APIservice {
     @FormUrlEncoded
     @POST("appworkmanager/{type}")
     Observable<WorkLog> getLogPicData(@Path("type") String type,
-                                   @Field("loginid") String loginid,
-                                   @Field("time") String time
+                                      @Field("loginid") String loginid,
+                                      @Field("time") String time
     );
-
 
 
     /**
@@ -255,12 +244,10 @@ public interface APIservice {
      * @return
      */
     @FormUrlEncoded
-    @POST("appworkmanager/"+CHECK_ONESSUMMARY_BYDAYS)
+    @POST("appworkmanager/" + CHECK_ONESSUMMARY_BYDAYS)
     Observable<WorkLog> getLogDataToDay(@Field("loginid") String loginid,
                                         @Field("time") String time
     );
-
-
 
 
     /**
@@ -277,6 +264,7 @@ public interface APIservice {
 
     /**
      * 根据时间段获取值班信息
+     *
      * @return
      */
     @FormUrlEncoded
@@ -288,6 +276,7 @@ public interface APIservice {
 
     /**
      * 查询某一天的排班记录
+     *
      * @param day
      * @return
      */
@@ -299,13 +288,15 @@ public interface APIservice {
 
     /**
      * 显示datrix上的图片
+     *
      * @return
      */
-    @GET(DATRIX_BASE_URL+"preview/getImage?fileid=c1b09c7c-6e9f-43cc-8f16-780713066cc0&token=X7yABwjE20sUJLefATUFqU0iUs8mJPqEJo6iRnV63mI=")
+    @GET(DATRIX_BASE_URL + "preview/getImage?fileid=c1b09c7c-6e9f-43cc-8f16-780713066cc0&token=X7yABwjE20sUJLefATUFqU0iUs8mJPqEJo6iRnV63mI=")
     Observable<String> getdatrixPic();
 
     /**
      * 登录
+     *
      * @param username
      * @param pwd
      * @return
@@ -318,6 +309,7 @@ public interface APIservice {
 
     /**
      * 登录2
+     *
      * @param username
      * @param pwd
      * @return
@@ -325,11 +317,12 @@ public interface APIservice {
     @FormUrlEncoded
     @POST("http://192.168.1.183:8004/sysadmin/panel/newlogin.php")
     Observable<String> login2(@Field("user_name") String username,
-                               @Field("password") String pwd,
+                              @Field("password") String pwd,
                               @Field("syscode") String syscode);
 
     /**
      * 修改用户密码
+     *
      * @param username
      * @param newpwd
      * @return
@@ -344,6 +337,7 @@ public interface APIservice {
 
     /**
      * 检查版本
+     *
      * @return
      */
     @GET("appupload/checkAppVersion")
@@ -352,6 +346,7 @@ public interface APIservice {
 
     /**
      * 获取请假类型
+     *
      * @return
      */
     @GET("appworkmanager/getLeaveType")
@@ -359,6 +354,7 @@ public interface APIservice {
 
     /**
      * 获取某人的上下级关系
+     *
      * @param policeid
      * @return
      */
@@ -372,6 +368,7 @@ public interface APIservice {
 
     /**
      * 获取社会信息采集类型
+     *
      * @return
      */
 
@@ -379,17 +376,68 @@ public interface APIservice {
     Observable<SICType> getTypeOfSocialInfo();
 
 
-
+    /**
+     * 获取某人的时间银行
+     *
+     * @param policeid
+     * @param year
+     * @return
+     */
     @FormUrlEncoded
     @POST("appworkmanager/getOnceTimeBankDetail")
     Observable<String> getOnceTimeBankDetail(@Field("policeid") String policeid,
                                              @Field("year") String year);
 
+    /**
+     * 社会信息采集内容上传
+     *
+     * @param policeid
+     * @param map
+     * @return
+     */
     @FormUrlEncoded
     @POST("")
     Observable<String> SICUpload(
-            @Field("policeid" )String policeid,
+            @Field("policeid") String policeid,
             @FieldMap Map<String, String> map);
 
+    /**
+     * 获取社会信息采集类型
+     *
+     * @param type
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("appinfocollect/getFieldNameByType")
+    Observable<String> getFieldNameByType(
+            @Field("type") String type);
+
+    /**
+     * 上传信息采集input信息
+     *
+     * @param type
+     * @param txt
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("appinfocollect/addSocialInfoTxt")
+    Observable<String> addSocialInfoTxt(
+            @Field("type") String type
+            , @Field("txt") String txt,
+            @Field("policeid") String policeid,
+            @Field("pic") String pic,
+            @Field("video") String video);
+
+    /**
+     * 获取社会信息权限
+     *
+     * @return
+     */
+    @GET("appinfocollect/getTypeOfAuth")
+    Observable<TypeOfAuth> getTypeOfAuth();
+
+    @FormUrlEncoded
+    @POST("appinfocollect/getSocialInfoLis")
+    Observable<String> getSocialInfoLis(@Field("policeid") String policeid);
 
 }

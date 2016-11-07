@@ -374,10 +374,16 @@ public class MySubordinateLogAcitvity extends BaseActivity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         //noinspection SimplifiableIfStatement
-        if (id == R.id.Statistics) {
+        if (id == R.id.sub_timebank) {
             // TODO: 2016/8/9 时间银行功能
             //SomeUtil.showSnackBar(mRootview, "开发中。。。");
-            startActivity(new Intent(this,TimeBankActivity.class));
+            startActivity(new Intent(this,TimeBankActivity.class).putExtra("policeid",policeid));
+            return true;
+        }
+        if (id == R.id.sub_cloudtag) {
+            // TODO: 2016/8/9 时间银行功能
+            //SomeUtil.showSnackBar(mRootview, "开发中。。。");
+            startActivity(new Intent(this,WorkLogCloudActivity.class).putExtra("policeid",policeid));
             return true;
         }
         if (id == android.R.id.home) {

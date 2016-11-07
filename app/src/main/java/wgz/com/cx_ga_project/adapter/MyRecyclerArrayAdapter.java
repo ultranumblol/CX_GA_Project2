@@ -515,6 +515,7 @@ public abstract class MyRecyclerArrayAdapter <T> extends RecyclerView.Adapter<Ba
 
     @Override
     public final void onBindViewHolder(BaseViewHolder holder, int position) {
+
         holder.itemView.setId(position);
         if (headers.size()!=0 && position<headers.size()){
             headers.get(position).onBindView(holder.itemView);
@@ -531,6 +532,7 @@ public abstract class MyRecyclerArrayAdapter <T> extends RecyclerView.Adapter<Ba
 
 
     public void OnBindViewHolder(BaseViewHolder holder, final int position){
+
         holder.setData(getItem(position));
     }
 

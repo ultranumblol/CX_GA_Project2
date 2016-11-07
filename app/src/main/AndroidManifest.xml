@@ -266,18 +266,27 @@
         <activity
             android:name=".activity.SICTypeActivity"
             android:label="@string/title_activity_sicinput"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activity.SICInputActivity"
             android:label="@string/title_activity_sicinput"
+            android:windowSoftInputMode="adjustPan"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activity.WorkLogCloudActivity"
             android:label="@string/title_activity_work_log_cloud"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activity.TimeBankActivity"
             android:label="@string/title_activity_time_bank"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activity.SICInputLogActivity"
+            android:label="@string/title_activity_sicinput_log"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
