@@ -85,8 +85,7 @@ public class app extends Application {
                                 .body(new ProgressResponseBody(orginalResponse.body(), new ProgressListener() {
                                     @Override
                                     public void onProgress(long progress, long total, boolean done) {
-                                       // LogUtil.d("onProgress: " + "total ---->" + total + "done ---->" + progress);
-                                    }
+                                             }
                                 }))
                                 .build();
                     }

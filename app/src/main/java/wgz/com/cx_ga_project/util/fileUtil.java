@@ -3,7 +3,6 @@ package wgz.com.cx_ga_project.util;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.util.Properties;
 
 /**
  * Created by wgz on 2016/10/19.
@@ -27,7 +26,7 @@ public class fileUtil {
              * 切割文件时，记录 切割文件的名称和切割的子文件个数以方便合并
              * 这个信息为了简单描述，使用键值对的方式，用到了properties对象
              */
-            Properties pro = new Properties();
+
             // 定义输出的文件夹路径
             File dir = new File("/storage/sdcard0/temp");
             // 判断文件夹是否存在，不存在则创建
@@ -40,14 +39,7 @@ public class fileUtil {
                 fo.write(b, 0, len);
                 fo.close();
             }
-           /* // 将被切割的文件信息保存到properties中
-            pro.setProperty("partCount", count + "");
-            pro.setProperty("fileName", file.getName());
-            fo = new FileOutputStream(new File(dir, (count++) + ".properties"));
-            // 写入properties文件
-            pro.store(fo, "save file info");
-            fo.close();
-            fs.close();*/
+
         } catch (Exception e) {
             e.printStackTrace();
         }

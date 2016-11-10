@@ -18,6 +18,8 @@ import butterknife.ButterKnife;
 import wgz.com.cx_ga_project.R;
 import wgz.com.cx_ga_project.base.BaseActivity;
 
+import wgz.com.cx_ga_project.base.RxBus;
+import wgz.com.cx_ga_project.bean.SecondCode;
 import wgz.com.cx_ga_project.view.zxing.camera.CameraManager;
 import wgz.com.cx_ga_project.view.zxing.decoding.CaptureActivityHandler;
 import wgz.com.cx_ga_project.view.zxing.decoding.InactivityTimer;
@@ -192,7 +194,9 @@ public class SaoYiSaoActivity extends BaseActivity implements SurfaceHolder.Call
             Intent resultIntent = new Intent();
             Bundle bundle = new Bundle();
             bundle.putString("result", resultString);
+
             bundle.putParcelable("bitmap", barcode);
+            RxBus.getDefault().post(new SecondCode(resultString,barcode));
             resultIntent.putExtras(bundle);
             this.setResult(RESULT_OK, resultIntent);
         }
