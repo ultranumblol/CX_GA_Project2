@@ -146,6 +146,8 @@ public class AddJQActivity extends BaseActivity {
     }
 
     private void addjqAndpic(String fileid, List<String> ids) {
+
+
         // TODO: 2016/10/28 上传警情文字图片信息
     }
 

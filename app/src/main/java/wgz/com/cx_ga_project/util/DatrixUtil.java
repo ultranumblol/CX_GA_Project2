@@ -3,6 +3,7 @@ package wgz.com.cx_ga_project.util;
 import android.view.View;
 
 import java.io.File;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -14,6 +15,10 @@ import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import wgz.com.cx_ga_project.app;
+import wgz.com.cx_ga_project.base.DefaultProgressListener;
+import wgz.com.cx_ga_project.base.RxBus;
+import wgz.com.cx_ga_project.base.UploadFileRequestBody;
+import wgz.com.cx_ga_project.bean.progress;
 import wgz.com.cx_ga_project.entity.DatrixCreat;
 import wgz.datatom.com.utillibrary.util.LogUtil;
 import wgz.datatom.com.utillibrary.util.ToastUtil;
@@ -105,13 +110,39 @@ public class DatrixUtil {
 
         DatrixCreate(path, UPLOADVIDEO);
     }
+
+    public void DatrixUpLoadVideos() {
+        LogUtil.d("datrixUtil pathssize:" + paths.size());
+
+        for (int i = 0; i < paths.size(); i++) {
+
+            DatrixCreate(paths.get(i), UPLOADVIDEO);
+        }
+
+
+    }
+
+
+
     private void writeByPiece2(){
         final Map<String, RequestBody> piecebodyMap = new HashMap<>();
         File file = new File("/storage/sdcard0/temp/"+currentPieces+".3gp");
-        piecebodyMap.put("file" + currentPieces + "\" ; filename=\"" + file.getName(), RequestBody.create(MediaType.parse("video/*"), file));
+
+        UploadFileRequestBody fileRequestBody = new UploadFileRequestBody(file, new DefaultProgressListener(currentPieces,filePieces));
+
+        //piecebodyMap.put("file" + currentPieces + "\" ; filename=\"" + file.getName(), RequestBody.create(MediaType.parse("video/*"), file));
+
+
+        piecebodyMap.put("file" + currentPieces + "\" ; filename=\"" + file.getName(),fileRequestBody);
+
         filePieceSize = (int) file.length();
         currentPieces+=1;
-        SomeUtil.showSnackBar(rootview, "current:" + currentPieces  + "filepiece:"+filePieces);
+        //发送进度
+        float num= (float)currentPieces/filePieces;
+        DecimalFormat df = new DecimalFormat("0.00");
+
+        RxBus.getDefault().post(new progress(df.format(num*100)));
+
         LogUtil.d("current:" + currentPieces  + "filepiece:"+filePieces);
         app.apiService.detrixWrite(fileid, startsize + "", filePieceSize+ "", piecebodyMap)
                 .compose(RxUtil.<String>applySchedulers())
@@ -122,6 +153,7 @@ public class DatrixUtil {
                     }
                     @Override
                     public void onError(Throwable e) {
+                        SomeUtil.checkHttpException(app.getApp().getApplicationContext(),e,rootview);
                         LogUtil.d("detrix_write_Response_error :" + e.toString());
                     }
 
@@ -138,53 +170,13 @@ public class DatrixUtil {
 
                         } else {
                             SomeUtil.showSnackBar(rootview, "第" + currentPieces  + "块文件写入失败!");
-                            //ToastUtil.showLong(app.getApp().getApplicationContext(),"current:"+currentfilesize+"filesize : "+filesize);
-                            //ToastUtil.showLong(app.getApp().getApplicationContext(),s);
+
                         }
                     }
                 });
 
     }
 
-
-    private void writeByPiece( final Map<String, RequestBody> bodyMap) {
-        startsize = endsize;
-        endsize+=UPLOADLENGTH;
-        if (endsize>filesize)
-            endsize = filesize;
-        currentfilesize+=endsize-startsize;
-        LogUtil.d(" startsize:"+startsize +"uploadSize : "+(endsize-startsize) +"currentPieces :"+currentPieces);
-        app.apiService.detrixWrite(fileid, startsize + "", endsize-startsize + "", bodyMap)
-                .compose(RxUtil.<String>applySchedulers())
-                .subscribe(new Subscriber<String>() {
-                    @Override
-                    public void onCompleted() {
-
-                    }
-                    @Override
-                    public void onError(Throwable e) {
-                        LogUtil.d("detrix_write_Response_error :" + e.toString());
-                    }
-
-                    @Override
-                    public void onNext(String s) {
-                        LogUtil.d("detrix_write_Response :" + s);
-                        if (s.contains("\t\"code\":\t200")) {
-                            if (currentPieces==filePieces-1){
-                                DatrixDoFinish();
-                            }else {
-                                writeByPiece(bodyMap);
-                                currentPieces+=1;
-                            }
-                            // DatrixDoFinish();
-                        } else {
-                            SomeUtil.showSnackBar(rootview, "第" + currentPieces  + "块文件写入失败!");
-                            //ToastUtil.showLong(app.getApp().getApplicationContext(),"current:"+currentfilesize+"filesize : "+filesize);
-                            ToastUtil.showLong(app.getApp().getApplicationContext(),s);
-                        }
-                    }
-                });
-    }
 
 
     private void DatrixCreate(final String path, final int type) {
@@ -209,6 +201,7 @@ public class DatrixUtil {
                     @Override
                     public void onError(Throwable e) {
                         LogUtil.d("Detrix_upPic_error:" + e.toString());
+                        SomeUtil.checkHttpException(app.getApp().getApplicationContext(),e,rootview);
                     }
 
                     @Override
@@ -236,6 +229,9 @@ public class DatrixUtil {
 
         if (type == UPLOADPIC) {
             File file = new File(path);
+
+
+
             bodyMap.put("file" + 1 + "\" ; filename=\"" + file.getName(), RequestBody.create(MediaType.parse("image/*"), file));
             filesize = (int) file.length();
             app.apiService.detrixWrite(fileid, "0", filesize + "", bodyMap)
@@ -250,6 +246,7 @@ public class DatrixUtil {
                         @Override
                         public void onError(Throwable e) {
                             LogUtil.d("detrix_write_Response_error :" + e.toString());
+                            SomeUtil.checkHttpException(app.getApp().getApplicationContext(),e,rootview);
                         }
 
                         @Override
@@ -266,7 +263,6 @@ public class DatrixUtil {
         }
         if (type == UPLOADVIDEO) {
             File file = new File(path);
-            //bodyMap.put("file" + 1 + "\" ; filename=\"" + file.getName(), RequestBody.create(MediaType.parse("video/*"), file));
             filesize = (int) file.length();
             LogUtil.d("Video file size : " + filesize);
             if (filesize > 4 * 1024 * 1024) {
@@ -292,7 +288,7 @@ public class DatrixUtil {
 
                     @Override
                     public void onError(Throwable e) {
-
+                        SomeUtil.checkHttpException(app.getApp().getApplicationContext(),e,rootview);
                     }
 
                     @Override

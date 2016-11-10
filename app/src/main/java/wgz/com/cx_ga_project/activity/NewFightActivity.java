@@ -505,6 +505,7 @@ public class NewFightActivity extends BaseActivity {
                         SomeUtil.showSnackBar(rootview, "警情转移成功！").setCallback(new Snackbar.Callback() {
                             @Override
                             public void onDismissed(Snackbar snackbar, int event) {
+                                RxBus.getDefault().post("newjqflush");
                                 finish();
                             }
                         });

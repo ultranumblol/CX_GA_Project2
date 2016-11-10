@@ -45,6 +45,7 @@ import com.uniview.airimos.protocol.PresetInfo;
 import com.uniview.airimos.service.KeepaliveService;
 import com.uniview.airimos.thread.RecvStreamThread;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -62,7 +63,7 @@ import wgz.com.cx_ga_project.base.BaseActivity;
 import wgz.com.cx_ga_project.util.SomeUtil;
 import wgz.datatom.com.utillibrary.util.LogUtil;
 
-import static wgz.com.cx_ga_project.activity.AskForLeaveActivity.getTime;
+
 
 /**
  * 附近摄像头播放
@@ -188,6 +189,14 @@ public class CamPlayerActivity extends BaseActivity implements KeepaliveService.
         //初始化一个Player对象
         mPlayer = new Player();
         mPlayer.AVInitialize(mSurfaceView.getHolder());
+    }  public  String getTime(Date date) {
+        try {
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            return format.format(date);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "";
+        }
     }
 
     private void dologin() {

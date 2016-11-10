@@ -66,7 +66,7 @@ public class SICActivity extends BaseActivity {
                 finish();
                 break;
             case R.id.id_sic_log:
-                SomeUtil.showSnackBar(rootview, "开发ing...");
+               startActivity(new Intent(SICActivity.this,SICInputLogActivity.class));
                 break;
 
         }

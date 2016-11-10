@@ -79,7 +79,7 @@ public class GetNewMsgService extends Service {
                                     Notification notify3 = null; // 需要注意build()是在API
                                     if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.JELLY_BEAN) {
                                         notify3 = new Notification.Builder(getApplication())
-                                                .setSmallIcon(R.mipmap.ic_launcher)
+                                                .setSmallIcon(R.drawable.logoicon)
                                                 .setTicker("智慧警务：" + "您收到了新的警情消息！")
                                                 .setContentTitle("智慧警务")
                                                 .setContentText("您收到了新的警情消息！")

@@ -2,19 +2,23 @@ package wgz.com.cx_ga_project.activity;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.CardView;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.BaseAdapter;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -29,35 +33,53 @@ import java.util.concurrent.TimeUnit;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import rx.Observable;
 import rx.Subscriber;
+import rx.Subscription;
 import rx.functions.Action1;
+import rx.schedulers.Schedulers;
 import wgz.com.cx_ga_project.R;
+import wgz.com.cx_ga_project.adapter.AddPictureAdapter;
 import wgz.com.cx_ga_project.app;
 import wgz.com.cx_ga_project.base.BaseActivity;
+import wgz.com.cx_ga_project.base.RxBus;
+import wgz.com.cx_ga_project.bean.ChatUpProgress;
+import wgz.com.cx_ga_project.bean.progress;
 import wgz.com.cx_ga_project.entity.TypeOfAuth;
+import wgz.com.cx_ga_project.fragment.PhotoPickerFragment;
+import wgz.com.cx_ga_project.util.DatrixUtil;
 import wgz.com.cx_ga_project.util.RxUtil;
 import wgz.com.cx_ga_project.util.SomeUtil;
+import wgz.com.cx_ga_project.util.UriUtils;
 import wgz.com.cx_ga_project.view.Mylayout;
 import wgz.datatom.com.utillibrary.util.LogUtil;
+
+import static wgz.com.cx_ga_project.activity.PickPhotoActivity.HTTP_URL;
+import static wgz.com.cx_ga_project.app.DATRIX_BASE_URL;
 
 public class SICInputActivity extends BaseActivity {
 
 
     @Bind(R.id.toolbar)
     Toolbar toolbar;
-    @Bind(R.id.sic_input_recyclerview)
-    EasyRecyclerView recyclerview;
+
     @Bind(R.id.content_sicinput2)
     RelativeLayout rootview;
     @Bind(R.id.upload_sic)
     FloatingActionButton uploadSic;
-    @Bind(R.id.testrv)
-    RecyclerView testrv;
-    @Bind(R.id.testlv)
-    ListView testlv;
+
+
     @Bind(R.id.tesllv)
     LinearLayout tesllv;
-    //private SICInputAdapter adapter;
+    @Bind(R.id.sicinput_pics)
+    EasyRecyclerView sicinputPics;
+    List<String> paths = new ArrayList<>();
+    @Bind(R.id.sicupload_prg)
+    ProgressBar sicuploadPrg;
+    @Bind(R.id.sicupload_bg)
+    CardView sicuploadBg;
+    @Bind(R.id.sicupload_protext)
+    TextView sicuploadProtext;
     private List<Map<String, Object>> mdata = new ArrayList<>();
     private Mylayout manager;
     private String typeid = "";
@@ -66,13 +88,28 @@ public class SICInputActivity extends BaseActivity {
     private String authid = "";
     private String picids = "";
     private String videoids = "";
-    // private HomeAdapter mAdapter;
-    private listviewadapter listviewadapter;
     private HashMap<Integer, View> lmap = new HashMap<Integer, View>();
+    private List<View> list = new ArrayList<>();
+    private AddPictureAdapter adapter;
+    private String videoPath = "";
+    private String videoPicPath = "";
+    private String datrixurl2 = "&token=X7yABwjE20sUJLefATUFqU0iUs8mJPqEJo6iRnV63mI=";
+    private String datrixVideoPicdurl1 = DATRIX_BASE_URL + "preview/coverMedium?fileid=";
+    private Subscription rxSubscription;
+    private boolean isupload = false;
+
 
     @Override
     public int getLayoutId() {
         return R.layout.activity_sicinput2;
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (!rxSubscription.isUnsubscribed()) {
+            rxSubscription.unsubscribe();
+        }
     }
 
     @Override
@@ -86,44 +123,67 @@ public class SICInputActivity extends BaseActivity {
         toolbar.setSubtitle(typename);
         LogUtil.d("typename: " + typename);
         LogUtil.d("typeid: " + typeid);
-        recyclerview.setLayoutManager(manager = new Mylayout(this));
-        //recyclerview.setAdapter(adapter = new SICInputAdapter(this));
-        testlv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                EditText ev = (EditText) view.findViewById(R.id.sic_input_content);
-                ev.requestFocus();
-            }
-        });
-
-
+        sicinputPics.setLayoutManager(new GridLayoutManager(this, 4));
+        sicinputPics.setAdapter(adapter = new AddPictureAdapter(this));
         initData();
+        rxSubscription = RxBus.getDefault().toObservable(ChatUpProgress.class)
+                .subscribe(new Subscriber<ChatUpProgress>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        LogUtil.d("error :" +e.toString());
+                    }
+
+                    @Override
+                    public void onNext(final ChatUpProgress chatUpProgress) {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                sicuploadProtext.setText(chatUpProgress.getPro());
+                            }
+                        });
+
+                    }
+                });
+
+
         RxView.clicks(uploadSic).throttleFirst(500, TimeUnit.MICROSECONDS)
                 .subscribe(new Action1<Void>() {
                     @Override
                     public void call(Void aVoid) {
-                        String[] typename = new String[typedata.size()];
-                        final String[] typeid = new String[typedata.size()];
-                        for (int i = 0; i < typedata.size(); i++) {
-                            typename[i] = typedata.get(i).getValname();
-                            typeid[i] = typedata.get(i).getValcode();
-
-                        }
+                        // TODO: 2016/11/8 添加图片视频
+                        String[] titles = new String[]{"添加图片", "添加视频"};
                         AlertDialog.Builder builder = new AlertDialog.Builder(SICInputActivity.this);
-                        builder.setTitle("请选择数据权限")
-                                .setSingleChoiceItems(typename, -1, new DialogInterface.OnClickListener() {
+                        builder.setTitle("请选择要添加的附件")
+                                .setItems(titles, new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
-                                        authid = typeid[which];
-                                        LogUtil.d("authID : " + authid);
-                                    }
-                                }).setPositiveButton("确认", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                UploadInfo();
-                            }
-                        }).setNegativeButton("取消", null).show();
+                                        switch (which) {
+                                            case 0:
+                                                Intent intent = new Intent(SICInputActivity.this, PickPhotoActivity.class);
+                                                intent.putExtra(PhotoPickerFragment.EXTRA_SELECT_COUNT, 6);
+                                                intent.putExtra(PhotoPickerFragment.EXTRA_DEFAULT_SELECTED_LIST, "");
+                                                intent.putExtra(HTTP_URL, "");
+                                                startActivityForResult(intent, 9);
 
+                                                break;
+                                            case 1:
+                                                Intent intent2 = new Intent();
+                                                intent2.setType("video/*");
+                                                intent2.setAction(Intent.ACTION_GET_CONTENT);
+                                                intent2.addCategory(Intent.CATEGORY_OPENABLE);
+                                                startActivityForResult(intent2, 3);
+
+                                                break;
+
+
+                                        }
+                                    }
+                                }).show();
 
                     }
                 });
@@ -131,14 +191,15 @@ public class SICInputActivity extends BaseActivity {
     }
 
     private void UploadInfo() {
+
         Map<String, Object> paraValue = new HashMap<>();
         LogUtil.d("mdata.size :" + mdata.size());
         LogUtil.d("lmap.size :" + lmap.size());
 
-        for (int i = 0; i < mdata.size(); i++) {
+        for (int i = 0; i < list.size(); i++) {
             try {
 
-                View itemview = lmap.get(i);
+                View itemview = list.get(i);
                 TextView titleview = (TextView) itemview.findViewById(R.id.sic_input_titleid);
                 EditText contentview = (EditText) itemview.findViewById(R.id.sic_input_content);
                 String key = titleview.getText().toString();
@@ -162,17 +223,25 @@ public class SICInputActivity extends BaseActivity {
                 .subscribe(new Subscriber<String>() {
                     @Override
                     public void onCompleted() {
-
+                        sicuploadPrg.setVisibility(View.GONE);
+                        sicuploadBg.setVisibility(View.GONE);
+                        sicuploadProtext.setVisibility(View.GONE);
+                        isupload = false;
                     }
 
                     @Override
                     public void onError(Throwable e) {
-
+                        sicuploadPrg.setVisibility(View.GONE);
+                        sicuploadBg.setVisibility(View.GONE);
+                        isupload = false;
+                        sicuploadProtext.setVisibility(View.GONE);
                     }
 
                     @Override
                     public void onNext(String s) {
+
                         LogUtil.d("sicinputresult : " + s);
+                        finish();
                     }
                 });
 
@@ -184,9 +253,7 @@ public class SICInputActivity extends BaseActivity {
                 .subscribe(new Subscriber<String>() {
                     @Override
                     public void onCompleted() {
-                        //adapter.addAll(mdata);
-                        //testrv.setAdapter(mAdapter = new HomeAdapter());
-                        // testlv.setAdapter(listviewadapter);
+
                     }
 
                     @Override
@@ -196,7 +263,7 @@ public class SICInputActivity extends BaseActivity {
 
                     @Override
                     public void onNext(String s) {
-                        //listviewadapter = new listviewadapter();
+                        LogUtil.d("s : " + s);
                         mdata = SomeUtil.JsonStrToListMap(s);
                         for (int i = 0; i < mdata.size(); i++) {
                             View view = LayoutInflater.from(SICInputActivity.this).inflate(R.layout.item_input_sic, null);
@@ -205,9 +272,8 @@ public class SICInputActivity extends BaseActivity {
                             tvname.setText(mdata.get(i).get("zh_name").toString());
                             tvid.setText(mdata.get(i).get("en_name").toString());
                             tesllv.addView(view);
+                            list.add(view);
                         }
-
-
 
 
                         LogUtil.d("listmap : " + mdata.toString());
@@ -239,59 +305,188 @@ public class SICInputActivity extends BaseActivity {
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.sic_input, menu);
+        return true;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        try {
+            LogUtil.d("resultCode :" + resultCode);
+            if (resultCode == 9) {
+                if (data.getStringExtra("result").equals("addpic")) {
+
+                    // TODO: 2016/11/8 设置高度
+                    ViewGroup.LayoutParams lp;
+                    lp = sicinputPics.getLayoutParams();
+                    lp.height = 240;
+                    sicinputPics.setLayoutParams(lp);
+
+                    paths.clear();
+                    paths = data.getStringArrayListExtra("paths");
+                    LogUtil.d("paths :" + paths.toString());
+                    adapter.addAll(paths);
+                }
+
+            } else {
+                Uri uri = data.getData();
+
+                videoPath = UriUtils.getPath(getApplicationContext(), uri);
+               /* paths.clear();
+                paths.add(testvideo);*/
+                adapter.add("testvideo");
+                // SomeUtil.showSnackBar(rootview,"videoPath: "+videoPath);
+                // 视频文件路径
+
+
+            }
+
+
+        } catch (Exception e) {
+            LogUtil.d("error : " + e);
+
+        }
+
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+        switch (id) {
+            case android.R.id.home:
+
+
+
+
+                break;
+            case R.id.id_sic_input_menu:
+                String[] typename = new String[typedata.size()];
+                final String[] typeid = new String[typedata.size()];
+                for (int i = 0; i < typedata.size(); i++) {
+                    typename[i] = typedata.get(i).getValname();
+                    typeid[i] = typedata.get(i).getValcode();
+
+                }
+                AlertDialog.Builder builder = new AlertDialog.Builder(SICInputActivity.this);
+                builder.setTitle("请选择数据权限")
+                        .setSingleChoiceItems(typename, -1, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                authid = typeid[which];
+                                LogUtil.d("authID : " + authid);
+                            }
+                        }).setPositiveButton("确认", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        commit();
+                    }
+                }).setNegativeButton("取消", null).show();
+
+
+                break;
+
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void commit() {
+        SomeUtil.showSnackBar(rootview,"正在上传请稍等！");
+        Observable.just("go").compose(RxUtil.<String>applySchedulers())
+                .subscribe(new Action1<String>() {
+                    @Override
+                    public void call(String s) {
+                        sicuploadPrg.setVisibility(View.VISIBLE);
+                        sicuploadBg.setVisibility(View.VISIBLE);
+                        sicuploadProtext.setVisibility(View.VISIBLE);
+                        isupload = true;
+                    }
+                });
+        if (paths.size() > 0 && videoPath.length() < 1) {
+            DatrixUtil datrixUtil = new DatrixUtil(paths, rootview);
+            datrixUtil.DatrixUpLoadPic2();
+            datrixUtil.setOnAfterFinish(new DatrixUtil.AfterFinish() {
+                @Override
+                public void afterfinish(String fileid, List<String> ids) {
+                    UploadPic(ids);
+                    UploadInfo();
+                }
+            });
+        }
+        if (paths.size() > 0 && videoPath.length() > 1) {
+            DatrixUtil datrixUtil = new DatrixUtil(paths, rootview);
+            datrixUtil.DatrixUpLoadPic2();
+            datrixUtil.setOnAfterFinish(new DatrixUtil.AfterFinish() {
+                @Override
+                public void afterfinish(String fileid, List<String> ids) {
+                    UploadPic(ids);
+                    UpLoadVideo();
+
+                }
+            });
+
+
+        }
+        if (paths.size() <= 0 && videoPath.length() > 1) {
+            UpLoadVideo();
+        }
+        if (paths.size() <= 0 && videoPath.length() < 1) {
+            UploadInfo();
+        }
+
+    }
+
+    private void UpLoadVideo() {
+        DatrixUtil datrixUtil = new DatrixUtil(videoPath, rootview);
+        datrixUtil.DatrixUpLoadVideo();
+        datrixUtil.setOnAfterFinish(new DatrixUtil.AfterFinish() {
+            @Override
+            public void afterfinish(String fileid, List<String> ids) {
+                StringBuffer sf = new StringBuffer();
+                for (int i = 0; i < ids.size(); i++) {
+                    if (i == ids.size() - 1) {
+                        sf.append(ids.get(i));
+                    } else {
+                        sf.append(ids.get(i));
+                        sf.append(",");
+                    }
+                }
+                videoids = sf.toString();
+                LogUtil.d("videoids : " + videoids);
+                UploadInfo();
+            }
+        });
+
+
+    }
+
+    private void UploadPic(List<String> ids) {
+        StringBuffer sf = new StringBuffer();
+        for (int i = 0; i < ids.size(); i++) {
+            if (i == ids.size() - 1) {
+                sf.append(ids.get(i));
+            } else {
+                sf.append(ids.get(i));
+                sf.append(",");
+            }
+
+
+        }
+        picids = sf.toString();
+        LogUtil.d("picids : " + picids);
+
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         // TODO: add setContentView(...) invocation
         ButterKnife.bind(this);
     }
-
-    class listviewadapter extends BaseAdapter {
-
-        @Override
-        public int getCount() {
-            return mdata.size();
-        }
-
-        @Override
-        public Object getItem(int position) {
-            return mdata.get(position);
-        }
-
-        @Override
-        public long getItemId(int position) {
-            return position;
-        }
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-
-            ViewHolder ViewHolder;
-
-            convertView = LayoutInflater.from(SICInputActivity.this).inflate(R.layout.item_input_sic, null);
-            ViewHolder = new ViewHolder(convertView);
-            lmap.put(position, convertView);
-            convertView = lmap.get(position);
-            ViewHolder.title.setText(mdata.get(position).get("zh_name").toString());
-            ViewHolder.id.setText(mdata.get(position).get("en_name").toString());
-
-
-            return convertView;
-        }
-
-        //添加viewHolder
-        class ViewHolder {
-            TextView title, id;
-
-            public ViewHolder(View convertView) {
-                title = (TextView) convertView.findViewById(R.id.sic_input_title);
-
-                id = (TextView) convertView.findViewById(R.id.sic_input_titleid);
-
-            }
-
-        }
-
-    }
-
-
 }

@@ -5,21 +5,20 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context="wgz.com.cx_ga_project.activity.SICInputActivity">
+    tools:context="wgz.com.cx_ga_project.activity.SICLogDetilActivity">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        >
-        <include layout="@layout/title_toolbar"></include>
+        ><include layout="@layout/title_toolbar"></include>
 
-        <include layout="@layout/content_sicinput2" />
-
+        <include layout="@layout/content_siclog_detil" />
     </LinearLayout>
 
 
     <android.support.design.widget.FloatingActionButton
-        android:id="@+id/upload_sic"
+        android:id="@+id/siclog"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"

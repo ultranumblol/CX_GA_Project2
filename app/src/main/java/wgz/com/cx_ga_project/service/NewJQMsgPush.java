@@ -52,12 +52,12 @@ public class NewJQMsgPush extends Service {
 
                                     @Override
                                     public void onError(Throwable e) {
-                                        LogUtil.d("msmgpush error : "+e.toString());
+                                       // LogUtil.d("msmgpush error : "+e.toString());
                                     }
 
                                     @Override
                                     public void onNext(NewJQPush data) {
-                                        LogUtil.d("msmgpush : "+data.getRes().toString());
+                                        //LogUtil.d("msmgpush : "+data.getRes().toString());
                                         if (data.getCode().equals(200)){
                                             new SPBuild(getApplicationContext())
                                                     .addData(Constant.NEWJQCOUNT,data.getRes().size()).build();

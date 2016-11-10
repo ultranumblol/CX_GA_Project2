@@ -38,6 +38,7 @@ import java.util.HashSet;
 import java.util.List;
 
 import wgz.com.cx_ga_project.activity.PickPhotoActivity;
+import wgz.datatom.com.utillibrary.util.LogUtil;
 
 /**
  * User: datou_SleepyzzZ(SleepyzzZ19911002@126.com)
@@ -344,12 +345,17 @@ public class PhotoPickerFragment extends Fragment {
         mPopWindowBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mDirPopupWindow.setAnimationStyle(R.style.anim_popup_dir);
-                mDirPopupWindow.showAsDropDown(mBottonLy, 0, 0);
-                //设置背景颜色变暗
-                WindowManager.LayoutParams lp = getActivity().getWindow().getAttributes();
-                lp.alpha = .3f;
-                getActivity().getWindow().setAttributes(lp);
+                try {
+                    mDirPopupWindow.setAnimationStyle(R.style.anim_popup_dir);
+                    mDirPopupWindow.showAsDropDown(mBottonLy, 0, 0);
+                    //设置背景颜色变暗
+                    WindowManager.LayoutParams lp = getActivity().getWindow().getAttributes();
+                    lp.alpha = .3f;
+                    getActivity().getWindow().setAttributes(lp);
+                } catch (Exception e) {
+                    LogUtil.d("pickpic error :"+e.toString());
+                    e.printStackTrace();
+                }
             }
         });
         //初始化按钮

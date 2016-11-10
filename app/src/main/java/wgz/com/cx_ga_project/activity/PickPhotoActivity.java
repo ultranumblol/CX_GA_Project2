@@ -154,6 +154,10 @@ public class PickPhotoActivity extends BaseActivity {
                     putStringArrayListExtra("paths", (ArrayList<String>) paths)
                     .putExtra("result", "addpic"));
 
+            setResult(9, new Intent(PickPhotoActivity.this, SICInputActivity.class).
+                    putStringArrayListExtra("paths", (ArrayList<String>) paths)
+                    .putExtra("result", "addpic"));
+
             LogUtil.d("paths== "+paths.toString());
             finish();
             return true;

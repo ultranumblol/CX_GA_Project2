@@ -87,7 +87,44 @@ public class SomeUtil {
         return object;
     }
 
+    /**
+     * 比较前一个日期是否大于后一个日期
+     * @param s1
+     * @param s2
+     * @return
+     */
+    public static boolean DateCompare(String s1, String s2) {
+        //设定时间的模板
+
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            //得到指定模范的时间
+            Date d1 = sdf.parse(s1);
+            Date d2 = sdf.parse(s2);
+
+
+            if (Math.abs(((d1.getTime() - d2.getTime()))) >0) {
+              return true;
+            } else {
+                LogUtil.d("start time :"+d1.getTime());
+                LogUtil.d("end time :"+d2.getTime());
+
+                LogUtil.d("start time :"+d1.toString());
+                LogUtil.d("end time :"+d2.toString());
+
+                return false;
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+            LogUtil.d(" compare time error:"+e.toString());
+        }
+
+        return false;
+    }
+
+
     public static void checkHttpException(Context mContext, Throwable mThrowable, View mRootView) {
+        LogUtil.d("error :" + mThrowable.toString());
         String snack_action_to_setting = "设置";
         if ((mThrowable instanceof UnknownHostException)) {
             String snack_message_net_error = "网络错误，请检查网络";

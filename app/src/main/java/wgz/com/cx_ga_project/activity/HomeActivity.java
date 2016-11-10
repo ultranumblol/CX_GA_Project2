@@ -104,6 +104,7 @@ public class HomeActivity extends AppCompatActivity
     CardView idTagcloudlog;
     private JQReceiver receiver;
     private BadgeView badgeView;
+    private boolean isleader = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -143,7 +144,7 @@ public class HomeActivity extends AppCompatActivity
                 .thumbnail(0.4f)
                 .dontAnimate()
                 .into(userhead);
-
+        isleader = (boolean) SPUtils.get(app.getApp().getApplicationContext(), Constant.ISLEADER, false);
         TextView username = (TextView) navView.getHeaderView(0).findViewById(R.id.username_head);
         TextView userdepartment = (TextView) navView.getHeaderView(0).findViewById(R.id.departmant_head);
         username.setText((String) SPUtils.get(app.getApp().getApplicationContext(), Constant.USERNAME, "未知"));
@@ -151,7 +152,14 @@ public class HomeActivity extends AppCompatActivity
 
         // startService(new Intent(this, GetNewMsgService.class));
 
+        if (isleader){
+            idShenhe.setVisibility(View.VISIBLE);
+            idXiashu.setVisibility(View.VISIBLE);
 
+        }else{
+            idXiashu.setVisibility(View.GONE);
+            idShenhe.setVisibility(View.GONE);
+        }
         startService(new Intent(this, NewJQMsgPush.class));
     }
 

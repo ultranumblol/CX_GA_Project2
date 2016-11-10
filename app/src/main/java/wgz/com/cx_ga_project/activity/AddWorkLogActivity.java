@@ -148,7 +148,7 @@ public class AddWorkLogActivity extends BaseActivity {
             datrixUtil.setOnAfterFinish(new DatrixUtil.AfterFinish() {
                 @Override
                 public void afterfinish(String fileid, List<String> ids) {
-
+                    addsummaryPic(fileid, ids);
                 }
             });
         } else

@@ -23,6 +23,7 @@ import com.jakewharton.rxbinding.widget.RxTextView;
 import com.uniview.airimos.util.MD5;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.Bind;
@@ -35,6 +36,7 @@ import wgz.com.cx_ga_project.R;
 import wgz.com.cx_ga_project.app;
 import wgz.com.cx_ga_project.base.BaseActivity;
 import wgz.com.cx_ga_project.base.Constant;
+import wgz.com.cx_ga_project.entity.Subordinate;
 import wgz.com.cx_ga_project.entity.UserInfo;
 import wgz.com.cx_ga_project.util.RxUtil;
 import wgz.com.cx_ga_project.util.SPBuild;
@@ -205,8 +207,11 @@ public class LoginActivity extends BaseActivity {
                                                     }
                                                 });
 
+
+
                                                 getuserhead(userInfo.getRes().get(0).getUserid());
                                                 saveUserInfo(userInfo.getRes().get(0),password);
+                                                getsub();
                                             }
                                             else {
                                                 SomeUtil.showSnackBar(scrollLoginForm,"用户名或密码错误！");
@@ -225,6 +230,43 @@ public class LoginActivity extends BaseActivity {
                     }
                 });
     }
+
+    private void getsub() {
+        app.apiService.getSupAndSub(SomeUtil.getUserId())
+                .compose(RxUtil.<Subordinate>applySchedulers())
+                .subscribe(new Subscriber<Subordinate>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                    SomeUtil.checkHttpException(app.getApp().getApplicationContext(),e,scrollLoginForm);
+                    }
+
+                    @Override
+                    public void onNext(Subordinate subordinate) {
+                        LogUtil.d("subord size :"+subordinate.getResdown().size());
+                        if(subordinate.getResdown().size()>0){
+                            new SPBuild(getApplicationContext())
+                                    .addData(Constant.ISLEADER, Boolean.TRUE)
+                                    .build();
+
+                        } else {
+                            new SPBuild(getApplicationContext())
+                                    .addData(Constant.ISLEADER, Boolean.FALSE)
+                                    .build();
+
+                        }
+
+
+                    }
+                });
+
+
+    }
+
     private void getuserhead(String userid) {
         LogUtil.d("userid : "+userid);
         app.apiService.getUserhead(userid).subscribeOn(Schedulers.io())

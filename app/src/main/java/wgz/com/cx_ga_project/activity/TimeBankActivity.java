@@ -114,7 +114,7 @@ public class TimeBankActivity extends BaseActivity {
         timebankWebview.setInitialScale(100);
         //webSettings.setBuiltInZoomControls(true);
         timebankWebview.addJavascriptInterface(getHtmlInterface(), "android");
-        timebankWebview.loadUrl("http://192.168.1.187:8888/timebank?flag_menu=JWXN-sjyh&appflag=1&apptoken=58c93a51-3e95-43b6-8a11-e33c96bb78cf&uid=030247&uname=陈墅");
+        timebankWebview.loadUrl("http://192.168.1.187:8888/timebank?flag_menu=JWXN-sjyh&appflag=1&apptoken=58c93a51-3e95-43b6-8a11-e33c96bb78cf");
         timebankWebview.loadUrl("javascript:timebankapp()");
         //timebankWebview.loadUrl("http://192.168.1.187:8888/timebank?flag_menu=JWXN-sjyh&appflag=1&apptoken=58c93a51-3e95-43b6-8a11-e33c96bb78cf&uid=030247&uname=%E9%99%88%E6%9B%99%E5%9B%BD");
 

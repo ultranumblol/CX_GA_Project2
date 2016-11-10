@@ -43,7 +43,6 @@ import wgz.com.cx_ga_project.util.SPUtils;
 import wgz.com.cx_ga_project.util.SomeUtil;
 import wgz.datatom.com.utillibrary.util.LogUtil;
 
-import static wgz.com.cx_ga_project.activity.AskForLeaveActivity.getTime;
 
 /**
  * 提交加班申请
@@ -70,6 +69,8 @@ public class AskForJiabanActivity extends BaseActivity {
     @Bind(R.id.content_ask_for_jiaban)
     LinearLayout rootview;
     private List<Subordinate.Resup> list = new ArrayList<>();
+    private Date mstartdate = new Date();
+    private Date menddate = new Date();
 
     @Override
     public int getLayoutId() {
@@ -98,9 +99,11 @@ public class AskForJiabanActivity extends BaseActivity {
                 switch (flag) {
                     case 1:
                         mJiabanStarttime.setText(getTime(date));
+                        mstartdate = date;
                         break;
                     case 2:
                         mJiabanEndtime.setText(getTime(date));
+                        menddate = date;
                 }
             }
         });
@@ -137,16 +140,29 @@ public class AskForJiabanActivity extends BaseActivity {
                 });
 
     }
-
+    public  String getTime(Date date) {
+        try {
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            return format.format(date);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "";
+        }
+    }
     private void docommit() {
         boolean cancle = false;
-        Date startdate = getStrToDate(mJiabanStarttime.getText().toString());
-        Date enddate = getStrToDate(mJiabanEndtime.getText().toString());
+
         Date currentdate = new Date(System.currentTimeMillis());
-        String curredate = AskForLeaveActivity.getTime(currentdate);
-        Date CUDDATE = getStrToDate(curredate);
-        String stime = AskForLeaveActivity.getTime(startdate);
-        String etime = AskForLeaveActivity.getTime(enddate);
+
+
+        String curredate = getTime(currentdate);
+        String stime = getTime(mstartdate);
+        String etime = getTime(menddate);
+
+        LogUtil.d("stime :"+mstartdate.getTime());
+        LogUtil.d("etime :"+menddate.getTime());
+        LogUtil.d("curredate :"+System.currentTimeMillis());
+
         if (mJiabanReason.getText().toString().equals("")) {
             Snackbar.make(rootview, "请填写加班内容!", Snackbar.LENGTH_SHORT).show();
             cancle = true;
@@ -157,26 +173,15 @@ public class AskForJiabanActivity extends BaseActivity {
             Snackbar.make(rootview, "请选择日期！", Snackbar.LENGTH_SHORT).show();
             cancle = true;
             return;
-        }
-        /*if (mJiabanReason.getText().toString().equals("")) {
-            Snackbar.make(rootview, "请填写加班内容!", Snackbar.LENGTH_SHORT).show();
+        }else if (mstartdate.getTime()-menddate.getTime()>=0){
+            Snackbar.make(rootview, "结束日期应大于开始日期!", Snackbar.LENGTH_SHORT).show();
             cancle = true;
             return;
-        }else if (mJiabanStarttime.getText().toString().contains("请选择")
-                ||mJiabanEndtime.getText().toString().contains("请选择")) {
-            Snackbar.make(rootview, "请选择日期!", Snackbar.LENGTH_SHORT).show();
-            cancle = true;
-            return;
-        }
-        else if (!compareDate(startdate, enddate)) {
-            Snackbar.make(rootview, "结束日期应该大于开始日期!", Snackbar.LENGTH_SHORT).show();
-            cancle = true;
-            return;
-        } else if (!DateCompare(CUDDATE, enddate)) {
+        }else if (mstartdate.getTime()-System.currentTimeMillis()>0||menddate.getTime()-System.currentTimeMillis()>0){
             Snackbar.make(rootview, "日期不能超过当前日期!", Snackbar.LENGTH_SHORT).show();
             cancle = true;
             return;
-        }*/
+        }
         cancle = false;
         LogUtil.d("curredate:"+curredate);
         if (!cancle){
@@ -229,28 +234,15 @@ public class AskForJiabanActivity extends BaseActivity {
         return super.onKeyDown(keyCode, event);
     }
 
-    public static boolean DateCompare(Date startdate, Date enddate) {
-        if (Math.abs(((startdate.getTime() - enddate.getTime())/(24*3600*1000)))<0){
-            return true;
-        }
-        else {
-            return false;
-        }
-    }
 
 
-    public  boolean compareDate(Date d1, Date d2) {
-        Calendar c1 = Calendar.getInstance();
-        Calendar c2 = Calendar.getInstance();
-        c1.setTime(d1);
-        c2.setTime(d2);
 
-        int result = c1.compareTo(c2);
-        if (result < 0)
-            return true;
-        else
-            return false;
-    }
+
+    /**
+     * yyyy-MM-dd HH:mm"
+     * @param str
+     * @return
+     */
     public  Date getStrToDate(String str)  {
         try {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");

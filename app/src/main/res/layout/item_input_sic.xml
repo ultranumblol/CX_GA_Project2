@@ -43,8 +43,8 @@
             <EditText
                 android:id="@+id/sic_input_content"
                 android:layout_width="0dp"
-                android:layout_weight="25"
-                android:layout_marginLeft="4dp"
+                android:layout_weight="22"
+                android:layout_marginLeft="6dp"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:background="@null"

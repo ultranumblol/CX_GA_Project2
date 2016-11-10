@@ -21,6 +21,8 @@ import wgz.com.cx_ga_project.entity.AppVersion;
 import wgz.com.cx_ga_project.entity.Apply;
 import wgz.com.cx_ga_project.entity.DatrixCreat;
 import wgz.com.cx_ga_project.entity.LeaveType;
+import wgz.com.cx_ga_project.entity.SICDetil;
+import wgz.com.cx_ga_project.entity.SICList;
 import wgz.com.cx_ga_project.entity.SICType;
 import wgz.com.cx_ga_project.entity.Scheduling;
 import wgz.com.cx_ga_project.entity.SchedulingOneDay;
@@ -436,8 +438,60 @@ public interface APIservice {
     @GET("appinfocollect/getTypeOfAuth")
     Observable<TypeOfAuth> getTypeOfAuth();
 
+    /**
+     * 获取社会信息采集历史
+     *
+     * @param policeid
+     * @return
+     */
     @FormUrlEncoded
-    @POST("appinfocollect/getSocialInfoLis")
-    Observable<String> getSocialInfoLis(@Field("policeid") String policeid);
+    @POST("appinfocollect/getSocialInfoList")
+    Observable<SICList> getSocialInfoList(@Field("policeid") String policeid);
+
+
+    /**
+     * 修改采集信息
+     *
+     * @param type
+     * @param docid
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("appinfocollect/updateSocialInfo")
+    Observable<String> updateSocialInfo(@Field("docid") String docid,
+                                          @Field("type") String type,
+                                          @Field("txt") String txt,
+                                          @Field("pic") String pic,
+                                          @Field("video") String video,
+                                          @Field("picdocid") String picdocid,
+                                          @Field("videodocid") String videodocid);
+
+
+    /**
+     * 获取历史社会信息采集内容
+     *
+     * @param type
+     * @param docid
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("appinfocollect/getTxtDetail")
+    Observable<String> getTxtDetail(
+            @Field("type") String type,
+            @Field("docid") String docid);
+
+
+    /**
+     * 获取信息详情
+     * @param type
+     * @param docid
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("appinfocollect/getSocialInfoDetail")
+    Observable<SICDetil> getSocialInfoDetil(
+            @Field("type") String type,
+            @Field("docid") String docid);
+
 
 }

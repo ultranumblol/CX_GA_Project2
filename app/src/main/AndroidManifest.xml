@@ -271,7 +271,6 @@
         <activity
             android:name=".activity.SICInputActivity"
             android:label="@string/title_activity_sicinput"
-            android:windowSoftInputMode="adjustPan"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
@@ -287,6 +286,12 @@
         <activity
             android:name=".activity.SICInputLogActivity"
             android:label="@string/title_activity_sicinput_log"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activity.SICLogDetilActivity"
+            android:label="@string/title_activity_siclog_detil"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 

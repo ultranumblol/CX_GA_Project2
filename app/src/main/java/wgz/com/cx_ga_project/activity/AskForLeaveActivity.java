@@ -42,6 +42,7 @@ import wgz.com.cx_ga_project.entity.Subordinate;
 import wgz.com.cx_ga_project.util.RxUtil;
 import wgz.com.cx_ga_project.util.SPUtils;
 import wgz.com.cx_ga_project.util.SomeUtil;
+import wgz.com.cx_ga_project.util.TimeUtils;
 import wgz.datatom.com.utillibrary.util.LogUtil;
 
 /**
@@ -85,6 +86,8 @@ public class AskForLeaveActivity extends BaseActivity {
     @Bind(R.id.content_ask_for_leave)
     LinearLayout rootview;
     private List<Subordinate.Resup> list = new ArrayList<>();
+    private Date mstartdate = new Date();
+    private Date menddate = new Date();
 
     @Override
     public int getLayoutId() {
@@ -112,9 +115,18 @@ public class AskForLeaveActivity extends BaseActivity {
                 switch (flag) {
                     case 1:
                         mLeaveStarttime.setText(getTime(date));
+                        mstartdate = date;
+                        if (menddate!=null){
+                            mLeaveDaycount.setText(TimeUtils.getGapCount(mstartdate,menddate)+"");
+                        }
                         break;
                     case 2:
                         mLeaveEndtime.setText(getTime(date));
+                        menddate = date;
+                        if (mstartdate!=null){
+                            mLeaveDaycount.setText(TimeUtils.getGapCount(mstartdate,menddate)+"");
+
+                        }
                 }
             }
         });
@@ -180,7 +192,7 @@ public class AskForLeaveActivity extends BaseActivity {
         initData();
     }
 
-    public static String getTime(Date date) {
+    public  String getTime(Date date) {
         try {
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             return format.format(date);
@@ -234,9 +246,10 @@ public class AskForLeaveActivity extends BaseActivity {
         Date startdate = getStrToDate(mLeaveStarttime.getText().toString());
         Date enddate = getStrToDate(mLeaveEndtime.getText().toString());
         Date currentdate = new Date(System.currentTimeMillis());
-        String curredate = AskForLeaveActivity.getTime(currentdate);
-        String stime = AskForLeaveActivity.getTime(startdate);
-        String etime = AskForLeaveActivity.getTime(enddate);
+
+        String curredate = getTime(currentdate);
+        String stime = getTime(startdate);
+        String etime = getTime(enddate);
         if (mLeaveReason.getText().toString().equals("")) {
             Snackbar.make(rootview, "请填写请假事由!", Snackbar.LENGTH_SHORT).show();
             return;
@@ -247,7 +260,7 @@ public class AskForLeaveActivity extends BaseActivity {
         } else if (mLeaveType.getText().toString().equals("")) {
             Snackbar.make(rootview, "请选择请假类型！", Snackbar.LENGTH_SHORT).show();
             return;
-        } else if (!compareDate(startdate, enddate)) {
+        } else if (SomeUtil.DateCompare(stime, etime)) {
             Snackbar.make(rootview, "结束日期应该大于开始日期!", Snackbar.LENGTH_SHORT).show();
             return;
         }
@@ -279,18 +292,6 @@ public class AskForLeaveActivity extends BaseActivity {
     }
 
 
-    public boolean compareDate(Date d1, Date d2) {
-        Calendar c1 = Calendar.getInstance();
-        Calendar c2 = Calendar.getInstance();
-        c1.setTime(d1);
-        c2.setTime(d2);
-
-        int result = c1.compareTo(c2);
-        if (result < 0)
-            return true;
-        else
-            return false;
-    }
 
     public Date getStrToDate(String str) {
         try {
