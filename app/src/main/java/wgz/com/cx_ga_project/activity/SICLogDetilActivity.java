@@ -69,9 +69,9 @@ public class SICLogDetilActivity extends BaseActivity {
     @Bind(R.id.sicupload_protext)
     TextView sicuploadProtext;
     @Bind(R.id.siclog)
-    List<String> videopaths = new ArrayList<>();
     FloatingActionButton siclog;
     List<String> paths = new ArrayList<>();
+    List<String> videopaths = new ArrayList<>();
     List<String> NewPicpaths = new ArrayList<>();
     private AddPictureAdapter adapter;
     private String type = "";

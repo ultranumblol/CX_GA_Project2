@@ -103,7 +103,7 @@ public class CamMapHtmlActivity extends BaseActivity {
         webSettings.setBuiltInZoomControls(true);
         webView.addJavascriptInterface(getHtmlInterface(), "android");
 
-        webView.loadUrl("http://192.168.1.184:12345/appmap");
+        webView.loadUrl("http://192.168.1.187:8888/fujinziyuan?flag_menu=ZHDD-fjzy&appflag=1&apptoken=58c93a51-3e95-43b6-8a11-e33c96bb78cf");
 
         RxView.clicks(fab).throttleFirst(500, TimeUnit.MICROSECONDS)
                 .subscribe(new Action1<Void>() {

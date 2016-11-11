@@ -74,8 +74,6 @@ public class CamPlayerActivity extends BaseActivity implements KeepaliveService.
     FloatingActionButton fab2;
     @Bind(R.id.id_cams)
     TextView idCams;
-    @Bind(R.id.cam_recyclerview)
-    EasyRecyclerView recyclerview;
     @Bind(R.id.fab3)
     FloatingActionButton fab3;
     @Bind(R.id.fab_right)
@@ -94,7 +92,6 @@ public class CamPlayerActivity extends BaseActivity implements KeepaliveService.
     LinearLayout rootview;
     @Bind(R.id.fab)
     FloatingActionButton fab;
-    CamsIDAdapter adapter;
     List<String> camsIDs = new ArrayList<>();
     TimePickerView pvTime;
     @Bind(R.id.id_replay_starttime)
@@ -109,7 +106,6 @@ public class CamPlayerActivity extends BaseActivity implements KeepaliveService.
     private RecvStreamThread mRecvStreamThread = null;
     private String mCameraCode;
     private List<PresetInfo> mPresetInfos;
-    private ArrayAdapter mAdapter;
 
     @Override
     public int getLayoutId() {
@@ -128,21 +124,6 @@ public class CamPlayerActivity extends BaseActivity implements KeepaliveService.
         mCameraCode = i.getStringExtra("camid");
         LogUtil.d("mCameraCode : "+mCameraCode);
 
-
-
-        recyclerview.setLayoutManager(new LinearLayoutManager(this));
-        recyclerview.setAdapter(adapter = new CamsIDAdapter(this));
-        adapter.setOnItemClickListener(new MyRecyclerArrayAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(int position, View itemView) {
-                TextView id = (TextView) itemView.findViewById(R.id.id_item_camID);
-                stopLive();
-                //startLive(id.getText().toString());
-                mCameraCode = id.getText().toString();
-                startLive(mCameraCode);
-                //SomeUtil.showSnackBar(rootview,"选中摄像头: "+id.getText().toString());
-            }
-        });
 
         //时间选择器
         pvTime = new TimePickerView(this, TimePickerView.Type.MONTH_DAY_HOUR_MIN);
@@ -181,7 +162,7 @@ public class CamPlayerActivity extends BaseActivity implements KeepaliveService.
                     public void call(Void aVoid) {
                         //queryCameraRes();
                         startLive(mCameraCode);
-                        queryCameraRes();
+                        //queryCameraRes();
                     }
                 });
 
@@ -218,7 +199,7 @@ public class CamPlayerActivity extends BaseActivity implements KeepaliveService.
     public void queryCameraRes() {
         try {
             camsIDs.clear();
-            adapter.clear();
+
             OnQueryResourceListener listener = new OnQueryResourceListener() {
                 @Override
                 public void onQueryResourceResult(long errorCode, String errorDesc, List<ResourceInfo> resList) {
@@ -243,7 +224,6 @@ public class CamPlayerActivity extends BaseActivity implements KeepaliveService.
                     }
                     LogUtil.d("cam列表：" + stringBuffer.toString());
                     // idCams.setText("cam列表：" + stringBuffer.toString());
-                    adapter.addAll(camsIDs);
                 }
             };
 
