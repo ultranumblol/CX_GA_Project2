@@ -51,21 +51,30 @@ public class DatrixUtil {
     private int endsize = 0;
     private int currentfilesize = 0;
     private boolean flag = false;
+    private int videofile = 0;
+    private int videofilecount = 0;
 
     /**
-     * 根据图片地址list上传多个图片
+     * 文件地址集合
      *
      * @param paths
      * @param rootview
      */
     public DatrixUtil(List<String> paths, View rootview) {
         ids.clear();
+        videofile = 0;
+        videofilecount = 0;
         flag=true;
         this.paths = paths;
         this.rootview = rootview;
 
     }
 
+    /**
+     * 单个文件地址
+     * @param path
+     * @param rootview
+     */
     public DatrixUtil(String path, View rootview) {
         this.path = path;
         ids.clear();
@@ -82,7 +91,6 @@ public class DatrixUtil {
         LogUtil.d("datrixUtil pathssize:" + paths.size());
         paths.remove(paths.size() - 1);
         for (int i = 0; i < paths.size(); i++) {
-
             DatrixCreate(paths.get(i), UPLOADPIC);
         }
 
@@ -90,7 +98,7 @@ public class DatrixUtil {
     }
 
     /**
-     * 只传一张图片
+     * 全部图片上传
      */
     public void DatrixUpLoadPic2() {
         LogUtil.d("datrixUtil pathssize:" + paths.size());
@@ -103,7 +111,7 @@ public class DatrixUtil {
     }
 
     /**
-     * 上传视频
+     * 上传单个视频
      */
     public void DatrixUpLoadVideo() {
         LogUtil.d("datrixUtil path:" + path);
@@ -111,17 +119,130 @@ public class DatrixUtil {
         DatrixCreate(path, UPLOADVIDEO);
     }
 
+    /**
+     * 上传多个视频
+     */
     public void DatrixUpLoadVideos() {
-        LogUtil.d("datrixUtil pathssize:" + paths.size());
+        videofile = 0;
+        videofilecount = paths.size();
+        DatrixVideosCreate((paths.get(videofile)));
 
-        for (int i = 0; i < paths.size(); i++) {
+    }
 
-            DatrixCreate(paths.get(i), UPLOADVIDEO);
-        }
+    private void DatrixVideosCreate(final String path) {
+        filesize = 0;
+        filePieces = 0;
+        currentPieces = 0;
+        offset = 0;
+        startsize = 0;
+        endsize = 0;
+        currentfilesize=0;
+        File file = new File(path);
+
+        app.apiService.uploadFileWithRequestBodyTest(file.getName(),""+file.length())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<DatrixCreat>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        LogUtil.d("Detrix_upPic_error:" + e.toString());
+                        SomeUtil.checkHttpException(app.getApp().getApplicationContext(),e,rootview);
+                    }
+
+                    @Override
+                    public void onNext(DatrixCreat datrixCreat) {
+                        LogUtil.d("Detrix_upPic_create : code :" + datrixCreat.getCode().toString());
+                        if (datrixCreat.getCode().equals(200)) {
+                            LogUtil.d("Detrix_upPic_create :" + datrixCreat.getResult().getFileid());
+                            fileid = datrixCreat.getResult().getFileid();
+                            ids.add(fileid);
+                            LogUtil.d("Detrix_upPic_create :" + datrixCreat.getResult().toString());
+                            DatrixVideosDoWrite(path, fileid);
+
+                        } else {
+
+                            SomeUtil.showSnackBar(rootview, "创建上传图片失败!");
+                        }
+
+                    }
+                });
+
 
 
     }
 
+    private void DatrixVideosDoWrite(String path, String fileid) {
+        Map<String, RequestBody> bodyMap = new HashMap<>();
+        File file = new File(path);
+        filesize = (int) file.length();
+        // LogUtil.d("Video file size : " + filesize);
+        if (filesize > 4 * 1024 * 1024) {
+            long k = filesize / 4 / 1024 / 1024;
+            filePieces = (int) Math.floor(k) + 1;
+            // LogUtil.d("Video file Pieces  : " + filePieces);
+            fileUtil.splitFile(file);
+            writeVideosByPiece2();
+        }
+
+    }
+
+    private void writeVideosByPiece2() {
+        final Map<String, RequestBody> piecebodyMap = new HashMap<>();
+        File file = new File("/storage/sdcard0/temp/"+currentPieces+".3gp");
+
+        UploadFileRequestBody fileRequestBody = new UploadFileRequestBody(file, new DefaultProgressListener(currentPieces,filePieces));
+
+        //piecebodyMap.put("file" + currentPieces + "\" ; filename=\"" + file.getName(), RequestBody.create(MediaType.parse("video/*"), file));
+
+
+        piecebodyMap.put("file" + currentPieces + "\" ; filename=\"" + file.getName(),fileRequestBody);
+
+        filePieceSize = (int) file.length();
+        currentPieces+=1;
+        //发送进度
+        float num= (float)currentPieces/filePieces;
+        DecimalFormat df = new DecimalFormat("0.00");
+
+        RxBus.getDefault().post(new progress(df.format(num*100)));
+
+        LogUtil.d("current:" + currentPieces  + "filepiece:"+filePieces);
+        app.apiService.detrixWrite(fileid, startsize + "", filePieceSize+ "", piecebodyMap)
+                .compose(RxUtil.<String>applySchedulers())
+                .subscribe(new Subscriber<String>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+                    @Override
+                    public void onError(Throwable e) {
+                        SomeUtil.checkHttpException(app.getApp().getApplicationContext(),e,rootview);
+                        LogUtil.d("detrix_write_Response_error :" + e.toString());
+                    }
+
+                    @Override
+                    public void onNext(String s) {
+                        LogUtil.d("detrix_write_Response :" + s);
+                        if (s.contains("\t\"code\":\t200")) {
+                            if (currentPieces==filePieces){
+                                DatrixVideosDoFinish();
+                            }else {
+                                startsize+=UPLOADLENGTH;
+                                writeVideosByPiece2();
+                            }
+
+                        } else {
+                            SomeUtil.showSnackBar(rootview, "第" + currentPieces  + "块文件写入失败!");
+
+                        }
+                    }
+                });
+
+    }
 
 
     private void writeByPiece2(){
@@ -264,13 +385,12 @@ public class DatrixUtil {
         if (type == UPLOADVIDEO) {
             File file = new File(path);
             filesize = (int) file.length();
-            LogUtil.d("Video file size : " + filesize);
+           // LogUtil.d("Video file size : " + filesize);
             if (filesize > 4 * 1024 * 1024) {
                 long k = filesize / 4 / 1024 / 1024;
                 filePieces = (int) Math.floor(k) + 1;
-                LogUtil.d("Video file Pieces  : " + filePieces);
+               // LogUtil.d("Video file Pieces  : " + filePieces);
                 fileUtil.splitFile(file);
-               // writeByPiece(bodyMap);
                 writeByPiece2();
             }
         }
@@ -312,7 +432,51 @@ public class DatrixUtil {
 
 
     }
+    private void DatrixVideosDoFinish() {
+        app.apiService.detrixfinish(fileid, " ")
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<String>() {
+                    @Override
+                    public void onCompleted() {
+                        delFolder("/storage/sdcard0/temp");
 
+                        videofile+= 1;
+                        if (videofile == videofilecount){
+                            LogUtil.d(videofilecount +"个视频上传完毕！");
+                        }else{
+                            DatrixVideosCreate((paths.get(videofile)));
+                        }
+
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        SomeUtil.checkHttpException(app.getApp().getApplicationContext(),e,rootview);
+                    }
+
+                    @Override
+                    public void onNext(String s) {
+                        if (s.contains("200")) {
+                            if (afterFinish != null) {
+
+                                if (flag){
+                                    afterFinish.afterfinish(fileid, ids);
+                                    flag=false;
+                                }
+
+                            }
+
+
+                        } else {
+                            SomeUtil.showSnackBar(rootview, "网络错误，请稍后！");
+                        }
+                    }
+                });
+
+
+    }
     public interface AfterFinish {
         void afterfinish(String fileid, List<String> ids);
     }
