@@ -74,6 +74,7 @@ public class SICInputActivity extends BaseActivity {
     @Bind(R.id.sicinput_pics)
     EasyRecyclerView sicinputPics;
     List<String> paths = new ArrayList<>();
+    List<String> videopaths = new ArrayList<>();
     @Bind(R.id.sicupload_prg)
     ProgressBar sicuploadPrg;
     @Bind(R.id.sicupload_bg)
@@ -91,7 +92,7 @@ public class SICInputActivity extends BaseActivity {
     private HashMap<Integer, View> lmap = new HashMap<Integer, View>();
     private List<View> list = new ArrayList<>();
     private AddPictureAdapter adapter;
-    private String videoPath = "";
+    //private String videoPath = "";
     private String videoPicPath = "";
     private String datrixurl2 = "&token=X7yABwjE20sUJLefATUFqU0iUs8mJPqEJo6iRnV63mI=";
     private String datrixVideoPicdurl1 = DATRIX_BASE_URL + "preview/coverMedium?fileid=";
@@ -332,8 +333,8 @@ public class SICInputActivity extends BaseActivity {
 
             } else {
                 Uri uri = data.getData();
-
-                videoPath = UriUtils.getPath(getApplicationContext(), uri);
+                videopaths.add( UriUtils.getPath(getApplicationContext(), uri));
+                //videoPath = UriUtils.getPath(getApplicationContext(), uri);
                /* paths.clear();
                 paths.add(testvideo);*/
                 adapter.add("testvideo");
@@ -408,7 +409,7 @@ public class SICInputActivity extends BaseActivity {
                         isupload = true;
                     }
                 });
-        if (paths.size() > 0 && videoPath.length() < 1) {
+        if (paths.size() > 0 && videopaths.size() < 0) {
             DatrixUtil datrixUtil = new DatrixUtil(paths, rootview);
             datrixUtil.DatrixUpLoadPic2();
             datrixUtil.setOnAfterFinish(new DatrixUtil.AfterFinish() {
@@ -419,7 +420,7 @@ public class SICInputActivity extends BaseActivity {
                 }
             });
         }
-        if (paths.size() > 0 && videoPath.length() > 1) {
+        if (paths.size() > 0 && videopaths.size() > 0) {
             DatrixUtil datrixUtil = new DatrixUtil(paths, rootview);
             datrixUtil.DatrixUpLoadPic2();
             datrixUtil.setOnAfterFinish(new DatrixUtil.AfterFinish() {
@@ -433,18 +434,20 @@ public class SICInputActivity extends BaseActivity {
 
 
         }
-        if (paths.size() <= 0 && videoPath.length() > 1) {
+        if (paths.size() <= 0 && videopaths.size() > 0) {
             UpLoadVideo();
         }
-        if (paths.size() <= 0 && videoPath.length() < 1) {
+        if (paths.size() <= 0 && videopaths.size() < 0) {
             UploadInfo();
         }
 
     }
 
+
     private void UpLoadVideo() {
-        DatrixUtil datrixUtil = new DatrixUtil(videoPath, rootview);
-        datrixUtil.DatrixUpLoadVideo();
+        DatrixUtil datrixUtil = new DatrixUtil(videopaths, rootview);
+        //datrixUtil.DatrixUpLoadVideo();
+        datrixUtil.DatrixUpLoadVideos();
         datrixUtil.setOnAfterFinish(new DatrixUtil.AfterFinish() {
             @Override
             public void afterfinish(String fileid, List<String> ids) {
@@ -459,6 +462,8 @@ public class SICInputActivity extends BaseActivity {
                 }
                 videoids = sf.toString();
                 LogUtil.d("videoids : " + videoids);
+
+
                 UploadInfo();
             }
         });

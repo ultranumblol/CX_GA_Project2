@@ -69,7 +69,7 @@ public class SICLogDetilActivity extends BaseActivity {
     @Bind(R.id.sicupload_protext)
     TextView sicuploadProtext;
     @Bind(R.id.siclog)
-
+    List<String> videopaths = new ArrayList<>();
     FloatingActionButton siclog;
     List<String> paths = new ArrayList<>();
     List<String> NewPicpaths = new ArrayList<>();
@@ -182,75 +182,13 @@ public class SICLogDetilActivity extends BaseActivity {
             }
         });
 
-       /* app.apiService.getTxtDetail(type, docid)
-                .compose(RxUtil.<String>applySchedulers())
-                .subscribe(new Subscriber<String>() {
-                    @Override
-                    public void onCompleted() {
-
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        LogUtil.d("sicinput error : " + e.toString());
-                    }
-
-                    @Override
-                    public void onNext(String s) {
-                        LogUtil.d("s : " + s);
-                        viewdata = SomeUtil.JsonStrToListMap(s);
-                        for (int i = 0; i < viewdata.size(); i++) {
-                            View view = LayoutInflater.from(SICLogDetilActivity.this).inflate(R.layout.item_input_sic, null);
-                            TextView tvname = (TextView) view.findViewById(R.id.sic_input_title);
-                            TextView tvid = (TextView) view.findViewById(R.id.sic_input_titleid);
-                            EditText ev = (EditText) view.findViewById(R.id.sic_input_content);
-                            tvname.setText(viewdata.get(i).get("zh_name").toString());
-                            tvid.setText(viewdata.get(i).get("en_name").toString());
-
-                            try {
-                                ev.setText(viewdata.get(i).get("val").toString());
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                                ev.setText("");
-                            }
-
-                            logTesllv.addView(view);
-                            viewlist.add(view);
-                        }
-
-                    }
-                });*/
-
-
-       /* app.apiService.getSocialInfoDetil(type, docid)
-                .compose(RxUtil.<SICDetil>applySchedulers())
-                .subscribe(new Subscriber<SICDetil>() {
-                    @Override
-                    public void onCompleted() {
-
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        LogUtil.d("sicdetil error:" + e.toString());
-                        //SomeUtil.checkHttpException(SICLogDetilActivity.this, e, rootview);
-                    }
-
-                    @Override
-                    public void onNext(SICDetil sicDetil) {
-                        LogUtil.d("sicDetil: " + sicDetil.toString());
-                        detildata = sicDetil;
-                        paths = sicDetil.getPicurl();
-                        adapter.addAll(paths);
-                    }
-                });*/
-
 
     }
 
     private void UpLoadVideo() {
-        DatrixUtil datrixUtil = new DatrixUtil(videoPath, rootview);
-        datrixUtil.DatrixUpLoadVideo();
+        DatrixUtil datrixUtil = new DatrixUtil(videopaths, rootview);
+        //datrixUtil.DatrixUpLoadVideo();
+        datrixUtil.DatrixUpLoadVideos();
         datrixUtil.setOnAfterFinish(new DatrixUtil.AfterFinish() {
             @Override
             public void afterfinish(String fileid, List<String> ids) {
@@ -265,6 +203,8 @@ public class SICLogDetilActivity extends BaseActivity {
                 }
                 videoids = sf.toString();
                 LogUtil.d("videoids : " + videoids);
+
+
                 UploadInfo();
             }
         });
@@ -416,8 +356,8 @@ public class SICLogDetilActivity extends BaseActivity {
 
             } else {
                 Uri uri = data.getData();
-
-                videoPath = UriUtils.getPath(getApplicationContext(), uri);
+                videopaths.add( UriUtils.getPath(getApplicationContext(), uri));
+                //videoPath = UriUtils.getPath(getApplicationContext(), uri);
                /* paths.clear();
                 paths.add(testvideo);*/
                 adapter.add("testvideo");
@@ -446,7 +386,7 @@ public class SICLogDetilActivity extends BaseActivity {
                         sicuploadProtext.setVisibility(View.VISIBLE);
                     }
                 });
-        if (NewPicpaths.size() > 0 && videoPath.length() < 1) {
+        if (NewPicpaths.size() > 0 && videopaths.size() < 0) {
             DatrixUtil datrixUtil = new DatrixUtil(NewPicpaths, rootview);
             datrixUtil.DatrixUpLoadPic2();
             datrixUtil.setOnAfterFinish(new DatrixUtil.AfterFinish() {
@@ -457,7 +397,7 @@ public class SICLogDetilActivity extends BaseActivity {
                 }
             });
         }
-        if (NewPicpaths.size() > 0 && videoPath.length() > 1) {
+        if (NewPicpaths.size() > 0 && videopaths.size() > 0) {
             DatrixUtil datrixUtil = new DatrixUtil(NewPicpaths, rootview);
             datrixUtil.DatrixUpLoadPic2();
             datrixUtil.setOnAfterFinish(new DatrixUtil.AfterFinish() {
@@ -471,10 +411,10 @@ public class SICLogDetilActivity extends BaseActivity {
 
 
         }
-        if (NewPicpaths.size() <= 0 && videoPath.length() > 1) {
+        if (NewPicpaths.size() <= 0 && videopaths.size() > 0) {
             UpLoadVideo();
         }
-        if (NewPicpaths.size() <= 0 && videoPath.length() < 1) {
+        if (NewPicpaths.size() <= 0 && videopaths.size() < 0) {
             UploadInfo();
         }
 
