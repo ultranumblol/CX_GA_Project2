@@ -1,6 +1,7 @@
 package wgz.com.cx_ga_project.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.view.Gravity;
 import android.view.View;
@@ -13,7 +14,14 @@ import com.moxun.tagcloudlib.view.TagsAdapter;
 import java.util.ArrayList;
 import java.util.List;
 
+import rx.Subscriber;
+import wgz.com.cx_ga_project.activity.WorkCloudListActivity;
+import wgz.com.cx_ga_project.activity.WorkLogCloudActivity;
+import wgz.com.cx_ga_project.app;
 import wgz.com.cx_ga_project.entity.CloudTag;
+import wgz.com.cx_ga_project.util.RxUtil;
+import wgz.com.cx_ga_project.util.SomeUtil;
+import wgz.datatom.com.utillibrary.util.LogUtil;
 
 /**
  * Created by wgz on 2016/11/2.
@@ -21,12 +29,13 @@ import wgz.com.cx_ga_project.entity.CloudTag;
 
 public class TextTagsAdapter extends TagsAdapter {
 
-    private List<CloudTag.cTag> dataSet = new ArrayList<>();
+    private List<CloudTag.Re> dataSet = new ArrayList<>();
+    private String policeid ;
 
-
-    public TextTagsAdapter(List<CloudTag.cTag> data) {
+    public TextTagsAdapter(List<CloudTag.Re> data,String policeid) {
         dataSet.clear();
         this.dataSet = data;
+        this.policeid =policeid;
     }
 
     @Override
@@ -36,14 +45,19 @@ public class TextTagsAdapter extends TagsAdapter {
 
     @Override
     public View getView(final Context context, final int position, ViewGroup parent) {
-        TextView tv = new TextView(context);
-        tv.setText(dataSet.get(position).getTagText());
+        final TextView tv = new TextView(context);
+        tv.setText(dataSet.get(position).getKey());
         tv.setGravity(Gravity.CENTER);
         tv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                Toast.makeText(context, dataSet.get(position).getTagText(), Toast.LENGTH_SHORT).show();
+                app.getApp().startActivity(new Intent(context, WorkCloudListActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS).putExtra("key",tv.getText().toString())
+                .putExtra("policeid",policeid));
+
+
+
+
             }
         });
 

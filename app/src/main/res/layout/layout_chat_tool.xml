@@ -37,9 +37,8 @@
 				android:text="图片"
 				android:textColor="@color/black" />
 		</LinearLayout>
-
 		<LinearLayout
-		    android:id="@+id/view_location"
+			android:id="@+id/view_video"
 			android:layout_width="0dp"
 			android:layout_height="wrap_content"
 			android:layout_weight="1"
@@ -50,15 +49,16 @@
 				android:layout_width="60.0dip"
 				android:layout_height="60.0dip"
 				android:contentDescription="@string/app_name"
-				android:src="@drawable/chat_tool_location" />
+				android:src="@drawable/chat_tool_video" />
 			<TextView
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
 				android:gravity="center"
 				android:textSize="12sp"
-				android:text="定位"
+				android:text="录像"
 				android:textColor="@color/black" />
 		</LinearLayout>
+
 	</LinearLayout>
 	<LinearLayout
 		    android:id="@+id/view_location_video"
@@ -119,25 +119,24 @@
 		</LinearLayout>
 
 		<LinearLayout
-			android:id="@+id/view_video"
+			android:id="@+id/view_location"
 			android:layout_width="0dp"
 			android:layout_height="wrap_content"
 			android:layout_weight="1"
 			android:gravity="center"
-			android:visibility="invisible"
 			android:orientation="vertical">
 			<ImageView
 				android:layout_margin="5dp"
 				android:layout_width="60.0dip"
 				android:layout_height="60.0dip"
 				android:contentDescription="@string/app_name"
-				android:src="@drawable/chat_tool_video" />
+				android:src="@drawable/chat_tool_location" />
 			<TextView
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
 				android:gravity="center"
 				android:textSize="12sp"
-				android:text="录像"
+				android:text="定位"
 				android:textColor="@color/black" />
 		</LinearLayout>
 

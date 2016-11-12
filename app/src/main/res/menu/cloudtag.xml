@@ -5,17 +5,17 @@
         <item
             android:id="@+id/cloudtag_week"
 
-            android:title="查看近一周" />
+            android:title="查看近三月" />
        <item
             android:id="@+id/cloudtag_month"
 
-            android:title="查看近一月" />
+            android:title="查看近六月" />
         <item
             android:id="@+id/cloudtag_year"
 
             android:title="查看近一年" />
-        <item
+       <!-- <item
             android:id="@+id/cloudtag_selfs"
-            android:title="自定义日期" />
+            android:title="自定义日期" />-->
     </group>
 </menu>

@@ -19,6 +19,7 @@ import retrofit2.http.Path;
 import rx.Observable;
 import wgz.com.cx_ga_project.entity.AppVersion;
 import wgz.com.cx_ga_project.entity.Apply;
+import wgz.com.cx_ga_project.entity.CloudTag;
 import wgz.com.cx_ga_project.entity.DatrixCreat;
 import wgz.com.cx_ga_project.entity.LeaveType;
 import wgz.com.cx_ga_project.entity.SICDetil;
@@ -29,6 +30,7 @@ import wgz.com.cx_ga_project.entity.SchedulingOneDay;
 import wgz.com.cx_ga_project.entity.Subordinate;
 import wgz.com.cx_ga_project.entity.TypeOfAuth;
 import wgz.com.cx_ga_project.entity.UserInfo;
+import wgz.com.cx_ga_project.entity.WorkCloudList;
 import wgz.com.cx_ga_project.entity.WorkLog;
 
 import static wgz.com.cx_ga_project.app.DATRIX_BASE_URL;
@@ -459,12 +461,12 @@ public interface APIservice {
     @FormUrlEncoded
     @POST("appinfocollect/updateSocialInfo")
     Observable<String> updateSocialInfo(@Field("docid") String docid,
-                                          @Field("type") String type,
-                                          @Field("txt") String txt,
-                                          @Field("pic") String pic,
-                                          @Field("video") String video,
-                                          @Field("picdocid") String picdocid,
-                                          @Field("videodocid") String videodocid);
+                                        @Field("type") String type,
+                                        @Field("txt") String txt,
+                                        @Field("pic") String pic,
+                                        @Field("video") String video,
+                                        @Field("picdocid") String picdocid,
+                                        @Field("videodocid") String videodocid);
 
 
     /**
@@ -483,6 +485,7 @@ public interface APIservice {
 
     /**
      * 获取信息详情
+     *
      * @param type
      * @param docid
      * @return
@@ -494,4 +497,30 @@ public interface APIservice {
             @Field("docid") String docid);
 
 
+    /**
+     * 获取工作云标签
+     * @param policeid
+     * @param wordtype
+     * @param month
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("appworkmanager/getWorkLogKeyWords")
+    Observable<CloudTag> getWorkLogKeyWords(@Field("policeid") String policeid,
+                                            @Field("wordtype") String wordtype,
+                                            @Field("month") String month
+                                         );
+
+    /**
+     * 根据标签词来查日志
+     * @param policeid
+     * @param key
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("appworkmanager/getWordInfo")
+    Observable<WorkCloudList> getWorkLogKeyWords(@Field("policeid") String policeid,
+                                                 @Field("key") String key
+
+    );
 }

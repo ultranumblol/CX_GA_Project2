@@ -369,7 +369,15 @@ public class SomeUtil {
 
         return false;
     }
-
+    public  static String getTime(Date date) {
+        try {
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            return format.format(date);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "";
+        }
+    }
 
     public static String getSysTime() {
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss ");

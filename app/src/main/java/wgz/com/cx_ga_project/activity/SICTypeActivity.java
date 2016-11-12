@@ -51,7 +51,7 @@ public class SICTypeActivity extends BaseActivity {
 
     @Override
     public void initView() {
-        toolbar.setTitle("社会信息录入");
+        toolbar.setTitle("社会信息采集");
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         recyclerview.setLayoutManager(new Mylayout(this));

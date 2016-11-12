@@ -82,18 +82,4 @@ public class MyApprovalActivity extends BaseActivity {
         });
 
     }
-
-
-   /* @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == 1002) {
-            MyapprovalFragment myapprovalFragment = (MyapprovalFragment) fragments.get(0);
-            MyapprovalHistoryFragment myapprovalHistoryFragment = (MyapprovalHistoryFragment) fragments.get(1);
-            myapprovalFragment.onActivityResult(requestCode, resultCode, data);
-            myapprovalHistoryFragment.onActivityResult(requestCode, resultCode, data);
-
-        }
-
-
-    }*/
 }

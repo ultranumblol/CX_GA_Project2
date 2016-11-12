@@ -173,7 +173,7 @@ public class HomeActivity extends AppCompatActivity
                 startActivity(new Intent(HomeActivity.this, WorkLogActivity.class));
                 break;
             case R.id.id_tagcloudlog:
-                startActivity(new Intent(HomeActivity.this, WorkLogCloudActivity.class));
+                startActivity(new Intent(HomeActivity.this, WorkLogCloudActivity.class).putExtra("policeid",SomeUtil.getUserId()));
                 break;
             case R.id.id_myscheduling:
                 startActivity(new Intent(HomeActivity.this, SchedulingActivity.class));

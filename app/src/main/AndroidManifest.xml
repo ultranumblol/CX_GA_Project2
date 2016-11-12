@@ -292,7 +292,12 @@
             android:name=".activity.SICLogDetilActivity"
             android:label="@string/title_activity_siclog_detil"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activity.WorkCloudListActivity"
+            android:label="@string/title_activity_work_cloud_list"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".activity.OnesLogActivity"></activity>
     </application>
 
 </manifest>
