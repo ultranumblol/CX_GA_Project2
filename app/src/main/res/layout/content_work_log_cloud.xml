@@ -63,7 +63,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
 
-            android:text="配置标签"
+            android:text="公安标签"
             android:textColor="@color/colorPrimary"
             android:textSize="14sp" />
 

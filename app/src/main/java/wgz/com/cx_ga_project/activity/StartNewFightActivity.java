@@ -119,10 +119,17 @@ public class StartNewFightActivity extends BaseActivity {
 
 
     }
-
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (!rxSubscription.isUnsubscribed()) {
+            rxSubscription.unsubscribe();
+        }
+    }
     private void initdata() {
         adapter.clear();
         data.clear();
+        // TODO: 2016/11/14 部门id
         app.jqAPIService.getNewJqlist(SomeUtil.getUserId(),"532301000000")
                 .compose(RxUtil.<NewJQ>applySchedulers())
                 .subscribe(new Subscriber<NewJQ>() {

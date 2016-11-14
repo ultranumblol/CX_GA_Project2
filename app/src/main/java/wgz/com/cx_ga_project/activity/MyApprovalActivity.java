@@ -1,11 +1,9 @@
 package wgz.com.cx_ga_project.activity;
 
-import android.content.Intent;
-import android.os.Bundle;
-import android.support.constraint.ConstraintLayout;
+
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentPagerAdapter;
+
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
 
@@ -13,7 +11,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.Bind;
-import butterknife.ButterKnife;
 import wgz.com.cx_ga_project.R;
 import wgz.com.cx_ga_project.adapter.MyFragmentPagerAdapter;
 import wgz.com.cx_ga_project.base.BaseActivity;

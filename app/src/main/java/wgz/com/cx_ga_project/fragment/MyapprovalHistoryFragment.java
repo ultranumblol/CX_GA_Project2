@@ -209,10 +209,14 @@ public class MyapprovalHistoryFragment extends BaseFragment implements SwipeRefr
     }
 
 
+
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         ButterKnife.unbind(this);
+        if (!rxSubscription.isUnsubscribed()) {
+            rxSubscription.unsubscribe();
+        }
     }
 
     @Override

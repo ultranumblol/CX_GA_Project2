@@ -39,7 +39,7 @@ public class NewJQMsgPush extends Service {
     public void onCreate() {
         super.onCreate();
         LogUtil.d("警情推送服务启动");
-        rx.Observable.interval(10, TimeUnit.SECONDS)
+        rx.Observable.interval(30, TimeUnit.SECONDS)
                 .subscribe(new Action1<Long>() {
                     @Override
                     public void call(Long aLong) {
@@ -57,7 +57,6 @@ public class NewJQMsgPush extends Service {
 
                                     @Override
                                     public void onNext(NewJQPush data) {
-                                        //LogUtil.d("msmgpush : "+data.getRes().toString());
                                         if (data.getCode().equals(200)){
                                             new SPBuild(getApplicationContext())
                                                     .addData(Constant.NEWJQCOUNT,data.getRes().size()).build();

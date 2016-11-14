@@ -79,9 +79,11 @@ public class JQListActivity extends BaseActivity {
             public void onItemClick(int position, View itemView) {
                 TextView jqidview = (TextView) itemView.findViewById(R.id.jqid);
                 String jqid = jqidview.getText().toString();
+
                 startActivity(new Intent(JQListActivity.this, NewFightActivity.class)
                         .putExtra("jqid",jqid)
                         .putExtra("jqlist",true));
+                JQListActivity.this.finish();
             }
         });
         initdata();

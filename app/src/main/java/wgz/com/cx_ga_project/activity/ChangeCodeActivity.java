@@ -71,7 +71,7 @@ public class ChangeCodeActivity extends BaseActivity {
         String oldpwd = oldpass.getText().toString();
         String newpwd = newpass.getText().toString();
         String newpwd2 = newpass2.getText().toString();
-        if (MD5.md5(oldpwd) .equals((String)SPUtils.get(app.getApp().getApplicationContext(), Constant.USERPASSWORD,""))){
+        if (MD5.md5(oldpwd) .equals(SPUtils.get(app.getApp().getApplicationContext(), Constant.USERPASSWORD,""))){
             if (newpwd.equals(newpwd2)){
 
                 app.apiService.changePass((String)SPUtils.get(app.getApp().getApplicationContext(), Constant.USERID,""), MD5.md5(newpwd))

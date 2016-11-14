@@ -26,6 +26,6 @@ public class WorkCloudListViewHolder extends BaseViewHolder<WorkCloudList.Re> {
     public void setData(WorkCloudList.Re data) {
         title.setText(data.getSummary());
 
-        time.setText(data.getInserttime());
+        time.setText(data.getInserttime().substring(0,10));
     }
 }

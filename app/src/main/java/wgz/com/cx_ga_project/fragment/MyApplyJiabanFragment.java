@@ -126,6 +126,9 @@ public class MyApplyJiabanFragment extends BaseFragment implements SwipeRefreshL
     public void onDestroyView() {
         super.onDestroyView();
         ButterKnife.unbind(this);
+        if (!rxSubscription.isUnsubscribed()) {
+            rxSubscription.unsubscribe();
+        }
     }
 
     @Override

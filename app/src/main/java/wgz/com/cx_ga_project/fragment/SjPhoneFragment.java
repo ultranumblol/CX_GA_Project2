@@ -63,6 +63,9 @@ public class SjPhoneFragment extends BaseFragment implements SwipeRefreshLayout.
     public void onDestroyView() {
         super.onDestroyView();
         ButterKnife.unbind(this);
+        if (!rxSubscription.isUnsubscribed()) {
+            rxSubscription.unsubscribe();
+        }
     }
 
     @Override

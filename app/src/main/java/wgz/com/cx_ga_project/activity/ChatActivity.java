@@ -605,6 +605,9 @@ public class ChatActivity extends BaseActivity {
         if (!rxSubscription.isUnsubscribed()) {
             rxSubscription.unsubscribe();
         }
+        if (!rxSubscription2.isUnsubscribed()) {
+            rxSubscription2.unsubscribe();
+        }
         unbindService(connection);
     }
 

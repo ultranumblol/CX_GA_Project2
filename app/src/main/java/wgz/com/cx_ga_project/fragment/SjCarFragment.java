@@ -65,10 +65,14 @@ public class SjCarFragment extends BaseFragment implements SwipeRefreshLayout.On
         return R.layout.fragment_sjcar;
     }
 
+
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         ButterKnife.unbind(this);
+        if (!rxSubscription.isUnsubscribed()) {
+            rxSubscription.unsubscribe();
+        }
     }
 
     @Override

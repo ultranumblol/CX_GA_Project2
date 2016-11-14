@@ -240,9 +240,22 @@ public class SICInputActivity extends BaseActivity {
 
                     @Override
                     public void onNext(String s) {
-
                         LogUtil.d("sicinputresult : " + s);
-                        finish();
+                        if (s.contains("200")){
+                            SomeUtil.showSnackBar(rootview, "提交成功！").setCallback(new Snackbar.Callback() {
+                                @Override
+                                public void onDismissed(Snackbar snackbar, int event) {
+                                    finish();
+                                }
+                            });
+
+                        }else {
+
+                            SomeUtil.showSnackBar(rootview,"网络错误！");
+                        }
+
+
+
                     }
                 });
 
@@ -409,7 +422,13 @@ public class SICInputActivity extends BaseActivity {
                         isupload = true;
                     }
                 });
-        if (paths.size() > 0 && videopaths.size() < 0) {
+
+        LogUtil.d("paths.size :"+paths.size());
+        LogUtil.d("videopaths.size :"+videopaths.size());
+        if (paths.size() > 0 && videopaths.size() <= 0) {
+
+            LogUtil.d("上传图片和文字");
+
             DatrixUtil datrixUtil = new DatrixUtil(paths, rootview);
             datrixUtil.DatrixUpLoadPic2();
             datrixUtil.setOnAfterFinish(new DatrixUtil.AfterFinish() {
@@ -421,6 +440,7 @@ public class SICInputActivity extends BaseActivity {
             });
         }
         if (paths.size() > 0 && videopaths.size() > 0) {
+            LogUtil.d("上传图片和文字和视频");
             DatrixUtil datrixUtil = new DatrixUtil(paths, rootview);
             datrixUtil.DatrixUpLoadPic2();
             datrixUtil.setOnAfterFinish(new DatrixUtil.AfterFinish() {
@@ -435,9 +455,11 @@ public class SICInputActivity extends BaseActivity {
 
         }
         if (paths.size() <= 0 && videopaths.size() > 0) {
+            LogUtil.d("上传视频");
             UpLoadVideo();
         }
-        if (paths.size() <= 0 && videopaths.size() < 0) {
+        if (paths.size() <= 0 && videopaths.size() <= 0) {
+            LogUtil.d("上传文字");
             UploadInfo();
         }
 

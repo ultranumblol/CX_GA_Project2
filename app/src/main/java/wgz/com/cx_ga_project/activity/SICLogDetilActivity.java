@@ -386,7 +386,7 @@ public class SICLogDetilActivity extends BaseActivity {
                         sicuploadProtext.setVisibility(View.VISIBLE);
                     }
                 });
-        if (NewPicpaths.size() > 0 && videopaths.size() < 0) {
+        if (NewPicpaths.size() > 0 && videopaths.size() <= 0) {
             DatrixUtil datrixUtil = new DatrixUtil(NewPicpaths, rootview);
             datrixUtil.DatrixUpLoadPic2();
             datrixUtil.setOnAfterFinish(new DatrixUtil.AfterFinish() {
@@ -414,7 +414,7 @@ public class SICLogDetilActivity extends BaseActivity {
         if (NewPicpaths.size() <= 0 && videopaths.size() > 0) {
             UpLoadVideo();
         }
-        if (NewPicpaths.size() <= 0 && videopaths.size() < 0) {
+        if (NewPicpaths.size() <= 0 && videopaths.size() <= 0) {
             UploadInfo();
         }
 

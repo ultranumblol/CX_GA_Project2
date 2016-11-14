@@ -123,19 +123,41 @@ public class NewFightActivity extends BaseActivity {
                 switch (id) {
                     case R.id.fabtag_bjrJQ:
                         startActivity(new Intent(NewFightActivity.this, JQListActivity.class).putExtra("title", "bjr").putExtra("bjrname", baojingName));
+                        if (ifFromJQlist){
+                            NewFightActivity.this.finish();
+
+                        }
                         break;
                     case R.id.fabtag_nearvideoCam:
                         startActivity(new Intent(NewFightActivity.this, CamMapHtmlActivity.class));
+                        if (ifFromJQlist){
+                            NewFightActivity.this.finish();
+
+                        }
                         break;
                     case R.id.fabtag_nearjq:
                         startActivity(new Intent(NewFightActivity.this, JQListActivity.class).putExtra("title", "nearjq"));
+                        if (ifFromJQlist){
+                            NewFightActivity.this.finish();
+
+                        }
                         break;
                     case R.id.fabtag_sjrJQ:
                         startActivity(new Intent(NewFightActivity.this, JQListActivity.class).putExtra("title", "sjr"));
+                        if (ifFromJQlist){
+                            NewFightActivity.this.finish();
+
+                        }
                         break;
                     case R.id.fabtag_zyJQ:
                         if(!ifFromJQlist){
-                            transferDialog();
+
+                            if (jqstate.equals("4")) {
+
+                            }else {
+                                transferDialog();
+                            }
+
                         }
 
                         break;

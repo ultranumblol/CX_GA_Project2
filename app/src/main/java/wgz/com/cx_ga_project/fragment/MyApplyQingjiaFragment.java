@@ -171,10 +171,14 @@ public class MyApplyQingjiaFragment extends BaseFragment implements SwipeRefresh
         return R.layout.fragment_my_apply_qingjia;
     }
 
+
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         ButterKnife.unbind(this);
+        if (!rxSubscription.isUnsubscribed()) {
+            rxSubscription.unsubscribe();
+        }
     }
 
     @Override

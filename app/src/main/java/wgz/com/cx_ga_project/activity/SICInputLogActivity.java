@@ -82,7 +82,13 @@ public class SICInputLogActivity extends BaseActivity {
                 });
 
     }
-
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (!rxSubscription.isUnsubscribed()) {
+            rxSubscription.unsubscribe();
+        }
+    }
     private void initData() {
         app.apiService.getSocialInfoList(SomeUtil.getUserId())
         .compose(RxUtil.<SICList>applySchedulers())

@@ -56,14 +56,8 @@ public class GetNewMsgService extends Service {
                         checkNew();
                         if (ifHasNew){
                             if (isActivityRunning(getApplicationContext(), ChatActivity.class)){
-                               /* Intent intent = new Intent();
-                                intent.putExtra("msg","newmsg");
-                                intent.setAction("service.MsgService");
-                                sendBroadcast(intent);
-                                LogUtil.d("发送广播");*/
                                 LogUtil.d("rxbus");
                                 RxBus.getDefault().post("flush");
-
                                 newchatData.clear();
                             }else {
                                 if (ifHasNotify){

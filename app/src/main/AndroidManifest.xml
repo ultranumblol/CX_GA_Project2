@@ -175,6 +175,7 @@
             android:name=".activity.NewFightActivity"
             android:label="@string/title_activity_new_fight"
             android:screenOrientation="portrait"
+            android:launchMode="standard"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activity.FullscreenActivity"
@@ -297,7 +298,10 @@
             android:name=".activity.WorkCloudListActivity"
             android:label="@string/title_activity_work_cloud_list"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".activity.OnesLogActivity"></activity>
+        <activity android:name=".activity.OnesLogActivity" />
+        <activity android:name=".activity.SecondCodeShowActivity"
+            android:launchMode="singleTask"
+            ></activity>
     </application>
 
 </manifest>

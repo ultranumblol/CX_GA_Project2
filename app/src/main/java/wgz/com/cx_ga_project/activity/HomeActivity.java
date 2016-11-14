@@ -357,8 +357,8 @@ public class HomeActivity extends AppCompatActivity
                                     new SPBuild(getApplicationContext())
                                             .addData(Constant.UPDATEURL, url).build();
                                     AlertDialog.Builder alertDialog = new AlertDialog.Builder(HomeActivity.this);
-                                    alertDialog.setTitle("版本更新")
-                                            .setMessage("检查到新版本，现在更新吗？")
+                                    alertDialog.setTitle("检查到新版本，是否更新？")
+                                            .setMessage(appVersion.getRes().get(0).getApkUpdatelog())
                                             .setPositiveButton("立即更新", new DialogInterface.OnClickListener() {
                                                 @Override
                                                 public void onClick(DialogInterface dialog, int which) {

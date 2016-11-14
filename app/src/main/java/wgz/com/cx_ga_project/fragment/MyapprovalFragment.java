@@ -156,10 +156,14 @@ public class MyapprovalFragment extends BaseFragment implements SwipeRefreshLayo
         return R.layout.fragment_my_approval;
     }
 
+
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         ButterKnife.unbind(this);
+        if (!rxSubscription.isUnsubscribed()) {
+            rxSubscription.unsubscribe();
+        }
     }
 
     @Override
