@@ -68,6 +68,7 @@ public class MySubordinateLogAcitvity extends BaseActivity {
     private List<View> calenderViews = new ArrayList<>();
     private List<WorkLog.Mylog> mylogs = new ArrayList<>();
     private String policeid = "";
+    private String policename = "";
     private AddPictureAdapter adapter;
     List<String> paths = new ArrayList<>();
     private boolean onPagescroll = false;
@@ -84,11 +85,10 @@ public class MySubordinateLogAcitvity extends BaseActivity {
     @Override
     public void initView() {
         Intent intent = getIntent();
-        String name = intent.getStringExtra("policename");
         policeid = intent.getStringExtra("policeid");
-
+        policename = intent.getStringExtra("policename");
         LogUtil.d("subordiante policeid: "+policeid);
-        toolbarWprklog.setTitle(name + "的工作日志");
+        toolbarWprklog.setTitle(policename + "的工作日志");
         fabAddworklog.setVisibility(View.GONE);
         setSupportActionBar(toolbarWprklog);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -377,13 +377,14 @@ public class MySubordinateLogAcitvity extends BaseActivity {
         if (id == R.id.sub_timebank) {
             // TODO: 2016/8/9 时间银行功能
             //SomeUtil.showSnackBar(mRootview, "开发中。。。");
-            startActivity(new Intent(this,TimeBankActivity.class).putExtra("policeid",policeid));
+            startActivity(new Intent(this,TimeBankActivity.class).putExtra("policename",policename).putExtra("policeid",policeid));
             return true;
         }
         if (id == R.id.sub_cloudtag) {
             // TODO: 2016/8/9 时间银行功能
             //SomeUtil.showSnackBar(mRootview, "开发中。。。");
-            startActivity(new Intent(this,WorkLogCloudActivity.class).putExtra("policeid",policeid));
+            startActivity(new Intent(this,WorkLogCloudActivity.class)
+                    .putExtra("policename",policename).putExtra("policeid",policeid));
             return true;
         }
         if (id == android.R.id.home) {

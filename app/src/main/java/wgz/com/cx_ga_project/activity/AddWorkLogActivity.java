@@ -2,6 +2,7 @@ package wgz.com.cx_ga_project.activity;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
@@ -11,6 +12,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 
 import com.jakewharton.rxbinding.view.RxView;
 import com.jude.easyrecyclerview.EasyRecyclerView;
@@ -20,6 +22,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.Bind;
+import butterknife.ButterKnife;
 import rx.Observer;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
@@ -59,6 +62,8 @@ public class AddWorkLogActivity extends BaseActivity {
     @Bind(R.id.content_add_worklog)
     LinearLayout rootview;
     List<String> paths = new ArrayList<>();
+    @Bind(R.id.upload_progerss)
+    ProgressBar uploadProgerss;
     private String time = "";
     private String worklog = "";
     private String id = "";
@@ -194,6 +199,8 @@ public class AddWorkLogActivity extends BaseActivity {
     }
 
     private void UpLoadWorkLog() {
+        uploadProgerss.setVisibility(View.VISIBLE);
+        SomeUtil.showSnackBar(rootview,"正在上传请稍后！");
         LogUtil.d("pathsize : " + paths.size());
         if (paths.size() > 1) {
             DatrixUtil datrixUtil = new DatrixUtil(paths, rootview);
@@ -228,6 +235,7 @@ public class AddWorkLogActivity extends BaseActivity {
                                         @Override
                                         public void onCompleted() {
                                             if (j == k) {
+                                                uploadProgerss.setVisibility(View.GONE);
                                                 SomeUtil.showSnackBar(rootview, "添加成功！").setCallback(new Snackbar.Callback() {
                                                     @Override
                                                     public void onDismissed(Snackbar snackbar, int event) {
@@ -242,14 +250,14 @@ public class AddWorkLogActivity extends BaseActivity {
 
                                         @Override
                                         public void onError(Throwable e) {
-
+                                            uploadProgerss.setVisibility(View.GONE);
+                                            SomeUtil.checkHttpException(AddWorkLogActivity.this,e,rootview);
                                         }
 
                                         @Override
                                         public void onNext(String s) {
                                             LogUtil.d("result:" + s);
                                             if (s.contains("200")) {
-                                                // onCompleted();
 
                                             } else onError(new Exception(s));
                                         }
@@ -280,6 +288,7 @@ public class AddWorkLogActivity extends BaseActivity {
                 .subscribe(new Observer<String>() {
                     @Override
                     public void onCompleted() {
+                        uploadProgerss.setVisibility(View.GONE);
                         SomeUtil.showSnackBar(rootview, "添加成功！").setCallback(new Snackbar.Callback() {
                             @Override
                             public void onDismissed(Snackbar snackbar, int event) {
@@ -355,4 +364,10 @@ public class AddWorkLogActivity extends BaseActivity {
 
     }
 
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        // TODO: add setContentView(...) invocation
+        ButterKnife.bind(this);
+    }
 }

@@ -2,6 +2,7 @@ package wgz.com.cx_ga_project.activity;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
@@ -11,6 +12,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 
 import com.jakewharton.rxbinding.view.RxView;
 import com.jude.easyrecyclerview.EasyRecyclerView;
@@ -20,6 +22,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.Bind;
+import butterknife.ButterKnife;
 import rx.Subscriber;
 import rx.functions.Action1;
 import wgz.com.cx_ga_project.R;
@@ -35,6 +38,7 @@ import wgz.com.cx_ga_project.util.SomeUtil;
 import wgz.datatom.com.utillibrary.util.LogUtil;
 
 import static wgz.com.cx_ga_project.activity.PickPhotoActivity.HTTP_URL;
+import static wgz.com.cx_ga_project.app.DATRIX_BASE_URL;
 
 /**
  * 警情信息回告
@@ -52,8 +56,12 @@ public class AddJQActivity extends BaseActivity {
     @Bind(R.id.addPicRV)
     EasyRecyclerView addPicRV;
     List<String> paths = new ArrayList<>();
+    @Bind(R.id.up_jq_progress)
+    ProgressBar upJqProgress;
     private AddPictureAdapter adapter;
     private String fileid = "";
+    private String datrixUrl = DATRIX_BASE_URL + "preview/getImage?fileid=";
+    private String datrixurl2 = "&token=X7yABwjE20sUJLefATUFqU0iUs8mJPqEJo6iRnV63mI=";
 
     @Override
     public int getLayoutId() {
@@ -92,8 +100,10 @@ public class AddJQActivity extends BaseActivity {
     }
 
     private void uploadjq() {
+        SomeUtil.showSnackBar(rootview,"正在上传请稍后！");
         LogUtil.d("pathsize : " + paths.size());
         if (paths.size() > 1) {
+            upJqProgress.setVisibility(View.VISIBLE);
             DatrixUtil datrixUtil = new DatrixUtil(paths, rootview);
             datrixUtil.DatrixUpLoadPic();
             datrixUtil.setOnAfterFinish(new DatrixUtil.AfterFinish() {
@@ -110,43 +120,103 @@ public class AddJQActivity extends BaseActivity {
 
     private void addjq() {
         // TODO: 2016/10/31 部门id换成动态
-        app.jqAPIService.uploadJqMsg(SomeUtil.getJQId(),SomeUtil.getTASKId(),SomeUtil.getUserId(),
-                contenttext.getText().toString(),SomeUtil.getSysTime(),"","","","532301000000")
-        .compose(RxUtil.<String>applySchedulers())
-        .subscribe(new Subscriber<String>() {
-            @Override
-            public void onCompleted() {
+        app.jqAPIService.uploadJqMsg(SomeUtil.getJQId(), SomeUtil.getTASKId(), SomeUtil.getUserId(),
+                contenttext.getText().toString(), SomeUtil.getSysTime(), "", "", "", "532301000000")
+                .compose(RxUtil.<String>applySchedulers())
+                .subscribe(new Subscriber<String>() {
+                    @Override
+                    public void onCompleted() {
 
-            }
+                    }
 
-            @Override
-            public void onError(Throwable e) {
+                    @Override
+                    public void onError(Throwable e) {
+                        upJqProgress.setVisibility(View.GONE);
+                        SomeUtil.checkHttpException(AddJQActivity.this,e,rootview);
 
-            }
+                    }
 
-            @Override
-            public void onNext(String s) {
-                LogUtil.d("addjq result : "+s);
-                if (s.contains("\"code\":200")){
-                    RxBus.getDefault().post("sjmsgflush");
-                    SomeUtil.showSnackBar(rootview,"警情回传成功！").setCallback(new Snackbar.Callback() {
-                        @Override
-                        public void onDismissed(Snackbar snackbar, int event) {
-                            finish();
+                    @Override
+                    public void onNext(String s) {
+                        LogUtil.d("addjq result : " + s);
+                        if (s.contains("\"code\":200")) {
+                            upJqProgress.setVisibility(View.GONE);
+                            RxBus.getDefault().post("sjmsgflush");
+                            SomeUtil.showSnackBar(rootview, "警情回传成功！").setCallback(new Snackbar.Callback() {
+                                @Override
+                                public void onDismissed(Snackbar snackbar, int event) {
+                                    finish();
+                                }
+                            });
                         }
-                    });
-                }
-            }
-        });
-
-
+                    }
+                });
 
 
         // TODO: 2016/10/28 上传警情文字信息
     }
 
-    private void addjqAndpic(String fileid, List<String> ids) {
+    private void addjqAndpic(String fileid, final List<String> ids) {
 
+        final int k = ids.size() - 1;
+        app.jqAPIService.uploadJqMsg(SomeUtil.getJQId(), SomeUtil.getTASKId(), SomeUtil.getUserId(),
+                contenttext.getText().toString(), SomeUtil.getSysTime(), "", "", "", "532301000000")
+                .compose(RxUtil.<String>applySchedulers())
+                .subscribe(new Subscriber<String>() {
+                    @Override
+                    public void onCompleted() {
+                        for (int i = 0; i < ids.size(); i++) {
+                            final int j = i;
+                            app.jqAPIService.uploadJqMsg(SomeUtil.getJQId(), SomeUtil.getTASKId(), SomeUtil.getUserId(),
+                                    "", SomeUtil.getSysTime(), datrixUrl + ids.get(i) + datrixurl2, "", "", "532301000000")
+                                    .compose(RxUtil.<String>applySchedulers())
+                                    .subscribe(new Subscriber<String>() {
+                                        @Override
+                                        public void onCompleted() {
+                                            if (j == k) {
+                                                upJqProgress.setVisibility(View.GONE);
+                                                RxBus.getDefault().post("sjmsgflush");
+                                                SomeUtil.showSnackBar(rootview, "警情回传成功！").setCallback(new Snackbar.Callback() {
+                                                    @Override
+                                                    public void onDismissed(Snackbar snackbar, int event) {
+
+                                                        finish();
+                                                    }
+                                                });
+
+                                            }
+                                        }
+
+                                        @Override
+                                        public void onError(Throwable e) {
+                                            upJqProgress.setVisibility(View.GONE);
+                                            SomeUtil.checkHttpException(AddJQActivity.this,e,rootview);
+                                        }
+
+                                        @Override
+                                        public void onNext(String s) {
+                                            LogUtil.d("result:" + s);
+                                            if (s.contains("200")) {
+
+                                            } else onError(new Exception(s));
+                                        }
+                                    });
+                        }
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onNext(String s) {
+                        if (s.contains("200")) {
+
+                        } else onError(new Exception(s));
+                    }
+                });
 
         // TODO: 2016/10/28 上传警情文字图片信息
     }
@@ -198,5 +268,12 @@ public class AddJQActivity extends BaseActivity {
 
         return true;
 
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        // TODO: add setContentView(...) invocation
+        ButterKnife.bind(this);
     }
 }

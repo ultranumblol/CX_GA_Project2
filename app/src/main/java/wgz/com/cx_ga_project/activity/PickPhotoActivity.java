@@ -141,7 +141,15 @@ public class PickPhotoActivity extends BaseActivity {
         if (id == R.id.uploadpic_finish) {
             // TODO: 2016/8/16 设置返回图片地址
             List<String> paths = new ArrayList<>();
-            paths = mPickerFragment.getPhotoPickerAdapter().getmSelectedImage();
+
+            try {
+                paths = mPickerFragment.getPhotoPickerAdapter().getmSelectedImage();
+            } catch (Exception e) {
+                e.printStackTrace();
+                LogUtil.d("error :"+e.toString());
+                paths.clear();
+            }
+
             setResult(0, new Intent(PickPhotoActivity.this, AddJQActivity.class).
                     putStringArrayListExtra("paths", (ArrayList<String>) paths)
                     .putExtra("result", "addpic"));
