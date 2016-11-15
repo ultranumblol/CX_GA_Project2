@@ -21,6 +21,7 @@ import com.jude.easyrecyclerview.EasyRecyclerView;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import butterknife.Bind;
@@ -75,6 +76,7 @@ public class WorkLogActivity extends BaseActivity {
     private List<WorkLog.Mylog> mylogs = new ArrayList<>();
     private String id = "";
     private AddPictureAdapter adapter;
+    private Date  clickdate  =new Date() ;
     List<String> paths = new ArrayList<>();
     private boolean onPagescroll = false;
     /**
@@ -311,32 +313,42 @@ public class WorkLogActivity extends BaseActivity {
 
     @OnClick(R.id.fab_addworklog)
     public void onClick() {
-        if (idWorkLogText.getText().toString().contains("没有工作记录")) {
-            Snackbar.make(container, "是否为选中日期添加工作记录？", Snackbar.LENGTH_LONG).setAction("确定", new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent();
-                    intent.putExtra("time", txToday.getText().toString());
-                    intent.putExtra("worklog", idWorkLogText.getText().toString());
-                    intent.putExtra("id", id);
-                    intent.setClass(WorkLogActivity.this, AddWorkLogActivity.class);
-                    startActivityForResult(intent, 1);
-                    //startActivity(intent);
-                }
-            }).show();
-        } else {
-            Snackbar.make(container, "是否修改当前工作记录？", Snackbar.LENGTH_LONG).setAction("确定", new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent();
-                    intent.putExtra("time", txToday.getText().toString());
-                    intent.putExtra("worklog", idWorkLogText.getText().toString());
-                    intent.putExtra("id", id);
-                    intent.setClass(WorkLogActivity.this, AddWorkLogActivity.class);
-                    startActivityForResult(intent, 1);
-                }
-            }).show();
-        }
+            LogUtil.d("currenttime :"+SomeUtil.getSysTime2());
+           if (clickdate.getTime()-System.currentTimeMillis()>0){
+               SomeUtil.showSnackBar(container,"不能添加未来的工作日志！");
+
+           }else{
+               if (idWorkLogText.getText().toString().contains("没有工作记录")) {
+                   Snackbar.make(container, "是否为选中日期添加工作记录？", Snackbar.LENGTH_LONG).setAction("确定", new View.OnClickListener() {
+                       @Override
+                       public void onClick(View v) {
+                           Intent intent = new Intent();
+                           intent.putExtra("time", txToday.getText().toString());
+                           intent.putExtra("worklog", idWorkLogText.getText().toString());
+                           intent.putExtra("id", id);
+                           intent.setClass(WorkLogActivity.this, AddWorkLogActivity.class);
+                           startActivityForResult(intent, 1);
+                           //startActivity(intent);
+                       }
+                   }).show();
+               } else {
+                   Snackbar.make(container, "是否修改当前工作记录？", Snackbar.LENGTH_LONG).setAction("确定", new View.OnClickListener() {
+                       @Override
+                       public void onClick(View v) {
+                           Intent intent = new Intent();
+                           intent.putExtra("time", txToday.getText().toString());
+                           intent.putExtra("worklog", idWorkLogText.getText().toString());
+                           intent.putExtra("id", id);
+                           intent.setClass(WorkLogActivity.this, AddWorkLogActivity.class);
+                           startActivityForResult(intent, 1);
+                       }
+                   }).show();
+               }
+
+           }
+
+
+
 
 
     }
@@ -365,6 +377,9 @@ public class WorkLogActivity extends BaseActivity {
     class OnMyCalendarClickerListener implements CalendarView.OnCalendarClickListener {
         @Override
         public void onCalendarClick(int position, DateBean dateBean) {
+            clickdate = dateBean.getDate();
+
+
             txToday.setText(OtherUtils.formatDate(dateBean.getDate()));
             LogUtil.d("click data :"+OtherUtils.formatDate(dateBean.getDate()));
             //查询日志图片内容

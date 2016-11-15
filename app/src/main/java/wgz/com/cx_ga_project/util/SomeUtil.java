@@ -101,16 +101,16 @@ public class SomeUtil {
             //得到指定模范的时间
             Date d1 = sdf.parse(s1);
             Date d2 = sdf.parse(s2);
+            LogUtil.d("start time :"+d1.getTime());
+            LogUtil.d("end time :"+d2.getTime());
 
+            LogUtil.d("start time :"+d1.toString());
+            LogUtil.d("end time :"+d2.toString());
 
             if (Math.abs(((d1.getTime() - d2.getTime()))) >0) {
               return true;
             } else {
-                LogUtil.d("start time :"+d1.getTime());
-                LogUtil.d("end time :"+d2.getTime());
 
-                LogUtil.d("start time :"+d1.toString());
-                LogUtil.d("end time :"+d2.toString());
 
                 return false;
             }
@@ -379,8 +379,26 @@ public class SomeUtil {
         }
     }
 
+    /**
+     * 获取系统时间yyyy-MM-dd HH:mm:ss
+     * @return
+     */
     public static String getSysTime() {
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss ");
+
+        Date curDate = new Date(System.currentTimeMillis());//获取当前时间
+
+        String str = formatter.format(curDate);
+        return str;
+
+    }
+
+    /**
+     * 获取系统日期
+     * @return
+     */
+    public static String getSysTime2() {
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
 
         Date curDate = new Date(System.currentTimeMillis());//获取当前时间
 
