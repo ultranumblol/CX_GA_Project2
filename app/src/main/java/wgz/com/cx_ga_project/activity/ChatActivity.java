@@ -52,6 +52,7 @@ import wgz.com.cx_ga_project.base.BaseActivity;
 import wgz.com.cx_ga_project.base.RxBus;
 import wgz.com.cx_ga_project.bean.ChatUpProgress;
 import wgz.com.cx_ga_project.entity.ChatMsg;
+import wgz.com.cx_ga_project.entity.ChatPic;
 import wgz.com.cx_ga_project.fragment.PhotoPickerFragment;
 import wgz.com.cx_ga_project.service.GetNewMsgService;
 import wgz.com.cx_ga_project.util.DatrixUtil;
@@ -128,6 +129,7 @@ public class ChatActivity extends BaseActivity {
     private String videoPath = "";
     private Subscription rxSubscription;
     private Subscription rxSubscription2;
+    private Subscription rxSubscription3;
     private String datrixUrl = DATRIX_BASE_URL + "preview/getImage?fileid=";
     private String datrixurl2 = "&token=X7yABwjE20sUJLefATUFqU0iUs8mJPqEJo6iRnV63mI=";
     private String datrixVideoPicdurl1 = DATRIX_BASE_URL + "preview/coverMedium?fileid=";
@@ -232,6 +234,7 @@ public class ChatActivity extends BaseActivity {
                     @Override
                     public void onError(Throwable e) {
                         LogUtil.d("rxSubscription2 error :"+e.toString());
+                        SomeUtil.checkHttpException(ChatActivity.this,e,rootview);
                     }
 
                     @Override
@@ -246,7 +249,32 @@ public class ChatActivity extends BaseActivity {
 
                     }
                 });
-
+        rxSubscription3 = RxBus.getDefault().toObservable(ChatPic.class)
+                .subscribe(new Action1<ChatPic>() {
+                    @Override
+                    public void call(ChatPic chatPic) {
+                        if (more.getVisibility() == View.VISIBLE) {
+                            more.setVisibility(View.GONE);
+                        }
+                        newchatData.clear();
+                        paths.clear();
+                        paths = chatPic.getPaths();
+                        ChatMsg re = new ChatMsg();
+                        ChatMsg.Re pic = re.new Re();
+                        Date currentdate = new Date(System.currentTimeMillis());
+                        String curredate = getTime(currentdate);
+                        pic.setPic(paths.get(0));
+                        pic.setSendtime(curredate);
+                        pic.setMark(0);
+                        pic.setIssend("2");
+                        newchatData.add(pic);
+                        adapter.addAll(newchatData);
+                        recyclerview.scrollToPosition(adapter.getCount() - 1);
+                        //uploadpic(makeFiles());
+                       // SomeUtil.showSnackBar(rootview,"发送图片！");
+                        SendPicmsg();
+                    }
+                });
 
         rxSubscription = RxBus.getDefault().toObservable(String.class)
                 .subscribe(new Subscriber<String>() {
@@ -257,7 +285,7 @@ public class ChatActivity extends BaseActivity {
 
                     @Override
                     public void onError(Throwable e) {
-
+                        SomeUtil.checkHttpException(ChatActivity.this,e,rootview);
                     }
 
                     @Override
@@ -277,6 +305,13 @@ public class ChatActivity extends BaseActivity {
                             notify3.flags |= Notification.FLAG_AUTO_CANCEL; // FLAG_AUTO_CANCEL表明当通知被用户点击时，通知将被清除。
                             manager.notify(1, notify3);// 步骤4：通过通知管理器来发起通知。如果id不同，则每click，在status哪里增加一个提示
                             getNewmsg();
+
+
+                        }
+                        if (s.equals("addchatpic")){
+
+
+
 
 
                         }
@@ -300,7 +335,7 @@ public class ChatActivity extends BaseActivity {
 
                     @Override
                     public void onError(Throwable e) {
-
+                        SomeUtil.checkHttpException(ChatActivity.this,e,rootview);
                     }
 
                     @Override
@@ -328,7 +363,7 @@ public class ChatActivity extends BaseActivity {
 
                     @Override
                     public void onError(Throwable e) {
-
+                        SomeUtil.checkHttpException(ChatActivity.this,e,rootview);
                     }
 
                     @Override
@@ -356,7 +391,7 @@ public class ChatActivity extends BaseActivity {
 
                     @Override
                     public void onError(Throwable e) {
-
+                        SomeUtil.checkHttpException(ChatActivity.this,e,rootview);
                     }
 
                     @Override
@@ -397,6 +432,7 @@ public class ChatActivity extends BaseActivity {
                     @Override
                     public void onError(Throwable e) {
                         SomeUtil.showSnackBar(rootview, "error:" + e.toString());
+                        SomeUtil.checkHttpException(ChatActivity.this,e,rootview);
                     }
 
                     @Override
@@ -437,6 +473,7 @@ public class ChatActivity extends BaseActivity {
                             public void onError(Throwable e) {
                                 //SomeUtil.showSnackBar(rootview, "error:" + e.toString());
                                 LogUtil.d("error:" + e.toString());
+                                SomeUtil.checkHttpException(ChatActivity.this,e,rootview);
                             }
 
                             @Override
@@ -488,6 +525,7 @@ public class ChatActivity extends BaseActivity {
                             public void onError(Throwable e) {
                                 //SomeUtil.showSnackBar(rootview, "error:" + e.toString());
                                 LogUtil.d("error:" + e.toString());
+                                SomeUtil.checkHttpException(ChatActivity.this,e,rootview);
                             }
 
                             @Override
@@ -634,6 +672,7 @@ public class ChatActivity extends BaseActivity {
                     adapter.addAll(newchatData);
                     recyclerview.scrollToPosition(adapter.getCount() - 1);
                     //uploadpic(makeFiles());
+                    SomeUtil.showSnackBar(rootview,"发送图片！");
                     SendPicmsg();
                     //DatrixCreate();
                     //adapter.addAll();

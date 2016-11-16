@@ -175,6 +175,7 @@ public class AskForLeaveActivity extends BaseActivity {
                     @Override
                     public void onError(Throwable e) {
                         LogUtil.d("leavetype  error: "+e.toString());
+                        SomeUtil.checkHttpException(AskForLeaveActivity.this,e,rootview);
                     }
 
                     @Override
@@ -214,6 +215,7 @@ public class AskForLeaveActivity extends BaseActivity {
                     @Override
                     public void onError(Throwable e) {
                         LogUtil.d("Subordinate : "+e.toString());
+                        SomeUtil.checkHttpException(AskForLeaveActivity.this,e,rootview);
                     }
 
                     @Override

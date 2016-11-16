@@ -73,7 +73,8 @@ public interface APIservice {
      * @return
      */
     @FormUrlEncoded
-    @POST(DATRIX_BASE_URL + "api/cluster/tracker/file/create" + DATRIXUID)
+    //@POST(DATRIX_BASE_URL + "api/cluster/tracker/file/create" + DATRIXUID)
+    @POST(DATRIX_BASE_URL + "api/cluster/tracker/file/create")
     @Headers("ACCESS-TOKEN:X7yABwjE20sUJLefATUFqU0iUs8mJPqEJo6iRnV63mI=")
     Observable<DatrixCreat> uploadFileWithRequestBodyTest(
             @Field("filename") String filename,
@@ -319,7 +320,7 @@ public interface APIservice {
      * @return
      */
     @FormUrlEncoded
-    @POST("http://192.168.1.183:8004/sysadmin/panel/newlogin.php")
+    @POST("sysadmin/panel/newlogin.php")
     Observable<String> login2(@Field("user_name") String username,
                               @Field("password") String pwd,
                               @Field("syscode") String syscode);
@@ -327,14 +328,17 @@ public interface APIservice {
     /**
      * 修改用户密码
      *
-     * @param username
-     * @param newpwd
+     * @param
+     * @param
      * @return
      */
     @FormUrlEncoded
-    @POST("applogin/appChangePwd")
-    Observable<String> changePass(@Field("username") String username,
-                                  @Field("newpwd") String newpwd
+    @POST("sysadmin/panel/changePwd.php")
+    Observable<String> changePass(@Field("user_id") String user_id,
+                                  @Field("syscode") String syscode,
+                                  @Field("old_passwd") String old_passwd,
+                                  @Field("new_passwd") String new_passwd
+
 
 
     );

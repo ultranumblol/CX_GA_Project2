@@ -207,7 +207,7 @@ public class AddJQActivity extends BaseActivity {
 
                     @Override
                     public void onError(Throwable e) {
-
+                        SomeUtil.checkHttpException(AddJQActivity.this,e,rootview);
                     }
 
                     @Override

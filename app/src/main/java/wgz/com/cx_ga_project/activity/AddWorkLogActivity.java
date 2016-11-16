@@ -185,7 +185,7 @@ public class AddWorkLogActivity extends BaseActivity {
 
                     @Override
                     public void onError(Throwable e) {
-
+                        SomeUtil.checkHttpException(AddWorkLogActivity.this,e,rootview);
                     }
 
                     @Override
@@ -268,6 +268,7 @@ public class AddWorkLogActivity extends BaseActivity {
                     @Override
                     public void onError(Throwable e) {
                         LogUtil.d("error:" + e.toString());
+                        SomeUtil.checkHttpException(AddWorkLogActivity.this,e,rootview);
                     }
 
                     @Override
@@ -303,6 +304,7 @@ public class AddWorkLogActivity extends BaseActivity {
                     @Override
                     public void onError(Throwable e) {
                         LogUtil.d("error:" + e.toString());
+                        SomeUtil.checkHttpException(AddWorkLogActivity.this,e,rootview);
                     }
 
                     @Override

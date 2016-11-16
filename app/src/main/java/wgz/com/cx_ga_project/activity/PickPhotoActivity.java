@@ -16,6 +16,8 @@ import java.util.List;
 import butterknife.Bind;
 import wgz.com.cx_ga_project.R;
 import wgz.com.cx_ga_project.base.BaseActivity;
+import wgz.com.cx_ga_project.base.RxBus;
+import wgz.com.cx_ga_project.entity.ChatPic;
 import wgz.com.cx_ga_project.fragment.PhotoPagerFragment;
 import wgz.com.cx_ga_project.fragment.PhotoPickerFragment;
 import wgz.com.cx_ga_project.util.SomeUtil;
@@ -149,7 +151,7 @@ public class PickPhotoActivity extends BaseActivity {
                 LogUtil.d("error :"+e.toString());
                 paths.clear();
             }
-
+            RxBus.getDefault().post(new ChatPic(paths));
             setResult(0, new Intent(PickPhotoActivity.this, AddJQActivity.class).
                     putStringArrayListExtra("paths", (ArrayList<String>) paths)
                     .putExtra("result", "addpic"));
@@ -158,9 +160,9 @@ public class PickPhotoActivity extends BaseActivity {
                     putStringArrayListExtra("paths", (ArrayList<String>) paths)
                     .putExtra("result", "addpic"));
 
-            setResult(7, new Intent(PickPhotoActivity.this, ChatActivity.class).
+            /*setResult(7, new Intent(PickPhotoActivity.this, ChatActivity.class).
                     putStringArrayListExtra("paths", (ArrayList<String>) paths)
-                    .putExtra("result", "addpic"));
+                    .putExtra("result", "addpic"));*/
 
             setResult(9, new Intent(PickPhotoActivity.this, SICInputActivity.class).
                     putStringArrayListExtra("paths", (ArrayList<String>) paths)

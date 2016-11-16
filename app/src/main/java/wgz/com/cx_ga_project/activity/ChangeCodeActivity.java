@@ -74,7 +74,7 @@ public class ChangeCodeActivity extends BaseActivity {
         if (MD5.md5(oldpwd) .equals(SPUtils.get(app.getApp().getApplicationContext(), Constant.USERPASSWORD,""))){
             if (newpwd.equals(newpwd2)){
 
-                app.apiService.changePass((String)SPUtils.get(app.getApp().getApplicationContext(), Constant.USERID,""), MD5.md5(newpwd))
+                app.apiService.changePass(SomeUtil.getUserId(),Constant.DATAFUSION,MD5.md5(oldpwd),MD5.md5(newpwd))
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(new Subscriber<String>() {
@@ -86,6 +86,7 @@ public class ChangeCodeActivity extends BaseActivity {
                             @Override
                             public void onError(Throwable e) {
                                 LogUtil.d("changepass result error: "+e.toString());
+                                SomeUtil.checkHttpException(ChangeCodeActivity.this,e,rootview);
                             }
 
                             @Override
@@ -94,7 +95,7 @@ public class ChangeCodeActivity extends BaseActivity {
                                 if (s.contains("200")){
                                     SomeUtil.showSnackBar(rootview,"修改密码成功！");
 
-                                }else SomeUtil.showSnackBar(rootview,"修改密码失败！");
+                                }else SomeUtil.showSnackBar(rootview,"修改密码失败！"+s);
                             }
                         });
             }

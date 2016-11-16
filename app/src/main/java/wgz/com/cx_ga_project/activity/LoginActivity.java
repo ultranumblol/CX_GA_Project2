@@ -4,8 +4,8 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Build;
+import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.text.TextUtils;
 import android.view.View;
@@ -15,6 +15,7 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 import android.widget.ScrollView;
 
@@ -23,10 +24,10 @@ import com.jakewharton.rxbinding.widget.RxTextView;
 import com.uniview.airimos.util.MD5;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.Bind;
+import butterknife.ButterKnife;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
@@ -43,9 +44,9 @@ import wgz.com.cx_ga_project.util.SPBuild;
 import wgz.com.cx_ga_project.util.SPUtils;
 import wgz.com.cx_ga_project.util.SomeUtil;
 import wgz.datatom.com.utillibrary.util.LogUtil;
+import wgz.datatom.com.utillibrary.util.ToastUtil;
 
 import static wgz.com.cx_ga_project.base.Constant.DATAFUSION;
-import static wgz.com.cx_ga_project.base.Constant.GET_USER_HEAD;
 
 /**
  * 登陆
@@ -62,7 +63,10 @@ public class LoginActivity extends BaseActivity {
     ProgressBar progressLogin;
     @Bind(R.id.scroll_login_form)
     ScrollView scrollLoginForm;
+    @Bind(R.id.login_rootview)
+    FrameLayout rootview;
     private String userhead;
+
     @Override
     public int getLayoutId() {
         return R.layout.activity_login;
@@ -78,7 +82,7 @@ public class LoginActivity extends BaseActivity {
             public Boolean call(Integer integer) {
                 return integer == EditorInfo.IME_ACTION_DONE;
             }
-        }).throttleFirst(500,TimeUnit.MILLISECONDS)
+        }).throttleFirst(500, TimeUnit.MILLISECONDS)
                 .subscribe(new Action1<Integer>() {
                     @Override
                     public void call(Integer integer) {
@@ -86,7 +90,6 @@ public class LoginActivity extends BaseActivity {
                         attemptLogin();
                     }
                 });
-
 
 
         RxView.clicks(btnLogin)
@@ -144,7 +147,7 @@ public class LoginActivity extends BaseActivity {
         //所有的检查完成 判断是否能开始联网 还是弹出提示
         if (cancel) {
             focusView.requestFocus();
-        }else {
+        } else {
             httpLogin(username, MD5.md5(password));
             //LogUtil.d("md5 : " + MD5.md5(password));
         }
@@ -152,13 +155,14 @@ public class LoginActivity extends BaseActivity {
     }
 
     private void httpLogin(final String username, final String password) {
-        app.apiService.login2(username,password,DATAFUSION).compose(RxUtil.<String>applySchedulers())
+        app.apiService.login2(username, password, DATAFUSION).compose(RxUtil.<String>applySchedulers())
                 .subscribe(new Subscriber<String>() {
                     @Override
                     public void onStart() {
                         super.onStart();
                         showProgress(true);
                     }
+
                     @Override
                     public void onCompleted() {
 
@@ -166,16 +170,18 @@ public class LoginActivity extends BaseActivity {
 
                     @Override
                     public void onError(Throwable e) {
-                        SomeUtil.checkHttpException(getApplicationContext(),e,scrollLoginForm);
+                        SomeUtil.checkHttpException(getApplicationContext(), e, scrollLoginForm);
                         showProgress(false);
-                        LogUtil.d("login : "+e.toString());
+                        LogUtil.d("login : " + e.toString());
                     }
 
                     @Override
                     public void onNext(String s) {
-                       LogUtil.d("login : "+s);
-                        if (s.contains("\"code\":200")){
-                            app.apiService.login(username,MD5.md5("112233"))
+                        LogUtil.d("login : " + s);
+                       // ToastUtil.showLong(LoginActivity.this,s);
+                           // SomeUtil.showSnackBar(rootview,s);
+                        if (s.contains("\"code\":200")) {
+                            app.apiService.login(username, MD5.md5("112233"))
                                     .subscribeOn(Schedulers.io())
                                     .observeOn(AndroidSchedulers.mainThread())
                                     .subscribe(new Subscriber<UserInfo>() {
@@ -188,42 +194,39 @@ public class LoginActivity extends BaseActivity {
                                         @Override
                                         public void onError(Throwable e) {
                                             showProgress(false);
-                                            LogUtil.d("Login error:"+e.toString());
+                                            LogUtil.d("Login error:" + e.toString());
                                             //SomeUtil.checkHttpException(getApplicationContext(),e,scrollLoginForm);
                                         }
 
                                         @Override
                                         public void onNext(UserInfo userInfo) {
-                                            LogUtil.d("login result code:" +userInfo.getCode().toString());
-                                            LogUtil.d("login result :" +userInfo.getRes().toString());
-                                            if (userInfo.getCode().equals(200)){
+                                            LogUtil.d("login result code:" + userInfo.getCode().toString());
+                                            LogUtil.d("login result :" + userInfo.getRes().toString());
+                                            if (userInfo.getCode().equals(200)) {
                                                 showProgress(false);
 
-                                                SomeUtil.showSnackBar(scrollLoginForm,"登录成功！").setCallback(new Snackbar.Callback() {
+                                                SomeUtil.showSnackBar(scrollLoginForm, "登录成功！").setCallback(new Snackbar.Callback() {
                                                     @Override
                                                     public void onDismissed(Snackbar snackbar, int event) {
-                                                        startActivity(new Intent(LoginActivity.this,HomeActivity.class));
+                                                        startActivity(new Intent(LoginActivity.this, HomeActivity.class));
                                                         finish();
                                                     }
                                                 });
 
 
-
                                                 getuserhead(userInfo.getRes().get(0).getUserid());
-                                                saveUserInfo(userInfo.getRes().get(0),password);
+                                                saveUserInfo(userInfo.getRes().get(0), password);
                                                 getsub();
-                                            }
-                                            else {
-                                                SomeUtil.showSnackBar(scrollLoginForm,"用户名或密码错误！");
+                                            } else {
+                                                SomeUtil.showSnackBar(scrollLoginForm, "用户名或密码错误！");
                                                 showProgress(false);
                                             }
                                         }
                                     });
 
 
-                        }
-                        else{
-                            SomeUtil.showSnackBar(scrollLoginForm,"用户名或密码错误！");
+                        } else {
+                            SomeUtil.showSnackBar(scrollLoginForm, "用户名或密码错误！"+s);
                             showProgress(false);
 
                         }
@@ -242,13 +245,13 @@ public class LoginActivity extends BaseActivity {
 
                     @Override
                     public void onError(Throwable e) {
-                    SomeUtil.checkHttpException(app.getApp().getApplicationContext(),e,scrollLoginForm);
+                        SomeUtil.checkHttpException(app.getApp().getApplicationContext(), e, scrollLoginForm);
                     }
 
                     @Override
                     public void onNext(Subordinate subordinate) {
-                        LogUtil.d("subord size :"+subordinate.getResdown().size());
-                        if(subordinate.getResdown().size()>0){
+                        LogUtil.d("subord size :" + subordinate.getResdown().size());
+                        if (subordinate.getResdown().size() > 0) {
                             new SPBuild(getApplicationContext())
                                     .addData(Constant.ISLEADER, Boolean.TRUE)
                                     .build();
@@ -268,7 +271,7 @@ public class LoginActivity extends BaseActivity {
     }
 
     private void getuserhead(String userid) {
-        LogUtil.d("userid : "+userid);
+        LogUtil.d("userid : " + userid);
         app.apiService.getUserhead(userid).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<String>() {
@@ -279,14 +282,14 @@ public class LoginActivity extends BaseActivity {
 
                     @Override
                     public void onError(Throwable e) {
-                        LogUtil.d("getuserhead : "+e.toString());
+                        LogUtil.d("getuserhead : " + e.toString());
                     }
 
                     @Override
                     public void onNext(String s) {
                         //LogUtil.d("userhead : " + s);
-                        String s2 = s.replaceAll("\\\\","");
-                        s2.replaceAll("\"","");
+                        String s2 = s.replaceAll("\\\\", "");
+                        s2.replaceAll("\"", "");
                         LogUtil.d("userhead : " + s2);
                         userhead = s2;
                         saveUserHead();
@@ -295,7 +298,8 @@ public class LoginActivity extends BaseActivity {
 
 
     }
-    private void saveUserHead(){
+
+    private void saveUserHead() {
         new SPBuild(getApplicationContext())
                 .addData(Constant.USERHEAD, userhead)
                 .build();
@@ -303,8 +307,8 @@ public class LoginActivity extends BaseActivity {
     }
 
 
-    private void saveUserInfo(UserInfo.UserRes userRes,String password) {
-        LogUtil.d("userres : "+ userRes.toString());
+    private void saveUserInfo(UserInfo.UserRes userRes, String password) {
+        LogUtil.d("userres : " + userRes.toString());
         SPUtils.clear(getApplicationContext());
         // TODO: 2016/8/5 存储用户信息
         new SPBuild(getApplicationContext())
@@ -323,6 +327,7 @@ public class LoginActivity extends BaseActivity {
 
         return password.length() > 4;
     }
+
     @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
     private void showProgress(final boolean show) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
@@ -340,6 +345,13 @@ public class LoginActivity extends BaseActivity {
         } else {
             progressLogin.setVisibility(show ? View.VISIBLE : View.INVISIBLE);
         }
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        // TODO: add setContentView(...) invocation
+        ButterKnife.bind(this);
     }
 }
 
