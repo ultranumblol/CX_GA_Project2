@@ -204,7 +204,9 @@ public class LoginActivity extends BaseActivity {
                                             LogUtil.d("login result :" + userInfo.getRes().toString());
                                             if (userInfo.getCode().equals(200)) {
                                                 showProgress(false);
-
+                                                getsub();
+                                                saveUserInfo(userInfo.getRes().get(0), password);
+                                                getuserhead(userInfo.getRes().get(0).getUserid());
                                                 SomeUtil.showSnackBar(scrollLoginForm, "登录成功！").setCallback(new Snackbar.Callback() {
                                                     @Override
                                                     public void onDismissed(Snackbar snackbar, int event) {
@@ -214,9 +216,9 @@ public class LoginActivity extends BaseActivity {
                                                 });
 
 
-                                                getuserhead(userInfo.getRes().get(0).getUserid());
-                                                saveUserInfo(userInfo.getRes().get(0), password);
-                                                getsub();
+
+
+
                                             } else {
                                                 SomeUtil.showSnackBar(scrollLoginForm, "用户名或密码错误！");
                                                 showProgress(false);
@@ -248,20 +250,43 @@ public class LoginActivity extends BaseActivity {
                         SomeUtil.checkHttpException(app.getApp().getApplicationContext(), e, scrollLoginForm);
                     }
 
+                    // TODO: 2016/11/21  未完成 
                     @Override
                     public void onNext(Subordinate subordinate) {
                         LogUtil.d("subord size :" + subordinate.getResdown().size());
+                        LogUtil.d("upper :" + subordinate.getResup().get(0).toString());
                         if (subordinate.getResdown().size() > 0) {
                             new SPBuild(getApplicationContext())
                                     .addData(Constant.ISLEADER, Boolean.TRUE)
                                     .build();
+                            if (subordinate.getResup().get(0).getPolid().equals("null")){
+                                new SPBuild(getApplicationContext())
+                                        .addData(Constant.HASUPPER, Boolean.FALSE)
+                                        .build();
 
+                            }else {
+                                new SPBuild(getApplicationContext())
+                                        .addData(Constant.HASUPPER, Boolean.TRUE)
+                                        .build();
+                            }
                         } else {
                             new SPBuild(getApplicationContext())
                                     .addData(Constant.ISLEADER, Boolean.FALSE)
                                     .build();
+                            if (subordinate.getResup().get(0).getPolid().equals("null")){
+                                new SPBuild(getApplicationContext())
+                                        .addData(Constant.HASUPPER, Boolean.FALSE)
+                                        .build();
+                                LogUtil.d("save no upper");
 
+                            }else {
+                                new SPBuild(getApplicationContext())
+                                        .addData(Constant.HASUPPER, Boolean.TRUE)
+                                        .build();
+                                LogUtil.d("save have upper");
+                            }
                         }
+
 
 
                     }

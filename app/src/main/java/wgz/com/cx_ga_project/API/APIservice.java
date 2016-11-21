@@ -21,6 +21,8 @@ import wgz.com.cx_ga_project.entity.AppVersion;
 import wgz.com.cx_ga_project.entity.Apply;
 import wgz.com.cx_ga_project.entity.CloudTag;
 import wgz.com.cx_ga_project.entity.DatrixCreat;
+import wgz.com.cx_ga_project.entity.DepPeople;
+import wgz.com.cx_ga_project.entity.Deps;
 import wgz.com.cx_ga_project.entity.LeaveType;
 import wgz.com.cx_ga_project.entity.SICDetil;
 import wgz.com.cx_ga_project.entity.SICList;
@@ -73,8 +75,8 @@ public interface APIservice {
      * @return
      */
     @FormUrlEncoded
-    //@POST(DATRIX_BASE_URL + "api/cluster/tracker/file/create" + DATRIXUID)
-    @POST(DATRIX_BASE_URL + "api/cluster/tracker/file/create")
+    @POST(DATRIX_BASE_URL + "api/cluster/tracker/file/create" + DATRIXUID)
+   // @POST(DATRIX_BASE_URL + "api/cluster/tracker/file/create")
     @Headers("ACCESS-TOKEN:X7yABwjE20sUJLefATUFqU0iUs8mJPqEJo6iRnV63mI=")
     Observable<DatrixCreat> uploadFileWithRequestBodyTest(
             @Field("filename") String filename,
@@ -527,4 +529,32 @@ public interface APIservice {
                                                  @Field("key") String key
 
     );
+
+    /**
+     * 获取所有部门
+     * @return
+     */
+    @GET("appworkmanager/getAllDep")
+    Observable<Deps> getAllDep();
+
+    /**
+     * 获取部门人员
+     * @param depid
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("appworkmanager/getDepMember")
+    Observable<DepPeople> getDepMember(@Field("depid") String depid);
+
+    /**
+     * 设置上级
+     * @param policeid
+     * @param upperid
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("appworkmanager/setUpper")
+    Observable<String> setUpper(@Field("policeid") String policeid,
+            @Field("upperid") String upperid);
+
 }

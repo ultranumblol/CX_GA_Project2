@@ -495,7 +495,6 @@ public class NewFightActivity extends BaseActivity {
                                             }
                                         }).setNegativeButton("取消", null).show();
 
-                                        /**/
                                     }
                                 }).show();
 

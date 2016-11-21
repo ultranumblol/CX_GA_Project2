@@ -66,10 +66,10 @@ dependencies {
     compile 'com.lzp.floatingactionbutton:floatingactionbuttonplus:1.0.0'
     compile 'com.moxun:tagcloudlib:1.2.0'
     compile 'com.android.support:multidex:1.0.0'       //app分包，解决method大于64k
-    /*检测内存泄露*/
+   /* *//*检测内存泄露*//*
     debugCompile 'com.squareup.leakcanary:leakcanary-android:1.5'
     releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
-    testCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
+    testCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'*/
 
     testCompile 'junit:junit:4.12'
     compile files('libs/badgeview.jar')

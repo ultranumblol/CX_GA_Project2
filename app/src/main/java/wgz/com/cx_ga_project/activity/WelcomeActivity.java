@@ -56,9 +56,12 @@ public class WelcomeActivity extends BaseActivity {
                 .subscribe(new Subscriber<String>() {
                     @Override
                     public void onCompleted() {
-                        LogUtil.d("onCompleted!");
+                        //LogUtil.d("onCompleted!");
                         startActivity(new Intent(WelcomeActivity.this,HomeActivity.class));
                         saveinfo();
+
+
+
                         finish();
                     }
 

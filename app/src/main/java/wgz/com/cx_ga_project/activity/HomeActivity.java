@@ -41,6 +41,8 @@ import com.jude.rollviewpager.adapter.StaticPagerAdapter;
 import com.jude.rollviewpager.hintview.ColorPointHintView;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -52,9 +54,13 @@ import rx.schedulers.Schedulers;
 import wgz.com.cx_ga_project.R;
 import wgz.com.cx_ga_project.app;
 import wgz.com.cx_ga_project.base.Constant;
+import wgz.com.cx_ga_project.entity.AllDep;
 import wgz.com.cx_ga_project.entity.AppVersion;
+import wgz.com.cx_ga_project.entity.DepPeople;
+import wgz.com.cx_ga_project.entity.Deps;
 import wgz.com.cx_ga_project.service.NewJQMsgPush;
 import wgz.com.cx_ga_project.service.UpdataService;
+import wgz.com.cx_ga_project.util.RxUtil;
 import wgz.com.cx_ga_project.util.SPBuild;
 import wgz.com.cx_ga_project.util.SPUtils;
 import wgz.com.cx_ga_project.util.SomeUtil;
@@ -105,6 +111,9 @@ public class HomeActivity extends AppCompatActivity
     private JQReceiver receiver;
     private BadgeView badgeView;
     private boolean isleader = false;
+    private boolean hasupper = true;
+    private List<Deps.Re> deplist = new ArrayList<>();
+    private List<DepPeople.Re> deppeopleplist = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -161,6 +170,138 @@ public class HomeActivity extends AppCompatActivity
             idShenhe.setVisibility(View.GONE);
         }
         startService(new Intent(this, NewJQMsgPush.class));
+
+        hasupper = (boolean) SPUtils.get(app.getApp().getApplicationContext(), Constant.HASUPPER, true);
+        LogUtil.d("hasupper "+hasupper);
+        if (!hasupper){
+            showSetUpper();
+        }
+        // showSetUpper();
+
+
+    }
+
+    private void showSetUpper() {
+        app.apiService.getAllDep()
+        .compose(RxUtil.<Deps>applySchedulers())
+        .subscribe(new Subscriber<Deps>() {
+            @Override
+            public void onCompleted() {
+                final String[] parts = new String[deplist.size()];
+                final String[] depid = {""};
+                for (int i = 0; i < deplist.size(); i++) {
+                    parts[i] = deplist.get(i).getDepartSimplename();
+                }
+
+                final android.support.v7.app.AlertDialog.Builder builder =
+                        new android.support.v7.app.AlertDialog.Builder(HomeActivity.this);
+                builder.setTitle("还没有设置您的上级，是否现在设置？")
+                        .setPositiveButton("确认", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                builder.setTitle("请选择上级所在部门")
+                                        .setItems(parts, new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                for (int i = 0 ; i<deplist.size() ; i++){
+                                                    if (parts[which].equals(deplist.get(i).getDepartSimplename())){
+                                                        depid[0] = deplist.get(i).getDepartmentid();
+                                                    }
+                                                }
+                                                LogUtil.d("depid:"+depid[0]);
+                                                app.apiService.getDepMember(depid[0])
+                                                        .compose(RxUtil.<DepPeople>applySchedulers())
+                                                        .subscribe(new Subscriber<DepPeople>() {
+                                                            @Override
+                                                            public void onCompleted() {
+                                                                final String[] peoples = new String[deppeopleplist.size()];
+                                                                final String[] upperid = {""};
+                                                                for (int i = 0; i < deppeopleplist.size(); i++) {
+                                                                    peoples[i] = deppeopleplist.get(i).getPolicename();
+                                                                }
+                                                                builder.setTitle("请选择上级")
+                                                                        .setItems(peoples, new DialogInterface.OnClickListener() {
+                                                                            @Override
+                                                                            public void onClick(DialogInterface dialog, int which) {
+                                                                            for (int i = 0 ; i<deppeopleplist.size(); i++){
+                                                                                if (peoples[i].equals(deppeopleplist.get(i).getPolicename()))
+                                                                                {
+                                                                                    upperid[0] = deppeopleplist.get(i).getPolid();
+                                                                                }
+                                                                            }
+                                                                                app.apiService.setUpper(SomeUtil.getUserId(),upperid[0])
+                                                                                        .compose(RxUtil.<String>applySchedulers())
+                                                                                        .subscribe(new Subscriber<String>() {
+                                                                                            @Override
+                                                                                            public void onCompleted() {
+
+                                                                                            }
+
+                                                                                            @Override
+                                                                                            public void onError(Throwable e) {
+
+                                                                                            }
+
+                                                                                            @Override
+                                                                                            public void onNext(String s) {
+                                                                                                LogUtil.d("result:"+s);
+                                                                                                if (s.contains("200")){
+                                                                                                    SomeUtil.showSnackBar(homeRootView,"设置上级成功！");
+
+                                                                                                }else {
+                                                                                                    SomeUtil.showSnackBar(homeRootView,"设置上级失败！");
+                                                                                                }
+                                                                                            }
+                                                                                        });
+
+                                                                            }
+                                                                        }).setNegativeButton("取消",null).setPositiveButton(null,null).show();
+
+
+
+                                                            }
+
+                                                            @Override
+                                                            public void onError(Throwable e) {
+                                                                LogUtil.d("depPeople error:"+e.toString());
+                                                            }
+
+                                                            @Override
+                                                            public void onNext(DepPeople s) {
+                                                                deppeopleplist = s.getRes();
+                                                            }
+                                                        });
+                                            }
+                                        }).setNegativeButton("取消",null).setPositiveButton(null,null)
+                                        .show();
+                            }
+                        })
+                        .setNegativeButton("稍后设置",null)
+                        .show();
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                SomeUtil.checkHttpException(HomeActivity.this,e,homeRootView);
+            }
+
+            @Override
+            public void onNext(Deps s) {
+
+
+                deplist = s.getRes();
+                LogUtil.d("deplist :"+deplist.toString());
+            }
+        });
+
+
+
+        //app.apiService.getDepMember();
+
+
+
+
     }
 
     @OnClick({R.id.id_fighttrack,R.id.id_tagcloudlog, R.id.fab, R.id.to_jiechujing, R.id.id_toWorkLog, R.id.id_myscheduling, R.id.id_myApply, R.id.id_shenhe, R.id.id_xiashu})
