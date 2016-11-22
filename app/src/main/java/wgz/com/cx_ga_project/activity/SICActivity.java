@@ -74,12 +74,7 @@ public class SICActivity extends BaseActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        // TODO: add setContentView(...) invocation
-        ButterKnife.bind(this);
-    }
+
 
     @OnClick({R.id.sic_data_input, R.id.sic_pic_input, R.id.sic_video_input})
     public void onClick(View view) {

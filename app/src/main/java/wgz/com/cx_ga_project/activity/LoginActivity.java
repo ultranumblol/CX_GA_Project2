@@ -86,7 +86,7 @@ public class LoginActivity extends BaseActivity {
                 .subscribe(new Action1<Integer>() {
                     @Override
                     public void call(Integer integer) {
-                        // TODO: 2016/8/18 隐藏软键盘
+                        // 2016/8/18 隐藏软键盘
                         attemptLogin();
                     }
                 });
@@ -105,7 +105,7 @@ public class LoginActivity extends BaseActivity {
 
     private void addUsernameAutoComplete() {
 
-        // TODO: 2016/8/5  系统读入内容帮助用户输入用户名
+        //  系统读入内容帮助用户输入用户名
         //系统读入内容帮助用户输入用户名
         ArrayList<String> arrayList = new ArrayList<>();
        /* for (int i = 0; i < 9; i++) {
@@ -181,7 +181,7 @@ public class LoginActivity extends BaseActivity {
                        // ToastUtil.showLong(LoginActivity.this,s);
                            // SomeUtil.showSnackBar(rootview,s);
                         if (s.contains("\"code\":200")) {
-                            app.apiService.login(username, MD5.md5("112233"))
+                            app.apiService.login(username)
                                     .subscribeOn(Schedulers.io())
                                     .observeOn(AndroidSchedulers.mainThread())
                                     .subscribe(new Subscriber<UserInfo>() {
@@ -250,7 +250,6 @@ public class LoginActivity extends BaseActivity {
                         SomeUtil.checkHttpException(app.getApp().getApplicationContext(), e, scrollLoginForm);
                     }
 
-                    // TODO: 2016/11/21  未完成 
                     @Override
                     public void onNext(Subordinate subordinate) {
                         LogUtil.d("subord size :" + subordinate.getResdown().size());
@@ -259,34 +258,29 @@ public class LoginActivity extends BaseActivity {
                             new SPBuild(getApplicationContext())
                                     .addData(Constant.ISLEADER, Boolean.TRUE)
                                     .build();
-                            if (subordinate.getResup().get(0).getPolid().equals("null")){
-                                new SPBuild(getApplicationContext())
-                                        .addData(Constant.HASUPPER, Boolean.FALSE)
-                                        .build();
 
-                            }else {
-                                new SPBuild(getApplicationContext())
-                                        .addData(Constant.HASUPPER, Boolean.TRUE)
-                                        .build();
-                            }
                         } else {
                             new SPBuild(getApplicationContext())
                                     .addData(Constant.ISLEADER, Boolean.FALSE)
                                     .build();
-                            if (subordinate.getResup().get(0).getPolid().equals("null")){
+                        }
+                        try {
+                            if (subordinate.getResup().get(0).getPolid()==null&&subordinate.getResup().get(0).getPolid().equals("null")){
                                 new SPBuild(getApplicationContext())
                                         .addData(Constant.HASUPPER, Boolean.FALSE)
                                         .build();
-                                LogUtil.d("save no upper");
 
                             }else {
                                 new SPBuild(getApplicationContext())
                                         .addData(Constant.HASUPPER, Boolean.TRUE)
                                         .build();
-                                LogUtil.d("save have upper");
                             }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            new SPBuild(getApplicationContext())
+                                    .addData(Constant.HASUPPER, Boolean.FALSE)
+                                    .build();
                         }
-
 
 
                     }
@@ -335,14 +329,15 @@ public class LoginActivity extends BaseActivity {
     private void saveUserInfo(UserInfo.UserRes userRes, String password) {
         LogUtil.d("userres : " + userRes.toString());
         SPUtils.clear(getApplicationContext());
-        // TODO: 2016/8/5 存储用户信息
+        // 存储用户信息
         new SPBuild(getApplicationContext())
                 .addData(Constant.ISLOGIN, Boolean.TRUE)
                 .addData(Constant.USERID, userRes.getUserid())//警员id
                 .addData(Constant.USERNAME, userRes.getPolicename())//警员姓名
                 .addData(Constant.USERPASSWORD, password)//警员密码
+                .addData(Constant.DEPARTID,userRes.getOfficecode())//部门id
+                .addData(Constant.DEPARTNAME,userRes.getOfficecodename())//部门名称
                 //.addData(Constant.USERDATRIXID, userRes.getDatrixid())//警员Datrix id
-                .addData(Constant.USERPHONENUM, userRes.getPphonenum())//警员电话
                 .addData(Constant.USEROFFICENAME, userRes.getOfficecodename())//警员办公地点
                 .addData(Constant.LOGINTIME, System.currentTimeMillis())//登陆时间
                 .build();
@@ -372,11 +367,5 @@ public class LoginActivity extends BaseActivity {
         }
     }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        // TODO: add setContentView(...) invocation
-        ButterKnife.bind(this);
-    }
 }
 

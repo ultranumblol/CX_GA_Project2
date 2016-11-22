@@ -46,7 +46,6 @@ public class AnimatorOnSubscribe implements Observable.OnSubscribe<String> {
                 long dTime = System.currentTimeMillis() - lastTime;
                 LogUtil.d("dTime= " + dTime + " default: " + mTimeDifference);
                 LogUtil.d("isLogin: "+isLogin);
-                // TODO: 2016/8/19 是否登陆的判断先写为true
                 if (isLogin) {
                     if (dTime < mTimeDifference) {
                         subscriber.onCompleted();

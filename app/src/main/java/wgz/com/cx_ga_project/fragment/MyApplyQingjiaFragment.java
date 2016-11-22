@@ -200,7 +200,7 @@ public class MyApplyQingjiaFragment extends BaseFragment implements SwipeRefresh
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (data == null)
             return;
-        // TODO: 2016/10/21 刷新
+
         if (requestCode == 1001) {
             String result = data.getStringExtra("result");
             if (result.equals("refresh")){

@@ -297,7 +297,7 @@ public class SICLogDetilActivity extends BaseActivity {
 
     @OnClick(R.id.siclog)
     public void onClick() {
-        // TODO: 2016/11/8 添加图片视频
+        //  添加图片视频
         String[] titles = new String[]{"添加图片", "添加视频"};
         AlertDialog.Builder builder = new AlertDialog.Builder(SICLogDetilActivity.this);
         builder.setTitle("请选择要添加的附件")
@@ -337,7 +337,7 @@ public class SICLogDetilActivity extends BaseActivity {
             if (resultCode == 2) {
                 if (data.getStringExtra("result").equals("addpic")) {
 
-                    // TODO: 2016/11/8 设置高度
+                    //  设置高度
                     if (NewPicpaths.size()+paths.size()>3){
 
                         ViewGroup.LayoutParams lp;

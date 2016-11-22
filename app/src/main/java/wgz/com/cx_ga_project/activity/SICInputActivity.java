@@ -156,7 +156,7 @@ public class SICInputActivity extends BaseActivity {
                 .subscribe(new Action1<Void>() {
                     @Override
                     public void call(Void aVoid) {
-                        // TODO: 2016/11/8 添加图片视频
+                        // 添加图片视频
                         String[] titles = new String[]{"添加图片", "添加视频"};
                         AlertDialog.Builder builder = new AlertDialog.Builder(SICInputActivity.this);
                         builder.setTitle("请选择要添加的附件")
@@ -510,10 +510,4 @@ public class SICInputActivity extends BaseActivity {
 
     }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        // TODO: add setContentView(...) invocation
-        ButterKnife.bind(this);
-    }
 }

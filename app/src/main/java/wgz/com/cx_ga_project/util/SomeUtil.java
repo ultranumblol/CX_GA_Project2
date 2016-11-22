@@ -414,6 +414,17 @@ public class SomeUtil {
         return (String) SPUtils.get(app.getApp().getApplicationContext(), Constant.USERID, "未知");
     }
 
+    public static String getDepartId() {
+
+        return (String) SPUtils.get(app.getApp().getApplicationContext(), Constant.DEPARTID, "未知");
+    }
+    public static String getDepartName() {
+
+        return (String) SPUtils.get(app.getApp().getApplicationContext(), Constant.DEPARTNAME, "未知");
+    }
+
+
+
     public static int getNewJQMSgCount() {
         return (int) SPUtils.get(app.getApp().getApplicationContext(), Constant.NEWJQCOUNT, 0);
 

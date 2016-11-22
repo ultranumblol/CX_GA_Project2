@@ -20,6 +20,7 @@ import com.jakewharton.rxbinding.view.RxView;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.Bind;
+import butterknife.ButterKnife;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
@@ -29,7 +30,6 @@ import wgz.com.cx_ga_project.app;
 import wgz.com.cx_ga_project.base.BaseActivity;
 import wgz.com.cx_ga_project.base.RxBus;
 import wgz.com.cx_ga_project.util.SomeUtil;
-import wgz.datatom.com.utillibrary.util.LogUtil;
 
 import static wgz.com.cx_ga_project.base.Constant.APPROVAL_PASS;
 import static wgz.com.cx_ga_project.base.Constant.APPROVAL_UNPASS;
@@ -90,6 +90,10 @@ public class ApprovalDetilActivity extends BaseActivity {
     TextView userName;
     @Bind(R.id.userName_jiaban)
     TextView userNameJiaban;
+    @Bind(R.id.jingjia_depart)
+    TextView jingjiaDepart;
+    @Bind(R.id.jiaban_depart)
+    TextView jiabanDepart;
     private String mId = "";
 
     @Override
@@ -141,10 +145,9 @@ public class ApprovalDetilActivity extends BaseActivity {
                 detilLeaveStarttime.setText(bundle.getString("starttime"));
                 detilLeaveEndtime.setText(bundle.getString("endtime"));
 
-                String days=getResources().getString(R.string.days);
-                String day = String.format(days,bundle.getString("days"));
+                String days = getResources().getString(R.string.days);
+                String day = String.format(days, bundle.getString("days"));
                 detilLeaveDayscount.setText(day);
-
 
 
                 detilLeaveReason.setText(bundle.getString("content"));
@@ -193,7 +196,7 @@ public class ApprovalDetilActivity extends BaseActivity {
 
                                     @Override
                                     public void onError(Throwable e) {
-                                        SomeUtil.checkHttpException(ApprovalDetilActivity.this,e,rootview);
+                                        SomeUtil.checkHttpException(ApprovalDetilActivity.this, e, rootview);
                                     }
 
                                     @Override
@@ -272,4 +275,10 @@ public class ApprovalDetilActivity extends BaseActivity {
                 }).setNegativeButton("取消", null).show();
     }
 
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        // TODO: add setContentView(...) invocation
+        ButterKnife.bind(this);
+    }
 }

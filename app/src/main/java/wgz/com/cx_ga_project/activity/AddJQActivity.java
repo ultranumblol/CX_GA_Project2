@@ -119,9 +119,8 @@ public class AddJQActivity extends BaseActivity {
     }
 
     private void addjq() {
-        // TODO: 2016/10/31 部门id换成动态
         app.jqAPIService.uploadJqMsg(SomeUtil.getJQId(), SomeUtil.getTASKId(), SomeUtil.getUserId(),
-                contenttext.getText().toString(), SomeUtil.getSysTime(), "", "", "", "532301000000")
+                contenttext.getText().toString(), SomeUtil.getSysTime(), "", "", "", SomeUtil.getDepartId())
                 .compose(RxUtil.<String>applySchedulers())
                 .subscribe(new Subscriber<String>() {
                     @Override
@@ -153,14 +152,14 @@ public class AddJQActivity extends BaseActivity {
                 });
 
 
-        // TODO: 2016/10/28 上传警情文字信息
+
     }
 
     private void addjqAndpic(String fileid, final List<String> ids) {
 
         final int k = ids.size() - 1;
         app.jqAPIService.uploadJqMsg(SomeUtil.getJQId(), SomeUtil.getTASKId(), SomeUtil.getUserId(),
-                contenttext.getText().toString(), SomeUtil.getSysTime(), "", "", "", "532301000000")
+                contenttext.getText().toString(), SomeUtil.getSysTime(), "", "", "", SomeUtil.getDepartId())
                 .compose(RxUtil.<String>applySchedulers())
                 .subscribe(new Subscriber<String>() {
                     @Override
@@ -218,7 +217,7 @@ public class AddJQActivity extends BaseActivity {
                     }
                 });
 
-        // TODO: 2016/10/28 上传警情文字图片信息
+
     }
 
     private List<String> initdata() {
@@ -270,10 +269,4 @@ public class AddJQActivity extends BaseActivity {
 
     }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        // TODO: add setContentView(...) invocation
-        ButterKnife.bind(this);
-    }
 }

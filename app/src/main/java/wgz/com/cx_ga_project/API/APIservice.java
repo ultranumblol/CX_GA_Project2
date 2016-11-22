@@ -305,13 +305,11 @@ public interface APIservice {
      * 登录
      *
      * @param username
-     * @param pwd
      * @return
      */
     @FormUrlEncoded
     @POST("applogin/appLogin")
-    Observable<UserInfo> login(@Field("username") String username,
-                               @Field("pwd") String pwd);
+    Observable<UserInfo> login(@Field("username") String username);
 
 
     /**

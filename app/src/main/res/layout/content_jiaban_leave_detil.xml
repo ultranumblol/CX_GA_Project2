@@ -70,10 +70,12 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="---"
+                    android:id="@+id/jingjia_depart"
                     android:layout_marginLeft="14dp"
                     android:layout_toRightOf="@id/userPic"
                     android:layout_marginTop="8dp"
                     android:layout_below="@id/userName"
+                    android:visibility="invisible"
 
                     />
             </RelativeLayout>
@@ -274,7 +276,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="18dp"
-            android:text="邦德"
+            android:text="---"
             android:textColor="@color/blueviolet"
             android:layout_marginTop="8dp"
             android:layout_marginLeft="14dp"
@@ -284,7 +286,9 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="部门:特工部"
+            android:text="---"
+            android:visibility="invisible"
+            android:id="@+id/jiaban_depart"
             android:layout_marginLeft="14dp"
             android:layout_toRightOf="@id/userPic_jiaban"
             android:layout_marginTop="8dp"

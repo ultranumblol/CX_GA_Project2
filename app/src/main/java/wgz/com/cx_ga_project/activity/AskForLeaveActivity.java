@@ -154,7 +154,7 @@ public class AskForLeaveActivity extends BaseActivity {
                         pvOptions.setCyclic(false, false, false);
                         //设置默认选中的项目
                         //监听确定选择按钮
-                        pvOptions.setSelectOptions(0, 1, 0);
+                        pvOptions.setSelectOptions(0, 0, 0);
                         pvOptions.setOnoptionsSelectListener(new OptionsPickerView.OnOptionsSelectListener() {
                             @Override
                             public void onOptionsSelect(int options1, int option2, int options3) {
@@ -267,7 +267,7 @@ public class AskForLeaveActivity extends BaseActivity {
             return;
         }
 
-        // TODO: 2016/8/5 提交请假申请
+        // 2016/8/5 提交请假申请
         app.apiService.upLoadLeave("leaveApply", stime, etime, mLeaveReason.getText().toString(),
                 SomeUtil.getUserId(), curredate, list.get(0).getPolid(),valueCode, mLeaveDaycount.getText().toString())
                 .subscribeOn(Schedulers.io())

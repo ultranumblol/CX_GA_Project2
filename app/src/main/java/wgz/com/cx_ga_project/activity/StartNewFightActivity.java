@@ -129,8 +129,8 @@ public class StartNewFightActivity extends BaseActivity {
     private void initdata() {
         adapter.clear();
         data.clear();
-        // TODO: 2016/11/14 部门id
-        app.jqAPIService.getNewJqlist(SomeUtil.getUserId(),"532301000000")
+        //  部门id
+        app.jqAPIService.getNewJqlist(SomeUtil.getUserId(),SomeUtil.getDepartId())
                 .compose(RxUtil.<NewJQ>applySchedulers())
                 .subscribe(new Subscriber<NewJQ>() {
                     @Override

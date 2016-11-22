@@ -133,12 +133,7 @@ public class WorkLogCloudActivity extends BaseActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        // TODO: add setContentView(...) invocation
-        ButterKnife.bind(this);
-    }
+
 
     @OnClick({R.id.shoudong_tag, R.id.peizhi_tag})
     public void onClick(View view) {

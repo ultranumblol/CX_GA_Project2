@@ -4,6 +4,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.design.widget.FloatingActionButton;
@@ -12,6 +13,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -84,8 +86,8 @@ public class CamPlayerActivity extends BaseActivity implements KeepaliveService.
     FloatingActionButton fabLeft;
     @Bind(R.id.fab_down)
     FloatingActionButton fabDown;
-    @Bind(R.id.toolbar)
-    Toolbar toolbar;
+   /* @Bind(R.id.toolbar)
+    Toolbar toolbar;*/
     @Bind(R.id.video_view)
     SurfaceView mSurfaceView;
     @Bind(R.id.content_cam_player)
@@ -114,12 +116,30 @@ public class CamPlayerActivity extends BaseActivity implements KeepaliveService.
 
     @Override
     public void initView() {
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON, WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON); setContentView( R.layout.activity_cam_player);
         dologin();
+        getWindowManager().getDefaultDisplay().getWidth();
+        if (this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE){
+            mSurfaceView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.MATCH_PARENT));
+            fabUp.setVisibility(View.INVISIBLE);
+            fabDown.setVisibility(View.INVISIBLE);
+            fabLeft.setVisibility(View.INVISIBLE);
+            fabRight.setVisibility(View.INVISIBLE);
+
+        }
+        else if (this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT){
+
+
+            mSurfaceView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,getWindowManager().getDefaultDisplay().getHeight()/3));
+
+        }
+
         mSurfaceView.getHolder().addCallback(new MySurfaceCallback());
-        toolbar.setTitle("监控播放");
+
+       /* toolbar.setTitle("监控播放");
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
+*/
         Intent i  = getIntent();
         mCameraCode = i.getStringExtra("camid");
         LogUtil.d("mCameraCode : "+mCameraCode);
@@ -243,7 +263,8 @@ public class CamPlayerActivity extends BaseActivity implements KeepaliveService.
     public void onLoginResult(long errorCode, String errorDesc) {
         //成功为0，其余为失败错误码
         if (errorCode == 0) {
-            SomeUtil.showSnackBar(rootview, "连接成功！可以查看摄像头");
+            //SomeUtil.showSnackBar(rootview, "连接成功！可以查看摄像头");
+            startLive(mCameraCode);
         } else {
             SomeUtil.showSnackBar(rootview, "登录失败：" + errorCode + "," + errorDesc);
         }
@@ -251,12 +272,7 @@ public class CamPlayerActivity extends BaseActivity implements KeepaliveService.
 
     }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        // TODO: add setContentView(...) invocation
-        ButterKnife.bind(this);
-    }
+
 
     @OnClick({R.id.fab_up, R.id.fab_left, R.id.fab_right, R.id.fab_down,R.id.id_replay_starttime,R.id.id_replay_endtime})
     public void onClick(View view) {

@@ -158,10 +158,5 @@ public class ScrollingActivity extends BaseActivity {
         v.startAnimation(alphaAnimation);
     }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        // TODO: add setContentView(...) invocation
-        ButterKnife.bind(this);
-    }
+
 }

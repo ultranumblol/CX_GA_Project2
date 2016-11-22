@@ -216,7 +216,7 @@ public class AddWorkLogActivity extends BaseActivity {
         }
     }
 
-    // TODO: 2016/10/13 循环取ids值上传
+    // 2016/10/13 循环取ids值上传
     private void addsummaryPic(final String fileid, final List<String> ids) {
         LogUtil.d(" addwork log ids :" + ids.toString());
         final int k = ids.size() - 1;
@@ -366,10 +366,5 @@ public class AddWorkLogActivity extends BaseActivity {
 
     }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        // TODO: add setContentView(...) invocation
-        ButterKnife.bind(this);
-    }
+
 }

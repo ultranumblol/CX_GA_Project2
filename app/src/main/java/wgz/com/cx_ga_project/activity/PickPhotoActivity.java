@@ -141,7 +141,7 @@ public class PickPhotoActivity extends BaseActivity {
         int id = item.getItemId();
         //noinspection SimplifiableIfStatement
         if (id == R.id.uploadpic_finish) {
-            // TODO: 2016/8/16 设置返回图片地址
+            //  设置返回图片地址
             List<String> paths = new ArrayList<>();
 
             try {

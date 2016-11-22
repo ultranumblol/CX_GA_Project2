@@ -39,4 +39,8 @@ public class Constant {
     public static final String JQID = "jqid";
     public static final String TASKID = "taskid";
     public static final String DATAFUSION = "datafusion";
+    public static final String DEPARTNAME = "departname";
+    public static final String DEPARTID = "departID";
+
+
 }

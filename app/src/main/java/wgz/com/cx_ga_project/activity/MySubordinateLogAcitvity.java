@@ -250,12 +250,7 @@ public class MySubordinateLogAcitvity extends BaseActivity {
         });
     }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        // TODO: add setContentView(...) invocation
-        ButterKnife.bind(this);
-    }
+
 
     /**
      * 点击某个日期回调
@@ -375,13 +370,13 @@ public class MySubordinateLogAcitvity extends BaseActivity {
         int id = item.getItemId();
         //noinspection SimplifiableIfStatement
         if (id == R.id.sub_timebank) {
-            // TODO: 2016/8/9 时间银行功能
+            //  时间银行功能
             //SomeUtil.showSnackBar(mRootview, "开发中。。。");
             startActivity(new Intent(this,TimeBankActivity.class).putExtra("policename",policename).putExtra("policeid",policeid));
             return true;
         }
         if (id == R.id.sub_cloudtag) {
-            // TODO: 2016/8/9 时间银行功能
+            //  时间银行功能
             //SomeUtil.showSnackBar(mRootview, "开发中。。。");
             startActivity(new Intent(this,WorkLogCloudActivity.class)
                     .putExtra("policename",policename).putExtra("policeid",policeid));

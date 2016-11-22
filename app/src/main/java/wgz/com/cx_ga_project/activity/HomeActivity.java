@@ -143,7 +143,7 @@ public class HomeActivity extends AppCompatActivity
         navView.setItemIconTintList(csl);
         //LogUtil.d("userhead_url: " +SPUtils.get(app.getApp().getApplicationContext(), Constant.USERHEAD, ""));
         ImageView userhead = (ImageView) navView.getHeaderView(0).findViewById(R.id.imageView);
-        // TODO: 2016/9/18 获取用户头像地址
+        // 2016/9/18 获取用户头像地址
         //String userheadurl = "http://"+SPUtils.get(app.getApp().getApplicationContext(), Constant.USERHEAD, "");
         //LogUtil.d("userheadurl : "+userheadurl);
         Glide.with(this)
@@ -157,7 +157,7 @@ public class HomeActivity extends AppCompatActivity
         TextView username = (TextView) navView.getHeaderView(0).findViewById(R.id.username_head);
         TextView userdepartment = (TextView) navView.getHeaderView(0).findViewById(R.id.departmant_head);
         username.setText((String) SPUtils.get(app.getApp().getApplicationContext(), Constant.USERNAME, "未知"));
-        userdepartment.setText((String) SPUtils.get(app.getApp().getApplicationContext(), Constant.USEROFFICENAME, "未知"));
+        userdepartment.setText(SomeUtil.getDepartName());
 
         // startService(new Intent(this, GetNewMsgService.class));
 
@@ -224,11 +224,11 @@ public class HomeActivity extends AppCompatActivity
                                                                             @Override
                                                                             public void onClick(DialogInterface dialog, int which) {
                                                                             for (int i = 0 ; i<deppeopleplist.size(); i++){
-                                                                                if (peoples[i].equals(deppeopleplist.get(i).getPolicename()))
+                                                                                if (peoples[which].equals(deppeopleplist.get(i).getPolicename()))
                                                                                 {
                                                                                     upperid[0] = deppeopleplist.get(i).getPolid();
                                                                                 }
-                                                                            }
+                                                                            } LogUtil.d("upperid: "+upperid[0]);
                                                                                 app.apiService.setUpper(SomeUtil.getUserId(),upperid[0])
                                                                                         .compose(RxUtil.<String>applySchedulers())
                                                                                         .subscribe(new Subscriber<String>() {
@@ -255,7 +255,7 @@ public class HomeActivity extends AppCompatActivity
                                                                                         });
 
                                                                             }
-                                                                        }).setNegativeButton("取消",null).setPositiveButton(null,null).show();
+                                                                        }).setNegativeButton("取消",null).show();
 
 
 
@@ -329,11 +329,11 @@ public class HomeActivity extends AppCompatActivity
                 startActivity(new Intent(HomeActivity.this, MySubordinateActivity.class));
                 break;
             case R.id.fab:
-                // TODO: 2016/8/3 社会信息采集功能
+                //  社会信息采集功能
                 startActivity(new Intent(HomeActivity.this, SICTypeActivity.class));
                 break;
             case R.id.to_jiechujing:
-                // TODO: 2016/8/5 接处警作战功能
+                //接处警作战功能
                 LogUtil.d("count :" + SomeUtil.getNewJQMSgCount());
                 new SPBuild(getApplicationContext())
                         .addData(Constant.NEWJQCOUNT, 0).build();
@@ -492,7 +492,7 @@ public class HomeActivity extends AppCompatActivity
                                 int a = Integer.parseInt(code);
                                 LogUtil.d("serviceCode : " + a);
                                 if (a > versionCode) {
-                                    // TODO: 2016/10/10 下载更新
+                                    //  下载更新
                                     String url = appVersion.getRes().get(0).getApkUrl();
                                     url.replaceAll("\\\\", "");
                                     new SPBuild(getApplicationContext())
@@ -540,7 +540,7 @@ public class HomeActivity extends AppCompatActivity
 
 
         } else if (id == R.id.nav_saoyisao) {
-            // TODO: 2016/9/3 扫一扫
+            //  扫一扫
             startActivityForResult(new Intent(HomeActivity.this, SaoYiSaoActivity.class), 9);
 
         }

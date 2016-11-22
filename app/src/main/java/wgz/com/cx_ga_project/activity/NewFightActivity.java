@@ -538,8 +538,8 @@ public class NewFightActivity extends BaseActivity {
     }
 
     private void ShowDialog() {
-        // TODO: 2016/11/1 部门id替换 日期替换sendtime
-        app.jqAPIService.getPeoOnduty("532301000000", OtherUtils.formatDate(SomeUtil.getStrToDate(sendtime)))
+        //  部门id替换 日期替换sendtime
+        app.jqAPIService.getPeoOnduty(SomeUtil.getDepartId(), OtherUtils.formatDate(SomeUtil.getStrToDate(sendtime)))
                 .compose(RxUtil.<JQOnDutyPeople>applySchedulers())
                 .subscribe(new Subscriber<JQOnDutyPeople>() {
                     @Override
@@ -618,8 +618,8 @@ public class NewFightActivity extends BaseActivity {
     }
 
     private void addCjPerson(String[] lid) {
-        // TODO: 2016/11/1 部门id替换
-        app.jqAPIService.addCjPerson(taskid, "532301000000", lid)
+
+        app.jqAPIService.addCjPerson(taskid, SomeUtil.getDepartId(), lid)
                 .compose(RxUtil.<String>applySchedulers())
                 .subscribe(new Action1<String>() {
                     @Override
@@ -749,12 +749,7 @@ public class NewFightActivity extends BaseActivity {
         }
     }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        // TODO: add setContentView(...) invocation
-        ButterKnife.bind(this);
-    }
+
 
     class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.MyViewHolder> {
 

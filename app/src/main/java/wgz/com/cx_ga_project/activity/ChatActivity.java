@@ -512,7 +512,7 @@ public class ChatActivity extends BaseActivity {
                                 uploadPrg.setVisibility(View.GONE);
                                 uploadBg.setVisibility(View.GONE);
                                 uploadProtext.setVisibility(View.GONE);
-                                // TODO: 2016/9/12 获取新消息 删除本地 换成服务器请求的
+                                //2016/9/12 获取新消息 删除本地 换成服务器请求的
                                 //adapter.getHeader()
                                 //getNewmsg();
                                 //LogUtil.d("recyclerview count:"+recyclerview.getChildCount());
@@ -713,10 +713,5 @@ public class ChatActivity extends BaseActivity {
         }
     }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        // TODO: add setContentView(...) invocation
-        ButterKnife.bind(this);
-    }
+
 }
