@@ -2,7 +2,6 @@ package wgz.com.cx_ga_project.activity;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
 import android.view.Menu;
@@ -20,14 +19,13 @@ import wgz.com.cx_ga_project.base.RxBus;
 import wgz.com.cx_ga_project.entity.ChatPic;
 import wgz.com.cx_ga_project.fragment.PhotoPagerFragment;
 import wgz.com.cx_ga_project.fragment.PhotoPickerFragment;
-import wgz.com.cx_ga_project.util.SomeUtil;
 import wgz.datatom.com.utillibrary.util.LogUtil;
 
 /**
  * 选择图片
  * Created by wgz on 2016/8/30.
  */
-public class PickPhotoActivity extends BaseActivity {
+public class PickPhotoActivity2 extends BaseActivity {
     public static final String HTTP_URL = "http_url";
     @Bind(R.id.toolbar)
     Toolbar toolbar;
@@ -115,7 +113,7 @@ public class PickPhotoActivity extends BaseActivity {
      * @param url-服务器地址
      */
     public static void actionStart(Context context, int maxSelectCount, String searchPath, String url) {
-        Intent intent = new Intent(context, PickPhotoActivity.class);
+        Intent intent = new Intent(context, PickPhotoActivity2.class);
         intent.putExtra(PhotoPickerFragment.EXTRA_SELECT_COUNT, maxSelectCount);
         intent.putExtra(PhotoPickerFragment.EXTRA_DEFAULT_SELECTED_LIST, searchPath);
         intent.putExtra(HTTP_URL, url);
@@ -151,23 +149,7 @@ public class PickPhotoActivity extends BaseActivity {
                 LogUtil.d("error :"+e.toString());
                 paths.clear();
             }
-            //RxBus.getDefault().post(new ChatPic(paths));
-            setResult(0, new Intent(PickPhotoActivity.this, AddJQActivity.class).
-                    putStringArrayListExtra("paths", (ArrayList<String>) paths)
-                    .putExtra("result", "addpic"));
-
-            setResult(1, new Intent(PickPhotoActivity.this, AddWorkLogActivity.class).
-                    putStringArrayListExtra("paths", (ArrayList<String>) paths)
-                    .putExtra("result", "addpic"));
-
-            /*setResult(7, new Intent(PickPhotoActivity.this, ChatActivity.class).
-                    putStringArrayListExtra("paths", (ArrayList<String>) paths)
-                    .putExtra("result", "addpic"));*/
-
-            setResult(9, new Intent(PickPhotoActivity.this, SICInputActivity.class).
-                    putStringArrayListExtra("paths", (ArrayList<String>) paths)
-                    .putExtra("result", "addpic"));
-
+            RxBus.getDefault().post(new ChatPic(paths));
             LogUtil.d("paths== "+paths.toString());
             finish();
             return true;

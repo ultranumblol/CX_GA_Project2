@@ -47,7 +47,8 @@ public interface JqAPIService {
     );
 
     /**
-     * 添加涉警车辆信息回传
+     *
+     *添加涉警车辆信息回传
      *
      * @param jqid                   警情id
      * @param taskid                 taskid
@@ -58,6 +59,16 @@ public interface JqAPIService {
      * @param involvecarowneridcard  车主身份证号
      * @param involvecardriver       驾驶人名
      * @param involvecardriveridcard 驾驶人身份证号
+     * @param cartype  车辆类型【跑车等】
+     * @param carbrand 车辆品牌【奥迪等】
+     * @param carcolor 车辆颜色【白色】
+     * @param carmodel 车辆型号  A8
+     * @param carnature 车辆性质【私家车等】
+     * @param driverphone 驾驶人联系方式
+     * @param gender 驾驶人性别。
+     * @param ownerphone 车主联系方式
+     * @param ownernature 车主性质
+     *
      * @return
      */
     @FormUrlEncoded
@@ -71,21 +82,35 @@ public interface JqAPIService {
             @Field("involvecarowner") String involvecarowner,
             @Field("involvecarowneridcard") String involvecarowneridcard,
             @Field("involvecardriver") String involvecardriver,
-            @Field("involvecardriveridcard") String involvecardriveridcard
+            @Field("involvecardriveridcard") String involvecardriveridcard,
+            @Field("cartype") String cartype,
+            @Field("carbrand") String carbrand,
+            @Field("carcolor") String carcolor,
+            @Field("carmodel") String carmodel,
+            @Field("carnature") String carnature,
+            @Field("driverphone") String driverphone,
+            @Field("gender") String gender,
+            @Field("ownerphone") String ownerphone,
+            @Field("ownernature") String ownernature
     );
 
     /**
+     *
      * 添加涉警人信息
      *
-     * @param jqid                     警情id
-     * @param taskid                   taskid
-     * @param cj_policeid              policeid
-     * @param cj_reporttime            回告时间
-     * @param involvepeoplename        涉警人
-     * @param involvepeopleidcard      涉警人idcard
-     * @param phone       涉警人座机
-     * @param mobilephone 涉警人手机
-     * @param gander                   涉警人性别 1man 2woman
+     * @param jqid                警情id
+     * @param taskid              taskid
+     * @param cj_policeid         policeid
+     * @param cj_reporttime       回告时间
+     * @param involvepeoplename   涉警人
+     * @param involvepeopleidcard 涉警人idcard
+     * @param phone               涉警人座机
+     * @param mobilephone         涉警人手机
+     * @param gander              涉警人性别 1man 2woman
+     * @param addr  地址
+     * @param mac mac
+     * @param serialnumber 手机串号
+     * @param simi  sim卡卡号
      * @return
      */
     @FormUrlEncoded
@@ -99,7 +124,12 @@ public interface JqAPIService {
             @Field("involvepeopleidcard") String involvepeopleidcard,
             @Field("phone") String phone,
             @Field("mobilephone") String mobilephone,
-            @Field("gander") String gander
+            @Field("gander") String gander,
+            @Field("addr") String addr,
+            @Field("mac") String mac,
+            @Field("serialnumber") String serialnumber,
+            @Field("simi") String simi
+
     );
 
     /**
@@ -124,7 +154,11 @@ public interface JqAPIService {
             @Field("relationname") String involvepeoplename,
             @Field("relationidcard") String involvepeopleidcard,
             @Field("mobilephone") String involvepeoplephone,
-            @Field("phone") String phone
+            @Field("phone") String phone,
+            @Field("mac") String mac,
+            @Field("serialnumber") String serialnumber,
+            @Field("simi") String simi
+
     );
 
 
@@ -347,7 +381,7 @@ public interface JqAPIService {
     @FormUrlEncoded
     @POST("appjqreport/getNewJqlist")
     Observable<NewJQ> getNewJqlist(@Field("policeid") String policeid,
-                                    @Field("depid") String depid);
+                                   @Field("depid") String depid);
 
 
     /**
@@ -363,6 +397,7 @@ public interface JqAPIService {
 
     /**
      * 获取警员的历史警情
+     *
      * @param policeid
      * @return
      */
@@ -373,6 +408,7 @@ public interface JqAPIService {
 
     /**
      * 停止某警情
+     *
      * @param status
      * @param id
      * @return
@@ -380,11 +416,12 @@ public interface JqAPIService {
     @FormUrlEncoded
     @POST("appjqreport/stopTaskJq")
     Observable<String> stopTaskJq(@Field("status") String status,
-                                 @Field("id") String id,
+                                  @Field("id") String id,
                                   @Field("taskid") String taskid);
 
     /**
      * 获取所有部门
+     *
      * @return
      */
     @GET("appjqreport/getAllDep")
@@ -393,6 +430,7 @@ public interface JqAPIService {
 
     /**
      * 警情转移
+     *
      * @param jqid
      * @param taskid
      * @param sendtime
@@ -403,9 +441,9 @@ public interface JqAPIService {
     @FormUrlEncoded
     @POST("appjqreport/JqTransfer")
     Observable<String> JqTransfer(@Field("jqid") String jqid,
-                                  @Field("taskid") String taskid ,
-                                  @Field("sendtime") String sendtime ,
-                                  @Field("depname") String depname ,
-                                  @Field("depid") String depid  );
+                                  @Field("taskid") String taskid,
+                                  @Field("sendtime") String sendtime,
+                                  @Field("depname") String depname,
+                                  @Field("depid") String depid);
 
 }

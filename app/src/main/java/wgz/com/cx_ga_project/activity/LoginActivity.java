@@ -204,9 +204,9 @@ public class LoginActivity extends BaseActivity {
                                             LogUtil.d("login result :" + userInfo.getRes().toString());
                                             if (userInfo.getCode().equals(200)) {
                                                 showProgress(false);
-                                                getsub();
                                                 saveUserInfo(userInfo.getRes().get(0), password);
                                                 getuserhead(userInfo.getRes().get(0).getUserid());
+                                                getsub();
                                                 SomeUtil.showSnackBar(scrollLoginForm, "登录成功！").setCallback(new Snackbar.Callback() {
                                                     @Override
                                                     public void onDismissed(Snackbar snackbar, int event) {
@@ -237,7 +237,7 @@ public class LoginActivity extends BaseActivity {
     }
 
     private void getsub() {
-        app.apiService.getSupAndSub(SomeUtil.getUserId())
+        app.apiService.getSupAndSub(actvUsername.getText().toString())
                 .compose(RxUtil.<Subordinate>applySchedulers())
                 .subscribe(new Subscriber<Subordinate>() {
                     @Override
@@ -252,9 +252,10 @@ public class LoginActivity extends BaseActivity {
 
                     @Override
                     public void onNext(Subordinate subordinate) {
+                        LogUtil.d("subordinate: "+subordinate);
                         LogUtil.d("subord size :" + subordinate.getResdown().size());
                         LogUtil.d("upper :" + subordinate.getResup().get(0).toString());
-                        if (subordinate.getResdown().size() > 0) {
+                       if (subordinate.getResdown().size() > 0) {
                             new SPBuild(getApplicationContext())
                                     .addData(Constant.ISLEADER, Boolean.TRUE)
                                     .build();

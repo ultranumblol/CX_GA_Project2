@@ -1,209 +1,361 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/content_sjpeople"
+
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context="wgz.com.cx_ga_project.activity.SJPeopleActivity"
     tools:showIn="@layout/activity_sjpeople">
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="1sp"
-        android:layout_marginTop="24dp"
-        android:background="@color/gainsboro"
-
-        />
-
     <LinearLayout
-        android:id="@+id/id_leave_type_layout"
         android:layout_width="match_parent"
-
-        android:layout_height="40dp"
-        android:background="@color/white"
-        android:gravity="center_vertical"
-        android:orientation="horizontal">
-
-
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:id="@+id/content_sjpeople"
+        >
         <TextView
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="16dp"
-            android:text="涉警人姓名"
-            android:textColor="@color/darkcyan"
-            android:textSize="16dp" />
-
-        <EditText
-            android:id="@+id/addsjr_name"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_centerVertical="true"
-            android:background="@null"
-            android:textSize="16dp"
+            android:layout_width="match_parent"
+            android:layout_height="1sp"
+            android:layout_marginTop="24dp"
+            android:background="@color/gainsboro"
 
             />
 
-    </LinearLayout>
+        <LinearLayout
+            android:id="@+id/id_leave_type_layout"
+            android:layout_width="match_parent"
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="1sp"
-        android:layout_marginLeft="16dp"
-        android:background="@color/gainsboro"
-
-        />
+            android:layout_height="40dp"
+            android:background="@color/white"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
 
 
-    <LinearLayout
-        android:id="@+id/id_leave_starttime_layout"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:background="@color/white"
-        android:gravity="center_vertical"
-        android:orientation="horizontal">
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="16dp"
+                android:text="涉警人姓名"
+                android:textColor="@color/darkcyan"
+                android:textSize="16dp" />
 
-        <TextView
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="16dp"
-            android:text="涉警人性别"
-            android:textColor="@color/darkcyan"
-            android:textSize="16dp" />
+            <EditText
+                android:id="@+id/addsjr_name"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:background="@null"
+                android:textSize="16dp"
 
-        <EditText
-            android:id="@+id/addsjr_sex"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_centerVertical="true"
-            android:background="@null"
-            android:textSize="16dp" />
+                />
 
-    </LinearLayout>
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="1sp"
-        android:layout_marginLeft="16dp"
-        android:background="@color/gainsboro" />
-
-    <LinearLayout
-        android:id="@+id/id_leave_endtime_layout"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:background="@color/white"
-        android:gravity="center_vertical"
-        android:orientation="horizontal">
+        </LinearLayout>
 
         <TextView
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
+            android:layout_width="match_parent"
+            android:layout_height="1sp"
             android:layout_marginLeft="16dp"
-            android:text="身份证号码"
-            android:textColor="@color/darkcyan"
-            android:textSize="16dp" />
+            android:background="@color/gainsboro"
 
-        <EditText
-            android:id="@+id/addsjr_idnum"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_centerVertical="true"
-            android:background="@null"
-            android:textSize="16dp" />
+            />
 
-    </LinearLayout>
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="1sp"
-        android:layout_marginLeft="16dp"
-        android:background="@color/gainsboro" />
 
-    <LinearLayout
+        <LinearLayout
+            android:id="@+id/id_leave_starttime_layout"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:background="@color/white"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
 
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:background="@color/white"
-        android:gravity="center_vertical"
-        android:orientation="horizontal">
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="16dp"
+                android:text="涉警人性别"
+                android:textColor="@color/darkcyan"
+                android:textSize="16dp" />
+
+            <EditText
+                android:id="@+id/addsjr_sex"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:background="@null"
+                android:textSize="16dp" />
+
+        </LinearLayout>
 
         <TextView
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
+            android:layout_width="match_parent"
+            android:layout_height="1sp"
             android:layout_marginLeft="16dp"
-            android:text="涉警人手机"
-            android:textColor="@color/darkcyan"
-            android:textSize="16dp" />
+            android:background="@color/gainsboro" />
 
-        <EditText
+        <LinearLayout
+            android:id="@+id/id_leave_endtime_layout"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:background="@color/white"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
 
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_centerVertical="true"
-            android:background="@null"
-            android:id="@+id/addsjr_mobilephone"
-            android:textSize="16dp" />
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="16dp"
+                android:text="身份证号码"
+                android:textColor="@color/darkcyan"
+                android:textSize="16dp" />
 
-    </LinearLayout>
+            <EditText
+                android:id="@+id/addsjr_idnum"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:background="@null"
+                android:textSize="16dp" />
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="1sp"
-        android:layout_marginLeft="16dp"
-        android:background="@color/gainsboro" />
+        </LinearLayout>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="1sp"
+            android:layout_marginLeft="16dp"
+            android:background="@color/gainsboro" />
 
-    <LinearLayout
+        <LinearLayout
 
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:background="@color/white"
-        android:gravity="center_vertical"
-        android:orientation="horizontal">
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:background="@color/white"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="16dp"
+                android:text="涉警人手机"
+                android:textColor="@color/darkcyan"
+                android:textSize="16dp" />
+
+            <EditText
+
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:background="@null"
+                android:id="@+id/addsjr_mobilephone"
+                android:textSize="16dp" />
+
+        </LinearLayout>
 
         <TextView
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
+            android:layout_width="match_parent"
+            android:layout_height="1sp"
             android:layout_marginLeft="16dp"
-            android:text="涉警人座机"
-            android:textColor="@color/darkcyan"
-            android:textSize="16dp" />
+            android:background="@color/gainsboro" />
 
-        <EditText
+        <LinearLayout
 
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_centerVertical="true"
-            android:background="@null"
-            android:id="@+id/addsjr_telphone"
-            android:textSize="16dp" />
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:background="@color/white"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="16dp"
+                android:text="涉警人通讯地址"
+                android:textColor="@color/darkcyan"
+                android:textSize="16dp" />
+
+            <EditText
+
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:background="@null"
+                android:id="@+id/addsjr_addr"
+                android:textSize="16dp" />
+
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="1sp"
+            android:layout_marginLeft="16dp"
+            android:background="@color/gainsboro" />
+        <LinearLayout
+
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:background="@color/white"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="16dp"
+                android:text="手机MAC地址"
+                android:textColor="@color/darkcyan"
+                android:textSize="16dp" />
+
+            <EditText
+
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:background="@null"
+                android:id="@+id/addsjr_mac"
+                android:textSize="16dp" />
+
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="1sp"
+            android:layout_marginLeft="16dp"
+            android:background="@color/gainsboro" />
+        <LinearLayout
+
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:background="@color/white"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="16dp"
+                android:text="手机串号IMEI"
+                android:textColor="@color/darkcyan"
+                android:textSize="16dp" />
+
+            <EditText
+
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:background="@null"
+                android:id="@+id/addsjr_serialnumber"
+                android:textSize="16dp" />
+
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="1sp"
+            android:layout_marginLeft="16dp"
+            android:background="@color/gainsboro" />
+        <LinearLayout
+
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:background="@color/white"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="16dp"
+                android:text="simi卡号"
+                android:textColor="@color/darkcyan"
+                android:textSize="16dp" />
+
+            <EditText
+
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:background="@null"
+                android:id="@+id/addsjr_simi"
+                android:textSize="16dp" />
+
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="1sp"
+            android:layout_marginLeft="16dp"
+            android:background="@color/gainsboro" />
+        <LinearLayout
+
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:background="@color/white"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="16dp"
+                android:text="涉警人座机"
+                android:textColor="@color/darkcyan"
+                android:textSize="16dp" />
+
+            <EditText
+
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:background="@null"
+                android:id="@+id/addsjr_telphone"
+                android:textSize="16dp" />
+
+        </LinearLayout>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="1sp"
+            android:background="@color/gainsboro"
+
+            />
+
 
     </LinearLayout>
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="1sp"
-        android:background="@color/gainsboro"
-
-        />
 
 
-</LinearLayout>
+</ScrollView>

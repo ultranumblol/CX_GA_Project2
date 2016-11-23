@@ -6,6 +6,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.widget.Toolbar;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.jakewharton.rxbinding.view.RxView;
 
@@ -47,6 +48,28 @@ public class UpLoadSJCarActivity extends BaseActivity {
     EditText addsjcarDriver;
     @Bind(R.id.addsjcar_driveridnum)
     EditText addsjcarDriveridnum;
+    @Bind(R.id.addsjcar_ownerphone)
+    EditText addsjcarOwnerphone;
+    @Bind(R.id.addsjcar_cartype)
+    EditText addsjcarCartype;
+    @Bind(R.id.addsjcar_carbrand)
+    EditText addsjcarCarbrand;
+    @Bind(R.id.addsjcar_carcolor)
+    EditText addsjcarCarcolor;
+    @Bind(R.id.addsjcar_carmodel)
+    EditText addsjcarCarmodel;
+    @Bind(R.id.addsjcar_carnature)
+    EditText addsjcarCarnature;
+    @Bind(R.id.addsjcar_gender)
+    EditText addsjcarGender;
+    @Bind(R.id.addsjcar_driverphone)
+    EditText addsjcarDriverphone;
+    @Bind(R.id.addsjcar_ownernature)
+    EditText addsjcarOwnernature;
+    @Bind(R.id.textView2)
+    TextView textView2;
+    @Bind(R.id.id_leave_starttime_layout)
+    LinearLayout idLeaveStarttimeLayout;
 
     @Override
     public int getLayoutId() {
@@ -74,7 +97,17 @@ public class UpLoadSJCarActivity extends BaseActivity {
                 , addsjcarOwner.getText().toString()
                 , addsjcarOwneridnum.getText().toString()
                 , addsjcarDriver.getText().toString()
-                , addsjcarDriveridnum.getText().toString()).subscribeOn(Schedulers.io())
+                , addsjcarDriveridnum.getText().toString()
+                , addsjcarCartype.getText().toString()
+                , addsjcarCarbrand.getText().toString()
+                , addsjcarCarcolor.getText().toString()
+                , addsjcarCarmodel.getText().toString()
+                , addsjcarCarnature.getText().toString()
+                , addsjcarDriverphone.getText().toString()
+                , addsjcarGender.getText().toString()
+                , addsjcarOwnerphone.getText().toString()
+                , addsjcarOwnernature.getText().toString())
+                .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<String>() {
                     @Override
@@ -104,5 +137,10 @@ public class UpLoadSJCarActivity extends BaseActivity {
     }
 
 
-
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        // TODO: add setContentView(...) invocation
+        ButterKnife.bind(this);
+    }
 }

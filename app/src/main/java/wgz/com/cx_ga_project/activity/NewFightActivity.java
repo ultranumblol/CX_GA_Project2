@@ -516,7 +516,7 @@ public class NewFightActivity extends BaseActivity {
 
                     @Override
                     public void onError(Throwable e) {
-
+                        SomeUtil.checkHttpException(NewFightActivity.this,e,rootview);
                     }
 
                     @Override
@@ -526,7 +526,6 @@ public class NewFightActivity extends BaseActivity {
                         SomeUtil.showSnackBar(rootview, "警情转移成功！").setCallback(new Snackbar.Callback() {
                             @Override
                             public void onDismissed(Snackbar snackbar, int event) {
-                                RxBus.getDefault().post("newjqflush");
                                 finish();
                             }
                         });

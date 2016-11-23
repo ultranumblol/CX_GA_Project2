@@ -117,7 +117,7 @@ public class AskForJiabanActivity extends BaseActivity {
         initData();
     }
 
-    private void initData() {
+   private void initData() {
         app.apiService.getSupAndSub(SomeUtil.getUserId())
                 .compose(RxUtil.<Subordinate>applySchedulers())
                 .subscribe(new Subscriber<Subordinate>() {

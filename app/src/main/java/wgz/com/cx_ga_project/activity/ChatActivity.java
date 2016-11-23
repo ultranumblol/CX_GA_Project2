@@ -10,7 +10,6 @@ import android.content.ServiceConnection;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
-import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
@@ -38,7 +37,6 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.Bind;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 import rx.Subscriber;
 import rx.Subscription;
@@ -56,12 +54,11 @@ import wgz.com.cx_ga_project.entity.ChatPic;
 import wgz.com.cx_ga_project.fragment.PhotoPickerFragment;
 import wgz.com.cx_ga_project.service.GetNewMsgService;
 import wgz.com.cx_ga_project.util.DatrixUtil;
-import wgz.com.cx_ga_project.util.RxUtil;
 import wgz.com.cx_ga_project.util.SomeUtil;
 import wgz.com.cx_ga_project.util.UriUtils;
 import wgz.datatom.com.utillibrary.util.LogUtil;
 
-import static wgz.com.cx_ga_project.activity.PickPhotoActivity.HTTP_URL;
+import static wgz.com.cx_ga_project.activity.PickPhotoActivity2.HTTP_URL;
 import static wgz.com.cx_ga_project.app.DATRIX_BASE_URL;
 import static wgz.com.cx_ga_project.util.fileUtil.delFolder;
 
@@ -616,7 +613,7 @@ public class ChatActivity extends BaseActivity {
                 }
                 break;
             case R.id.view_photo:
-                Intent intent = new Intent(ChatActivity.this, PickPhotoActivity.class);
+                Intent intent = new Intent(ChatActivity.this, PickPhotoActivity2.class);
                 intent.putExtra(PhotoPickerFragment.EXTRA_SELECT_COUNT, 1);
                 intent.putExtra(PhotoPickerFragment.EXTRA_DEFAULT_SELECTED_LIST, "");
                 intent.putExtra(HTTP_URL, "");

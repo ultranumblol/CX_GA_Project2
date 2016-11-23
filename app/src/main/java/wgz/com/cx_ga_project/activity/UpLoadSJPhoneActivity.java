@@ -41,6 +41,12 @@ public class UpLoadSJPhoneActivity extends BaseActivity {
     EditText addphoneIdnum;
     @Bind(R.id.addphone_telphone)
     EditText addphoneTelphone;
+    @Bind(R.id.addphone_mac)
+    EditText addphoneMac;
+    @Bind(R.id.serialnumber)
+    EditText addserialnumber;
+    @Bind(R.id.addphone_simi)
+    EditText addphoneSimi;
 
     @Override
     public int getLayoutId() {
@@ -66,7 +72,11 @@ public class UpLoadSJPhoneActivity extends BaseActivity {
         app.jqAPIService.uploadSjPhone(SomeUtil.getJQId(), SomeUtil.getTASKId()
                 , SomeUtil.getUserId(), SomeUtil.getSysTime(), addphoneName.getText().toString()
                 , addphoneIdnum.getText().toString(), addphoneMibilephone.getText().toString()
-                , addphoneTelphone.getText().toString())
+                , addphoneTelphone.getText().toString()
+                ,addphoneMac.getText().toString()
+                ,addserialnumber.getText().toString()
+                ,addphoneSimi.getText().toString()
+        )
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<String>() {
@@ -97,4 +107,10 @@ public class UpLoadSJPhoneActivity extends BaseActivity {
 
     }
 
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        // TODO: add setContentView(...) invocation
+        ButterKnife.bind(this);
+    }
 }

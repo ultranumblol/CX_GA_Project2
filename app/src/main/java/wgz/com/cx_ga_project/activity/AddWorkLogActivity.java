@@ -112,7 +112,15 @@ public class AddWorkLogActivity extends BaseActivity {
                         @Override
                         public void call(Void aVoid) {
                             edittext = worklogText.getText().toString();
-                            ChangeWorkLog();
+                            if (edittext==null&&edittext.equals("")){
+
+                                ChangeWorkLog();
+                            }else {
+                                SomeUtil.showSnackBar(rootview,"请填写工作内容！");
+
+                            }
+
+
                         }
                     });
 
@@ -125,7 +133,13 @@ public class AddWorkLogActivity extends BaseActivity {
                         @Override
                         public void call(Void aVoid) {
                             edittext = worklogText.getText().toString();
-                            UpLoadWorkLog();
+                            if (edittext==null&&edittext.equals("")){
+                                UpLoadWorkLog();
+                            }else {
+                                SomeUtil.showSnackBar(rootview,"请填写工作内容！");
+
+                            }
+
                         }
                     });
 

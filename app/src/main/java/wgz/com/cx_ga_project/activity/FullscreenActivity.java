@@ -25,7 +25,11 @@ import java.util.Hashtable;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import wgz.com.cx_ga_project.R;
+import wgz.com.cx_ga_project.app;
 import wgz.com.cx_ga_project.base.BaseActivity;
+import wgz.com.cx_ga_project.base.Constant;
+import wgz.com.cx_ga_project.util.SPUtils;
+import wgz.com.cx_ga_project.util.SomeUtil;
 
 /**
  * 我的二维码页面
@@ -125,7 +129,7 @@ public class FullscreenActivity extends BaseActivity {
                 toggle();
             }
         });
-        createQRImage("app的作者太帅了！！！");
+        createQRImage("警员："+ SPUtils.get(app.getApp().getApplicationContext(), Constant.USERNAME, "未知")+"\n"+"部门："+SomeUtil.getDepartName());
     }
 
     @Override

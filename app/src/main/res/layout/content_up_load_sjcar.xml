@@ -1,16 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/content_up_load_sjcar"
     android:layout_width="match_parent"
     android:orientation="vertical"
     android:layout_height="match_parent"
-
     tools:context="wgz.com.cx_ga_project.activity.UpLoadSJCarActivity"
     tools:showIn="@layout/activity_up_load_sjcar">
 
-
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:id="@+id/content_up_load_sjcar"
+    >
     <TextView
         android:layout_width="match_parent"
         android:layout_height="1sp"
@@ -106,14 +109,274 @@
         android:background="@color/gainsboro"
         android:layout_marginLeft="16dp"
         />
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:orientation="horizontal"
         android:gravity="center_vertical"
         android:background="@color/white"
-        android:id="@+id/id_leave_endtime_layout2"
+        >
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="车主性质"
+            android:layout_marginLeft="16dp"
+            android:layout_centerVertical="true"
+            android:textColor="@color/darkcyan"
+            android:textSize="16dp"
+            />
+        <EditText
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:textSize="16dp"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:background="@null"
+            android:hint="公司、个人"
+            android:layout_marginRight="16dp"
+            android:id="@+id/addsjcar_ownernature"
+
+            />
+
+    </LinearLayout>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="1sp"
+        android:background="@color/gainsboro"
+        android:layout_marginLeft="16dp"
+        />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:background="@color/white"
+        >
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="车主联系方式"
+            android:layout_marginLeft="16dp"
+            android:layout_centerVertical="true"
+            android:textColor="@color/darkcyan"
+            android:textSize="16dp"
+            />
+        <EditText
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:textSize="16dp"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:background="@null"
+            android:layout_marginRight="16dp"
+            android:id="@+id/addsjcar_ownerphone"
+
+            />
+
+    </LinearLayout>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="1sp"
+        android:background="@color/gainsboro"
+        android:layout_marginLeft="16dp"
+        />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:background="@color/white"
+        >
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="车辆类型"
+            android:layout_marginLeft="16dp"
+            android:layout_centerVertical="true"
+            android:textColor="@color/darkcyan"
+            android:textSize="16dp"
+            />
+        <EditText
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:textSize="16dp"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:background="@null"
+            android:hint="如跑车、卡车等"
+            android:layout_marginRight="16dp"
+            android:id="@+id/addsjcar_cartype"
+
+            />
+
+    </LinearLayout>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="1sp"
+        android:background="@color/gainsboro"
+        android:layout_marginLeft="16dp"
+        />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:background="@color/white"
+        >
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="车辆品牌"
+            android:layout_marginLeft="16dp"
+            android:layout_centerVertical="true"
+            android:textColor="@color/darkcyan"
+            android:textSize="16dp"
+            />
+        <EditText
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:textSize="16dp"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:background="@null"
+            android:layout_marginRight="16dp"
+            android:id="@+id/addsjcar_carbrand"
+
+            />
+
+    </LinearLayout>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="1sp"
+        android:background="@color/gainsboro"
+        android:layout_marginLeft="16dp"
+        />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:background="@color/white"
+        >
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="车辆颜色"
+            android:layout_marginLeft="16dp"
+            android:layout_centerVertical="true"
+            android:textColor="@color/darkcyan"
+            android:textSize="16dp"
+            />
+        <EditText
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:textSize="16dp"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:background="@null"
+            android:layout_marginRight="16dp"
+            android:id="@+id/addsjcar_carcolor"
+
+            />
+
+    </LinearLayout>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="1sp"
+        android:background="@color/gainsboro"
+        android:layout_marginLeft="16dp"
+        />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:background="@color/white"
+        >
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="车辆型号"
+            android:layout_marginLeft="16dp"
+            android:layout_centerVertical="true"
+            android:textColor="@color/darkcyan"
+            android:textSize="16dp"
+            />
+        <EditText
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:textSize="16dp"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:background="@null"
+            android:layout_marginRight="16dp"
+            android:id="@+id/addsjcar_carmodel"
+
+            />
+
+    </LinearLayout>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="1sp"
+        android:background="@color/gainsboro"
+        android:layout_marginLeft="16dp"
+        />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:background="@color/white"
+        >
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="车辆性质"
+            android:layout_marginLeft="16dp"
+            android:layout_centerVertical="true"
+            android:textColor="@color/darkcyan"
+            android:textSize="16dp"
+            />
+        <EditText
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:textSize="16dp"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:background="@null"
+            android:hint="私家车，公车等"
+            android:layout_marginRight="16dp"
+            android:id="@+id/addsjcar_carnature"
+
+            />
+
+    </LinearLayout>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="1sp"
+        android:background="@color/gainsboro"
+        android:layout_marginLeft="16dp"
+        />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:background="@color/white"
         >
         <TextView
             android:layout_width="0dp"
@@ -145,6 +408,44 @@
         android:background="@color/gainsboro"
         android:layout_marginLeft="16dp"
         />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:background="@color/white"
+        >
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="驾驶人性别"
+            android:layout_marginLeft="16dp"
+            android:layout_centerVertical="true"
+            android:textColor="@color/darkcyan"
+            android:textSize="16dp"
+            />
+        <EditText
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:textSize="16dp"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:background="@null"
+            android:layout_marginRight="16dp"
+            android:id="@+id/addsjcar_gender"
+
+            />
+
+    </LinearLayout>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="1sp"
+        android:background="@color/gainsboro"
+        android:layout_marginLeft="16dp"
+        />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="40dp"
@@ -186,7 +487,46 @@
         android:layout_marginLeft="16dp"
         />
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:background="@color/white"
+        >
 
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="驾驶人名"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="16dp"
+            android:textColor="@color/darkcyan"
+            android:textSize="16dp"
+            />
+        <EditText
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:textSize="16dp"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:background="@null"
+
+            android:layout_marginRight="16dp"
+            android:id="@+id/addsjcar_driverphone"
+
+            />
+
+    </LinearLayout>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="1sp"
+        android:background="@color/gainsboro"
+        android:layout_marginLeft="16dp"
+        />
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="40dp"
@@ -237,4 +577,8 @@
 
         />
 
+
+
 </LinearLayout>
+
+</ScrollView>

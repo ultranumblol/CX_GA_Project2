@@ -181,60 +181,29 @@ public class Subordinate {
                     '}';
         }
 
-        /**
-         *
-         * @return
-         * The policename
-         */
         public String getPolicename() {
             return policename;
         }
 
-        /**
-         *
-         * @param policename
-         * The policename
-         */
         public void setPolicename(String policename) {
             this.policename = policename;
         }
 
-        /**
-         *
-         * @return
-         * The polid
-         */
         public String getPolid() {
             return polid;
         }
 
-        /**
-         *
-         * @param polid
-         * The polid
-         */
         public void setPolid(String polid) {
             this.polid = polid;
         }
 
-        /**
-         *
-         * @return
-         * The face
-         */
         public String getFace() {
             return face;
         }
 
-        /**
-         *
-         * @param face
-         * The face
-         */
         public void setFace(String face) {
             this.face = face;
         }
-
     }
 
 }

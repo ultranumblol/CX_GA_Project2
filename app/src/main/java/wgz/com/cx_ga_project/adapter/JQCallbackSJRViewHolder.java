@@ -1,6 +1,5 @@
 package wgz.com.cx_ga_project.adapter;
 
-import android.support.annotation.LayoutRes;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
@@ -13,7 +12,7 @@ import wgz.com.cx_ga_project.entity.JqCallBack;
  * Created by qwerr on 2016/9/5.
  */
 public class JQCallbackSJRViewHolder extends BaseViewHolder<Object> {
-    private TextView name,sex,phone,mobilephone,idnum;
+    private TextView name, sex, phone, mobilephone, idnum, addr, mac, serialnumber, sim;
 
     public JQCallbackSJRViewHolder(ViewGroup parent) {
         super(parent, R.layout.item_sjr_callback);
@@ -22,23 +21,32 @@ public class JQCallbackSJRViewHolder extends BaseViewHolder<Object> {
         phone = $(R.id.sjr_telphone);
         mobilephone = $(R.id.sjr_mobilephone);
         idnum = $(R.id.sjr_idcard);
+        addr = $(R.id.sjr_addr);
+        mac = $(R.id.sjr_mac);
+        serialnumber = $(R.id.sjr_serialnumber);
+        sim = $(R.id.sjr_sim);
+
     }
 
     @Override
-    public void setData(Object data)
-    {
-       if (data instanceof JqCallBack.Resperson){
-           name.setText(((JqCallBack.Resperson) data).getInvolvepeoplename());
-           if (((JqCallBack.Resperson) data).getGander().equals("1")){
-               sex.setText("男");
+    public void setData(Object data) {
+        if (data instanceof JqCallBack.Resperson) {
+            name.setText(((JqCallBack.Resperson) data).getInvolvepeoplename());
+            sex.setText(((JqCallBack.Resperson) data).getGander());
+            phone.setText(((JqCallBack.Resperson) data).getInvolvepeoplephone());
+            mobilephone.setText(((JqCallBack.Resperson) data).getInvolvepeoplemobilephone());
+            idnum.setText(((JqCallBack.Resperson) data).getInvolvepeopleidcard());
+            addr.setText(((JqCallBack.Resperson) data).getAddr());
+            try {
+                mac.setText(((JqCallBack.Resperson) data).getMac().toString());
+            } catch (Exception e) {
+                e.printStackTrace();
+                mac.setText("");
+            }
+            serialnumber.setText(((JqCallBack.Resperson) data).getSerialnumber());
+            sim.setText(((JqCallBack.Resperson) data).getSimi());
 
-           }else
-               sex.setText("nv");
-           phone.setText(((JqCallBack.Resperson) data).getInvolvepeoplephone());
-           mobilephone.setText(((JqCallBack.Resperson) data).getInvolvepeoplemobilephone());
-           idnum.setText(((JqCallBack.Resperson) data).getInvolvepeopleidcard());
 
-
-       }
+        }
     }
 }

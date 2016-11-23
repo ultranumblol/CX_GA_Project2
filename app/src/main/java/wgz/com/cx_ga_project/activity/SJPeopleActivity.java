@@ -47,6 +47,14 @@ public class SJPeopleActivity extends BaseActivity {
     EditText addsjrMobilephone;
     @Bind(R.id.addsjr_telphone)
     EditText addsjrTelphone;
+    @Bind(R.id.addsjr_addr)
+    EditText addsjrAddr;
+    @Bind(R.id.addsjr_mac)
+    EditText addsjrMac;
+    @Bind(R.id.addsjr_serialnumber)
+    EditText addsjrSerialnumber;
+    @Bind(R.id.addsjr_simi)
+    EditText addsjrSimi;
 
     @Override
     public int getLayoutId() {
@@ -70,7 +78,6 @@ public class SJPeopleActivity extends BaseActivity {
     private void UpLoadSjr() {
 
 
-
         app.jqAPIService.uploadSjPerson(SomeUtil.getJQId()
                 , SomeUtil.getTASKId()
                 , SomeUtil.getUserId()
@@ -79,7 +86,12 @@ public class SJPeopleActivity extends BaseActivity {
                 , addsjrIdnum.getText().toString()
                 , addsjrTelphone.getText().toString()
                 , addsjrMobilephone.getText().toString()
-                , addsjrSex.getText().toString()).subscribeOn(Schedulers.io())
+                , addsjrSex.getText().toString()
+                , addsjrAddr.getText().toString()
+                , addsjrMac.getText().toString()
+                , addsjrSerialnumber.getText().toString()
+                , addsjrSimi.getText().toString()
+        ).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<String>() {
                     @Override
@@ -110,4 +122,10 @@ public class SJPeopleActivity extends BaseActivity {
     }
 
 
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        // TODO: add setContentView(...) invocation
+        ButterKnife.bind(this);
+    }
 }
