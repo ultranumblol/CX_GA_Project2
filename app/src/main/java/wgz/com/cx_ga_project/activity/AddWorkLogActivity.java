@@ -90,38 +90,32 @@ public class AddWorkLogActivity extends BaseActivity {
         addworklogRV.setLayoutManager(new GridLayoutManager(this, 4));
         addworklogRV.setAdapter(adapter = new AddPictureAdapter(this));
         adapter.addAll(initdata());
-        adapter.setOnItemClickListener(new MyRecyclerArrayAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(int position, View itemView) {
-                if (position + 1 == adapter.getCount()) {
-                    Intent intent = new Intent(AddWorkLogActivity.this, PickPhotoActivity.class);
-                    intent.putExtra(PhotoPickerFragment.EXTRA_SELECT_COUNT, 9);
-                    intent.putExtra(PhotoPickerFragment.EXTRA_DEFAULT_SELECTED_LIST, "");
-                    intent.putExtra(HTTP_URL, "");
-                    startActivityForResult(intent, 1);
-                }
-
+        adapter.setOnItemClickListener((position, itemView) -> {
+            if (position + 1 == adapter.getCount()) {
+                Intent intent1 = new Intent(AddWorkLogActivity.this, PickPhotoActivity.class);
+                intent1.putExtra(PhotoPickerFragment.EXTRA_SELECT_COUNT, 9);
+                intent1.putExtra(PhotoPickerFragment.EXTRA_DEFAULT_SELECTED_LIST, "");
+                intent1.putExtra(HTTP_URL, "");
+                startActivityForResult(intent1, 1);
             }
+
         });
 
 
         if (!worklog.contains("没有工作记录")) {
             worklogText.setText(worklog);
             RxView.clicks(fabAddworklog).throttleFirst(500, TimeUnit.MILLISECONDS)
-                    .subscribe(new Action1<Void>() {
-                        @Override
-                        public void call(Void aVoid) {
-                            edittext = worklogText.getText().toString();
-                            if (edittext==null&&edittext.equals("")){
+                    .subscribe(aVoid -> {
+                        edittext = worklogText.getText().toString();
+                        if (edittext==null&&edittext.equals("")){
 
-                                ChangeWorkLog();
-                            }else {
-                                SomeUtil.showSnackBar(rootview,"请填写工作内容！");
-
-                            }
-
+                            ChangeWorkLog();
+                        }else {
+                            SomeUtil.showSnackBar(rootview,"请填写工作内容！");
 
                         }
+
+
                     });
 
 
@@ -129,18 +123,15 @@ public class AddWorkLogActivity extends BaseActivity {
 
 
             RxView.clicks(fabAddworklog).throttleFirst(500, TimeUnit.MILLISECONDS)
-                    .subscribe(new Action1<Void>() {
-                        @Override
-                        public void call(Void aVoid) {
-                            edittext = worklogText.getText().toString();
-                            if (edittext==null&&edittext.equals("")){
-                                UpLoadWorkLog();
-                            }else {
-                                SomeUtil.showSnackBar(rootview,"请填写工作内容！");
-
-                            }
+                    .subscribe(aVoid -> {
+                        edittext = worklogText.getText().toString();
+                        if (edittext==null&&edittext.equals("")){
+                            UpLoadWorkLog();
+                        }else {
+                            SomeUtil.showSnackBar(rootview,"请填写工作内容！");
 
                         }
+
                     });
 
         }
@@ -164,12 +155,7 @@ public class AddWorkLogActivity extends BaseActivity {
         if (paths.size() > 1) {
             DatrixUtil datrixUtil = new DatrixUtil(paths, rootview);
             datrixUtil.DatrixUpLoadPic();
-            datrixUtil.setOnAfterFinish(new DatrixUtil.AfterFinish() {
-                @Override
-                public void afterfinish(String fileid, List<String> ids) {
-                    addsummaryPic(fileid, ids);
-                }
-            });
+            datrixUtil.setOnAfterFinish((fileid1, ids) -> addsummaryPic(fileid1, ids));
         } else
 
 
@@ -219,12 +205,7 @@ public class AddWorkLogActivity extends BaseActivity {
         if (paths.size() > 1) {
             DatrixUtil datrixUtil = new DatrixUtil(paths, rootview);
             datrixUtil.DatrixUpLoadPic();
-            datrixUtil.setOnAfterFinish(new DatrixUtil.AfterFinish() {
-                @Override
-                public void afterfinish(String fileid, List<String> ids) {
-                    addsummaryPic(fileid, ids);
-                }
-            });
+            datrixUtil.setOnAfterFinish((fileid1, ids) -> addsummaryPic(fileid1, ids));
         } else {
             addsummary();
         }
@@ -365,12 +346,7 @@ public class AddWorkLogActivity extends BaseActivity {
                 } else {
                     AlertDialog.Builder dialog = new AlertDialog.Builder(AddWorkLogActivity.this);
                     dialog.setTitle("请确认").setMessage("还没有提交记录，确认退出?")
-                            .setPositiveButton("确认", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    finish();
-                                }
-                            }).setNegativeButton("取消", null).show();
+                            .setPositiveButton("确认", (dialog1, which) -> finish()).setNegativeButton("取消", null).show();
                 }
 
 

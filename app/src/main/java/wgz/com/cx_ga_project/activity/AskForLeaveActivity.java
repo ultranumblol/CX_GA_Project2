@@ -108,34 +108,27 @@ public class AskForLeaveActivity extends BaseActivity {
         pvTime.setCyclic(false);
         pvTime.setCancelable(true);
         //时间选择后回调
-        pvTime.setOnTimeSelectListener(new TimePickerView.OnTimeSelectListener() {
+        pvTime.setOnTimeSelectListener(date -> {
+            switch (flag) {
+                case 1:
+                    mLeaveStarttime.setText(getTime(date));
+                    mstartdate = date;
+                    if (menddate!=null){
+                        mLeaveDaycount.setText(TimeUtils.getGapCount(mstartdate,menddate)+"");
+                    }
+                    break;
+                case 2:
+                    mLeaveEndtime.setText(getTime(date));
+                    menddate = date;
+                    if (mstartdate!=null){
+                        mLeaveDaycount.setText(TimeUtils.getGapCount(mstartdate,menddate)+"");
 
-            @Override
-            public void onTimeSelect(Date date) {
-                switch (flag) {
-                    case 1:
-                        mLeaveStarttime.setText(getTime(date));
-                        mstartdate = date;
-                        if (menddate!=null){
-                            mLeaveDaycount.setText(TimeUtils.getGapCount(mstartdate,menddate)+"");
-                        }
-                        break;
-                    case 2:
-                        mLeaveEndtime.setText(getTime(date));
-                        menddate = date;
-                        if (mstartdate!=null){
-                            mLeaveDaycount.setText(TimeUtils.getGapCount(mstartdate,menddate)+"");
-
-                        }
-                }
+                    }
             }
         });
         RxView.clicks(mLeaveCommit).throttleFirst(500, TimeUnit.MILLISECONDS)
-                .subscribe(new Action1<Void>() {
-                    @Override
-                    public void call(Void aVoid) {
-                        docommit();
-                    }
+                .subscribe(aVoid -> {
+                    docommit();
                 });
 
         //选项选择器
@@ -155,20 +148,17 @@ public class AskForLeaveActivity extends BaseActivity {
                         //设置默认选中的项目
                         //监听确定选择按钮
                         pvOptions.setSelectOptions(0, 0, 0);
-                        pvOptions.setOnoptionsSelectListener(new OptionsPickerView.OnOptionsSelectListener() {
-                            @Override
-                            public void onOptionsSelect(int options1, int option2, int options3) {
-                                String result = options2Items.get(options1).get(option2);
-                                mLeaveType.setText(result);
-                                //LogUtil.d("leaveTypeRes : "+leaveTypeRes.toString());
-                              for (int i = 0 ; i <leaveTypeRes.size();i++)
-                                  if (leaveTypeRes.get(i).getValname().equals(result)){
+                        pvOptions.setOnoptionsSelectListener((options1, option2, options3) -> {
+                            String result = options2Items.get(options1).get(option2);
+                            mLeaveType.setText(result);
+                            //LogUtil.d("leaveTypeRes : "+leaveTypeRes.toString());
+                          for (int i = 0 ; i <leaveTypeRes.size();i++)
+                              if (leaveTypeRes.get(i).getValname().equals(result)){
 
-                                      valueCode = leaveTypeRes.get(i).getValcode();
-                                  }
+                                  valueCode = leaveTypeRes.get(i).getValcode();
+                              }
 
-                                LogUtil.d("valuecode : "+valueCode);
-                            }
+                            LogUtil.d("valuecode : "+valueCode);
                         });
                     }
 
@@ -272,23 +262,20 @@ public class AskForLeaveActivity extends BaseActivity {
                 SomeUtil.getUserId(), curredate, list.get(0).getPolid(),valueCode, mLeaveDaycount.getText().toString())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Action1<String>() {
-                    @Override
-                    public void call(String s) {
-                        LogUtil.d("leaveApply :" +s);
-                        if (s.contains("200")) {
-                            RxBus.getDefault().post("qingjiaflush");
-                            SomeUtil.showSnackBar(rootview, "提交申请成功！").setCallback(new Snackbar.Callback() {
-                                @Override
-                                public void onDismissed(Snackbar snackbar, int event) {
-                                    //setResult(1001,new Intent(AskForLeaveActivity.this,MyWorkApplyActivity.class).putExtra("result","refresh"));
-                                    finish();
-                                }
-                            });
+                .subscribe(s -> {
+                    LogUtil.d("leaveApply :" +s);
+                    if (s.contains("200")) {
+                        RxBus.getDefault().post("qingjiaflush");
+                        SomeUtil.showSnackBar(rootview, "提交申请成功！").setCallback(new Snackbar.Callback() {
+                            @Override
+                            public void onDismissed(Snackbar snackbar, int event) {
+                                //setResult(1001,new Intent(AskForLeaveActivity.this,MyWorkApplyActivity.class).putExtra("result","refresh"));
+                                finish();
+                            }
+                        });
 
-                         } else {
-                            SomeUtil.showSnackBar(rootview, "服务器错误！");
-                        }
+                     } else {
+                        SomeUtil.showSnackBar(rootview, "服务器错误！");
                     }
                 });
     }

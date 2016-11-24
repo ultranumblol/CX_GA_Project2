@@ -154,36 +154,27 @@ public class CamPlayerActivity extends BaseActivity implements KeepaliveService.
         pvTime.setCyclic(false);
         pvTime.setCancelable(true);
 
-        pvTime.setOnTimeSelectListener(new TimePickerView.OnTimeSelectListener() {
-            @Override
-            public void onTimeSelect(Date date) {
-                switch (flag) {
-                    case 1:
-                        idReplayStarttime.setText(getTime(date));
-                        break;
-                    case 2:
-                        idReplayEndtime.setText(getTime(date));
-                }
-
+        pvTime.setOnTimeSelectListener(date -> {
+            switch (flag) {
+                case 1:
+                    idReplayStarttime.setText(getTime(date));
+                    break;
+                case 2:
+                    idReplayEndtime.setText(getTime(date));
             }
+
         });
 
 
         RxView.clicks(fab).throttleFirst(500, TimeUnit.MILLISECONDS)
-                .subscribe(new Action1<Void>() {
-                    @Override
-                    public void call(Void aVoid) {
-                        ptzCommand(mCameraCode, PtzCommandParam.PTZ_CMD.ALLSTOP);
-                    }
+                .subscribe(aVoid -> {
+                    ptzCommand(mCameraCode, PtzCommandParam.PTZ_CMD.ALLSTOP);
                 });
         RxView.clicks(fab2).throttleFirst(300, TimeUnit.MILLISECONDS)
-                .subscribe(new Action1<Void>() {
-                    @Override
-                    public void call(Void aVoid) {
-                        //queryCameraRes();
-                        startLive(mCameraCode);
-                        //queryCameraRes();
-                    }
+                .subscribe(aVoid -> {
+                    //queryCameraRes();
+                    startLive(mCameraCode);
+                    //queryCameraRes();
                 });
 
 
@@ -220,31 +211,28 @@ public class CamPlayerActivity extends BaseActivity implements KeepaliveService.
         try {
             camsIDs.clear();
 
-            OnQueryResourceListener listener = new OnQueryResourceListener() {
-                @Override
-                public void onQueryResourceResult(long errorCode, String errorDesc, List<ResourceInfo> resList) {
-                    if (null == resList) {
-                        return;
-                    }
-                    StringBuffer stringBuffer = new StringBuffer();
-                    int size = resList.size();
-                    for (int i = 0; i < size; i++) {
-                        stringBuffer.append(resList.get(i).getResCode() + ",");
-                        stringBuffer.append(resList.get(i).getResName() + ",");
-                        stringBuffer.append(resList.get(i).getResType() + ",");
-                        stringBuffer.append(resList.get(i).getResSubType() + ",");
-                        stringBuffer.append(resList.get(i).getIsOnline() + "\n");
-
-                        //找到第一个在线的摄像机
-                        if (resList.get(i).getResType() == ResourceInfo.ResType.CAMERA && resList.get(i).getIsOnline()) {
-                            mCameraCode = resList.get(i).getResCode().trim();
-                            camsIDs.add(resList.get(i).getResCode().trim());
-
-                        }
-                    }
-                    LogUtil.d("cam列表：" + stringBuffer.toString());
-                    // idCams.setText("cam列表：" + stringBuffer.toString());
+            OnQueryResourceListener listener = (errorCode, errorDesc, resList) -> {
+                if (null == resList) {
+                    return;
                 }
+                StringBuffer stringBuffer = new StringBuffer();
+                int size = resList.size();
+                for (int i = 0; i < size; i++) {
+                    stringBuffer.append(resList.get(i).getResCode() + ",");
+                    stringBuffer.append(resList.get(i).getResName() + ",");
+                    stringBuffer.append(resList.get(i).getResType() + ",");
+                    stringBuffer.append(resList.get(i).getResSubType() + ",");
+                    stringBuffer.append(resList.get(i).getIsOnline() + "\n");
+
+                    //找到第一个在线的摄像机
+                    if (resList.get(i).getResType() == ResourceInfo.ResType.CAMERA && resList.get(i).getIsOnline()) {
+                        mCameraCode = resList.get(i).getResCode().trim();
+                        camsIDs.add(resList.get(i).getResCode().trim());
+
+                    }
+                }
+                LogUtil.d("cam列表：" + stringBuffer.toString());
+                // idCams.setText("cam列表：" + stringBuffer.toString());
             };
 
 
@@ -334,30 +322,27 @@ public class CamPlayerActivity extends BaseActivity implements KeepaliveService.
     public void startLive(String cameraCode) {
         try {
             //启动实况结果监听
-            OnStartLiveListener listener = new OnStartLiveListener() {
-                @Override
-                public void onStartLiveResult(long errorCode, String errorDesc, String playSession) {
+            OnStartLiveListener listener = (errorCode, errorDesc, playSession) -> {
 
-                    if (errorCode == 0) {
-                        //将播放回话设给Player
-                        mPlayer.setPlaySession(playSession);
+                if (errorCode == 0) {
+                    //将播放回话设给Player
+                    mPlayer.setPlaySession(playSession);
 
-                        if (null != mRecvStreamThread) {
-                            mPlayer.AVStopPlay();
-                            mRecvStreamThread.interrupt();
-                            mRecvStreamThread = null;
-                        }
-
-                        //启动播放
-                        mPlayer.AVStartPlay();
-
-                        mRecvStreamThread = new RecvStreamThread(mPlayer, playSession);
-                        mRecvStreamThread.start();
-                    } else {
-                        //Toast.makeText(PtzActivity.this,errorDesc,Toast.LENGTH_SHORT).show();
+                    if (null != mRecvStreamThread) {
+                        mPlayer.AVStopPlay();
+                        mRecvStreamThread.interrupt();
+                        mRecvStreamThread = null;
                     }
 
+                    //启动播放
+                    mPlayer.AVStartPlay();
+
+                    mRecvStreamThread = new RecvStreamThread(mPlayer, playSession);
+                    mRecvStreamThread.start();
+                } else {
+                    //Toast.makeText(PtzActivity.this,errorDesc,Toast.LENGTH_SHORT).show();
                 }
+
             };
 
             //设置实况的参数
@@ -384,53 +369,47 @@ public class CamPlayerActivity extends BaseActivity implements KeepaliveService.
         QueryReplayParam p = new QueryReplayParam(mCameraCode, beginTime, endTime, new QueryCondition(0, 100, true));
 
         //查询回放记录结果监听
-        OnQueryReplayListener queryListener = new OnQueryReplayListener() {
-            @Override
-            public void onQueryReplayResult(long errorCode, String errorDesc, List<RecordInfo> recordList) {
-                if (recordList == null || recordList.size() <= 0) {
-                    LogUtil.d("There is no record");
-                    SomeUtil.showSnackBar(rootview, "There is no record");
-                    return;
+        OnQueryReplayListener queryListener = (errorCode, errorDesc, recordList) -> {
+            if (recordList == null || recordList.size() <= 0) {
+                LogUtil.d("There is no record");
+                SomeUtil.showSnackBar(rootview, "There is no record");
+                return;
+            }
+
+
+            //取第一条回放记录测试回放
+            RecordInfo firstRecord = recordList.get(0);
+
+            //启动回放的参数
+            StartReplayParam p1 = new StartReplayParam();
+            p1.setCameraCode(mCameraCode);
+            p1.setRecodeInfo(firstRecord);
+            p1.setBitrate(64 * 8);  //64KB码率
+            p1.setFramerate(20);     //20帧率
+            p1.setResolution(2);     //4CIF分辨率
+
+
+            OnStartReplayListener listener = (errorCode1, errorDesc1, playSession) -> {
+                //设播放会话给Player
+                mPlayer.setPlaySession(playSession);
+
+                //先停掉已有的播放
+                if (mRecvStreamThread != null) {
+                    mPlayer.AVStopPlay();
+                    mRecvStreamThread.interrupt();
+                    mRecvStreamThread = null;
                 }
 
+                //启动播放解码
+                mPlayer.AVStartPlay();
 
-                //取第一条回放记录测试回放
-                RecordInfo firstRecord = recordList.get(0);
+                //启动收流线程
+                mRecvStreamThread = new RecvStreamThread(mPlayer, playSession);
+                mRecvStreamThread.start();
+            };
 
-                //启动回放的参数
-                StartReplayParam p = new StartReplayParam();
-                p.setCameraCode(mCameraCode);
-                p.setRecodeInfo(firstRecord);
-                p.setBitrate(64 * 8);  //64KB码率
-                p.setFramerate(20);     //20帧率
-                p.setResolution(2);     //4CIF分辨率
-
-
-                OnStartReplayListener listener = new OnStartReplayListener() {
-                    @Override
-                    public void onStartReplayResult(long errorCode, String errorDesc, String playSession) {
-                        //设播放会话给Player
-                        mPlayer.setPlaySession(playSession);
-
-                        //先停掉已有的播放
-                        if (mRecvStreamThread != null) {
-                            mPlayer.AVStopPlay();
-                            mRecvStreamThread.interrupt();
-                            mRecvStreamThread = null;
-                        }
-
-                        //启动播放解码
-                        mPlayer.AVStartPlay();
-
-                        //启动收流线程
-                        mRecvStreamThread = new RecvStreamThread(mPlayer, playSession);
-                        mRecvStreamThread.start();
-                    }
-                };
-
-                //启动回放
-                ServiceManager.startReplay(p, listener);
-            }
+            //启动回放
+            ServiceManager.startReplay(p1, listener);
         };
 
         //先查询指定时间段内有的回放记录
@@ -448,15 +427,12 @@ public class CamPlayerActivity extends BaseActivity implements KeepaliveService.
         }
 
         try {
-            OnStopLiveListener listener = new OnStopLiveListener() {
-                @Override
-                public void onStopLiveResult(long errorCode, String errorDesc) {
-                    //errorCode为0表示成功
-                    if (errorCode == 0) {
-                        //Toast.makeText(PtzActivity.this,"停止实况成功",Toast.LENGTH_SHORT).show();
-                    } else {
-                        // Toast.makeText(PtzActivity.this,errorDesc,Toast.LENGTH_SHORT).show();
-                    }
+            OnStopLiveListener listener = (errorCode, errorDesc) -> {
+                //errorCode为0表示成功
+                if (errorCode == 0) {
+                    //Toast.makeText(PtzActivity.this,"停止实况成功",Toast.LENGTH_SHORT).show();
+                } else {
+                    // Toast.makeText(PtzActivity.this,errorDesc,Toast.LENGTH_SHORT).show();
                 }
             };
             //停止实况接口调用
@@ -483,12 +459,9 @@ public class CamPlayerActivity extends BaseActivity implements KeepaliveService.
         param.setSpeed2(5);
 
         try {
-            OnPtzCommandListener listener = new OnPtzCommandListener() {
-                @Override
-                public void onPtzCommandResult(long errorCode, String errorDesc) {
-                    if (errorCode != 0) {
-                        //Toast.makeText(PtzActivity.this, errorDesc, Toast.LENGTH_SHORT).show();
-                    }
+            OnPtzCommandListener listener = (errorCode, errorDesc) -> {
+                if (errorCode != 0) {
+                    //Toast.makeText(PtzActivity.this, errorDesc, Toast.LENGTH_SHORT).show();
                 }
             };
             //云台控制接口
@@ -508,14 +481,11 @@ public class CamPlayerActivity extends BaseActivity implements KeepaliveService.
         param.setCameraCode(cameraCode);
 
         try {
-            OnLockPtzListener listener = new OnLockPtzListener() {
-                @Override
-                public void onLockPtzResult(long errorCode, String errorDesc) {
-                    if (errorCode != 0) {
-                        //Toast.makeText(PtzActivity.this, errorDesc, Toast.LENGTH_SHORT).show();
-                    } else {
-                        //Toast.makeText(PtzActivity.this,"云台锁定成功",Toast.LENGTH_SHORT).show();
-                    }
+            OnLockPtzListener listener = (errorCode, errorDesc) -> {
+                if (errorCode != 0) {
+                    //Toast.makeText(PtzActivity.this, errorDesc, Toast.LENGTH_SHORT).show();
+                } else {
+                    //Toast.makeText(PtzActivity.this,"云台锁定成功",Toast.LENGTH_SHORT).show();
                 }
             };
             //锁定云台接口调用
@@ -535,14 +505,11 @@ public class CamPlayerActivity extends BaseActivity implements KeepaliveService.
         param.setCameraCode(cameraCode);
 
         try {
-            OnUnLockPtzListener listener = new OnUnLockPtzListener() {
-                @Override
-                public void onUnLockPtzResult(long errorCode, String errorDesc) {
-                    if (errorCode != 0) {
-                        //Toast.makeText(PtzActivity.this, errorDesc, Toast.LENGTH_SHORT).show();
-                    } else {
-                        //Toast.makeText(PtzActivity.this, "云台解锁成功", Toast.LENGTH_SHORT).show();
-                    }
+            OnUnLockPtzListener listener = (errorCode, errorDesc) -> {
+                if (errorCode != 0) {
+                    //Toast.makeText(PtzActivity.this, errorDesc, Toast.LENGTH_SHORT).show();
+                } else {
+                    //Toast.makeText(PtzActivity.this, "云台解锁成功", Toast.LENGTH_SHORT).show();
                 }
             };
             //解锁云台接口调用

@@ -87,17 +87,10 @@ public class SICTypeActivity extends BaseActivity {
                     }
                 });
 
-        adapter.setOnItemClickListener(new MyRecyclerArrayAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(int position, View itemView) {
-                startActivity(new Intent(SICTypeActivity.this, SICInputActivity.class)
-                        .putExtra("typeid", adapter.getItem(position).getMoudleclasscode())
-                        .putExtra("typename", adapter.getItem(position).getMoudleclass())
-                );
-
-
-            }
-        });
+        adapter.setOnItemClickListener((position, itemView) -> startActivity(new Intent(SICTypeActivity.this, SICInputActivity.class)
+                .putExtra("typeid", adapter.getItem(position).getMoudleclasscode())
+                .putExtra("typename", adapter.getItem(position).getMoudleclass())
+        ));
 
 
     }

@@ -76,14 +76,11 @@ public class ScrollingActivity extends BaseActivity {
         //adapter.addAll(list);
         mTbToolbar.setTitle("");
         // AppBar的监听
-        mAblAppBar.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
-            @Override
-            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
-                int maxScroll = appBarLayout.getTotalScrollRange();
-                float percentage = (float) Math.abs(verticalOffset) / (float) maxScroll;
-                handleAlphaOnTitle(percentage);
-                handleToolbarTitleVisibility(percentage);
-            }
+        mAblAppBar.addOnOffsetChangedListener((appBarLayout, verticalOffset) -> {
+            int maxScroll = appBarLayout.getTotalScrollRange();
+            float percentage = (float) Math.abs(verticalOffset) / (float) maxScroll;
+            handleAlphaOnTitle(percentage);
+            handleToolbarTitleVisibility(percentage);
         });
 
         initParallaxValues(); // 自动滑动效果

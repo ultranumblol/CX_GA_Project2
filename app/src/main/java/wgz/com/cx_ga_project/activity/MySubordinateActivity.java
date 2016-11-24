@@ -56,19 +56,15 @@ public class MySubordinateActivity extends BaseActivity {
         adapter = new SubordinateAdapter(this);
         recyclerView.setAdapter(adapter);
         //adapter.setNoMore(R.layout.view_nomore);
-        adapter.setOnItemClickListener(new MyRecyclerArrayAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(int position, View itemView) {
-                final TextView policeidview = (TextView) itemView.findViewById(R.id.subordinate_zhiwu);
-                final TextView policeidname = (TextView) itemView.findViewById(R.id.subordinate_name);
-                String[] titles = new String[]{"时间银行", "工作日志", "工作云标签"};
-                int item = -1;
-                final AlertDialog.Builder builder = new AlertDialog.Builder(MySubordinateActivity.this);
+        adapter.setOnItemClickListener((position, itemView) -> {
+            final TextView policeidview = (TextView) itemView.findViewById(R.id.subordinate_zhiwu);
+            final TextView policeidname = (TextView) itemView.findViewById(R.id.subordinate_name);
+            String[] titles = new String[]{"时间银行", "工作日志", "工作云标签"};
+            int item = -1;
+            final AlertDialog.Builder builder = new AlertDialog.Builder(MySubordinateActivity.this);
 
-                builder.setTitle("请选择要查看下属的内容")
-                        .setItems(titles, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
+            builder.setTitle("请选择要查看下属的内容")
+                    .setItems(titles, (dialog, which) -> {
                         switch (which) {
                             case 0:
 
@@ -93,13 +89,11 @@ public class MySubordinateActivity extends BaseActivity {
                                 break;
 
                         }
-                    }
-                })
-                        .setNegativeButton("取消", null)
-                        .show();
+                    })
+                    .setNegativeButton("取消", null)
+                    .show();
 
 
-            }
         });
         initData();
 

@@ -120,12 +120,9 @@ public class MyApplyQingjiaFragment extends BaseFragment implements SwipeRefresh
         app.apiService.getBeanData("getOverLeaveStatus",(String) SPUtils.get(app.getApp().getApplicationContext(), Constant.USERID,""))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .map(new Func1<Apply, List<Apply.Result>>() {
-                    @Override
-                    public List<Apply.Result> call(Apply apply) {
-                        LogUtil.d("map_result::"+apply.getResult().toString());
-                        return apply.getResult();
-                    }
+                .map(apply -> {
+                    LogUtil.d("map_result::"+apply.getResult().toString());
+                    return apply.getResult();
                 })
                 .flatMap(new Func1<List<Apply.Result>, Observable<Apply.Result>>() {
                     @Override
@@ -134,18 +131,10 @@ public class MyApplyQingjiaFragment extends BaseFragment implements SwipeRefresh
                         return Observable.from(results);
                     }
                 })
-               .filter(new Func1<Apply.Result, Boolean>() {
-                   @Override
-                   public Boolean call(Apply.Result result) {
-                       return result.getType().equals(TYPE_QINGJIA)?true:false;
-                   }
-               }).
-                map(new Func1<Apply.Result, List<Apply.Result>>() {
-                    @Override
-                    public List<Apply.Result> call(Apply.Result result) {
-                        list.add(result);
-                        return list;
-                    }
+               .filter(result -> result.getType().equals(TYPE_QINGJIA)?true:false).
+                map(result -> {
+                    list.add(result);
+                    return list;
                 }).subscribe(new Observer<List<Apply.Result>>() {
             @Override
             public void onCompleted() {

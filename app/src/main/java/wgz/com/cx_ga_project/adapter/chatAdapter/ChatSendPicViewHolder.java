@@ -56,12 +56,7 @@ public class ChatSendPicViewHolder extends BaseViewHolder<ChatMsg.Re> {
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(mSendPicture);
 
-        mSendPicture.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getContext().startActivity(new Intent(getContext(), ShowBigImage.class).putExtra("url",data.getPic()));
-            }
-        });
+        mSendPicture.setOnClickListener(v -> getContext().startActivity(new Intent(getContext(), ShowBigImage.class).putExtra("url",data.getPic())));
         timestamp.setText(data.getSendtime());
         if (data.getIssend().equals("2")){
             progressBar.setVisibility(View.VISIBLE);

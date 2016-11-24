@@ -90,12 +90,7 @@ public class AddJQActivity extends BaseActivity {
             }
         });
         RxView.clicks(uploadPicFab).throttleFirst(500, TimeUnit.MILLISECONDS)
-                .subscribe(new Action1<Void>() {
-                    @Override
-                    public void call(Void aVoid) {
-                        uploadjq();
-                    }
-                });
+                .subscribe(aVoid -> {uploadjq();});
 
     }
 
@@ -106,12 +101,7 @@ public class AddJQActivity extends BaseActivity {
             upJqProgress.setVisibility(View.VISIBLE);
             DatrixUtil datrixUtil = new DatrixUtil(paths, rootview);
             datrixUtil.DatrixUpLoadPic();
-            datrixUtil.setOnAfterFinish(new DatrixUtil.AfterFinish() {
-                @Override
-                public void afterfinish(String fileid, List<String> ids) {
-                    addjqAndpic(fileid, ids);
-                }
-            });
+            datrixUtil.setOnAfterFinish((fileid1, ids) -> addjqAndpic(fileid1, ids));
         } else {
             addjq();
         }
@@ -254,12 +244,7 @@ public class AddJQActivity extends BaseActivity {
                 } else {
                     AlertDialog.Builder dialog = new AlertDialog.Builder(AddJQActivity.this);
                     dialog.setTitle("请确认").setMessage("还没有提交记录，确认退出?")
-                            .setPositiveButton("确认", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    finish();
-                                }
-                            }).setNegativeButton("取消", null).show();
+                            .setPositiveButton("确认", (dialog1, which) -> finish()).setNegativeButton("取消", null).show();
                 }
 
 

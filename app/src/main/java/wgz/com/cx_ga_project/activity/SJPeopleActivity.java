@@ -67,11 +67,8 @@ public class SJPeopleActivity extends BaseActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         RxView.clicks(fab).throttleFirst(500, TimeUnit.MILLISECONDS)
-                .subscribe(new Action1<Void>() {
-                    @Override
-                    public void call(Void aVoid) {
-                        UpLoadSjr();
-                    }
+                .subscribe(aVoid -> {
+                    UpLoadSjr();
                 });
     }
 

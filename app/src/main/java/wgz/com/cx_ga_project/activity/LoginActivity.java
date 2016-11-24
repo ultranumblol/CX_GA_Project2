@@ -77,28 +77,17 @@ public class LoginActivity extends BaseActivity {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         }
-        RxTextView.editorActions(editPassword, new Func1<Integer, Boolean>() {
-            @Override
-            public Boolean call(Integer integer) {
-                return integer == EditorInfo.IME_ACTION_DONE;
-            }
-        }).throttleFirst(500, TimeUnit.MILLISECONDS)
-                .subscribe(new Action1<Integer>() {
-                    @Override
-                    public void call(Integer integer) {
-                        // 2016/8/18 隐藏软键盘
-                        attemptLogin();
-                    }
+        RxTextView.editorActions(editPassword, integer -> integer == EditorInfo.IME_ACTION_DONE).throttleFirst(500, TimeUnit.MILLISECONDS)
+                .subscribe(integer -> {
+                    // 2016/8/18 隐藏软键盘
+                    attemptLogin();
                 });
 
 
         RxView.clicks(btnLogin)
                 .throttleFirst(500, TimeUnit.MILLISECONDS)
-                .subscribe(new Action1<Void>() {
-                    @Override
-                    public void call(Void aVoid) {
-                        attemptLogin();
-                    }
+                .subscribe(aVoid -> {
+                    attemptLogin();
                 });
         addUsernameAutoComplete();
     }

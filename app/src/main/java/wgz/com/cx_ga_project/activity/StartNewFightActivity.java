@@ -75,46 +75,40 @@ public class StartNewFightActivity extends BaseActivity {
         recyclerView.setAdapter(adapter = new JQAdapter(this));
         adapter.setNoMore(R.layout.view_nomore);
 
-        adapter.setOnItemClickListener(new MyRecyclerArrayAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(int position, View itemView) {
-                TextView taskidview = (TextView) itemView.findViewById(R.id.taskid);
-                String taskid =taskidview.getText().toString();
-                TextView jqstateview = (TextView) itemView.findViewById(R.id.jqstate_id);
-                String jqstate = jqstateview.getText().toString();
+        adapter.setOnItemClickListener((position, itemView) -> {
+            TextView taskidview = (TextView) itemView.findViewById(R.id.taskid);
+            String taskid =taskidview.getText().toString();
+            TextView jqstateview = (TextView) itemView.findViewById(R.id.jqstate_id);
+            String jqstate = jqstateview.getText().toString();
 
-                TextView jqidview = (TextView) itemView.findViewById(R.id.jqid);
-                String jqid = jqidview.getText().toString();
+            TextView jqidview = (TextView) itemView.findViewById(R.id.jqid);
+            String jqid = jqidview.getText().toString();
 
-                TextView jqstopidview = (TextView) itemView.findViewById(R.id.jqstop_id);
-                String jqstopid = jqstopidview.getText().toString();
+            TextView jqstopidview = (TextView) itemView.findViewById(R.id.jqstop_id);
+            String jqstopid = jqstopidview.getText().toString();
 
-                TextView sendtimeview = (TextView) itemView.findViewById(R.id.jqsendtime);
-                String sendtime = sendtimeview.getText().toString();
+            TextView sendtimeview = (TextView) itemView.findViewById(R.id.jqsendtime);
+            String sendtime = sendtimeview.getText().toString();
 
-                startActivity(new Intent(StartNewFightActivity.this, NewFightActivity.class)
-                        .putExtra("taskid",taskid)
-                        .putExtra("jqstate",jqstate)
-                        .putExtra("jqid",jqid)
-                        .putExtra("jqstopid",jqstopid)
-                        .putExtra("sendtime",sendtime)
-                );
-                new SPBuild(getApplicationContext())
-                        .addData(Constant.JQID, jqid)
-                        .addData(Constant.TASKID,taskid)
-                        .build();
+            startActivity(new Intent(StartNewFightActivity.this, NewFightActivity.class)
+                    .putExtra("taskid",taskid)
+                    .putExtra("jqstate",jqstate)
+                    .putExtra("jqid",jqid)
+                    .putExtra("jqstopid",jqstopid)
+                    .putExtra("sendtime",sendtime)
+            );
+            new SPBuild(getApplicationContext())
+                    .addData(Constant.JQID, jqid)
+                    .addData(Constant.TASKID,taskid)
+                    .build();
 
 
-            }
         });
         initdata();
         rxSubscription = RxBus.getDefault().toObservable(String.class)
-                .subscribe(new Action1<String>() {
-                    @Override
-                    public void call(String s) {
-                        if (s.equals("newjqflush"))
-                            initdata();
-                    }
+                .subscribe(s -> {
+                    if (s.equals("newjqflush"))
+                        initdata();
                 });
 
 

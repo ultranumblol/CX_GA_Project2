@@ -74,17 +74,14 @@ public class JQListActivity extends BaseActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter = new JQAdapter(this));
         adapter.setNoMore(R.layout.view_nomore);
-        adapter.setOnItemClickListener(new MyRecyclerArrayAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(int position, View itemView) {
-                TextView jqidview = (TextView) itemView.findViewById(R.id.jqid);
-                String jqid = jqidview.getText().toString();
+        adapter.setOnItemClickListener((position, itemView) -> {
+            TextView jqidview = (TextView) itemView.findViewById(R.id.jqid);
+            String jqid = jqidview.getText().toString();
 
-                startActivity(new Intent(JQListActivity.this, NewFightActivity.class)
-                        .putExtra("jqid",jqid)
-                        .putExtra("jqlist",true));
-                JQListActivity.this.finish();
-            }
+            startActivity(new Intent(JQListActivity.this, NewFightActivity.class)
+                    .putExtra("jqid",jqid)
+                    .putExtra("jqlist",true));
+            JQListActivity.this.finish();
         });
         initdata();
     }

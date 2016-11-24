@@ -60,13 +60,8 @@ public class WorkCloudListActivity extends BaseActivity {
 
 
         initData();
-        adapter.setOnItemClickListener(new MyRecyclerArrayAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(int position, View itemView) {
-                startActivity(new Intent(WorkCloudListActivity.this,OnesLogActivity.class)
-                        .putExtra("log",list.get(position).getSummary()));
-            }
-        });
+        adapter.setOnItemClickListener((position, itemView) -> startActivity(new Intent(WorkCloudListActivity.this,OnesLogActivity.class)
+                .putExtra("log",list.get(position).getSummary())));
 
 
     }

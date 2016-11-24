@@ -180,13 +180,10 @@ public class ChatActivity extends BaseActivity {
 
         recyclerview.scrollToPosition(adapter.getCount() - 1);
         RxView.clicks(etSendmessage).throttleFirst(500, TimeUnit.MICROSECONDS)
-                .subscribe(new Action1<Void>() {
-                    @Override
-                    public void call(Void aVoid) {
-                        recyclerview.scrollToPosition(adapter.getCount() - 1);
-                        if (more.getVisibility() == View.VISIBLE) {
-                            more.setVisibility(View.GONE);
-                        }
+                .subscribe(aVoid -> {
+                    recyclerview.scrollToPosition(adapter.getCount() - 1);
+                    if (more.getVisibility() == View.VISIBLE) {
+                        more.setVisibility(View.GONE);
                     }
                 });
         etSendmessage.addTextChangedListener(new TextWatcher() {
@@ -206,17 +203,14 @@ public class ChatActivity extends BaseActivity {
 
         });
         RxView.clicks(btnSend).throttleFirst(200, TimeUnit.MILLISECONDS)
-                .subscribe(new Action1<Void>() {
-                    @Override
-                    public void call(Void aVoid) {
-                        if (etSendmessage.getText().toString().equals("")) {
+                .subscribe(aVoid -> {
+                    if (etSendmessage.getText().toString().equals("")) {
 
-                        } else {
-                            Sendmsg();
-                            hideKeyboard();
-                        }
-
+                    } else {
+                        Sendmsg();
+                        hideKeyboard();
                     }
+
                 });
 
         getmsg();
@@ -237,12 +231,7 @@ public class ChatActivity extends BaseActivity {
                     @Override
                     public void onNext(final ChatUpProgress progress) {
 
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                uploadProtext.setText(progress.getPro());
-                            }
-                        });
+                        runOnUiThread(() -> uploadProtext.setText(progress.getPro()));
 
                     }
                 });
@@ -448,38 +437,35 @@ public class ChatActivity extends BaseActivity {
         //DatrixCreate();
         DatrixUtil datrixUtil = new DatrixUtil(paths, rootview);
         datrixUtil.DatrixUpLoadPic2();
-        datrixUtil.setOnAfterFinish(new DatrixUtil.AfterFinish() {
-            @Override
-            public void afterfinish(String fileid, List<String> ids) {
-                Date currentdate = new Date(System.currentTimeMillis());
-                String curredate = getTime(currentdate);
+        datrixUtil.setOnAfterFinish((fileid1, ids) -> {
+            Date currentdate = new Date(System.currentTimeMillis());
+            String curredate = getTime(currentdate);
 
 
-                app.jqAPIService.sendMsg(SomeUtil.getJQId(), "", datrixUrl + fileid + datrixurl2, "", "", SomeUtil.getTASKId(), curredate, SomeUtil.getUserId())
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(new Subscriber<String>() {
-                            @Override
-                            public void onCompleted() {
-                                etSendmessage.setText("");
+            app.jqAPIService.sendMsg(SomeUtil.getJQId(), "", datrixUrl + fileid1 + datrixurl2, "", "", SomeUtil.getTASKId(), curredate, SomeUtil.getUserId())
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new Subscriber<String>() {
+                        @Override
+                        public void onCompleted() {
+                            etSendmessage.setText("");
 
-                                getPicVideoNewmsg();
-                            }
+                            getPicVideoNewmsg();
+                        }
 
-                            @Override
-                            public void onError(Throwable e) {
-                                //SomeUtil.showSnackBar(rootview, "error:" + e.toString());
-                                LogUtil.d("error:" + e.toString());
-                                SomeUtil.checkHttpException(ChatActivity.this,e,rootview);
-                            }
+                        @Override
+                        public void onError(Throwable e) {
+                            //SomeUtil.showSnackBar(rootview, "error:" + e.toString());
+                            LogUtil.d("error:" + e.toString());
+                            SomeUtil.checkHttpException(ChatActivity.this,e,rootview);
+                        }
 
-                            @Override
-                            public void onNext(String s) {
-                                LogUtil.d("Finish result:" + s);
-                                // SomeUtil.showSnackBar(rootview,"result:"+s);
-                            }
-                        });
-            }
+                        @Override
+                        public void onNext(String s) {
+                            LogUtil.d("Finish result:" + s);
+                            // SomeUtil.showSnackBar(rootview,"result:"+s);
+                        }
+                    });
         });
 
     }
@@ -490,51 +476,48 @@ public class ChatActivity extends BaseActivity {
         uploadProtext.setVisibility(View.VISIBLE);
         DatrixUtil datrixUtil = new DatrixUtil(videoPath, rootview);
         datrixUtil.DatrixUpLoadVideo();
-        datrixUtil.setOnAfterFinish(new DatrixUtil.AfterFinish() {
-            @Override
-            public void afterfinish(String fileid, List<String> ids) {
-                LogUtil.d("UpLoad Video finish  id : " + fileid);
-                Date currentdate = new Date(System.currentTimeMillis());
-                String curredate = getTime(currentdate);
+        datrixUtil.setOnAfterFinish((fileid1, ids) -> {
+            LogUtil.d("UpLoad Video finish  id : " + fileid1);
+            Date currentdate = new Date(System.currentTimeMillis());
+            String curredate = getTime(currentdate);
 
 
-                app.jqAPIService.sendMsg(SomeUtil.getJQId(), "", "", datrixPlayVideo + fileid + datrixPlayVideo2, datrixVideoPicdurl1 + fileid + datrixurl2, SomeUtil.getTASKId(), curredate, SomeUtil.getUserId())
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(new Subscriber<String>() {
+            app.jqAPIService.sendMsg(SomeUtil.getJQId(), "", "", datrixPlayVideo + fileid1 + datrixPlayVideo2, datrixVideoPicdurl1 + fileid1 + datrixurl2, SomeUtil.getTASKId(), curredate, SomeUtil.getUserId())
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new Subscriber<String>() {
 
-                            @Override
-                            public void onCompleted() {
-                                etSendmessage.setText("");
-                                uploadPrg.setVisibility(View.GONE);
-                                uploadBg.setVisibility(View.GONE);
-                                uploadProtext.setVisibility(View.GONE);
-                                //2016/9/12 获取新消息 删除本地 换成服务器请求的
-                                //adapter.getHeader()
-                                //getNewmsg();
-                                //LogUtil.d("recyclerview count:"+recyclerview.getChildCount());
-                                //recyclerview.getChildCount();
-                                //adapter.remove(adapter.getCount() - 1);
-                                getPicVideoNewmsg();
-                            }
+                        @Override
+                        public void onCompleted() {
+                            etSendmessage.setText("");
+                            uploadPrg.setVisibility(View.GONE);
+                            uploadBg.setVisibility(View.GONE);
+                            uploadProtext.setVisibility(View.GONE);
+                            //2016/9/12 获取新消息 删除本地 换成服务器请求的
+                            //adapter.getHeader()
+                            //getNewmsg();
+                            //LogUtil.d("recyclerview count:"+recyclerview.getChildCount());
+                            //recyclerview.getChildCount();
+                            //adapter.remove(adapter.getCount() - 1);
+                            getPicVideoNewmsg();
+                        }
 
-                            @Override
-                            public void onError(Throwable e) {
-                                //SomeUtil.showSnackBar(rootview, "error:" + e.toString());
-                                LogUtil.d("error:" + e.toString());
-                                SomeUtil.checkHttpException(ChatActivity.this,e,rootview);
-                            }
+                        @Override
+                        public void onError(Throwable e) {
+                            //SomeUtil.showSnackBar(rootview, "error:" + e.toString());
+                            LogUtil.d("error:" + e.toString());
+                            SomeUtil.checkHttpException(ChatActivity.this,e,rootview);
+                        }
 
-                            @Override
-                            public void onNext(String s) {
-                                LogUtil.d("Finish result:" + s);
-                                // SomeUtil.showSnackBar(rootview,"result:"+s);
-                            }
-                        });
+                        @Override
+                        public void onNext(String s) {
+                            LogUtil.d("Finish result:" + s);
+                            // SomeUtil.showSnackBar(rootview,"result:"+s);
+                        }
+                    });
 
-                //SomeUtil.showSnackBarLong(rootview, "视频id：" + fileid);
+            //SomeUtil.showSnackBarLong(rootview, "视频id：" + fileid);
 
-            }
         });
 
 

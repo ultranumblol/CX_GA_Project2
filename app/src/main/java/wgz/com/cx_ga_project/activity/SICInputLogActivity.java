@@ -57,28 +57,18 @@ public class SICInputLogActivity extends BaseActivity {
         sicinputlogRv.setLayoutManager(new Mylayout(this));
         sicinputlogRv.setAdapter(adapter = new SICInputLogAdapter(this));
         initData();
-        adapter.setOnItemClickListener(new MyRecyclerArrayAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(int position, View itemView) {
-                startActivity(new Intent(SICInputLogActivity.this,SICLogDetilActivity.class)
-                .putExtra("type",adapter.getItem(position).getType())
-                        .putExtra("docid",adapter.getItem(position).getDocid())
-                );
-
-
-            }
-        });
+        adapter.setOnItemClickListener((position, itemView) -> startActivity(new Intent(SICInputLogActivity.this,SICLogDetilActivity.class)
+        .putExtra("type",adapter.getItem(position).getType())
+                .putExtra("docid",adapter.getItem(position).getDocid())
+        ));
 
         rxSubscription = RxBus.getDefault().toObservable(String.class)
-                .subscribe(new Action1<String>() {
-                    @Override
-                    public void call(String s) {
-                     if (s.equals("flushsiclog")){
-                         initData();
+                .subscribe(s -> {
+                 if (s.equals("flushsiclog")){
+                     initData();
 
-                     }
+                 }
 
-                    }
                 });
 
     }

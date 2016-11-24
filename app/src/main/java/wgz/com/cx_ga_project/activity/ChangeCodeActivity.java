@@ -58,11 +58,8 @@ public class ChangeCodeActivity extends BaseActivity {
 
         RxView.clicks(commit)
                 .throttleFirst(500, TimeUnit.MILLISECONDS)
-                .subscribe(new Action1<Void>() {
-                    @Override
-                    public void call(Void aVoid) {
-                        commitPass();
-                    }
+                .subscribe(aVoid -> {
+                    commitPass();
                 });
 
     }

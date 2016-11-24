@@ -87,15 +87,12 @@ public class CamMapHtmlActivity extends BaseActivity {
             }
 
         });
-        webView.setOnKeyListener(new View.OnKeyListener() {
-            @Override
-            public boolean onKey(View v, int keyCode, KeyEvent event) {
-                if (webView.canGoBack() && event.getAction() == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_BACK) {
-                    webView.goBack();
-                    return true;
-                }
-                return false;
+        webView.setOnKeyListener((v, keyCode, event) -> {
+            if (webView.canGoBack() && event.getAction() == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_BACK) {
+                webView.goBack();
+                return true;
             }
+            return false;
         });
         WebSettings webSettings = webView.getSettings();
         webSettings.setJavaScriptEnabled(true);
@@ -106,13 +103,10 @@ public class CamMapHtmlActivity extends BaseActivity {
         webView.loadUrl("http://192.168.1.187:8888/fujinziyuan?flag_menu=ZHDD-fjzy&appflag=1&apptoken=58c93a51-3e95-43b6-8a11-e33c96bb78cf");
 
         RxView.clicks(fab).throttleFirst(500, TimeUnit.MICROSECONDS)
-                .subscribe(new Action1<Void>() {
-                    @Override
-                    public void call(Void aVoid) {
-                        //获取body标签下的详情内容
-                       // webView.loadUrl("javascript:window.android.copyText(document.getElementsByTagName('body')[0].innerHTML);");
-                        webView.loadUrl("javascript:getposition()");
-                    }
+                .subscribe(aVoid -> {
+                    //获取body标签下的详情内容
+                   // webView.loadUrl("javascript:window.android.copyText(document.getElementsByTagName('body')[0].innerHTML);");
+                    webView.loadUrl("javascript:getposition()");
                 });
 
 

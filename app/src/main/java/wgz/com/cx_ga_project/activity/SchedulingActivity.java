@@ -198,12 +198,7 @@ public class SchedulingActivity extends BaseActivity {
         vpCalender.addOnPageChangeListener(new OnMyViewPageChangeListener());
 
 
-        vpCalender.post(new Runnable() {
-            @Override
-            public void run() {
-                initEventDays(adapter.getChildView(0));
-            }
-        });
+        vpCalender.post(() -> initEventDays(adapter.getChildView(0)));
 
     }
 

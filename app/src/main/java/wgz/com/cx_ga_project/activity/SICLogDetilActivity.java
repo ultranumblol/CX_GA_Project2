@@ -112,18 +112,10 @@ public class SICLogDetilActivity extends BaseActivity {
         sicloginputPics.setAdapter(adapter = new AddPictureAdapter(this));
         initdata();
         rxSubscription = RxBus.getDefault().toObservable(ChatUpProgress.class)
-                .subscribe(new Action1<ChatUpProgress>() {
-                    @Override
-                    public void call(final ChatUpProgress s) {
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                sicuploadProtext.setText(s.getPro());
-                            }
-                        });
+                .subscribe(s -> {
+                    runOnUiThread(() -> sicuploadProtext.setText(s.getPro()));
 
 
-                    }
                 });
     }
 
@@ -134,12 +126,7 @@ public class SICLogDetilActivity extends BaseActivity {
                                 .compose(RxUtil.<String>applySchedulers()),
                         app.apiService.getSocialInfoDetil(type, docid)
                                 .compose(RxUtil.<SICDetil>applySchedulers())
-                        , new Func2<String, SICDetil, SicDetilAndStr>() {
-                            @Override
-                            public SicDetilAndStr call(String s, SICDetil sicDetil) {
-                                return new SicDetilAndStr(s, sicDetil);
-                            }
-                        });
+                        , (s, sicDetil) -> new SicDetilAndStr(s, sicDetil));
         com.subscribe(new Subscriber<SicDetilAndStr>() {
             @Override
             public void onCompleted() {
@@ -189,24 +176,21 @@ public class SICLogDetilActivity extends BaseActivity {
         DatrixUtil datrixUtil = new DatrixUtil(videopaths, rootview);
         //datrixUtil.DatrixUpLoadVideo();
         datrixUtil.DatrixUpLoadVideos();
-        datrixUtil.setOnAfterFinish(new DatrixUtil.AfterFinish() {
-            @Override
-            public void afterfinish(String fileid, List<String> ids) {
-                StringBuffer sf = new StringBuffer();
-                for (int i = 0; i < ids.size(); i++) {
-                    if (i == ids.size() - 1) {
-                        sf.append(ids.get(i));
-                    } else {
-                        sf.append(ids.get(i));
-                        sf.append(",");
-                    }
+        datrixUtil.setOnAfterFinish((fileid, ids) -> {
+            StringBuffer sf = new StringBuffer();
+            for (int i = 0; i < ids.size(); i++) {
+                if (i == ids.size() - 1) {
+                    sf.append(ids.get(i));
+                } else {
+                    sf.append(ids.get(i));
+                    sf.append(",");
                 }
-                videoids = sf.toString();
-                LogUtil.d("videoids : " + videoids);
-
-
-                UploadInfo();
             }
+            videoids = sf.toString();
+            LogUtil.d("videoids : " + videoids);
+
+
+            UploadInfo();
         });
 
 
@@ -301,29 +285,26 @@ public class SICLogDetilActivity extends BaseActivity {
         String[] titles = new String[]{"添加图片", "添加视频"};
         AlertDialog.Builder builder = new AlertDialog.Builder(SICLogDetilActivity.this);
         builder.setTitle("请选择要添加的附件")
-                .setItems(titles, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        switch (which) {
-                            case 0:
-                                Intent intent = new Intent(SICLogDetilActivity.this, PickPhotoActivity.class);
-                                intent.putExtra(PhotoPickerFragment.EXTRA_SELECT_COUNT, 6);
-                                intent.putExtra(PhotoPickerFragment.EXTRA_DEFAULT_SELECTED_LIST, "");
-                                intent.putExtra(HTTP_URL, "");
-                                startActivityForResult(intent, 2);
+                .setItems(titles, (dialog, which) -> {
+                    switch (which) {
+                        case 0:
+                            Intent intent = new Intent(SICLogDetilActivity.this, PickPhotoActivity.class);
+                            intent.putExtra(PhotoPickerFragment.EXTRA_SELECT_COUNT, 6);
+                            intent.putExtra(PhotoPickerFragment.EXTRA_DEFAULT_SELECTED_LIST, "");
+                            intent.putExtra(HTTP_URL, "");
+                            startActivityForResult(intent, 2);
 
-                                break;
-                            case 1:
-                                Intent intent2 = new Intent();
-                                intent2.setType("video/*");
-                                intent2.setAction(Intent.ACTION_GET_CONTENT);
-                                intent2.addCategory(Intent.CATEGORY_OPENABLE);
-                                startActivityForResult(intent2, 3);
+                            break;
+                        case 1:
+                            Intent intent2 = new Intent();
+                            intent2.setType("video/*");
+                            intent2.setAction(Intent.ACTION_GET_CONTENT);
+                            intent2.addCategory(Intent.CATEGORY_OPENABLE);
+                            startActivityForResult(intent2, 3);
 
-                                break;
+                            break;
 
 
-                        }
                     }
                 }).show();
 
@@ -378,35 +359,26 @@ public class SICLogDetilActivity extends BaseActivity {
     private void commit() {
         SomeUtil.showSnackBar(rootview, "正在上传请稍等！");
         Observable.just("go").compose(RxUtil.<String>applySchedulers())
-                .subscribe(new Action1<String>() {
-                    @Override
-                    public void call(String s) {
-                        sicuploadPrg.setVisibility(View.VISIBLE);
-                        sicuploadBg.setVisibility(View.VISIBLE);
-                        sicuploadProtext.setVisibility(View.VISIBLE);
-                    }
+                .subscribe(s -> {
+                    sicuploadPrg.setVisibility(View.VISIBLE);
+                    sicuploadBg.setVisibility(View.VISIBLE);
+                    sicuploadProtext.setVisibility(View.VISIBLE);
                 });
         if (NewPicpaths.size() > 0 && videopaths.size() <= 0) {
             DatrixUtil datrixUtil = new DatrixUtil(NewPicpaths, rootview);
             datrixUtil.DatrixUpLoadPic2();
-            datrixUtil.setOnAfterFinish(new DatrixUtil.AfterFinish() {
-                @Override
-                public void afterfinish(String fileid, List<String> ids) {
-                    UploadPic(ids);
-                    UploadInfo();
-                }
+            datrixUtil.setOnAfterFinish((fileid, ids) -> {
+                UploadPic(ids);
+                UploadInfo();
             });
         }
         if (NewPicpaths.size() > 0 && videopaths.size() > 0) {
             DatrixUtil datrixUtil = new DatrixUtil(NewPicpaths, rootview);
             datrixUtil.DatrixUpLoadPic2();
-            datrixUtil.setOnAfterFinish(new DatrixUtil.AfterFinish() {
-                @Override
-                public void afterfinish(String fileid, List<String> ids) {
-                    UploadPic(ids);
-                    UpLoadVideo();
+            datrixUtil.setOnAfterFinish((fileid, ids) -> {
+                UploadPic(ids);
+                UpLoadVideo();
 
-                }
             });
 
 
@@ -441,12 +413,7 @@ public class SICLogDetilActivity extends BaseActivity {
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(SICLogDetilActivity.this);
                 builder.setTitle("确认提交修改？")
-                        .setPositiveButton("确认", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                commit();
-                            }
-                        }).setNegativeButton("取消", null).show();
+                        .setPositiveButton("确认", (dialog, which) -> commit()).setNegativeButton("取消", null).show();
 
                 break;
 

@@ -82,11 +82,8 @@ public class UpLoadSJCarActivity extends BaseActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         RxView.clicks(fab).throttleFirst(500, TimeUnit.MILLISECONDS)
-                .subscribe(new Action1<Void>() {
-                    @Override
-                    public void call(Void aVoid) {
-                        UpLoadcarMsg();
-                    }
+                .subscribe(aVoid -> {
+                    UpLoadcarMsg();
                 });
     }
 
@@ -137,10 +134,4 @@ public class UpLoadSJCarActivity extends BaseActivity {
     }
 
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        // TODO: add setContentView(...) invocation
-        ButterKnife.bind(this);
-    }
 }

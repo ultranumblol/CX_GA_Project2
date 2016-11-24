@@ -116,53 +116,50 @@ public class NewFightActivity extends BaseActivity {
 
     @Override
     public void initView() {
-        FabPlus.setOnItemClickListener(new FloatingActionButtonPlus.OnItemClickListener() {
-            @Override
-            public void onItemClick(FabTagLayout tagView, int position) {
-                int id = tagView.getId();
-                switch (id) {
-                    case R.id.fabtag_bjrJQ:
-                        startActivity(new Intent(NewFightActivity.this, JQListActivity.class).putExtra("title", "bjr").putExtra("bjrname", baojingName));
-                        if (ifFromJQlist){
-                            NewFightActivity.this.finish();
+        FabPlus.setOnItemClickListener((tagView, position) -> {
+            int id = tagView.getId();
+            switch (id) {
+                case R.id.fabtag_bjrJQ:
+                    startActivity(new Intent(NewFightActivity.this, JQListActivity.class).putExtra("title", "bjr").putExtra("bjrname", baojingName));
+                    if (ifFromJQlist){
+                        NewFightActivity.this.finish();
 
-                        }
-                        break;
-                    case R.id.fabtag_nearvideoCam:
-                        startActivity(new Intent(NewFightActivity.this, CamMapHtmlActivity.class));
-                        if (ifFromJQlist){
-                            NewFightActivity.this.finish();
+                    }
+                    break;
+                case R.id.fabtag_nearvideoCam:
+                    startActivity(new Intent(NewFightActivity.this, CamMapHtmlActivity.class));
+                    if (ifFromJQlist){
+                        NewFightActivity.this.finish();
 
-                        }
-                        break;
-                    case R.id.fabtag_nearjq:
-                        startActivity(new Intent(NewFightActivity.this, JQListActivity.class).putExtra("title", "nearjq"));
-                        if (ifFromJQlist){
-                            NewFightActivity.this.finish();
+                    }
+                    break;
+                case R.id.fabtag_nearjq:
+                    startActivity(new Intent(NewFightActivity.this, JQListActivity.class).putExtra("title", "nearjq"));
+                    if (ifFromJQlist){
+                        NewFightActivity.this.finish();
 
-                        }
-                        break;
-                    case R.id.fabtag_sjrJQ:
-                        startActivity(new Intent(NewFightActivity.this, JQListActivity.class).putExtra("title", "sjr"));
-                        if (ifFromJQlist){
-                            NewFightActivity.this.finish();
+                    }
+                    break;
+                case R.id.fabtag_sjrJQ:
+                    startActivity(new Intent(NewFightActivity.this, JQListActivity.class).putExtra("title", "sjr"));
+                    if (ifFromJQlist){
+                        NewFightActivity.this.finish();
 
-                        }
-                        break;
-                    case R.id.fabtag_zyJQ:
-                        if(!ifFromJQlist){
+                    }
+                    break;
+                case R.id.fabtag_zyJQ:
+                    if(!ifFromJQlist){
 
-                            if (jqstate.equals("4")) {
+                        if (jqstate.equals("4")) {
 
-                            }else {
-                                transferDialog();
-                            }
-
+                        }else {
+                            transferDialog();
                         }
 
-                        break;
+                    }
 
-                }
+                    break;
+
             }
         });
         toolbar.setTitle("接处警作战");
@@ -200,22 +197,16 @@ public class NewFightActivity extends BaseActivity {
         if (jqstate.equals("1")) {
 
             RxView.clicks(fabNewfight).throttleFirst(500, TimeUnit.MICROSECONDS)
-                    .subscribe(new Action1<Void>() {
-                        @Override
-                        public void call(Void aVoid) {
-                            ShowDialog();
-                        }
+                    .subscribe(aVoid -> {
+                        ShowDialog();
                     });
         }
 
         if (jqstate.equals("2")) {
             fabNewfight.setImageResource(R.drawable.ic_stop_white_48dp);
             RxView.clicks(fabNewfight).throttleFirst(500, TimeUnit.MICROSECONDS)
-                    .subscribe(new Action1<Void>() {
-                        @Override
-                        public void call(Void aVoid) {
-                            stopjq();
-                        }
+                    .subscribe(aVoid -> {
+                        stopjq();
                     });
             idFightBulu.setVisibility(View.GONE);
             idFightUpload.setVisibility(View.VISIBLE);
@@ -224,11 +215,8 @@ public class NewFightActivity extends BaseActivity {
         if (jqstate.equals("4")) {
             fabNewfight.setImageResource(R.drawable.ic_stop_white_48dp);
             RxView.clicks(fabNewfight).throttleFirst(500, TimeUnit.MICROSECONDS)
-                    .subscribe(new Action1<Void>() {
-                        @Override
-                        public void call(Void aVoid) {
-                            stopjq2();
-                        }
+                    .subscribe(aVoid -> {
+                        stopjq2();
                     });
             idFightBulu.setVisibility(View.VISIBLE);
             idFightUpload.setVisibility(View.GONE);
@@ -243,37 +231,32 @@ public class NewFightActivity extends BaseActivity {
     private void stopjq2() {
         final AlertDialog.Builder builder = new AlertDialog.Builder(NewFightActivity.this);
         builder.setTitle("是否结束警情补录?")
-                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        app.jqAPIService.stopTaskJq("3", stopid, taskid)
-                                .compose(RxUtil.<String>applySchedulers())
-                                .subscribe(new Subscriber<String>() {
+                .setPositiveButton("确定", (dialog, which) -> app.jqAPIService.stopTaskJq("3", stopid, taskid)
+                        .compose(RxUtil.<String>applySchedulers())
+                        .subscribe(new Subscriber<String>() {
+                            @Override
+                            public void onCompleted() {
+
+                            }
+
+                            @Override
+                            public void onError(Throwable e) {
+                                LogUtil.d("jqstop result error:" + e.toString());
+                            }
+
+                            @Override
+                            public void onNext(String s) {
+                                LogUtil.d("jqstop result :" + s);
+                                SomeUtil.showSnackBar(rootview, "出警任务已经结束！").setCallback(new Snackbar.Callback() {
                                     @Override
-                                    public void onCompleted() {
+                                    public void onDismissed(Snackbar snackbar, int event) {
+                                        RxBus.getDefault().post("newjqflush");
+                                        finish();
 
-                                    }
-
-                                    @Override
-                                    public void onError(Throwable e) {
-                                        LogUtil.d("jqstop result error:" + e.toString());
-                                    }
-
-                                    @Override
-                                    public void onNext(String s) {
-                                        LogUtil.d("jqstop result :" + s);
-                                        SomeUtil.showSnackBar(rootview, "出警任务已经结束！").setCallback(new Snackbar.Callback() {
-                                            @Override
-                                            public void onDismissed(Snackbar snackbar, int event) {
-                                                RxBus.getDefault().post("newjqflush");
-                                                finish();
-
-                                            }
-                                        });
                                     }
                                 });
-                    }
-                })
+                            }
+                        }))
                 .setNegativeButton("取消", null).show();
 
 
@@ -283,26 +266,19 @@ public class NewFightActivity extends BaseActivity {
         final String[] choice = new String[]{"已完成警情回告并结束此次出警任务", "结束任务，后期补录警情内容"};
         final AlertDialog.Builder builder = new AlertDialog.Builder(NewFightActivity.this);
         builder.setTitle("是否结束此次出警？")
-                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        builder.setTitle("请选择：")
-                                .setSingleChoiceItems(choice, -1, new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        switch (which) {
-                                            case 0:
-                                                stopstate = "3";
-                                                break;
-                                            case 1:
-                                                stopstate = "4";
+                .setPositiveButton("确定", (dialog, which) -> {
+                    builder.setTitle("请选择：")
+                            .setSingleChoiceItems(choice, -1, (dialog12, which12) -> {
+                                switch (which12) {
+                                    case 0:
+                                        stopstate = "3";
+                                        break;
+                                    case 1:
+                                        stopstate = "4";
 
-                                        }
+                                }
 
-                                    }
-                                }).setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
+                            }).setPositiveButton("确定", (dialog1, which1) -> {
                                 LogUtil.d("taskid:" + taskid);
                                 app.jqAPIService.stopTaskJq(stopstate, stopid, taskid)
                                         .compose(RxUtil.<String>applySchedulers())
@@ -329,11 +305,9 @@ public class NewFightActivity extends BaseActivity {
                                                 });
                                             }
                                         });
-                            }
-                        }).setNegativeButton("取消", null).show();
+                            }).setNegativeButton("取消", null).show();
 
-                        /**/
-                    }
+                    /**/
                 }).setNegativeButton("取消", null)
                 .show();
 
@@ -385,118 +359,85 @@ public class NewFightActivity extends BaseActivity {
                         tbuilder.setTitle("请确认")
                                 .setMessage("是否结束当前出警任务并转移该任务？")
                                 .setNegativeButton("取消", null)
-                                .setPositiveButton("确认", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
+                                .setPositiveButton("确认", (dialog, which) -> tbuilder.setTitle("请选择：")
+                                        .setMessage(null)
+                                        .setSingleChoiceItems(choice, -1, (dialog15, which15) -> {
+                                            switch (which15) {
+                                                case 0:
+                                                    stopstate = "3";
+                                                    break;
+                                                case 1:
+                                                    stopstate = "4";
 
-                                        tbuilder.setTitle("请选择：")
-                                                .setMessage(null)
-                                                .setSingleChoiceItems(choice, -1, new DialogInterface.OnClickListener() {
-                                                    @Override
-                                                    public void onClick(DialogInterface dialog, int which) {
-                                                        switch (which) {
-                                                            case 0:
-                                                                stopstate = "3";
-                                                                break;
-                                                            case 1:
-                                                                stopstate = "4";
+                                            }
+
+                                        }).setPositiveButton("确认", (dialog14, which14) -> {
+                                            //停止警情
+                                            app.jqAPIService.stopTaskJq(stopstate, stopid, taskid)
+                                                    .compose(RxUtil.<String>applySchedulers())
+                                                    .subscribe(new Subscriber<String>() {
+                                                        @Override
+                                                        public void onCompleted() {
 
                                                         }
 
-                                                    }
-                                                }).setPositiveButton("确认", new DialogInterface.OnClickListener() {
-                                            @Override
-                                            public void onClick(DialogInterface dialog, int which) {
-                                                //停止警情
-                                                app.jqAPIService.stopTaskJq(stopstate, stopid, taskid)
-                                                        .compose(RxUtil.<String>applySchedulers())
-                                                        .subscribe(new Subscriber<String>() {
-                                                            @Override
-                                                            public void onCompleted() {
+                                                        @Override
+                                                        public void onError(Throwable e) {
+                                                            LogUtil.d("jqstop result error:" + e.toString());
+                                                        }
 
-                                                            }
+                                                        @Override
+                                                        public void onNext(String s) {
+                                                            tbuilder.setTitle("请选择要转移的单位")
+                                                                    .setMessage(null)
+                                                                    .setSingleChoiceItems(parts, -1, (dialog13, which13) -> {
+                                                                        partNum = which13;
+                                                                    })
+                                                                    .setNegativeButton("取消", null)
+                                                                    .setPositiveButton("下一步", (dialog12, which12) -> {
+                                                                        LogUtil.d("which : " + which12);
+                                                                        switch (partNum) {
+                                                                            case 0:
+                                                                                tbuilder.setTitle(parts[partNum])
+                                                                                        .setMessage(null)
+                                                                                        .setSingleChoiceItems(parts1, -1, (dialog1, which1) -> {
+                                                                                            departmentName = parts1[which1];
+                                                                                            for (int i = 0; i < data1.size(); i++) {
+                                                                                                if (departmentName.equals(data1.get(i).getDepartSimplename())) {
+                                                                                                    departmentID = data1.get(i).getDepartmentid();
+                                                                                                }
+                                                                                            }
 
-                                                            @Override
-                                                            public void onError(Throwable e) {
-                                                                LogUtil.d("jqstop result error:" + e.toString());
-                                                            }
+                                                                                        }).setNegativeButton("取消", null)
+                                                                                        .setPositiveButton("确定", (dialog1213, which1213) -> {
+                                                                                            LogUtil.d("departmentName : " + departmentName);
+                                                                                            LogUtil.d("departmentid : " + departmentID);
+                                                                                            Jqzhuanyi();
+                                                                                        }).show();
 
-                                                            @Override
-                                                            public void onNext(String s) {
-                                                                tbuilder.setTitle("请选择要转移的单位")
-                                                                        .setMessage(null)
-                                                                        .setSingleChoiceItems(parts, -1, new DialogInterface.OnClickListener() {
-                                                                            @Override
-                                                                            public void onClick(DialogInterface dialog, int which) {
-                                                                                partNum = which;
-                                                                            }
-                                                                        })
-                                                                        .setNegativeButton("取消", null)
-                                                                        .setPositiveButton("下一步", new DialogInterface.OnClickListener() {
-                                                                            @Override
-                                                                            public void onClick(DialogInterface dialog, int which) {
-                                                                                LogUtil.d("which : " + which);
-                                                                                switch (partNum) {
-                                                                                    case 0:
-                                                                                        tbuilder.setTitle(parts[partNum])
-                                                                                                .setMessage(null)
-                                                                                                .setSingleChoiceItems(parts1, -1, new DialogInterface.OnClickListener() {
-                                                                                                    @Override
-                                                                                                    public void onClick(DialogInterface dialog, int which) {
-                                                                                                        departmentName = parts1[which];
-                                                                                                        for (int i = 0; i < data1.size(); i++) {
-                                                                                                            if (departmentName.equals(data1.get(i).getDepartSimplename())) {
-                                                                                                                departmentID = data1.get(i).getDepartmentid();
-                                                                                                            }
-                                                                                                        }
+                                                                                break;
+                                                                            case 1:
+                                                                                tbuilder.setTitle(parts[partNum])
+                                                                                        .setMessage(null)
+                                                                                        .setSingleChoiceItems(partsSL, -1, (dialog1212, which1212) -> {
+                                                                                            departmentName = partsSL[which1212];
+                                                                                            for (int i = 0; i < dataSL.size(); i++) {
+                                                                                                if (departmentName.equals(dataSL.get(i).getDepartSimplename())) {
+                                                                                                    departmentID = dataSL.get(i).getDepartmentid();
+                                                                                                }
+                                                                                            }
+                                                                                        }).setNegativeButton("取消", null)
+                                                                                        .setPositiveButton("确定", (dialog121, which121) -> Jqzhuanyi()).show();
+                                                                                break;
 
-                                                                                                    }
-                                                                                                }).setNegativeButton("取消", null)
-                                                                                                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                                                                                                    @Override
-                                                                                                    public void onClick(DialogInterface dialog, int which) {
-                                                                                                        LogUtil.d("departmentName : " + departmentName);
-                                                                                                        LogUtil.d("departmentid : " + departmentID);
-                                                                                                        Jqzhuanyi();
-                                                                                                    }
-                                                                                                }).show();
+                                                                        }
 
-                                                                                        break;
-                                                                                    case 1:
-                                                                                        tbuilder.setTitle(parts[partNum])
-                                                                                                .setMessage(null)
-                                                                                                .setSingleChoiceItems(partsSL, -1, new DialogInterface.OnClickListener() {
-                                                                                                    @Override
-                                                                                                    public void onClick(DialogInterface dialog, int which) {
-                                                                                                        departmentName = partsSL[which];
-                                                                                                        for (int i = 0; i < dataSL.size(); i++) {
-                                                                                                            if (departmentName.equals(dataSL.get(i).getDepartSimplename())) {
-                                                                                                                departmentID = dataSL.get(i).getDepartmentid();
-                                                                                                            }
-                                                                                                        }
-                                                                                                    }
-                                                                                                }).setNegativeButton("取消", null)
-                                                                                                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                                                                                                    @Override
-                                                                                                    public void onClick(DialogInterface dialog, int which) {
-                                                                                                        Jqzhuanyi();
-                                                                                                    }
-                                                                                                }).show();
-                                                                                        break;
+                                                                    }).show();
 
-                                                                                }
+                                                        }
+                                                    });
 
-                                                                            }
-                                                                        }).show();
-
-                                                            }
-                                                        });
-
-                                            }
-                                        }).setNegativeButton("取消", null).show();
-
-                                    }
-                                }).show();
+                                        }).setNegativeButton("取消", null).show()).show();
 
 
                     }
@@ -574,12 +515,7 @@ public class NewFightActivity extends BaseActivity {
 
                         AlertDialog.Builder builder = new AlertDialog.Builder(NewFightActivity.this);
                         builder.setTitle("请选择出警人员:")
-                                .setMultiChoiceItems(lname, ifchaeck, new DialogInterface.OnMultiChoiceClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which, boolean isChecked) {
-                                        ifchaeck[which] = isChecked;
-                                    }
-                                }).setPositiveButton("确认", new DialogInterface.OnClickListener() {
+                                .setMultiChoiceItems(lname, ifchaeck, (dialog, which, isChecked) -> ifchaeck[which] = isChecked).setPositiveButton("确认", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
 
@@ -606,11 +542,8 @@ public class NewFightActivity extends BaseActivity {
 
                                 // StartFight();
                             }
-                        }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
+                        }).setNegativeButton("取消", (dialog, which) -> {
 
-                            }
                         }).show();
                     }
                 });
@@ -620,11 +553,8 @@ public class NewFightActivity extends BaseActivity {
 
         app.jqAPIService.addCjPerson(taskid, SomeUtil.getDepartId(), lid)
                 .compose(RxUtil.<String>applySchedulers())
-                .subscribe(new Action1<String>() {
-                    @Override
-                    public void call(String s) {
-                        LogUtil.d("addcjperson result : " + s);
-                    }
+                .subscribe(s -> {
+                    LogUtil.d("addcjperson result : " + s);
                 });
 
 

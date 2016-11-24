@@ -98,15 +98,12 @@ public class TimeBankActivity extends BaseActivity {
             }
 
         });
-        timebankWebview.setOnKeyListener(new View.OnKeyListener() {
-            @Override
-            public boolean onKey(View v, int keyCode, KeyEvent event) {
-                if (timebankWebview.canGoBack() && event.getAction() == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_BACK) {
-                    timebankWebview.goBack();
-                    return true;
-                }
-                return false;
+        timebankWebview.setOnKeyListener((v, keyCode, event) -> {
+            if (timebankWebview.canGoBack() && event.getAction() == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_BACK) {
+                timebankWebview.goBack();
+                return true;
             }
+            return false;
         });
         WebSettings webSettings = timebankWebview.getSettings();
         webSettings.setJavaScriptEnabled(true);

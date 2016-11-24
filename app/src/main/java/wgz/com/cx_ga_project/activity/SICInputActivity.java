@@ -141,52 +141,44 @@ public class SICInputActivity extends BaseActivity {
 
                     @Override
                     public void onNext(final ChatUpProgress chatUpProgress) {
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                sicuploadProtext.setText(chatUpProgress.getPro());
-                            }
-                        });
+                        runOnUiThread(() -> sicuploadProtext.setText(chatUpProgress.getPro()));
 
                     }
                 });
 
 
         RxView.clicks(uploadSic).throttleFirst(500, TimeUnit.MICROSECONDS)
-                .subscribe(new Action1<Void>() {
-                    @Override
-                    public void call(Void aVoid) {
-                        // 添加图片视频
-                        String[] titles = new String[]{"添加图片", "添加视频"};
-                        AlertDialog.Builder builder = new AlertDialog.Builder(SICInputActivity.this);
-                        builder.setTitle("请选择要添加的附件")
-                                .setItems(titles, new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        switch (which) {
-                                            case 0:
-                                                Intent intent = new Intent(SICInputActivity.this, PickPhotoActivity.class);
-                                                intent.putExtra(PhotoPickerFragment.EXTRA_SELECT_COUNT, 6);
-                                                intent.putExtra(PhotoPickerFragment.EXTRA_DEFAULT_SELECTED_LIST, "");
-                                                intent.putExtra(HTTP_URL, "");
-                                                startActivityForResult(intent, 9);
+                .subscribe(aVoid -> {
+                    // 添加图片视频
+                    String[] titles = new String[]{"添加图片", "添加视频"};
+                    AlertDialog.Builder builder = new AlertDialog.Builder(SICInputActivity.this);
+                    builder.setTitle("请选择要添加的附件")
+                            .setItems(titles, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    switch (which) {
+                                        case 0:
+                                            Intent intent1 = new Intent(SICInputActivity.this, PickPhotoActivity.class);
+                                            intent1.putExtra(PhotoPickerFragment.EXTRA_SELECT_COUNT, 6);
+                                            intent1.putExtra(PhotoPickerFragment.EXTRA_DEFAULT_SELECTED_LIST, "");
+                                            intent1.putExtra(HTTP_URL, "");
+                                            startActivityForResult(intent1, 9);
 
-                                                break;
-                                            case 1:
-                                                Intent intent2 = new Intent();
-                                                intent2.setType("video/*");
-                                                intent2.setAction(Intent.ACTION_GET_CONTENT);
-                                                intent2.addCategory(Intent.CATEGORY_OPENABLE);
-                                                startActivityForResult(intent2, 3);
+                                            break;
+                                        case 1:
+                                            Intent intent2 = new Intent();
+                                            intent2.setType("video/*");
+                                            intent2.setAction(Intent.ACTION_GET_CONTENT);
+                                            intent2.addCategory(Intent.CATEGORY_OPENABLE);
+                                            startActivityForResult(intent2, 3);
 
-                                                break;
+                                            break;
 
 
-                                        }
                                     }
-                                }).show();
+                                }
+                            }).show();
 
-                    }
                 });
 
     }
@@ -389,18 +381,10 @@ public class SICInputActivity extends BaseActivity {
                 }
                 AlertDialog.Builder builder = new AlertDialog.Builder(SICInputActivity.this);
                 builder.setTitle("请选择数据权限")
-                        .setSingleChoiceItems(typename, -1, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                authid = typeid[which];
-                                LogUtil.d("authID : " + authid);
-                            }
-                        }).setPositiveButton("确认", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        commit();
-                    }
-                }).setNegativeButton("取消", null).show();
+                        .setSingleChoiceItems(typename, -1, (dialog, which) -> {
+                            authid = typeid[which];
+                            LogUtil.d("authID : " + authid);
+                        }).setPositiveButton("确认", (dialog, which) -> commit()).setNegativeButton("取消", null).show();
 
 
                 break;
@@ -413,14 +397,11 @@ public class SICInputActivity extends BaseActivity {
     private void commit() {
         SomeUtil.showSnackBar(rootview,"正在上传请稍等！");
         Observable.just("go").compose(RxUtil.<String>applySchedulers())
-                .subscribe(new Action1<String>() {
-                    @Override
-                    public void call(String s) {
-                        sicuploadPrg.setVisibility(View.VISIBLE);
-                        sicuploadBg.setVisibility(View.VISIBLE);
-                        sicuploadProtext.setVisibility(View.VISIBLE);
-                        isupload = true;
-                    }
+                .subscribe(s -> {
+                    sicuploadPrg.setVisibility(View.VISIBLE);
+                    sicuploadBg.setVisibility(View.VISIBLE);
+                    sicuploadProtext.setVisibility(View.VISIBLE);
+                    isupload = true;
                 });
 
         LogUtil.d("paths.size :"+paths.size());
@@ -431,25 +412,19 @@ public class SICInputActivity extends BaseActivity {
 
             DatrixUtil datrixUtil = new DatrixUtil(paths, rootview);
             datrixUtil.DatrixUpLoadPic2();
-            datrixUtil.setOnAfterFinish(new DatrixUtil.AfterFinish() {
-                @Override
-                public void afterfinish(String fileid, List<String> ids) {
-                    UploadPic(ids);
-                    UploadInfo();
-                }
+            datrixUtil.setOnAfterFinish((fileid, ids) -> {
+                UploadPic(ids);
+                UploadInfo();
             });
         }
         if (paths.size() > 0 && videopaths.size() > 0) {
             LogUtil.d("上传图片和文字和视频");
             DatrixUtil datrixUtil = new DatrixUtil(paths, rootview);
             datrixUtil.DatrixUpLoadPic2();
-            datrixUtil.setOnAfterFinish(new DatrixUtil.AfterFinish() {
-                @Override
-                public void afterfinish(String fileid, List<String> ids) {
-                    UploadPic(ids);
-                    UpLoadVideo();
+            datrixUtil.setOnAfterFinish((fileid, ids) -> {
+                UploadPic(ids);
+                UpLoadVideo();
 
-                }
             });
 
 
@@ -470,24 +445,21 @@ public class SICInputActivity extends BaseActivity {
         DatrixUtil datrixUtil = new DatrixUtil(videopaths, rootview);
         //datrixUtil.DatrixUpLoadVideo();
         datrixUtil.DatrixUpLoadVideos();
-        datrixUtil.setOnAfterFinish(new DatrixUtil.AfterFinish() {
-            @Override
-            public void afterfinish(String fileid, List<String> ids) {
-                StringBuffer sf = new StringBuffer();
-                for (int i = 0; i < ids.size(); i++) {
-                    if (i == ids.size() - 1) {
-                        sf.append(ids.get(i));
-                    } else {
-                        sf.append(ids.get(i));
-                        sf.append(",");
-                    }
+        datrixUtil.setOnAfterFinish((fileid, ids) -> {
+            StringBuffer sf = new StringBuffer();
+            for (int i = 0; i < ids.size(); i++) {
+                if (i == ids.size() - 1) {
+                    sf.append(ids.get(i));
+                } else {
+                    sf.append(ids.get(i));
+                    sf.append(",");
                 }
-                videoids = sf.toString();
-                LogUtil.d("videoids : " + videoids);
-
-
-                UploadInfo();
             }
+            videoids = sf.toString();
+            LogUtil.d("videoids : " + videoids);
+
+
+            UploadInfo();
         });
 
 

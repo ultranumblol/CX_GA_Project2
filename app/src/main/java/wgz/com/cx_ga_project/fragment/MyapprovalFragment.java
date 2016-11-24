@@ -104,12 +104,9 @@ public class MyapprovalFragment extends BaseFragment implements SwipeRefreshLayo
         app.apiService.getBeanData("getDepLeaveOverApply", SomeUtil.getUserId())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .map(new Func1<Apply, List<Apply.Result>>() {
-                    @Override
-                    public List<Apply.Result> call(Apply apply) {
-                       // LogUtil.d("approval map_result::"+apply.getResult().toString());
-                        return apply.getResult();
-                    }
+                .map(apply -> {
+                   // LogUtil.d("approval map_result::"+apply.getResult().toString());
+                    return apply.getResult();
                 })
                 .flatMap(new Func1<List<Apply.Result>, Observable<Apply.Result>>() {
                     @Override
@@ -118,19 +115,11 @@ public class MyapprovalFragment extends BaseFragment implements SwipeRefreshLayo
                         return Observable.from(results);
                     }
                 })
-                .filter(new Func1<Apply.Result, Boolean>() {
-                    @Override
-                    public Boolean call(Apply.Result result) {
-                        return result.getStatus().equals(UNAPPROVAL)?true:false;
-                    }
-                }).
-                map(new Func1<Apply.Result, List<Apply.Result>>() {
-                    @Override
-                    public List<Apply.Result> call(Apply.Result result) {
-                        list.add(result);
-                        //LogUtil.d("approval result list :"+list.toString());
-                        return list;
-                    }
+                .filter(result -> result.getStatus().equals(UNAPPROVAL)?true:false).
+                map(result -> {
+                    list.add(result);
+                    //LogUtil.d("approval result list :"+list.toString());
+                    return list;
                 }).subscribe(new Observer<List<Apply.Result>>() {
             @Override
             public void onCompleted() {
@@ -168,13 +157,10 @@ public class MyapprovalFragment extends BaseFragment implements SwipeRefreshLayo
 
     @Override
     public void onRefresh() {
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                list.clear();
-                adapter.clear();
-                initdata();
-            }
+        handler.postDelayed(() -> {
+            list.clear();
+            adapter.clear();
+            initdata();
         }, 2000);
     }
 

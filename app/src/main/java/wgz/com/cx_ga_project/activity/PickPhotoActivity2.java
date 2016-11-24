@@ -83,13 +83,9 @@ public class PickPhotoActivity2 extends BaseActivity {
     @Override
     public void onBackPressed() {
         if (mPagerFragment != null && mPagerFragment.isVisible()) {
-            mPagerFragment.runExitAnimation(new Runnable() {
-
-                @Override
-                public void run() {
-                    if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
-                        getSupportFragmentManager().popBackStack();
-                    }
+            mPagerFragment.runExitAnimation(() -> {
+                if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
+                    getSupportFragmentManager().popBackStack();
                 }
             });
         } else {

@@ -196,86 +196,75 @@ public class HomeActivity extends AppCompatActivity
                 final android.support.v7.app.AlertDialog.Builder builder =
                         new android.support.v7.app.AlertDialog.Builder(HomeActivity.this);
                 builder.setTitle("还没有设置您的上级，是否现在设置？")
-                        .setPositiveButton("确认", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                builder.setTitle("请选择上级所在部门")
-                                        .setItems(parts, new DialogInterface.OnClickListener() {
-                                            @Override
-                                            public void onClick(DialogInterface dialog, int which) {
-                                                for (int i = 0 ; i<deplist.size() ; i++){
-                                                    if (parts[which].equals(deplist.get(i).getDepartSimplename())){
-                                                        depid[0] = deplist.get(i).getDepartmentid();
+                        .setPositiveButton("确认", (dialog, which) -> builder.setTitle("请选择上级所在部门")
+                                .setItems(parts, (dialog12, which12) -> {
+                                    for (int i = 0 ; i<deplist.size() ; i++){
+                                        if (parts[which12].equals(deplist.get(i).getDepartSimplename())){
+                                            depid[0] = deplist.get(i).getDepartmentid();
+                                        }
+                                    }
+                                    LogUtil.d("depid:"+depid[0]);
+                                    app.apiService.getDepMember(depid[0])
+                                            .compose(RxUtil.applySchedulers())
+                                            .subscribe(new Subscriber<DepPeople>() {
+                                                @Override
+                                                public void onCompleted() {
+                                                    final String[] peoples = new String[deppeopleplist.size()];
+                                                    final String[] upperid = {""};
+                                                    for (int i = 0; i < deppeopleplist.size(); i++) {
+                                                        peoples[i] = deppeopleplist.get(i).getPolicename();
                                                     }
-                                                }
-                                                LogUtil.d("depid:"+depid[0]);
-                                                app.apiService.getDepMember(depid[0])
-                                                        .compose(RxUtil.<DepPeople>applySchedulers())
-                                                        .subscribe(new Subscriber<DepPeople>() {
-                                                            @Override
-                                                            public void onCompleted() {
-                                                                final String[] peoples = new String[deppeopleplist.size()];
-                                                                final String[] upperid = {""};
-                                                                for (int i = 0; i < deppeopleplist.size(); i++) {
-                                                                    peoples[i] = deppeopleplist.get(i).getPolicename();
+                                                    builder.setTitle("请选择上级")
+                                                            .setItems(peoples, (dialog1, which1) -> {
+                                                            for (int i = 0 ; i<deppeopleplist.size(); i++){
+                                                                if (peoples[which1].equals(deppeopleplist.get(i).getPolicename()))
+                                                                {
+                                                                    upperid[0] = deppeopleplist.get(i).getPolid();
                                                                 }
-                                                                builder.setTitle("请选择上级")
-                                                                        .setItems(peoples, new DialogInterface.OnClickListener() {
+                                                            } LogUtil.d("upperid: "+upperid[0]);
+                                                                app.apiService.setUpper(SomeUtil.getUserId(),upperid[0])
+                                                                        .compose(RxUtil.applySchedulers())
+                                                                        .subscribe(new Subscriber<String>() {
                                                                             @Override
-                                                                            public void onClick(DialogInterface dialog, int which) {
-                                                                            for (int i = 0 ; i<deppeopleplist.size(); i++){
-                                                                                if (peoples[which].equals(deppeopleplist.get(i).getPolicename()))
-                                                                                {
-                                                                                    upperid[0] = deppeopleplist.get(i).getPolid();
-                                                                                }
-                                                                            } LogUtil.d("upperid: "+upperid[0]);
-                                                                                app.apiService.setUpper(SomeUtil.getUserId(),upperid[0])
-                                                                                        .compose(RxUtil.<String>applySchedulers())
-                                                                                        .subscribe(new Subscriber<String>() {
-                                                                                            @Override
-                                                                                            public void onCompleted() {
-
-                                                                                            }
-
-                                                                                            @Override
-                                                                                            public void onError(Throwable e) {
-
-                                                                                            }
-
-                                                                                            @Override
-                                                                                            public void onNext(String s) {
-                                                                                                LogUtil.d("result:"+s);
-                                                                                                if (s.contains("200")){
-                                                                                                    SomeUtil.showSnackBar(homeRootView,"设置上级成功！");
-
-                                                                                                }else {
-                                                                                                    SomeUtil.showSnackBar(homeRootView,"设置上级失败！");
-                                                                                                }
-                                                                                            }
-                                                                                        });
+                                                                            public void onCompleted() {
 
                                                                             }
-                                                                        }).setNegativeButton("取消",null).show();
+
+                                                                            @Override
+                                                                            public void onError(Throwable e) {
+
+                                                                            }
+
+                                                                            @Override
+                                                                            public void onNext(String s) {
+                                                                                LogUtil.d("result:"+s);
+                                                                                if (s.contains("200")){
+                                                                                    SomeUtil.showSnackBar(homeRootView,"设置上级成功！");
+
+                                                                                }else {
+                                                                                    SomeUtil.showSnackBar(homeRootView,"设置上级失败！");
+                                                                                }
+                                                                            }
+                                                                        });
+
+                                                            }).setNegativeButton("取消",null).show();
 
 
 
-                                                            }
+                                                }
 
-                                                            @Override
-                                                            public void onError(Throwable e) {
-                                                                LogUtil.d("depPeople error:"+e.toString());
-                                                            }
+                                                @Override
+                                                public void onError(Throwable e) {
+                                                    LogUtil.d("depPeople error:"+e.toString());
+                                                }
 
-                                                            @Override
-                                                            public void onNext(DepPeople s) {
-                                                                deppeopleplist = s.getRes();
-                                                            }
-                                                        });
-                                            }
-                                        }).setNegativeButton("取消",null).setPositiveButton(null,null)
-                                        .show();
-                            }
-                        })
+                                                @Override
+                                                public void onNext(DepPeople s) {
+                                                    deppeopleplist = s.getRes();
+                                                }
+                                            });
+                                }).setNegativeButton("取消",null).setPositiveButton(null,null)
+                                .show())
                         .setNegativeButton("稍后设置",null)
                         .show();
 
@@ -376,12 +365,9 @@ public class HomeActivity extends AppCompatActivity
                     .dontAnimate()
                     .into(imageView);
             //点击事件
-            imageView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    //SomeUtil.showSnackBar(homeRootView, "维护中。。。");
-                    //startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(list.get(position).getUrl())));
-                }
+            imageView.setOnClickListener(v -> {
+                //SomeUtil.showSnackBar(homeRootView, "维护中。。。");
+                //startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(list.get(position).getUrl())));
             });
             return imageView;
         }
@@ -500,14 +486,7 @@ public class HomeActivity extends AppCompatActivity
                                     AlertDialog.Builder alertDialog = new AlertDialog.Builder(HomeActivity.this);
                                     alertDialog.setTitle("检查到新版本，是否更新？")
                                             .setMessage(appVersion.getRes().get(0).getApkUpdatelog())
-                                            .setPositiveButton("立即更新", new DialogInterface.OnClickListener() {
-                                                @Override
-                                                public void onClick(DialogInterface dialog, int which) {
-                                                    startService(new Intent(HomeActivity.this, UpdataService.class));
-
-
-                                                }
-                                            }).setNegativeButton("稍后更新", new DialogInterface.OnClickListener() {
+                                            .setPositiveButton("立即更新", (dialog, which) -> startService(new Intent(HomeActivity.this, UpdataService.class))).setNegativeButton("稍后更新", new DialogInterface.OnClickListener() {
                                         @Override
                                         public void onClick(DialogInterface dialog, int which) {
 
@@ -558,39 +537,34 @@ public class HomeActivity extends AppCompatActivity
         AlertDialog.Builder builder = new AlertDialog.Builder(HomeActivity.this);
         builder.setTitle("清理缓存")
                 .setMessage("缓存大小：" + getCacheSize() + "是否清除?")
-                .setPositiveButton("确认", new DialogInterface.OnClickListener() {
+                .setPositiveButton("确认", (dialog, which) -> Observable.create(new Observable.OnSubscribe<Void>() {
                     @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        Observable.create(new Observable.OnSubscribe<Void>() {
-                            @Override
-                            public void call(Subscriber<? super Void> subscriber) {
-                                subscriber.onNext(null);
-                                subscriber.onCompleted();
-                            }
-                        }).subscribeOn(Schedulers.newThread())
-                                .observeOn(Schedulers.newThread())
-                                .subscribe(new Subscriber<Void>() {
-                                    @Override
-                                    public void onCompleted() {
-                                        LogUtil.d("clearCache_oncompleted");
-                                        SomeUtil.showSnackBar(homeRootView, "清理完成！");
-
-                                    }
-
-                                    @Override
-                                    public void onError(Throwable e) {
-
-                                    }
-
-                                    @Override
-                                    public void onNext(Void aVoid) {
-                                        LogUtil.d("clearCache_onNext");
-                                        Glide.get(getApplicationContext()).clearDiskCache();
-                                        //
-                                    }
-                                });
+                    public void call(Subscriber<? super Void> subscriber) {
+                        subscriber.onNext(null);
+                        subscriber.onCompleted();
                     }
-                }).setNegativeButton("取消", null).show();
+                }).subscribeOn(Schedulers.newThread())
+                        .observeOn(Schedulers.newThread())
+                        .subscribe(new Subscriber<Void>() {
+                            @Override
+                            public void onCompleted() {
+                                LogUtil.d("clearCache_oncompleted");
+                                SomeUtil.showSnackBar(homeRootView, "清理完成！");
+
+                            }
+
+                            @Override
+                            public void onError(Throwable e) {
+
+                            }
+
+                            @Override
+                            public void onNext(Void aVoid) {
+                                LogUtil.d("clearCache_onNext");
+                                Glide.get(getApplicationContext()).clearDiskCache();
+                                //
+                            }
+                        })).setNegativeButton("取消", null).show();
         Glide.get(getApplicationContext()).clearMemory();
     }
 

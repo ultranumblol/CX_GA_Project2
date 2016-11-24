@@ -242,12 +242,7 @@ public class MySubordinateLogAcitvity extends BaseActivity {
         calenderLog.setAdapter(adapter);
         calenderLog.setCurrentItem(INIT_PAGER_INDEX);
         calenderLog.addOnPageChangeListener(new OnMyViewPageChangeListener());
-        calenderLog.post(new Runnable() {
-            @Override
-            public void run() {
-                initEventDays( adapter.getChildView(0));
-            }
-        });
+        calenderLog.post(() -> initEventDays( adapter.getChildView(0)));
     }
 
 

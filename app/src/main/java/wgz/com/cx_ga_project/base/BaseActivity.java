@@ -46,14 +46,15 @@ public abstract class BaseActivity extends AppCompatActivity{
         ButterKnife.unbind(this);
     }
 
-
-   @Override
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
-            case android.R.id.home:
-                finish();
+        // 此时android.R.id.home即为返回箭头
+        if (item.getItemId() == android.R.id.home) {
+            onBackPressed();
+            return true;
+        } else {
+            return super.onOptionsItemSelected(item);
         }
-        return super.onOptionsItemSelected(item);
     }
 
 }

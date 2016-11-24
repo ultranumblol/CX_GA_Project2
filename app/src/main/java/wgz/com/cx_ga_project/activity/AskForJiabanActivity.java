@@ -92,27 +92,20 @@ public class AskForJiabanActivity extends BaseActivity {
         pvTime.setCancelable(true);
 
         //时间选择后回调
-        pvTime.setOnTimeSelectListener(new TimePickerView.OnTimeSelectListener() {
-
-            @Override
-            public void onTimeSelect(Date date) {
-                switch (flag) {
-                    case 1:
-                        mJiabanStarttime.setText(getTime(date));
-                        mstartdate = date;
-                        break;
-                    case 2:
-                        mJiabanEndtime.setText(getTime(date));
-                        menddate = date;
-                }
+        pvTime.setOnTimeSelectListener(date -> {
+            switch (flag) {
+                case 1:
+                    mJiabanStarttime.setText(getTime(date));
+                    mstartdate = date;
+                    break;
+                case 2:
+                    mJiabanEndtime.setText(getTime(date));
+                    menddate = date;
             }
         });
         RxView.clicks(mJiabanCommit).throttleFirst(500, TimeUnit.MILLISECONDS)
-                .subscribe(new Action1<Void>() {
-                    @Override
-                    public void call(Void aVoid) {
-                        docommit();
-                    }
+                .subscribe(aVoid -> {
+                    docommit();
                 });
         initData();
     }

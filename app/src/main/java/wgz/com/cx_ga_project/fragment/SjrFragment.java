@@ -49,12 +49,9 @@ public class SjrFragment extends BaseFragment implements SwipeRefreshLayout.OnRe
         recyclerview.setRefreshListener(this);
         initData();
         rxSubscription = RxBus.getDefault().toObservable(String.class)
-                .subscribe(new Action1<String>() {
-                    @Override
-                    public void call(String s) {
-                        if (s.equals("sjrflush"))
-                            onRefresh();
-                    }
+                .subscribe(s -> {
+                    if (s.equals("sjrflush"))
+                        onRefresh();
                 });
     }
 
@@ -75,13 +72,10 @@ public class SjrFragment extends BaseFragment implements SwipeRefreshLayout.OnRe
 
     @Override
     public void onRefresh() {
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                list.clear();
-                adapter.clear();
-                initData();
-            }
+        handler.postDelayed(() -> {
+            list.clear();
+            adapter.clear();
+            initData();
         }, 2000);
     }
 

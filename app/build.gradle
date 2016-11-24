@@ -24,6 +24,11 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
     android.applicationVariants.all {
         variant -> variant.outputs.each {
             output -> output.outputFile = new File(output.outputFile.parent, "CXgongan_" + defaultConfig.versionCode +  "_v" + defaultConfig.versionName +"_"+buildType.name+ ".apk");

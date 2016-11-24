@@ -40,19 +40,13 @@ public class app extends Application {
                 .connectTimeout(20, TimeUnit.SECONDS)
                 .writeTimeout(20, TimeUnit.SECONDS)
                 .readTimeout(20, TimeUnit.SECONDS)
-                .addNetworkInterceptor(new Interceptor() {
-                    @Override
-                    public okhttp3.Response intercept(Chain chain) throws IOException {
-                        okhttp3.Response orginalResponse = chain.proceed(chain.request());
+                .addNetworkInterceptor(chain -> {
+                    okhttp3.Response orginalResponse = chain.proceed(chain.request());
 
-                        return orginalResponse.newBuilder()
-                                .body(new ProgressResponseBody(orginalResponse.body(), new ProgressListener() {
-                                    @Override
-                                    public void onProgress(long progress, long total, boolean done) {
-                                    }
-                                }))
-                                .build();
-                    }
+                    return orginalResponse.newBuilder()
+                            .body(new ProgressResponseBody(orginalResponse.body(), (progress, total, done) -> {
+                            }))
+                            .build();
                 })
                 .build();
         return client;

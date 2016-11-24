@@ -34,12 +34,7 @@ public class ShowBigImage extends BaseActivity {
     public void initView() {
         Intent intent = getIntent();
         String url = intent.getStringExtra("url");
-        image.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
+        image.setOnClickListener(v -> finish());
 
 
         Glide.with(this)

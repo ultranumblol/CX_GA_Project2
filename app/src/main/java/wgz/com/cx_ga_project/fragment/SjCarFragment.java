@@ -51,12 +51,9 @@ public class SjCarFragment extends BaseFragment implements SwipeRefreshLayout.On
         initData();
 
         rxSubscription = RxBus.getDefault().toObservable(String.class)
-                .subscribe(new Action1<String>() {
-                    @Override
-                    public void call(String s) {
-                        if (s.equals("sjcarflush"))
-                            onRefresh();
-                    }
+                .subscribe(s -> {
+                    if (s.equals("sjcarflush"))
+                        onRefresh();
                 });
     }
 
@@ -77,13 +74,10 @@ public class SjCarFragment extends BaseFragment implements SwipeRefreshLayout.On
 
     @Override
     public void onRefresh() {
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                list.clear();
-                adapter.clear();
-                initData();
-            }
+        handler.postDelayed(() -> {
+            list.clear();
+            adapter.clear();
+            initData();
         }, 2000);
     }
 

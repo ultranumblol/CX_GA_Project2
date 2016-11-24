@@ -82,26 +82,23 @@ public class JQCallbackActivity extends BaseActivity {
         jqcallbackVp.setAdapter(new MyFragmentPagerAdapter(getSupportFragmentManager(), fragments, titles));
         jqcallbackVp.setCurrentItem(0);
         tabJqcallback.setupWithViewPager(jqcallbackVp);
-        FabPlus.setOnItemClickListener(new FloatingActionButtonPlus.OnItemClickListener() {
-            @Override
-            public void onItemClick(FabTagLayout tagView, int position) {
-                int id = tagView.getId();
-                switch (id) {
-                    case R.id.fabtag_addsjcar:
-                        startActivity(new Intent(JQCallbackActivity.this, UpLoadSJCarActivity.class));
+        FabPlus.setOnItemClickListener((tagView, position) -> {
+            int id = tagView.getId();
+            switch (id) {
+                case R.id.fabtag_addsjcar:
+                    startActivity(new Intent(JQCallbackActivity.this, UpLoadSJCarActivity.class));
 
-                        break;
-                    case R.id.fabtag_addsjPeople:
-                        startActivity(new Intent(JQCallbackActivity.this, SJPeopleActivity.class));
+                    break;
+                case R.id.fabtag_addsjPeople:
+                    startActivity(new Intent(JQCallbackActivity.this, SJPeopleActivity.class));
 
-                        break;
-                    case R.id.fabtag_addsjPhone:
-                        startActivity(new Intent(JQCallbackActivity.this, UpLoadSJPhoneActivity.class));
-                        break;
-                    case R.id.fabtag_addjqMsg:
-                        startActivity(new Intent(JQCallbackActivity.this, AddJQActivity.class));
-                        break;
-                }
+                    break;
+                case R.id.fabtag_addsjPhone:
+                    startActivity(new Intent(JQCallbackActivity.this, UpLoadSJPhoneActivity.class));
+                    break;
+                case R.id.fabtag_addjqMsg:
+                    startActivity(new Intent(JQCallbackActivity.this, AddJQActivity.class));
+                    break;
             }
         });
 
