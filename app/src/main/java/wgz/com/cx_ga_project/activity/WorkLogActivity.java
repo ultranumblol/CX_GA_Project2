@@ -366,7 +366,7 @@ public class WorkLogActivity extends BaseActivity {
                 finish();
                 break;
             case R.id.my_timebank:
-                startActivity(new Intent(this,WorkLogCloudActivity.class)
+                startActivity(new Intent(this,TimeBankActivity.class)
                         .putExtra("policename",(String) SPUtils.get(app.getApp().getApplicationContext(), Constant.USERNAME, "未知")).putExtra("policeid",SomeUtil.getUserId()));
                 break;
 
@@ -407,12 +407,15 @@ public class WorkLogActivity extends BaseActivity {
             LogUtil.d("click data :"+OtherUtils.formatDate(dateBean.getDate()));
             //查询日志图片内容
             app.apiService.getLogPicData(CHECK_ONESSUMMARYPIC_BYDAYS,SomeUtil.getUserId(),OtherUtils.formatDate(dateBean.getDate()))
-                    .compose(RxUtil.<WorkLog>applySchedulers())
+                    .compose(RxUtil.applySchedulers())
                     .subscribe(new Subscriber<WorkLog>() {
                         @Override
                         public void onCompleted() {
                             adapter.clear();
-                            adapter.addAll(paths);
+                           if (paths.size()>=1){
+                               adapter.addAll(paths);
+
+                           }
                             LogUtil.d("显示图片");
                         }
 
@@ -428,7 +431,7 @@ public class WorkLogActivity extends BaseActivity {
                                 for (int i = 0 ; i<workLog.getLogs().size();i++){
                                     paths.add(workLog.getLogs().get(i).getSummary_pic());
                                 }
-                                LogUtil.d("PIC path :"+paths.toString());
+                                LogUtil.d("PIC path :"+paths.size());
 
                                // idWorkLogText.setText(workLog.getLogs().get(0).getSummary());
                                 //id = workLog.getLogs().get(0).getId();

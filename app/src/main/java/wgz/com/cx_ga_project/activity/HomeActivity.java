@@ -49,11 +49,14 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import rx.Observable;
 import rx.Subscriber;
+import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 import wgz.com.cx_ga_project.R;
 import wgz.com.cx_ga_project.app;
 import wgz.com.cx_ga_project.base.Constant;
+import wgz.com.cx_ga_project.base.RxBus;
 import wgz.com.cx_ga_project.entity.AllDep;
 import wgz.com.cx_ga_project.entity.AppVersion;
 import wgz.com.cx_ga_project.entity.DepPeople;
@@ -65,6 +68,7 @@ import wgz.com.cx_ga_project.util.SPBuild;
 import wgz.com.cx_ga_project.util.SPUtils;
 import wgz.com.cx_ga_project.util.SomeUtil;
 import wgz.datatom.com.utillibrary.util.LogUtil;
+import wgz.datatom.com.utillibrary.util.ToastUtil;
 
 import static wgz.com.cx_ga_project.util.SomeUtil.getFormatSize;
 
@@ -114,7 +118,7 @@ public class HomeActivity extends AppCompatActivity
     private boolean hasupper = true;
     private List<Deps.Re> deplist = new ArrayList<>();
     private List<DepPeople.Re> deppeopleplist = new ArrayList<>();
-
+    private Subscription rxSubscription;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -148,7 +152,7 @@ public class HomeActivity extends AppCompatActivity
         //LogUtil.d("userheadurl : "+userheadurl);
         Glide.with(this)
                 .load(Constant.USERHEADURL)
-                .placeholder(R.mipmap.ic_launcher)
+                .placeholder(R.drawable.ic_account_circle_gray_48dp)
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .thumbnail(0.4f)
                 .dontAnimate()
@@ -177,13 +181,17 @@ public class HomeActivity extends AppCompatActivity
             showSetUpper();
         }
         // showSetUpper();
+       /* rxSubscription = RxBus.getDefault().toObservable(String.class)
+                .subscribe(s -> {
+                        SomeUtil.showSnackBar(homeRootView,s);
 
+                });*/
 
     }
 
     private void showSetUpper() {
         app.apiService.getAllDep()
-        .compose(RxUtil.<Deps>applySchedulers())
+        .compose(RxUtil.applySchedulers())
         .subscribe(new Subscriber<Deps>() {
             @Override
             public void onCompleted() {
@@ -425,9 +433,11 @@ public class HomeActivity extends AppCompatActivity
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
 
-            //startActivity(new Intent(HomeActivity.this, CamPlayerActivity.class));
+            startActivity(new Intent(HomeActivity.this, CamMapHtmlActivity.class));
             //startActivity(new Intent(HomeActivity.this, LoginActivity.class));
-            startActivity(new Intent(HomeActivity.this, NewMsgActivity.class));
+           // startActivity(new Intent(HomeActivity.this, NewMsgActivity.class));
+
+
             return true;
         }
         if (id == android.R.id.home) {

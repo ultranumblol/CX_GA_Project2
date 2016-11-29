@@ -133,13 +133,10 @@ public class MyApplyJiabanFragment extends BaseFragment implements SwipeRefreshL
 
     @Override
     public void onRefresh() {
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                list.clear();
-                adapter.clear();
-               initData();
-            }
+        handler.postDelayed(() -> {
+            list.clear();
+            adapter.clear();
+           initData();
         }, 1500);
     }
 

@@ -115,12 +115,7 @@ public class FullscreenActivity extends BaseActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         mVisible = true;
         // Set up the user interaction to manually show or hide the system UI.
-        mContentView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                toggle();
-            }
-        });
+        mContentView.setOnClickListener(view -> toggle());
         createQRImage("警员："+ SPUtils.get(app.getApp().getApplicationContext(), Constant.USERNAME, "未知")+"\n"+"部门："+SomeUtil.getDepartName());
     }
 

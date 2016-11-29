@@ -17,6 +17,8 @@ import retrofit2.converter.scalars.ScalarsConverterFactory;
 import wgz.com.cx_ga_project.API.APIservice;
 import wgz.com.cx_ga_project.API.JqAPIService;
 import wgz.com.cx_ga_project.service.GetGPSService;
+import wgz.com.cx_ga_project.service.GetGPSService2;
+import wgz.com.cx_ga_project.service.GetGPSService3;
 import wgz.com.cx_ga_project.util.ProgressListener;
 import wgz.com.cx_ga_project.util.ProgressResponseBody;
 import wgz.datatom.com.utillibrary.util.LogUtil;
@@ -27,10 +29,10 @@ import wgz.datatom.com.utillibrary.util.ToastUtil;
  */
 
 public class app extends Application {
-    public static final String BASE_URL = "http://192.168.1.193:8004/";
-    public static final String DATRIX_BASE_URL = "http://101.231.77.242:9001/";
-    //public static final String DATRIX_BASE_URL = "http://53.20.31.32/";
-    //public static final String BASE_URL = "http://53.20.31.31:8788/";
+    //public static final String BASE_URL = "http://192.168.1.193:8004/";
+   //public static final String DATRIX_BASE_URL = "http://101.231.77.242:9001/";
+   public static final String DATRIX_BASE_URL = "http://53.20.31.32/";
+    public static final String BASE_URL = "http://53.20.31.31:8788/";
     public static APIservice apiService;
     public static JqAPIService jqAPIService;
     private static app mApp;
@@ -75,7 +77,8 @@ public class app extends Application {
         mApp = this;
         ToastUtil.isShow = true;
         //开启定位服务
-        startService(new Intent(getApplicationContext(), GetGPSService.class));
+        //startService(new Intent(getApplicationContext(), GetGPSService3.class));
+        startService(new Intent(getApplicationContext(), GetGPSService2.class));
         LogUtil.isDebug = true;
 
         //配置程序异常退出处理

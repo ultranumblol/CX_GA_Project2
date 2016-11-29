@@ -15,6 +15,7 @@ import com.baidu.location.Poi;
 import java.util.List;
 
 import wgz.com.cx_ga_project.base.Constant;
+import wgz.com.cx_ga_project.base.RxBus;
 import wgz.com.cx_ga_project.util.SPBuild;
 import wgz.datatom.com.utillibrary.util.LogUtil;
 
@@ -34,12 +35,9 @@ public class GetGPSService extends Service {
         mLocationClient = new LocationClient(getApplicationContext());     //声明LocationClient类
         mLocationClient.registerLocationListener(myListener);    //注册监听函数
         initLocation();
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                mLocationClient.start();
-                LogUtil.d("定位服务启动！");
-            }
+        new Thread(() -> {
+            mLocationClient.start();
+            LogUtil.d("定位服务启动！");
         }).start();
 
 
@@ -134,7 +132,8 @@ public class GetGPSService extends Service {
                     sb.append(p.getId() + " " + p.getName() + " " + p.getRank());
                 }
             }
-            //LogUtil.d("BaiduLocationApiDem::"+sb.toString());
+            LogUtil.d("BaiduLocationApiDem::"+sb.toString());
+            RxBus.getDefault().post(sb.toString()+"");
             new SPBuild(getApplicationContext())
                     .addData(Constant.LONGITUDE,longitude )
                     .addData(Constant.LATITUDE, latitude).build();

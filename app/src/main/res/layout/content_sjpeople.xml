@@ -295,7 +295,7 @@
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="16dp"
-                android:text="simi卡号"
+                android:text="SIM卡号"
                 android:textColor="@color/darkcyan"
                 android:textSize="16dp" />
 

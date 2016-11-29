@@ -14,7 +14,7 @@ import wgz.com.cx_ga_project.R;
 import wgz.com.cx_ga_project.activity.ShowBigImage;
 
 /**
- * Created by wgz on 2016/8/16.
+ * Created by wgz
  */
 
 public class AddPictureViewHolder extends BaseViewHolder<String> {
@@ -50,12 +50,9 @@ public class AddPictureViewHolder extends BaseViewHolder<String> {
                         .into(imageView);
 
             }else{
-                imageView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        getContext().startActivity(new Intent(getContext(), ShowBigImage.class).putExtra("url",data));
-                    }
-                });
+                imageView.setOnClickListener(v ->
+                        getContext().startActivity(new Intent(getContext()
+                                , ShowBigImage.class).putExtra("url",data)));
 
                 Glide.with(getContext())
                         .load(data)

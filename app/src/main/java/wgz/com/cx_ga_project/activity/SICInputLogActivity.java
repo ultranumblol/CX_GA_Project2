@@ -57,7 +57,8 @@ public class SICInputLogActivity extends BaseActivity {
         sicinputlogRv.setLayoutManager(new Mylayout(this));
         sicinputlogRv.setAdapter(adapter = new SICInputLogAdapter(this));
         initData();
-        adapter.setOnItemClickListener((position, itemView) -> startActivity(new Intent(SICInputLogActivity.this,SICLogDetilActivity.class)
+        adapter.setOnItemClickListener((position, itemView) ->
+                startActivity(new Intent(SICInputLogActivity.this,SICLogDetilActivity.class)
         .putExtra("type",adapter.getItem(position).getType())
                 .putExtra("docid",adapter.getItem(position).getDocid())
         ));
@@ -81,7 +82,7 @@ public class SICInputLogActivity extends BaseActivity {
     }
     private void initData() {
         app.apiService.getSocialInfoList(SomeUtil.getUserId())
-        .compose(RxUtil.<SICList>applySchedulers())
+        .compose(RxUtil.applySchedulers())
         .subscribe(new Subscriber<SICList>() {
             @Override
             public void onStart() {

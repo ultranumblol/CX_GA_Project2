@@ -159,16 +159,19 @@ public class LoginActivity extends BaseActivity {
 
                     @Override
                     public void onError(Throwable e) {
-                        SomeUtil.checkHttpException(getApplicationContext(), e, scrollLoginForm);
+                       // SomeUtil.showSnackBar(rootview,e.toString());
+                        //SomeUtil.checkHttpException(getApplicationContext(), e, scrollLoginForm);
                         showProgress(false);
-                        LogUtil.d("login : " + e.toString());
+                        LogUtil.d("login2 : " + e.toString());
+
                     }
 
                     @Override
                     public void onNext(String s) {
                         LogUtil.d("login : " + s);
+
                        // ToastUtil.showLong(LoginActivity.this,s);
-                           // SomeUtil.showSnackBar(rootview,s);
+                        //SomeUtil.showSnackBar(rootview,s);
                         if (s.contains("\"code\":200")) {
                             app.apiService.login(username)
                                     .subscribeOn(Schedulers.io())
@@ -184,7 +187,8 @@ public class LoginActivity extends BaseActivity {
                                         public void onError(Throwable e) {
                                             showProgress(false);
                                             LogUtil.d("Login error:" + e.toString());
-                                            //SomeUtil.checkHttpException(getApplicationContext(),e,scrollLoginForm);
+                                            SomeUtil.checkHttpException(getApplicationContext(),e,scrollLoginForm);
+                                           // startActivity(new Intent(LoginActivity.this, HomeActivity.class));
                                         }
 
                                         @Override
@@ -195,7 +199,7 @@ public class LoginActivity extends BaseActivity {
                                                 showProgress(false);
                                                 saveUserInfo(userInfo.getRes().get(0), password);
                                                 getuserhead(userInfo.getRes().get(0).getUserid());
-                                                getsub();
+                                               getsub();
                                                 SomeUtil.showSnackBar(scrollLoginForm, "登录成功！").setCallback(new Snackbar.Callback() {
                                                     @Override
                                                     public void onDismissed(Snackbar snackbar, int event) {
@@ -227,7 +231,7 @@ public class LoginActivity extends BaseActivity {
 
     private void getsub() {
         app.apiService.getSupAndSub(actvUsername.getText().toString())
-                .compose(RxUtil.<Subordinate>applySchedulers())
+                .compose(RxUtil.applySchedulers())
                 .subscribe(new Subscriber<Subordinate>() {
                     @Override
                     public void onCompleted() {

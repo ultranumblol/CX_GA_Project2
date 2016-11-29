@@ -153,29 +153,26 @@ public class SICInputActivity extends BaseActivity {
                     String[] titles = new String[]{"添加图片", "添加视频"};
                     AlertDialog.Builder builder = new AlertDialog.Builder(SICInputActivity.this);
                     builder.setTitle("请选择要添加的附件")
-                            .setItems(titles, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    switch (which) {
-                                        case 0:
-                                            Intent intent1 = new Intent(SICInputActivity.this, PickPhotoActivity.class);
-                                            intent1.putExtra(PhotoPickerFragment.EXTRA_SELECT_COUNT, 6);
-                                            intent1.putExtra(PhotoPickerFragment.EXTRA_DEFAULT_SELECTED_LIST, "");
-                                            intent1.putExtra(HTTP_URL, "");
-                                            startActivityForResult(intent1, 9);
+                            .setItems(titles, (dialog, which) -> {
+                                switch (which) {
+                                    case 0:
+                                        Intent intent1 = new Intent(SICInputActivity.this, PickPhotoActivity.class);
+                                        intent1.putExtra(PhotoPickerFragment.EXTRA_SELECT_COUNT, 6);
+                                        intent1.putExtra(PhotoPickerFragment.EXTRA_DEFAULT_SELECTED_LIST, "");
+                                        intent1.putExtra(HTTP_URL, "");
+                                        startActivityForResult(intent1, 9);
 
-                                            break;
-                                        case 1:
-                                            Intent intent2 = new Intent();
-                                            intent2.setType("video/*");
-                                            intent2.setAction(Intent.ACTION_GET_CONTENT);
-                                            intent2.addCategory(Intent.CATEGORY_OPENABLE);
-                                            startActivityForResult(intent2, 3);
+                                        break;
+                                    case 1:
+                                        Intent intent2 = new Intent();
+                                        intent2.setType("video/*");
+                                        intent2.setAction(Intent.ACTION_GET_CONTENT);
+                                        intent2.addCategory(Intent.CATEGORY_OPENABLE);
+                                        startActivityForResult(intent2, 3);
 
-                                            break;
+                                        break;
 
 
-                                    }
                                 }
                             }).show();
 

@@ -385,7 +385,7 @@ public interface JqAPIService {
 
 
     /**
-     * 查询新警情还没有出警人的
+     * 查询新警情
      *
      * @param policeid
      * @return

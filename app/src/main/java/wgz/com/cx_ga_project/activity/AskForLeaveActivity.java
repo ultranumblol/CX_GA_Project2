@@ -252,7 +252,7 @@ public class AskForLeaveActivity extends BaseActivity {
         } else if (mLeaveType.getText().toString().equals("")) {
             Snackbar.make(rootview, "请选择请假类型！", Snackbar.LENGTH_SHORT).show();
             return;
-        } else if (SomeUtil.DateCompare(stime, etime)) {
+        } else if (mstartdate.getTime()-menddate.getTime()>0) {
             Snackbar.make(rootview, "结束日期应该大于开始日期!", Snackbar.LENGTH_SHORT).show();
             return;
         }

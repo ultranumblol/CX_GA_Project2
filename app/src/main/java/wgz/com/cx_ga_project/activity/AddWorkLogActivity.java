@@ -8,6 +8,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
@@ -107,29 +108,33 @@ public class AddWorkLogActivity extends BaseActivity {
             RxView.clicks(fabAddworklog).throttleFirst(500, TimeUnit.MILLISECONDS)
                     .subscribe(aVoid -> {
                         edittext = worklogText.getText().toString();
-                        if (edittext==null&&edittext.equals("")){
+                        LogUtil.d("修改工作日志");
+                        LogUtil.d("edittext： "+edittext);
+                        if (TextUtils.isEmpty(edittext)){
 
-                            ChangeWorkLog();
-                        }else {
                             SomeUtil.showSnackBar(rootview,"请填写工作内容！");
 
+                        }else {
+
+                            ChangeWorkLog();
                         }
 
 
                     });
 
 
-        } else {
-
+        } else if (worklog.contains("没有工作记录")){
 
             RxView.clicks(fabAddworklog).throttleFirst(500, TimeUnit.MILLISECONDS)
                     .subscribe(aVoid -> {
                         edittext = worklogText.getText().toString();
-                        if (edittext==null&&edittext.equals("")){
-                            UpLoadWorkLog();
-                        }else {
+                        LogUtil.d("上传工作日志");
+                        LogUtil.d("edittext： "+edittext);
+                        if (TextUtils.isEmpty(edittext)){
                             SomeUtil.showSnackBar(rootview,"请填写工作内容！");
+                        }else {
 
+                            UpLoadWorkLog();
                         }
 
                     });

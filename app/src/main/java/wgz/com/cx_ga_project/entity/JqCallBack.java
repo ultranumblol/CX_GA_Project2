@@ -916,6 +916,29 @@ public class JqCallBack {
             this.wechat = wechat;
         }
 
+        @Override
+        public String toString() {
+            return "Resperson{" +
+                    "id='" + id + '\'' +
+                    ", jqid='" + jqid + '\'' +
+                    ", cjTaskid='" + cjTaskid + '\'' +
+                    ", cjPoliceid='" + cjPoliceid + '\'' +
+                    ", cjReporttime='" + cjReporttime + '\'' +
+                    ", involvepeoplename='" + involvepeoplename + '\'' +
+                    ", involvepeopleidcard='" + involvepeopleidcard + '\'' +
+                    ", involvepeoplephone='" + involvepeoplephone + '\'' +
+                    ", involvepeoplemobilephone='" + involvepeoplemobilephone + '\'' +
+                    ", remark=" + remark +
+                    ", gander='" + gander + '\'' +
+                    ", addr='" + addr + '\'' +
+                    ", mac=" + mac +
+                    ", serialnumber='" + serialnumber + '\'' +
+                    ", simi='" + simi + '\'' +
+                    ", imei=" + imei +
+                    ", sim=" + sim +
+                    ", wechat=" + wechat +
+                    '}';
+        }
     }
 
 

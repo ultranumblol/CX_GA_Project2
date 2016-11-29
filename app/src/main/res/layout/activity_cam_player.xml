@@ -25,6 +25,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
+        app:backgroundTint="@color/colorPrimary"
         app:srcCompat="@drawable/ic_stop_white_48dp" />
 
     <android.support.design.widget.FloatingActionButton
@@ -33,6 +34,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|start"
         android:layout_margin="@dimen/fab_margin"
+        app:backgroundTint="@color/colorPrimary"
         app:srcCompat="@drawable/ic_play_arrow_white_36dp" />
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab3"
@@ -60,6 +62,7 @@
         app:srcCompat="@drawable/ic_keyboard_arrow_right_white_48dp"
         android:id="@+id/fab_right"
        app:layout_anchor="@id/fab3"
+        app:backgroundTint="@color/colorPrimary"
         app:layout_anchorGravity="right|center_vertical"
         app:fabSize="mini"></android.support.design.widget.FloatingActionButton>
     <android.support.design.widget.FloatingActionButton
@@ -69,6 +72,7 @@
         app:srcCompat="@drawable/ic_keyboard_arrow_up_white_48dp"
         android:id="@+id/fab_up"
         app:layout_anchor="@id/fab3"
+        app:backgroundTint="@color/colorPrimary"
         app:layout_anchorGravity="center_horizontal"
         app:fabSize="mini"></android.support.design.widget.FloatingActionButton>
     <android.support.design.widget.FloatingActionButton
@@ -79,7 +83,7 @@
         android:id="@+id/fab_left"
         app:layout_anchor="@id/fab3"
         app:layout_anchorGravity="center_vertical"
-
+        app:backgroundTint="@color/colorPrimary"
         app:fabSize="mini"></android.support.design.widget.FloatingActionButton>
     <android.support.design.widget.FloatingActionButton
         android:layout_width="wrap_content"
@@ -88,7 +92,7 @@
         app:srcCompat="@drawable/ic_keyboard_arrow_down_white_48dp"
         android:id="@+id/fab_down"
         app:layout_anchor="@id/fab3"
-
+        app:backgroundTint="@color/colorPrimary"
         app:layout_anchorGravity="center"
         app:fabSize="mini"></android.support.design.widget.FloatingActionButton>
 </android.support.design.widget.CoordinatorLayout>

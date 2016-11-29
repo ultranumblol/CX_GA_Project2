@@ -2,6 +2,7 @@ package wgz.com.cx_ga_project.activity;
 
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
+import android.support.design.widget.Snackbar;
 import android.support.v7.widget.Toolbar;
 import android.widget.Button;
 import android.widget.EditText;
@@ -22,6 +23,7 @@ import wgz.com.cx_ga_project.R;
 import wgz.com.cx_ga_project.app;
 import wgz.com.cx_ga_project.base.BaseActivity;
 import wgz.com.cx_ga_project.base.Constant;
+import wgz.com.cx_ga_project.util.SPBuild;
 import wgz.com.cx_ga_project.util.SPUtils;
 import wgz.com.cx_ga_project.util.SomeUtil;
 import wgz.datatom.com.utillibrary.util.LogUtil;
@@ -90,7 +92,16 @@ public class ChangeCodeActivity extends BaseActivity {
                             public void onNext(String s) {
                                 LogUtil.d("changepass result : "+s);
                                 if (s.contains("200")){
-                                    SomeUtil.showSnackBar(rootview,"修改密码成功！");
+                                    new SPBuild(getApplicationContext())
+                                            .addData(Constant.USERPASSWORD,MD5.md5(newpwd) )
+                                            .build();
+                                    SomeUtil.showSnackBar(rootview,"修改密码成功！").setCallback(new Snackbar.Callback() {
+                                        @Override
+                                        public void onDismissed(Snackbar snackbar, int event) {
+                                            finish();
+                                        }
+                                    });
+
 
                                 }else SomeUtil.showSnackBar(rootview,"修改密码失败！"+s);
                             }

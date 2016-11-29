@@ -103,12 +103,9 @@ public class MyApplyQingjiaFragment extends BaseFragment implements SwipeRefresh
         mMyapplyQingjiaLv.setRefreshListener(this);
        initData();
         rxSubscription = RxBus.getDefault().toObservable(String.class)
-                .subscribe(new Action1<String>() {
-                    @Override
-                    public void call(String s) {
-                        if (s.equals("qingjiaflush"))
-                            onRefresh();
-                    }
+                .subscribe(s -> {
+                    if (s.equals("qingjiaflush"))
+                        onRefresh();
                 });
     }
 

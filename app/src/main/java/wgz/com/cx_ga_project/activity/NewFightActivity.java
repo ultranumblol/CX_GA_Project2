@@ -496,7 +496,7 @@ public class NewFightActivity extends BaseActivity {
                     @Override
                     public void onNext(JQOnDutyPeople result) {
                         LogUtil.d("JQOnDutyPeople code : " + result.getCode().toString());
-                        LogUtil.d("JQOnDutyPeople code : " + result.getRes().toString());
+                       // LogUtil.d("JQOnDutyPeople code : " + result.getRes().toString());
                         mDutyPeodata = result.getRes();
                         String[] lname = new String[mDutyPeodata.size()];
                         final String[] lid = new String[mDutyPeodata.size()];
@@ -652,8 +652,8 @@ public class NewFightActivity extends BaseActivity {
                             detilJqAddress.setText(jqDetil.getResult().get(0).getJqaddr());
                             detilJqBjrName.setText(jqDetil.getResult().get(0).getAlarmperson());
                             detilJqBjrPhone.setText(jqDetil.getResult().get(0).getCallingnumber());
-                            detilJqNature.setText(jqDetil.getResult().get(0).getJqnature());
-                            detilJqType.setText(jqDetil.getResult().get(0).getJqtype());
+                            detilJqNature.setText(jqDetil.getResult().get(0).getJqnature1());
+                            detilJqType.setText(jqDetil.getResult().get(0).getJqtype1());
                             detilJqBjtime.setText(jqDetil.getResult().get(0).getCallpolicetime());
                             baojingName = jqDetil.getResult().get(0).getAlarmperson();
                         }

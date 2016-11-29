@@ -76,17 +76,14 @@ public class AddJQActivity extends BaseActivity {
         addPicRV.setLayoutManager(new GridLayoutManager(this, 4));
         addPicRV.setAdapter(adapter = new AddPictureAdapter(this));
         adapter.addAll(initdata());
-        adapter.setOnItemClickListener(new MyRecyclerArrayAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(int position, View itemView) {
-                if (position + 1 == adapter.getCount()) {
-                    //PickPhotoActivity.actionStart(AddJQActivity.this, 9, null, null);
-                    Intent intent = new Intent(AddJQActivity.this, PickPhotoActivity.class);
-                    intent.putExtra(PhotoPickerFragment.EXTRA_SELECT_COUNT, 3);
-                    intent.putExtra(PhotoPickerFragment.EXTRA_DEFAULT_SELECTED_LIST, "");
-                    intent.putExtra(HTTP_URL, "");
-                    startActivityForResult(intent, 0);
-                }
+        adapter.setOnItemClickListener((position, itemView) -> {
+            if (position + 1 == adapter.getCount()) {
+                //PickPhotoActivity.actionStart(AddJQActivity.this, 9, null, null);
+                Intent intent = new Intent(AddJQActivity.this, PickPhotoActivity.class);
+                intent.putExtra(PhotoPickerFragment.EXTRA_SELECT_COUNT, 3);
+                intent.putExtra(PhotoPickerFragment.EXTRA_DEFAULT_SELECTED_LIST, "");
+                intent.putExtra(HTTP_URL, "");
+                startActivityForResult(intent, 0);
             }
         });
         RxView.clicks(uploadPicFab).throttleFirst(500, TimeUnit.MILLISECONDS)

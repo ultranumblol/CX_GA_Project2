@@ -500,7 +500,7 @@
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:text="驾驶人名"
+            android:text="驾驶人电话"
             android:layout_centerVertical="true"
             android:layout_marginLeft="16dp"
             android:textColor="@color/darkcyan"

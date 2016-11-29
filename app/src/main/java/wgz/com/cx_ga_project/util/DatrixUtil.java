@@ -231,7 +231,7 @@ public class DatrixUtil {
 
         LogUtil.d("current:" + currentPieces + "filepiece:" + filePieces);
         app.apiService.detrixWrite(fileid, startsize + "", filePieceSize + "", piecebodyMap)
-                .compose(RxUtil.<String>applySchedulers())
+                .compose(RxUtil.applySchedulers())
                 .subscribe(new Subscriber<String>() {
                     @Override
                     public void onCompleted() {
@@ -428,6 +428,7 @@ public class DatrixUtil {
 
                     @Override
                     public void onError(Throwable e) {
+                        LogUtil.d("DatrixDoFinish error:"+e.toString());
                         SomeUtil.checkHttpException(app.getApp().getApplicationContext(), e, rootview);
                     }
 
