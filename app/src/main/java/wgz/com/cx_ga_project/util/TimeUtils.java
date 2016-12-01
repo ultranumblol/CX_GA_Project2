@@ -47,7 +47,7 @@ public class TimeUtils {
 
     }
     /**
-     * 获取两个日期之间的间隔天数
+     * 获取两个日期之间的间隔小时数
      * @return
      */
     public static int getGapCount(Date startDate, Date endDate) {
@@ -65,6 +65,6 @@ public class TimeUtils {
         toCalendar.set(Calendar.SECOND, 0);
         toCalendar.set(Calendar.MILLISECOND, 0);
 
-        return (int) ((toCalendar.getTime().getTime() - fromCalendar.getTime().getTime()) / (1000 * 60 * 60 * 24));
+        return (int) ((toCalendar.getTime().getTime() - fromCalendar.getTime().getTime()) / (1000 * 60 * 60 ));
     }
 }

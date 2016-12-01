@@ -83,8 +83,11 @@ public class WorkLogCloudActivity extends BaseActivity {
 
                     @Override
                     public void onCompleted() {
-                        textTagsAdapter = new TextTagsAdapter(list, policeid);
-                        tagCloud.setAdapter(textTagsAdapter);
+                        if (list!=null){
+                            textTagsAdapter = new TextTagsAdapter(list, policeid);
+                            tagCloud.setAdapter(textTagsAdapter);
+
+                        }
 
                     }
 

@@ -38,10 +38,11 @@ import java.util.concurrent.TimeUnit;
 
 import butterknife.Bind;
 import butterknife.OnClick;
+
+import me.iwf.photopicker.PhotoPicker;
 import rx.Subscriber;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 import wgz.com.cx_ga_project.R;
 import wgz.com.cx_ga_project.adapter.chatAdapter.ChatAdapter;
@@ -51,14 +52,12 @@ import wgz.com.cx_ga_project.base.RxBus;
 import wgz.com.cx_ga_project.bean.ChatUpProgress;
 import wgz.com.cx_ga_project.entity.ChatMsg;
 import wgz.com.cx_ga_project.entity.ChatPic;
-import wgz.com.cx_ga_project.fragment.PhotoPickerFragment;
 import wgz.com.cx_ga_project.service.GetNewMsgService;
 import wgz.com.cx_ga_project.util.DatrixUtil;
 import wgz.com.cx_ga_project.util.SomeUtil;
 import wgz.com.cx_ga_project.util.UriUtils;
 import wgz.datatom.com.utillibrary.util.LogUtil;
 
-import static wgz.com.cx_ga_project.activity.PickPhotoActivity2.HTTP_URL;
 import static wgz.com.cx_ga_project.app.DATRIX_BASE_URL;
 import static wgz.com.cx_ga_project.util.fileUtil.delFolder;
 
@@ -236,30 +235,28 @@ public class ChatActivity extends BaseActivity {
                     }
                 });
         rxSubscription3 = RxBus.getDefault().toObservable(ChatPic.class)
-                .subscribe(new Action1<ChatPic>() {
-                    @Override
-                    public void call(ChatPic chatPic) {
-                        if (more.getVisibility() == View.VISIBLE) {
-                            more.setVisibility(View.GONE);
-                        }
-                        newchatData.clear();
-                        paths.clear();
-                        paths = chatPic.getPaths();
-                        ChatMsg re = new ChatMsg();
-                        ChatMsg.Re pic = re.new Re();
-                        Date currentdate = new Date(System.currentTimeMillis());
-                        String curredate = getTime(currentdate);
-                        pic.setPic(paths.get(0));
-                        pic.setSendtime(curredate);
-                        pic.setMark(0);
-                        pic.setIssend("2");
-                        newchatData.add(pic);
-                        adapter.addAll(newchatData);
-                        recyclerview.scrollToPosition(adapter.getCount() - 1);
-                        //uploadpic(makeFiles());
-                       // SomeUtil.showSnackBar(rootview,"发送图片！");
-                        SendPicmsg();
+                .subscribe(chatPic -> {
+                    if (more.getVisibility() == View.VISIBLE) {
+                        more.setVisibility(View.GONE);
                     }
+                    LogUtil.d("选择图片回掉");
+                    newchatData.clear();
+                    paths.clear();
+                    paths = chatPic.getPaths();
+                    ChatMsg re = new ChatMsg();
+                    ChatMsg.Re pic = re.new Re();
+                    Date currentdate = new Date(System.currentTimeMillis());
+                    String curredate = getTime(currentdate);
+                    pic.setPic(paths.get(0));
+                    pic.setSendtime(curredate);
+                    pic.setMark(0);
+                    pic.setIssend("2");
+                    newchatData.add(pic);
+                    adapter.addAll(newchatData);
+                    recyclerview.scrollToPosition(adapter.getCount() - 1);
+                    //uploadpic(makeFiles());
+                   // SomeUtil.showSnackBar(rootview,"发送图片！");
+                    SendPicmsg();
                 });
 
         rxSubscription = RxBus.getDefault().toObservable(String.class)
@@ -596,11 +593,21 @@ public class ChatActivity extends BaseActivity {
                 }
                 break;
             case R.id.view_photo:
-                Intent intent = new Intent(ChatActivity.this, PickPhotoActivity2.class);
-                intent.putExtra(PhotoPickerFragment.EXTRA_SELECT_COUNT, 1);
-                intent.putExtra(PhotoPickerFragment.EXTRA_DEFAULT_SELECTED_LIST, "");
+               /* Intent intent = new Intent(ChatActivity.this, PickPhotoActivity2.class);
+                intent.putExtra(PhotoPickerFragment2.EXTRA_SELECT_COUNT, 1);
+                intent.putExtra(PhotoPickerFragment2.EXTRA_DEFAULT_SELECTED_LIST, "");
                 intent.putExtra(HTTP_URL, "");
-                startActivityForResult(intent, 7);
+                startActivityForResult(intent, 7);*/
+                PhotoPicker.builder()
+                        .setPhotoCount(1)
+                        .setShowCamera(true)
+                        .setShowGif(true)
+                        .setPreviewEnabled(true)
+                        .start(this, 777);
+
+
+
+
                 break;
             case R.id.view_camera:
                 break;
@@ -632,6 +639,38 @@ public class ChatActivity extends BaseActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         try {
+
+            if (resultCode == RESULT_OK && requestCode == 777){
+                if (data != null) {
+                    ArrayList<String> photos =
+                            data.getStringArrayListExtra(PhotoPicker.KEY_SELECTED_PHOTOS);
+                    if (more.getVisibility() == View.VISIBLE) {
+                        more.setVisibility(View.GONE);
+                    }
+                    LogUtil.d("选择图片回掉");
+                    newchatData.clear();
+                    paths.clear();
+                    paths = photos;
+                    ChatMsg re = new ChatMsg();
+                    ChatMsg.Re pic = re.new Re();
+                    Date currentdate = new Date(System.currentTimeMillis());
+                    String curredate = getTime(currentdate);
+                    pic.setPic(paths.get(0));
+                    pic.setSendtime(curredate);
+                    pic.setMark(0);
+                    pic.setIssend("2");
+                    newchatData.add(pic);
+                    adapter.addAll(newchatData);
+                    recyclerview.scrollToPosition(adapter.getCount() - 1);
+                    //uploadpic(makeFiles());
+                    // SomeUtil.showSnackBar(rootview,"发送图片！");
+                    SendPicmsg();
+                }
+
+            }
+
+
+
             if (resultCode == 7) {
                 if (data.getStringExtra("result").equals("addpic")) {
                     if (more.getVisibility() == View.VISIBLE) {

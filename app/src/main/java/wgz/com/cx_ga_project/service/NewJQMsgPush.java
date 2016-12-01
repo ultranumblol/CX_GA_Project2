@@ -41,7 +41,7 @@ public class NewJQMsgPush extends Service {
         LogUtil.d("警情推送服务启动");
         rx.Observable.interval(30, TimeUnit.SECONDS)
                 .subscribe(aLong -> {
-                    app.jqAPIService.jqmsgPush(SomeUtil.getUserId(),"532301000000")
+                    app.jqAPIService.jqmsgPush(SomeUtil.getUserId(),SomeUtil.getDepartId())
                             .subscribe(new Subscriber<NewJQPush>() {
                                 @Override
                                 public void onCompleted() {
@@ -50,7 +50,7 @@ public class NewJQMsgPush extends Service {
 
                                 @Override
                                 public void onError(Throwable e) {
-                                   // LogUtil.d("msmgpush error : "+e.toString());
+                                  LogUtil.d("msmgpush error : "+e.toString());
                                 }
 
                                 @Override

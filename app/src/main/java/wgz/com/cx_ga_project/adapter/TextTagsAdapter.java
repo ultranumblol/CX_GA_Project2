@@ -48,18 +48,8 @@ public class TextTagsAdapter extends TagsAdapter {
         final TextView tv = new TextView(context);
         tv.setText(dataSet.get(position).getKey());
         tv.setGravity(Gravity.CENTER);
-        tv.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                app.getApp().startActivity(new Intent(context, WorkCloudListActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS).putExtra("key",tv.getText().toString())
-                .putExtra("policeid",policeid));
-
-
-
-
-            }
-        });
+        tv.setOnClickListener(v -> app.getApp().startActivity(new Intent(context, WorkCloudListActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS).putExtra("key",tv.getText().toString())
+        .putExtra("policeid",policeid)));
 
 
         return tv;

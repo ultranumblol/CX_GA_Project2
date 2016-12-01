@@ -54,48 +54,42 @@ public class MyapprovalFragment extends BaseFragment implements SwipeRefreshLayo
         recyclerview.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerview.setAdapter(adapter = new ApplyAdapter(getActivity()));
         recyclerview.setRefreshListener(this);
-        adapter.setOnItemClickListener(new MyRecyclerArrayAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(int position, View itemView) {
-                ImageView im_face = (ImageView) itemView.findViewById(R.id.user_face);
-                Intent intent = new Intent();
-                intent.setClass(getActivity(), ApprovalDetilActivity.class);
-                Bundle bundle = new Bundle();
-                bundle.putString("id",adapter.getItem(position).getId());
-                bundle.putString("poiceid",adapter.getItem(position).getPoliceid());
-                bundle.putString("poicename",adapter.getItem(position).getPolicename());
-                bundle.putString("applytime",adapter.getItem(position).getApplytime());
-                bundle.putString("starttime",adapter.getItem(position).getStart());
-                bundle.putString("endtime",adapter.getItem(position).getEnd());
-                bundle.putString("days",adapter.getItem(position).getDays()+"");
-                bundle.putString("content",adapter.getItem(position).getContent());
-                bundle.putString("status",adapter.getItem(position).getStatus());
-                bundle.putString("upperid",adapter.getItem(position).getUpperid());
-                bundle.putString("reasontype",adapter.getItem(position).getReasontype());
-                bundle.putString("head","http://"+adapter.getItem(position).getUrl());
-                intent.putExtra("detil",bundle);
-                //intent.putExtra("type","qingjia");
+        adapter.setOnItemClickListener((position, itemView) -> {
+            ImageView im_face = (ImageView) itemView.findViewById(R.id.user_face);
+            Intent intent = new Intent();
+            intent.setClass(getActivity(), ApprovalDetilActivity.class);
+            Bundle bundle = new Bundle();
+            bundle.putString("id",adapter.getItem(position).getId());
+            bundle.putString("poiceid",adapter.getItem(position).getPoliceid());
+            bundle.putString("poicename",adapter.getItem(position).getPolicename());
+            bundle.putString("applytime",adapter.getItem(position).getApplytime());
+            bundle.putString("starttime",adapter.getItem(position).getStart());
+            bundle.putString("endtime",adapter.getItem(position).getEnd());
+            bundle.putString("days",adapter.getItem(position).getDays()+"");
+            bundle.putString("content",adapter.getItem(position).getContent());
+            bundle.putString("status",adapter.getItem(position).getStatus());
+            bundle.putString("upperid",adapter.getItem(position).getUpperid());
+            bundle.putString("reasontype",adapter.getItem(position).getReasontype());
+            bundle.putString("head","http://"+adapter.getItem(position).getUrl());
+            intent.putExtra("detil",bundle);
+            //intent.putExtra("type","qingjia");
 
 
 
-                intent.putExtra("type",adapter.getItem(position).getType());
-                intent.putExtra("ifhis",false);
-                ActivityCompat.startActivityForResult(getActivity(),
-                        intent,1002,ActivityOptionsCompat
-                                .makeSceneTransitionAnimation(getActivity(),
-                                        im_face, "share_img").toBundle());
-            }
+            intent.putExtra("type",adapter.getItem(position).getType());
+            intent.putExtra("ifhis",false);
+            ActivityCompat.startActivityForResult(getActivity(),
+                    intent,1002,ActivityOptionsCompat
+                            .makeSceneTransitionAnimation(getActivity(),
+                                    im_face, "share_img").toBundle());
         });
 
         //adapter.addAll(initData());
         initdata();
         rxSubscription = RxBus.getDefault().toObservable(String.class)
-                .subscribe(new Action1<String>() {
-                    @Override
-                    public void call(String s) {
-                        if (s.equals("myspflush"))
-                            onRefresh();
-                    }
+                .subscribe(s -> {
+                    if (s.equals("myspflush"))
+                        onRefresh();
                 });
 
     }

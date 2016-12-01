@@ -1,6 +1,5 @@
 package wgz.com.cx_ga_project.activity;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.design.widget.FloatingActionButton;
@@ -29,27 +28,24 @@ import java.util.Map;
 
 import butterknife.Bind;
 import butterknife.OnClick;
+import me.iwf.photopicker.PhotoPicker;
 import rx.Observable;
 import rx.Subscriber;
 import rx.Subscription;
-import rx.functions.Action1;
-import rx.functions.Func2;
+
 import wgz.com.cx_ga_project.R;
 import wgz.com.cx_ga_project.adapter.AddPictureAdapter;
 import wgz.com.cx_ga_project.app;
 import wgz.com.cx_ga_project.base.BaseActivity;
 import wgz.com.cx_ga_project.base.RxBus;
 import wgz.com.cx_ga_project.bean.ChatUpProgress;
-import wgz.com.cx_ga_project.bean.progress;
+
 import wgz.com.cx_ga_project.entity.SICDetil;
-import wgz.com.cx_ga_project.fragment.PhotoPickerFragment;
 import wgz.com.cx_ga_project.util.DatrixUtil;
 import wgz.com.cx_ga_project.util.RxUtil;
 import wgz.com.cx_ga_project.util.SomeUtil;
 import wgz.com.cx_ga_project.util.UriUtils;
 import wgz.datatom.com.utillibrary.util.LogUtil;
-
-import static wgz.com.cx_ga_project.activity.PickPhotoActivity.HTTP_URL;
 
 public class SICLogDetilActivity extends BaseActivity {
 
@@ -288,11 +284,18 @@ public class SICLogDetilActivity extends BaseActivity {
                 .setItems(titles, (dialog, which) -> {
                     switch (which) {
                         case 0:
-                            Intent intent = new Intent(SICLogDetilActivity.this, PickPhotoActivity.class);
+                          /*  Intent intent = new Intent(SICLogDetilActivity.this, PickPhotoActivity.class);
                             intent.putExtra(PhotoPickerFragment.EXTRA_SELECT_COUNT, 6);
                             intent.putExtra(PhotoPickerFragment.EXTRA_DEFAULT_SELECTED_LIST, "");
                             intent.putExtra(HTTP_URL, "");
-                            startActivityForResult(intent, 2);
+                            startActivityForResult(intent, 2);*/
+
+                            PhotoPicker.builder()
+                                    .setPhotoCount(6)
+                                    .setShowCamera(true)
+                                    .setShowGif(true)
+                                    .setPreviewEnabled(true)
+                                    .start(this, 999);
 
                             break;
                         case 1:
@@ -315,7 +318,30 @@ public class SICLogDetilActivity extends BaseActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         try {
             LogUtil.d("resultCode :" + resultCode);
-            if (resultCode == 2) {
+
+            if (resultCode == RESULT_OK && requestCode == 999){
+                if (data != null) {
+                    ArrayList<String> photos =
+                            data.getStringArrayListExtra(PhotoPicker.KEY_SELECTED_PHOTOS);
+                    if (NewPicpaths.size()+paths.size()>3){
+
+                        ViewGroup.LayoutParams lp;
+                        lp = sicloginputPics.getLayoutParams();
+                        lp.height = 260;
+                        sicloginputPics.setLayoutParams(lp);
+
+                        NewPicpaths.clear();
+                        NewPicpaths = photos;
+                        LogUtil.d("NewPicpaths :" + NewPicpaths.toString());
+                        adapter.addAll(NewPicpaths);
+                    }
+
+                }
+
+            }
+
+
+            /*if (resultCode == 2) {
                 if (data.getStringExtra("result").equals("addpic")) {
 
                     //  设置高度
@@ -335,7 +361,7 @@ public class SICLogDetilActivity extends BaseActivity {
                     adapter.addAll(NewPicpaths);
                 }
 
-            } else {
+            }*/ else {
                 Uri uri = data.getData();
                 videopaths.add( UriUtils.getPath(getApplicationContext(), uri));
                 //videoPath = UriUtils.getPath(getApplicationContext(), uri);

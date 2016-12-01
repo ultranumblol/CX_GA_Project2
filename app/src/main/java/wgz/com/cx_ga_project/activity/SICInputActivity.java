@@ -1,10 +1,7 @@
 package wgz.com.cx_ga_project.activity;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
-import android.os.Bundle;
-import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
@@ -32,21 +29,17 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.Bind;
-import butterknife.ButterKnife;
+import me.iwf.photopicker.PhotoPicker;
 import rx.Observable;
 import rx.Subscriber;
 import rx.Subscription;
-import rx.functions.Action1;
-import rx.schedulers.Schedulers;
 import wgz.com.cx_ga_project.R;
 import wgz.com.cx_ga_project.adapter.AddPictureAdapter;
 import wgz.com.cx_ga_project.app;
 import wgz.com.cx_ga_project.base.BaseActivity;
 import wgz.com.cx_ga_project.base.RxBus;
 import wgz.com.cx_ga_project.bean.ChatUpProgress;
-import wgz.com.cx_ga_project.bean.progress;
 import wgz.com.cx_ga_project.entity.TypeOfAuth;
-import wgz.com.cx_ga_project.fragment.PhotoPickerFragment;
 import wgz.com.cx_ga_project.util.DatrixUtil;
 import wgz.com.cx_ga_project.util.RxUtil;
 import wgz.com.cx_ga_project.util.SomeUtil;
@@ -54,7 +47,6 @@ import wgz.com.cx_ga_project.util.UriUtils;
 import wgz.com.cx_ga_project.view.Mylayout;
 import wgz.datatom.com.utillibrary.util.LogUtil;
 
-import static wgz.com.cx_ga_project.activity.PickPhotoActivity.HTTP_URL;
 import static wgz.com.cx_ga_project.app.DATRIX_BASE_URL;
 
 public class SICInputActivity extends BaseActivity {
@@ -156,11 +148,18 @@ public class SICInputActivity extends BaseActivity {
                             .setItems(titles, (dialog, which) -> {
                                 switch (which) {
                                     case 0:
-                                        Intent intent1 = new Intent(SICInputActivity.this, PickPhotoActivity.class);
+                                      /*  Intent intent1 = new Intent(SICInputActivity.this, PickPhotoActivity.class);
                                         intent1.putExtra(PhotoPickerFragment.EXTRA_SELECT_COUNT, 6);
                                         intent1.putExtra(PhotoPickerFragment.EXTRA_DEFAULT_SELECTED_LIST, "");
                                         intent1.putExtra(HTTP_URL, "");
-                                        startActivityForResult(intent1, 9);
+                                        startActivityForResult(intent1, 9);*/
+                                        PhotoPicker.builder()
+                                                .setPhotoCount(6)
+                                                .setShowCamera(true)
+                                                .setShowGif(true)
+                                                .setPreviewEnabled(true)
+                                                .start(this, 888);
+
 
                                         break;
                                     case 1:
@@ -318,6 +317,37 @@ public class SICInputActivity extends BaseActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         try {
             LogUtil.d("resultCode :" + resultCode);
+            if (resultCode == RESULT_OK && requestCode == 888){
+                if (data != null) {
+                    ArrayList<String> photos =
+                            data.getStringArrayListExtra(PhotoPicker.KEY_SELECTED_PHOTOS);
+                    ViewGroup.LayoutParams lp;
+                    lp = sicinputPics.getLayoutParams();
+                    lp.height = 240;
+                    sicinputPics.setLayoutParams(lp);
+
+                    paths.clear();
+                    paths = photos;
+                    LogUtil.d("paths :" + paths.toString());
+                    adapter.addAll(paths);
+
+                }
+
+            }
+            else {
+                Uri uri = data.getData();
+                videopaths.add( UriUtils.getPath(getApplicationContext(), uri));
+                //videoPath = UriUtils.getPath(getApplicationContext(), uri);
+               /* paths.clear();
+                paths.add(testvideo);*/
+                adapter.add("testvideo");
+                // SomeUtil.showSnackBar(rootview,"videoPath: "+videoPath);
+                // 视频文件路径
+
+
+            }
+
+/*
             if (resultCode == 9) {
                 if (data.getStringExtra("result").equals("addpic")) {
 
@@ -333,18 +363,7 @@ public class SICInputActivity extends BaseActivity {
                     adapter.addAll(paths);
                 }
 
-            } else {
-                Uri uri = data.getData();
-                videopaths.add( UriUtils.getPath(getApplicationContext(), uri));
-                //videoPath = UriUtils.getPath(getApplicationContext(), uri);
-               /* paths.clear();
-                paths.add(testvideo);*/
-                adapter.add("testvideo");
-                // SomeUtil.showSnackBar(rootview,"videoPath: "+videoPath);
-                // 视频文件路径
-
-
-            }
+            } */
 
 
         } catch (Exception e) {

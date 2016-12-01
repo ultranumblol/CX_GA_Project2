@@ -1,8 +1,6 @@
 package wgz.com.cx_ga_project.activity;
 
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
@@ -23,24 +21,20 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.Bind;
-import butterknife.ButterKnife;
+import me.iwf.photopicker.PhotoPicker;
 import rx.Observer;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 import wgz.com.cx_ga_project.R;
 import wgz.com.cx_ga_project.adapter.AddPictureAdapter;
-import wgz.com.cx_ga_project.adapter.MyRecyclerArrayAdapter;
 import wgz.com.cx_ga_project.app;
 import wgz.com.cx_ga_project.base.BaseActivity;
-import wgz.com.cx_ga_project.fragment.PhotoPickerFragment;
 import wgz.com.cx_ga_project.util.DatrixUtil;
 import wgz.com.cx_ga_project.util.RxUtil;
 import wgz.com.cx_ga_project.util.SomeUtil;
 import wgz.datatom.com.utillibrary.util.LogUtil;
 
-import static wgz.com.cx_ga_project.activity.PickPhotoActivity.HTTP_URL;
 import static wgz.com.cx_ga_project.app.DATRIX_BASE_URL;
 import static wgz.com.cx_ga_project.util.SomeUtil.getUserId;
 
@@ -93,11 +87,12 @@ public class AddWorkLogActivity extends BaseActivity {
         adapter.addAll(initdata());
         adapter.setOnItemClickListener((position, itemView) -> {
             if (position + 1 == adapter.getCount()) {
-                Intent intent1 = new Intent(AddWorkLogActivity.this, PickPhotoActivity.class);
-                intent1.putExtra(PhotoPickerFragment.EXTRA_SELECT_COUNT, 9);
-                intent1.putExtra(PhotoPickerFragment.EXTRA_DEFAULT_SELECTED_LIST, "");
-                intent1.putExtra(HTTP_URL, "");
-                startActivityForResult(intent1, 1);
+                PhotoPicker.builder()
+                        .setPhotoCount(1)
+                        .setShowCamera(true)
+                        .setShowGif(true)
+                        .setPreviewEnabled(true)
+                        .start(this, 111);
             }
 
         });
@@ -327,14 +322,19 @@ public class AddWorkLogActivity extends BaseActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         try {
-            if (data.getStringExtra("result").equals("addpic")) {
-                adapter.clear();
-                paths.clear();
-                paths = data.getStringArrayListExtra("paths");
-                initdata();
-                adapter.addAll(paths);
 
+            if (resultCode == RESULT_OK && requestCode == 111){
+                if (data != null) {
+                    ArrayList<String> photos =
+                            data.getStringArrayListExtra(PhotoPicker.KEY_SELECTED_PHOTOS);
+                    adapter.clear();
+                    paths.clear();
+                    paths = photos;
+                    initdata();
+                    adapter.addAll(paths);
+                }
             }
+
         } catch (Exception e) {
             LogUtil.d("error :" + e);
         }

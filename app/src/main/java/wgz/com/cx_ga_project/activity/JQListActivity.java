@@ -102,14 +102,17 @@ public class JQListActivity extends BaseActivity {
 
                         @Override
                         public void onError(Throwable e) {
-
+                            //SomeUtil.checkHttpException(JQListActivity.this,e,rootview);
                         }
 
                         @Override
                         public void onNext(NearJQ jqDetil) {
                             LogUtil.d("nearjq : "+jqDetil);
-                            nearjqdata  = jqDetil.getRes();
-                            adapter.addAll(nearjqdata);
+                            if (jqDetil.getCode().equals(200)){
+                                nearjqdata  = jqDetil.getRes();
+                                adapter.addAll(nearjqdata);
+                            }
+
                            /*// String url = appVersion.getRes().get(0).getApkUrl();
                             //url.replaceAll("\\\\","");
                             nearjqdata  = jqDetil.getResult();
@@ -133,14 +136,17 @@ public class JQListActivity extends BaseActivity {
 
                         @Override
                         public void onError(Throwable e) {
-
+                           // SomeUtil.checkHttpException(JQListActivity.this,e,rootview);
                         }
 
                         @Override
                         public void onNext(CallerInfo callerInfo) {
-                            LogUtil.d("callerinfo resutl : "+callerInfo.getCode());
-                            bjrdata = callerInfo.getResjq();
-                            adapter.addAll(bjrdata);
+                            if (callerInfo.getCode().equals(200)){
+                                LogUtil.d("callerinfo resutl : "+callerInfo.getCode());
+                                bjrdata = callerInfo.getResjq();
+                                adapter.addAll(bjrdata);
+                            }
+
                         }
                     });
         }
@@ -158,12 +164,16 @@ public class JQListActivity extends BaseActivity {
                         @Override
                         public void onError(Throwable e) {
                             LogUtil.d("getPoliceJqInfo error: "+e.toString());
+                            //SomeUtil.checkHttpException(JQListActivity.this,e,rootview);
                         }
 
                         @Override
                         public void onNext(NearJQ s) {
-                            sjrdata = s.getRes();
-                            adapter.addAll(sjrdata);
+                            if (s.getCode().equals(200)){
+                                sjrdata = s.getRes();
+                                adapter.addAll(sjrdata);
+                            }
+
 
                         }
                     });
@@ -180,14 +190,17 @@ public class JQListActivity extends BaseActivity {
 
                 @Override
                 public void onError(Throwable e) {
-
+                    //SomeUtil.checkHttpException(JQListActivity.this,e,rootview);
                 }
 
                 @Override
                 public void onNext(NewJQ newJQ) {
-                    jqhisdate = newJQ.getRes();
-                    LogUtil.d("jqhistory result :"+newJQ.getRes().toString());
-                    adapter.addAll(jqhisdate);
+                    if (newJQ.getCode().equals(200)){
+                        jqhisdate = newJQ.getRes();
+                        LogUtil.d("jqhistory result :"+newJQ.getRes().toString());
+                        adapter.addAll(jqhisdate);
+                    }
+
                 }
             });
         }

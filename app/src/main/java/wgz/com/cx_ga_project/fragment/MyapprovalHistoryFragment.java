@@ -25,7 +25,7 @@ import rx.Observer;
 import rx.Subscriber;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action1;
+
 import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 import wgz.com.cx_ga_project.R;

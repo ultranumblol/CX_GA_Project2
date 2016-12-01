@@ -126,7 +126,7 @@ public class AskForLeaveActivity extends BaseActivity {
                     }
             }
         });
-        RxView.clicks(mLeaveCommit).throttleFirst(500, TimeUnit.MILLISECONDS)
+        RxView.clicks(mLeaveCommit).throttleFirst(1000, TimeUnit.MILLISECONDS)
                 .subscribe(aVoid -> {
                     docommit();
                 });

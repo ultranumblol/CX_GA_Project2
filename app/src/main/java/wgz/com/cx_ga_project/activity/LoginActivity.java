@@ -160,10 +160,10 @@ public class LoginActivity extends BaseActivity {
                     @Override
                     public void onError(Throwable e) {
                        // SomeUtil.showSnackBar(rootview,e.toString());
-                        //SomeUtil.checkHttpException(getApplicationContext(), e, scrollLoginForm);
+                        //;
                         showProgress(false);
                         LogUtil.d("login2 : " + e.toString());
-
+                        SomeUtil.checkHttpException(getApplicationContext(), e, scrollLoginForm);
                     }
 
                     @Override
@@ -221,7 +221,7 @@ public class LoginActivity extends BaseActivity {
 
 
                         } else {
-                            SomeUtil.showSnackBar(scrollLoginForm, "用户名或密码错误！"+s);
+                            SomeUtil.showSnackBar(scrollLoginForm, "用户名或密码错误！");
                             showProgress(false);
 
                         }

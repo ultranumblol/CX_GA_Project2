@@ -51,7 +51,7 @@ import rx.Observable;
 import rx.Subscriber;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action1;
+
 import rx.schedulers.Schedulers;
 import wgz.com.cx_ga_project.R;
 import wgz.com.cx_ga_project.app;
@@ -433,9 +433,9 @@ public class HomeActivity extends AppCompatActivity
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
 
-            startActivity(new Intent(HomeActivity.this, CamMapHtmlActivity.class));
+            //startActivity(new Intent(HomeActivity.this, CamMapHtmlActivity.class));
             //startActivity(new Intent(HomeActivity.this, LoginActivity.class));
-           // startActivity(new Intent(HomeActivity.this, NewMsgActivity.class));
+           startActivity(new Intent(HomeActivity.this, NewMsgActivity.class));
 
 
             return true;

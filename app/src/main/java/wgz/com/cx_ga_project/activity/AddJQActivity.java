@@ -1,8 +1,6 @@
 package wgz.com.cx_ga_project.activity;
 
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
@@ -22,22 +20,17 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.Bind;
-import butterknife.ButterKnife;
+import me.iwf.photopicker.PhotoPicker;
 import rx.Subscriber;
-import rx.functions.Action1;
 import wgz.com.cx_ga_project.R;
 import wgz.com.cx_ga_project.adapter.AddPictureAdapter;
-import wgz.com.cx_ga_project.adapter.MyRecyclerArrayAdapter;
 import wgz.com.cx_ga_project.app;
 import wgz.com.cx_ga_project.base.BaseActivity;
 import wgz.com.cx_ga_project.base.RxBus;
-import wgz.com.cx_ga_project.fragment.PhotoPickerFragment;
 import wgz.com.cx_ga_project.util.DatrixUtil;
 import wgz.com.cx_ga_project.util.RxUtil;
 import wgz.com.cx_ga_project.util.SomeUtil;
 import wgz.datatom.com.utillibrary.util.LogUtil;
-
-import static wgz.com.cx_ga_project.activity.PickPhotoActivity.HTTP_URL;
 import static wgz.com.cx_ga_project.app.DATRIX_BASE_URL;
 
 /**
@@ -79,11 +72,13 @@ public class AddJQActivity extends BaseActivity {
         adapter.setOnItemClickListener((position, itemView) -> {
             if (position + 1 == adapter.getCount()) {
                 //PickPhotoActivity.actionStart(AddJQActivity.this, 9, null, null);
-                Intent intent = new Intent(AddJQActivity.this, PickPhotoActivity.class);
-                intent.putExtra(PhotoPickerFragment.EXTRA_SELECT_COUNT, 3);
-                intent.putExtra(PhotoPickerFragment.EXTRA_DEFAULT_SELECTED_LIST, "");
-                intent.putExtra(HTTP_URL, "");
-                startActivityForResult(intent, 0);
+                PhotoPicker.builder()
+                        .setPhotoCount(3)
+                        .setShowCamera(true)
+                        .setShowGif(true)
+                        .setPreviewEnabled(true)
+                        .start(this, 333);
+
             }
         });
         RxView.clicks(uploadPicFab).throttleFirst(500, TimeUnit.MILLISECONDS)
@@ -216,13 +211,28 @@ public class AddJQActivity extends BaseActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         try {
+            if (resultCode == RESULT_OK && requestCode == 333){
+                if (data != null) {
+                    ArrayList<String> photos =
+                            data.getStringArrayListExtra(PhotoPicker.KEY_SELECTED_PHOTOS);
+                    adapter.clear();
+                    paths.clear();
+                    paths =photos ;
+                    initdata();
+                    adapter.addAll(paths);
+
+                }
+
+            }
+
+         /*
             if (data.getStringExtra("result").equals("addpic")) {
                 adapter.clear();
                 paths.clear();
                 paths = data.getStringArrayListExtra("paths");
                 initdata();
                 adapter.addAll(paths);
-            }
+            }*/
 
         } catch (Exception e) {
             LogUtil.d("error : " + e);

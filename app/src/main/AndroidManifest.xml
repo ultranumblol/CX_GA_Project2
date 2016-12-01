@@ -159,16 +159,6 @@
         <service android:name=".service.GetGPSService" />
 
         <activity
-            android:name=".activity.PickPhotoActivity"
-            android:label="@string/title_activity_pick_photo"
-            android:screenOrientation="portrait"
-            android:launchMode="standard"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".activity.PickPhotoActivity2"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
             android:name=".activity.AddJQActivity"
             android:label="@string/title_activity_add_jq"
             android:screenOrientation="portrait"
@@ -309,6 +299,13 @@
         <activity android:name=".activity.SecondCodeShowActivity"
             android:launchMode="singleTask"
             ></activity>
+        <activity android:name="me.iwf.photopicker.PhotoPickerActivity"
+            android:theme="@style/Theme.AppCompat.NoActionBar"
+            />
+
+        <activity android:name="me.iwf.photopicker.PhotoPagerActivity"
+            android:theme="@style/Theme.AppCompat.NoActionBar"/>
+
     </application>
 
 </manifest>

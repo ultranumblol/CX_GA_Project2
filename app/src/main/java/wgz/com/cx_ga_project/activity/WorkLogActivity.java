@@ -382,6 +382,8 @@ public class WorkLogActivity extends BaseActivity {
             if (data.getStringExtra("result").equals("refresh")) {
                 //iniData();
                 initCalendar();
+
+
                 //idWorkLogText.setText(data.getStringExtra("text"));
             }
 

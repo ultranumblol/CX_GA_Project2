@@ -103,7 +103,7 @@ public class AskForJiabanActivity extends BaseActivity {
                     menddate = date;
             }
         });
-        RxView.clicks(mJiabanCommit).throttleFirst(500, TimeUnit.MILLISECONDS)
+        RxView.clicks(mJiabanCommit).throttleFirst(1000, TimeUnit.MILLISECONDS)
                 .subscribe(aVoid -> {
                     docommit();
                 });

@@ -42,6 +42,7 @@ import wgz.com.cx_ga_project.entity.AllDep;
 import wgz.com.cx_ga_project.entity.JQDetil;
 import wgz.com.cx_ga_project.entity.JQOnDutyPeople;
 import wgz.com.cx_ga_project.entity.JqOrbit;
+import wgz.com.cx_ga_project.util.GpsUtil;
 import wgz.com.cx_ga_project.util.RxUtil;
 import wgz.com.cx_ga_project.util.SPUtils;
 import wgz.com.cx_ga_project.util.SomeUtil;
@@ -162,6 +163,8 @@ public class NewFightActivity extends BaseActivity {
 
             }
         });
+        GpsUtil gpsUtil = new GpsUtil();
+        gpsUtil.getJingWeiDu(this);
         toolbar.setTitle("接处警作战");
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -457,7 +460,7 @@ public class NewFightActivity extends BaseActivity {
 
                     @Override
                     public void onError(Throwable e) {
-                        SomeUtil.checkHttpException(NewFightActivity.this,e,rootview);
+                       // SomeUtil.checkHttpException(NewFightActivity.this,e,rootview);
                     }
 
                     @Override
@@ -489,7 +492,7 @@ public class NewFightActivity extends BaseActivity {
 
                     @Override
                     public void onError(Throwable e) {
-                        SomeUtil.checkHttpException(getApplicationContext(), e, rootview);
+                        //SomeUtil.checkHttpException(getApplicationContext(), e, rootview);
                         LogUtil.d("JQOnDutyPeople error : " + e.toString());
                     }
 
@@ -566,7 +569,7 @@ public class NewFightActivity extends BaseActivity {
         //LogUtil.d("systime : "+SomeUtil.getSysTime());
         String time = SomeUtil.getSysTime();
         String latitude = (String) SPUtils.get(app.getApp().getApplicationContext(), Constant.LATITUDE, "111");
-        String longitude = (String) SPUtils.get(app.getApp().getApplicationContext(), Constant.LONGITUDE, "1111");
+        String longitude = (String) SPUtils.get(app.getApp().getApplicationContext(), Constant.LONGITUDE, "1");
         LogUtil.d("fight latitude:" + latitude);
         LogUtil.d("fight longitude:" + longitude);
         app.jqAPIService.StartNewFight(JQid, taskid, time, longitude, latitude)

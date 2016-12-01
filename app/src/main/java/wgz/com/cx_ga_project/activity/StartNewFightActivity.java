@@ -168,7 +168,10 @@ public class StartNewFightActivity extends BaseActivity {
                         LogUtil.d("newjq2 :" +newJQ.getRes().toString());
                         if (newJQ.getCode().equals(200)) {
                             data = newJQ.getRes();
-                            adapter.addAll(data);
+
+                                adapter.addAll(data);
+
+
 
 
 

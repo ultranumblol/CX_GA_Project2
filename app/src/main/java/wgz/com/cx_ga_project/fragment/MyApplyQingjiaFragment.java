@@ -23,7 +23,7 @@ import rx.Observable;
 import rx.Observer;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action1;
+
 import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 import wgz.com.cx_ga_project.R;
@@ -71,34 +71,31 @@ public class MyApplyQingjiaFragment extends BaseFragment implements SwipeRefresh
             }
         });*/
         //adapter.setNoMore(R.layout.view_nomore);
-        adapter.setOnItemClickListener(new MyRecyclerArrayAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(int position, View itemView) {
+        adapter.setOnItemClickListener((position, itemView) -> {
 
-                ImageView im_face = (ImageView) itemView.findViewById(R.id.user_face);
-                TextView state = (TextView) itemView.findViewById(R.id.jiaban_state);
-                Intent intent = new Intent();
-                intent.setClass(getActivity(), JiabanLeaveDetilActivity.class);
-                Bundle bundle = new Bundle();
-                bundle.putString("poiceid",adapter.getItem(position).getPoliceid());
-                bundle.putString("poicename",adapter.getItem(position).getPolicename());
-                bundle.putString("applytime",adapter.getItem(position).getApplytime());
-                bundle.putString("starttime",adapter.getItem(position).getStart());
-                bundle.putString("endtime",adapter.getItem(position).getEnd());
-                bundle.putString("days",adapter.getItem(position).getDays()+"");
-                bundle.putString("content",adapter.getItem(position).getContent());
-                bundle.putString("status",adapter.getItem(position).getStatus());
-                bundle.putString("upperid",adapter.getItem(position).getUpperid());
-                bundle.putString("reasontype",adapter.getItem(position).getReasontype());
-                bundle.putString("head","http://"+adapter.getItem(position).getUrl());
-                intent.putExtra("detil",bundle);
-                intent.putExtra("type",adapter.getItem(position).getType());
+            ImageView im_face = (ImageView) itemView.findViewById(R.id.user_face);
+            TextView state = (TextView) itemView.findViewById(R.id.jiaban_state);
+            Intent intent = new Intent();
+            intent.setClass(getActivity(), JiabanLeaveDetilActivity.class);
+            Bundle bundle = new Bundle();
+            bundle.putString("poiceid",adapter.getItem(position).getPoliceid());
+            bundle.putString("poicename",adapter.getItem(position).getPolicename());
+            bundle.putString("applytime",adapter.getItem(position).getApplytime());
+            bundle.putString("starttime",adapter.getItem(position).getStart());
+            bundle.putString("endtime",adapter.getItem(position).getEnd());
+            bundle.putString("days",adapter.getItem(position).getDays()+"");
+            bundle.putString("content",adapter.getItem(position).getContent());
+            bundle.putString("status",adapter.getItem(position).getStatus());
+            bundle.putString("upperid",adapter.getItem(position).getUpperid());
+            bundle.putString("reasontype",adapter.getItem(position).getReasontype());
+            bundle.putString("head","http://"+adapter.getItem(position).getUrl());
+            intent.putExtra("detil",bundle);
+            intent.putExtra("type",adapter.getItem(position).getType());
 
-                ActivityCompat.startActivityForResult(getActivity(),
-                       intent,1005 ,ActivityOptionsCompat
-                                .makeSceneTransitionAnimation(getActivity(),
-                                        im_face, "share_img").toBundle());
-            }
+            ActivityCompat.startActivityForResult(getActivity(),
+                   intent,1005 ,ActivityOptionsCompat
+                            .makeSceneTransitionAnimation(getActivity(),
+                                    im_face, "share_img").toBundle());
         });
         mMyapplyQingjiaLv.setRefreshListener(this);
        initData();
@@ -169,14 +166,11 @@ public class MyApplyQingjiaFragment extends BaseFragment implements SwipeRefresh
 
     @Override
     public void onRefresh() {
-        handler.postDelayed(new Runnable() {
-        @Override
-        public void run() {
+        handler.postDelayed(() -> {
             list.clear();
             adapter.clear();
             initData();
-        }
-    }, 1500);
+        }, 1500);
 
 
 
