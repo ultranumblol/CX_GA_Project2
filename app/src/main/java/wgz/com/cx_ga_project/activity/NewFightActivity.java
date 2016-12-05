@@ -199,6 +199,8 @@ public class NewFightActivity extends BaseActivity {
         }
         if (jqstate.equals("1")) {
 
+            idFightTalk.setVisibility(View.GONE);
+
             RxView.clicks(fabNewfight).throttleFirst(500, TimeUnit.MICROSECONDS)
                     .subscribe(aVoid -> {
                         ShowDialog();
@@ -597,7 +599,8 @@ public class NewFightActivity extends BaseActivity {
                             SomeUtil.showSnackBar(rootview, "开始作战！");
                             fabNewfight.setImageResource(R.drawable.ic_stop_white_48dp);
                             RxBus.getDefault().post("newjqflush");
-
+                            jqstate="2";
+                            idFightTalk.setVisibility(View.VISIBLE);
                         }
                         if (s.contains("300")) {
                             SomeUtil.showSnackBar(rootview, "服务器错误！请稍后再试！");

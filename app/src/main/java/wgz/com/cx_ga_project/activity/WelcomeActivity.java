@@ -21,6 +21,7 @@ import wgz.com.cx_ga_project.app;
 import wgz.com.cx_ga_project.base.BaseActivity;
 import wgz.com.cx_ga_project.base.Constant;
 import wgz.com.cx_ga_project.observable.AnimatorOnSubscribe;
+import wgz.com.cx_ga_project.util.GpsUtil;
 import wgz.com.cx_ga_project.util.SPBuild;
 
 import wgz.datatom.com.utillibrary.util.LogUtil;
@@ -59,7 +60,8 @@ public class WelcomeActivity extends BaseActivity {
                         //LogUtil.d("onCompleted!");
                         startActivity(new Intent(WelcomeActivity.this,HomeActivity.class));
                         saveinfo();
-
+                        GpsUtil gpsUtil = new GpsUtil();
+                        gpsUtil.getJingWeiDu(WelcomeActivity.this);
 
 
                         finish();

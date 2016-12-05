@@ -438,7 +438,7 @@ public class ChatActivity extends BaseActivity {
             Date currentdate = new Date(System.currentTimeMillis());
             String curredate = getTime(currentdate);
 
-
+           // datrixUrl + fileid1 + datrixurl2
             app.jqAPIService.sendMsg(SomeUtil.getJQId(), "", datrixUrl + fileid1 + datrixurl2, "", "", SomeUtil.getTASKId(), curredate, SomeUtil.getUserId())
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())

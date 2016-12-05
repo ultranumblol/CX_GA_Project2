@@ -34,8 +34,6 @@ public class DatrixUtil {
     private static final int UPLOADPIC = 1;
     private static final int UPLOADVIDEO = 2;
     private static final int UPLOADLENGTH = 4 * 1024 * 1024;
-    private static String DATRIXURL = "http://101.231.77.242:9001/preview/getImage?fileid=";
-    private static String DATRIXURL2 = "&token=X7yABwjE20sUJLefATUFqU0iUs8mJPqEJo6iRnV63mI=";
     List<String> paths = new ArrayList<>();
     List<String> ids = new ArrayList<>();
     //private String fileid;

@@ -34,6 +34,7 @@ import wgz.com.cx_ga_project.base.BaseActivity;
 import wgz.com.cx_ga_project.base.Constant;
 import wgz.com.cx_ga_project.base.RxBus;
 import wgz.com.cx_ga_project.entity.NewJQ;
+import wgz.com.cx_ga_project.util.GpsUtil;
 import wgz.com.cx_ga_project.util.RxUtil;
 import wgz.com.cx_ga_project.util.SPBuild;
 import wgz.com.cx_ga_project.util.SomeUtil;
@@ -110,7 +111,8 @@ public class StartNewFightActivity extends BaseActivity {
                     if (s.equals("newjqflush"))
                         initdata();
                 });
-
+        GpsUtil gpsUtil = new GpsUtil();
+        gpsUtil.getJingWeiDu(this);
 
     }
     @Override

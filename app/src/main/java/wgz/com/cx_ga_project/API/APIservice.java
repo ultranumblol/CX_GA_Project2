@@ -5,6 +5,8 @@ import java.util.Map;
 
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
+import okhttp3.ResponseBody;
+import retrofit2.Response;
 import retrofit2.http.Body;
 import retrofit2.http.Field;
 import retrofit2.http.FieldMap;
@@ -112,6 +114,23 @@ public interface APIservice {
     Observable<String> detrixfinish(
             @Field("fileid") String fileid,
             @Field("customjson") String customjson
+    );
+
+
+    /**
+     *
+     * @param fileid
+     * @param height 缩略图的高度，单位为像素，默认为 0, 表示等比缩放图片
+     * @param width 缩略图的宽度，单位为像素, 默认为 0, 表示大小不变
+     * @return
+     */
+    @FormUrlEncoded
+    @POST(DATRIX_BASE_URL + "api/media/image/thumbnail/preview")
+    @Headers("ACCESS-TOKEN:X7yABwjE20sUJLefATUFqU0iUs8mJPqEJo6iRnV63mI=")
+    Observable<ResponseBody> detrixPic(
+            @Field("fileid") String fileid,
+            @Field("height") String height,
+            @Field("width") String width
     );
 
     /**

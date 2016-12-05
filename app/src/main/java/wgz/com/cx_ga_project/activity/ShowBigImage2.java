@@ -1,48 +1,45 @@
 package wgz.com.cx_ga_project.activity;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
-import android.widget.ImageView;
-import android.widget.RelativeLayout;
 
-import com.jude.easyrecyclerview.EasyRecyclerView;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
 import butterknife.Bind;
-import butterknife.ButterKnife;
 import okhttp3.ResponseBody;
 import rx.Subscriber;
 import wgz.com.cx_ga_project.R;
 import wgz.com.cx_ga_project.app;
 import wgz.com.cx_ga_project.base.BaseActivity;
 import wgz.com.cx_ga_project.util.RxUtil;
+import wgz.com.cx_ga_project.view.PinchImageView;
 import wgz.datatom.com.utillibrary.util.LogUtil;
 
-public class NewMsgActivity extends BaseActivity {
 
+/**
+ * 查看大图
+ * Created by wgz on 2016/10/21.
+ */
 
-    @Bind(R.id.toolbar)
-    Toolbar toolbar;
-    @Bind(R.id.id_newmsg_lv)
-    EasyRecyclerView idNewmsgLv;
-    @Bind(R.id.content_new_msg)
-    RelativeLayout rootview;
-    @Bind(R.id.testpic)
-    ImageView testpic;
+public class ShowBigImage2 extends BaseActivity {
+    @Bind(R.id.image)
+    PinchImageView image;
+
 
     @Override
     public int getLayoutId() {
-        return R.layout.activity_new_msg;
+        return R.layout.activity_show_big_image;
     }
 
     @Override
     public void initView() {
-        toolbar.setTitle("新消息");
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-       /* app.apiService.detrixPic("8a7b0444-ad65-4af8-93d8-ae0f990016e7", "0", "200")
+        Intent intent = getIntent();
+        String url = intent.getStringExtra("url");
+        image.setOnClickListener(v -> finish());
+        LogUtil.d("showimage2 : "+url);
+        app.apiService.detrixPic(url, "0", "400")
                 .compose(RxUtil.applySchedulers())
                 .subscribe(new Subscriber<ResponseBody>() {
                     @Override
@@ -58,17 +55,18 @@ public class NewMsgActivity extends BaseActivity {
                     @Override
                     public void onNext(ResponseBody s) {
                         Bitmap btp = BitmapFactory.decodeStream(s.byteStream());
-                        testpic.setImageBitmap(btp);
+                        image.setImageBitmap(btp);
+                        LogUtil.d("show!"+s.byteStream().toString());
 
                     }
-                });*/
+                });
 
+      /*  Glide.with(this)
+                .load(url)
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .thumbnail(0.4f)
+                .dontAnimate()
+                .into(image);*/
     }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        // TODO: add setContentView(...) invocation
-        ButterKnife.bind(this);
-    }
 }

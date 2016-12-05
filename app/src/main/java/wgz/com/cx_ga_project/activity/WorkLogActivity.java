@@ -416,7 +416,7 @@ public class WorkLogActivity extends BaseActivity {
                             adapter.clear();
                            if (paths.size()>=1){
                                adapter.addAll(paths);
-
+                               LogUtil.d(paths.toString());
                            }
                             LogUtil.d("显示图片");
                         }
