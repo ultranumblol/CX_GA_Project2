@@ -39,7 +39,7 @@ public class ShowBigImage2 extends BaseActivity {
         String url = intent.getStringExtra("url");
         image.setOnClickListener(v -> finish());
         LogUtil.d("showimage2 : "+url);
-        app.apiService.detrixPic(url, "0", "400")
+        app.apiService.detrixPic(url, "0", "800")
                 .compose(RxUtil.applySchedulers())
                 .subscribe(new Subscriber<ResponseBody>() {
                     @Override

@@ -65,7 +65,7 @@ public class AddWorkLogActivity extends BaseActivity {
     private String edittext = "";
     private AddPictureAdapter adapter;
     private String fileid = "";
-    private String datrixUrl = DATRIX_BASE_URL + "preview/getImage?fileid=";
+   // private String datrixUrl = DATRIX_BASE_URL + "preview/getImage?fileid=";
     private String datrixurl2 = "&token=X7yABwjE20sUJLefATUFqU0iUs8mJPqEJo6iRnV63mI=";
 
     @Override
@@ -224,7 +224,7 @@ public class AddWorkLogActivity extends BaseActivity {
                         for (int i = 0; i < ids.size(); i++) {
                             final int j = i;
 
-                            app.apiService.upWorkLog("addSummary", getUserId(), "", datrixUrl + ids.get(i) + datrixurl2, time)
+                            app.apiService.upWorkLog("addSummary", getUserId(), "",  ids.get(i) , time)
                                     .compose(RxUtil.<String>applySchedulers())
                                     .subscribe(new Subscriber<String>() {
                                         @Override

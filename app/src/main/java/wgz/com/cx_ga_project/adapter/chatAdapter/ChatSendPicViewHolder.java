@@ -67,11 +67,11 @@ public class ChatSendPicViewHolder extends BaseViewHolder<ChatMsg.Re> {
                 .dontAnimate()
                 .into(userhead);
 
-
+        LogUtil.d("picurl :"+data.getPic());
         String url = data.getPic();
-        String url1 = url.replace(DATRIX_BASE_URL + "preview/getImage?fileid=", " ");
-        String url2 = url1.replace("&token=X7yABwjE20sUJLefATUFqU0iUs8mJPqEJo6iRnV63mI=", " ");
-        LogUtil.d("picurl :"+url2);
+        String url1 = url.replace(DATRIX_BASE_URL + "preview/getImage?fileid=", "");
+        String url2 = url1.replace("&token=X7yABwjE20sUJLefATUFqU0iUs8mJPqEJo6iRnV63mI=", "");
+       // LogUtil.d("picfileid :"+url2);
         app.apiService.detrixPic(url2, "0", "300")
                 .compose(RxUtil.applySchedulers())
                 .subscribe(new Subscriber<ResponseBody>() {
@@ -116,7 +116,7 @@ public class ChatSendPicViewHolder extends BaseViewHolder<ChatMsg.Re> {
         });*/
 
 
-        mSendPicture.setOnClickListener(v -> getContext().startActivity(new Intent(getContext(), ShowBigImage2.class).putExtra("url",data.getPic())));
+        mSendPicture.setOnClickListener(v -> getContext().startActivity(new Intent(getContext(), ShowBigImage2.class).putExtra("url",url2)));
         timestamp.setText(data.getSendtime());
         if (data.getIssend().equals("2")){
             progressBar.setVisibility(View.VISIBLE);

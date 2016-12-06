@@ -6,6 +6,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
@@ -53,7 +54,7 @@ public class AddJQActivity extends BaseActivity {
     ProgressBar upJqProgress;
     private AddPictureAdapter adapter;
     private String fileid = "";
-    private String datrixUrl = DATRIX_BASE_URL + "preview/getImage?fileid=";
+   // private String datrixUrl = DATRIX_BASE_URL + "preview/getImage?fileid=";
     private String datrixurl2 = "&token=X7yABwjE20sUJLefATUFqU0iUs8mJPqEJo6iRnV63mI=";
 
     @Override
@@ -68,21 +69,33 @@ public class AddJQActivity extends BaseActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         addPicRV.setLayoutManager(new GridLayoutManager(this, 4));
         addPicRV.setAdapter(adapter = new AddPictureAdapter(this));
-        adapter.addAll(initdata());
+        //adapter.addAll(initdata());
         adapter.setOnItemClickListener((position, itemView) -> {
-            if (position + 1 == adapter.getCount()) {
-                //PickPhotoActivity.actionStart(AddJQActivity.this, 9, null, null);
-                PhotoPicker.builder()
-                        .setPhotoCount(3)
-                        .setShowCamera(true)
-                        .setShowGif(true)
-                        .setPreviewEnabled(true)
-                        .start(this, 333);
+            if (paths.size()!=4){
+                if (position + 1 == adapter.getCount()) {
+                    //PickPhotoActivity.actionStart(AddJQActivity.this, 9, null, null);
+
+                    PhotoPicker.builder()
+                            .setPhotoCount(3)
+                            .setShowCamera(true)
+                            .setShowGif(true)
+                            .setPreviewEnabled(true)
+                            .start(this, 333);
+
+                }
+            }else {
+                SomeUtil.showSnackBar(rootview,"已经到达最大选择数量！");
 
             }
+
         });
         RxView.clicks(uploadPicFab).throttleFirst(500, TimeUnit.MILLISECONDS)
-                .subscribe(aVoid -> {uploadjq();});
+                .subscribe(aVoid -> {
+                    if (TextUtils.isEmpty(contenttext.getText().toString())){
+                        SomeUtil.showSnackBar(rootview,"请填写回告内容！");
+                    }else
+                    uploadjq();
+                });
 
     }
 
@@ -149,7 +162,7 @@ public class AddJQActivity extends BaseActivity {
                         for (int i = 0; i < ids.size(); i++) {
                             final int j = i;
                             app.jqAPIService.uploadJqMsg(SomeUtil.getJQId(), SomeUtil.getTASKId(), SomeUtil.getUserId(),
-                                    "", SomeUtil.getSysTime(), datrixUrl + ids.get(i) + datrixurl2, "", "", "532301000000")
+                                    "", SomeUtil.getSysTime(),  ids.get(i) , "", "", SomeUtil.getDepartId())
                                     .compose(RxUtil.<String>applySchedulers())
                                     .subscribe(new Subscriber<String>() {
                                         @Override
@@ -202,11 +215,11 @@ public class AddJQActivity extends BaseActivity {
 
     }
 
-    private List<String> initdata() {
+  /*  private List<String> initdata() {
 
         paths.add("end");
         return paths;
-    }
+    }*/
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -218,7 +231,7 @@ public class AddJQActivity extends BaseActivity {
                     adapter.clear();
                     paths.clear();
                     paths =photos ;
-                    initdata();
+                    //initdata();
                     adapter.addAll(paths);
 
                 }

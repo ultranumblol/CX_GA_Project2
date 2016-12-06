@@ -86,8 +86,6 @@ public class SICInputActivity extends BaseActivity {
     private AddPictureAdapter adapter;
     //private String videoPath = "";
     private String videoPicPath = "";
-    private String datrixurl2 = "&token=X7yABwjE20sUJLefATUFqU0iUs8mJPqEJo6iRnV63mI=";
-    private String datrixVideoPicdurl1 = DATRIX_BASE_URL + "preview/coverMedium?fileid=";
     private Subscription rxSubscription;
     private boolean isupload = false;
 
@@ -128,11 +126,12 @@ public class SICInputActivity extends BaseActivity {
 
                     @Override
                     public void onError(Throwable e) {
-                        LogUtil.d("error :" +e.toString());
+                        LogUtil.d("error :" + e.toString());
                     }
 
                     @Override
                     public void onNext(final ChatUpProgress chatUpProgress) {
+                        if (sicuploadPrg.getVisibility() == View.VISIBLE)
                         runOnUiThread(() -> sicuploadProtext.setText(chatUpProgress.getPro()));
 
                     }
@@ -229,7 +228,7 @@ public class SICInputActivity extends BaseActivity {
                     @Override
                     public void onNext(String s) {
                         LogUtil.d("sicinputresult : " + s);
-                        if (s.contains("200")){
+                        if (s.contains("200")) {
                             SomeUtil.showSnackBar(rootview, "提交成功！").setCallback(new Snackbar.Callback() {
                                 @Override
                                 public void onDismissed(Snackbar snackbar, int event) {
@@ -237,11 +236,10 @@ public class SICInputActivity extends BaseActivity {
                                 }
                             });
 
-                        }else {
+                        } else {
 
-                            SomeUtil.showSnackBar(rootview,"网络错误！");
+                            SomeUtil.showSnackBar(rootview, "网络错误！");
                         }
-
 
 
                     }
@@ -317,7 +315,7 @@ public class SICInputActivity extends BaseActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         try {
             LogUtil.d("resultCode :" + resultCode);
-            if (resultCode == RESULT_OK && requestCode == 888){
+            if (resultCode == RESULT_OK && requestCode == 888) {
                 if (data != null) {
                     ArrayList<String> photos =
                             data.getStringArrayListExtra(PhotoPicker.KEY_SELECTED_PHOTOS);
@@ -333,10 +331,9 @@ public class SICInputActivity extends BaseActivity {
 
                 }
 
-            }
-            else {
+            } else {
                 Uri uri = data.getData();
-                videopaths.add( UriUtils.getPath(getApplicationContext(), uri));
+                videopaths.add(UriUtils.getPath(getApplicationContext(), uri));
                 //videoPath = UriUtils.getPath(getApplicationContext(), uri);
                /* paths.clear();
                 paths.add(testvideo);*/
@@ -380,38 +377,41 @@ public class SICInputActivity extends BaseActivity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-        switch (id) {
-            case android.R.id.home:
+        if (item.getItemId() == android.R.id.home) {
+            if (sicuploadPrg.getVisibility() == View.VISIBLE) {
+                SomeUtil.showSnackBarLong(rootview, "正在上传视频，确认退出？").setAction("确认", v -> onBackPressed());
+
+            } else {
+                onBackPressed();
+                return true;
+            }
+            return true;
+        } else if (item.getItemId() == R.id.id_sic_input_menu) {
+            String[] typename = new String[typedata.size()];
+            final String[] typeid = new String[typedata.size()];
+            for (int i = 0; i < typedata.size(); i++) {
+                typename[i] = typedata.get(i).getValname();
+                typeid[i] = typedata.get(i).getValcode();
+
+            }
+            AlertDialog.Builder builder = new AlertDialog.Builder(SICInputActivity.this);
+            builder.setTitle("请选择数据权限")
+                    .setSingleChoiceItems(typename, -1, (dialog, which) -> {
+                        authid = typeid[which];
+                        LogUtil.d("authID : " + authid);
+                    }).setPositiveButton("确认", (dialog, which) -> commit()).setNegativeButton("取消", null).show();
 
 
-
-
-                break;
-            case R.id.id_sic_input_menu:
-                String[] typename = new String[typedata.size()];
-                final String[] typeid = new String[typedata.size()];
-                for (int i = 0; i < typedata.size(); i++) {
-                    typename[i] = typedata.get(i).getValname();
-                    typeid[i] = typedata.get(i).getValcode();
-
-                }
-                AlertDialog.Builder builder = new AlertDialog.Builder(SICInputActivity.this);
-                builder.setTitle("请选择数据权限")
-                        .setSingleChoiceItems(typename, -1, (dialog, which) -> {
-                            authid = typeid[which];
-                            LogUtil.d("authID : " + authid);
-                        }).setPositiveButton("确认", (dialog, which) -> commit()).setNegativeButton("取消", null).show();
-
-
-                break;
-
+            return true;
+        } else {
+            return super.onOptionsItemSelected(item);
         }
 
-        return super.onOptionsItemSelected(item);
+
     }
 
     private void commit() {
-        SomeUtil.showSnackBar(rootview,"正在上传请稍等！");
+        SomeUtil.showSnackBar(rootview, "正在上传请稍等！");
         Observable.just("go").compose(RxUtil.<String>applySchedulers())
                 .subscribe(s -> {
                     sicuploadPrg.setVisibility(View.VISIBLE);
@@ -420,8 +420,8 @@ public class SICInputActivity extends BaseActivity {
                     isupload = true;
                 });
 
-        LogUtil.d("paths.size :"+paths.size());
-        LogUtil.d("videopaths.size :"+videopaths.size());
+        LogUtil.d("paths.size :" + paths.size());
+        LogUtil.d("videopaths.size :" + videopaths.size());
         if (paths.size() > 0 && videopaths.size() <= 0) {
 
             LogUtil.d("上传图片和文字");

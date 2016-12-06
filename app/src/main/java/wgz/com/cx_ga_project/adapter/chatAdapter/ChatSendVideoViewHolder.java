@@ -66,7 +66,7 @@ public class ChatSendVideoViewHolder extends BaseViewHolder<ChatMsg.Re> {
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(imageView);
         LogUtil.d("videoUrl: "+data.getVideopic());
-        imageView.setOnClickListener(v -> ToastUtil.show(getContext(),"视频请在本地查看!", Toast.LENGTH_SHORT));
+        imageView.setOnClickListener(v -> ToastUtil.show(getContext(),"视频请在相册或者电脑端查看!", Toast.LENGTH_SHORT));
 
 
         timestamp.setText(data.getSendtime());

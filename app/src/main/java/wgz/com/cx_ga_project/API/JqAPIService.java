@@ -16,6 +16,7 @@ import wgz.com.cx_ga_project.entity.JqOrbit;
 import wgz.com.cx_ga_project.entity.NearJQ;
 import wgz.com.cx_ga_project.entity.NewJQ;
 import wgz.com.cx_ga_project.entity.NewJQPush;
+import wgz.com.cx_ga_project.entity.PicAndVideo;
 
 /**
  * Created by wgz on 2016/8/31.
@@ -244,6 +245,15 @@ public interface JqAPIService {
 
 
     /**
+     * 获取警情回告的视频和图片
+     * @param jqid
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("appjqreport/getJqPicAndVideo")
+    Observable<PicAndVideo> getJqPicAndVideo(@Field("jqid") String jqid);
+
+    /**
      * 获取一个警情的出警人名单
      *
      * @param taskid
@@ -252,6 +262,9 @@ public interface JqAPIService {
     @FormUrlEncoded
     @POST("appjqreport/getTaskPeople")
     Observable<ChuJingRen> GetCJRList(@Field("taskid") String taskid);
+
+
+
 
 
     /**

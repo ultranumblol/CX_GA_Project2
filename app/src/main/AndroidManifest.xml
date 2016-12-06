@@ -164,6 +164,11 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
+            android:name=".activity.AddJQPicActivity"
+            android:label="@string/title_activity_add_jq"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
             android:name=".activity.JQListActivity"
             android:label="@string/title_activity_jqlist"
             android:screenOrientation="portrait"

@@ -432,6 +432,7 @@ public class WorkLogActivity extends BaseActivity {
                             if (workLog.getCode().equals(200)) {
                                 for (int i = 0 ; i<workLog.getLogs().size();i++){
                                     paths.add(workLog.getLogs().get(i).getSummary_pic());
+
                                 }
                                 LogUtil.d("PIC path :"+paths.size());
 

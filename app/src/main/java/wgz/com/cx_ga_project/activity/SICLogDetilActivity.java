@@ -109,6 +109,7 @@ public class SICLogDetilActivity extends BaseActivity {
         initdata();
         rxSubscription = RxBus.getDefault().toObservable(ChatUpProgress.class)
                 .subscribe(s -> {
+                    if (sicuploadPrg.getVisibility() == View.VISIBLE)
                     runOnUiThread(() -> sicuploadProtext.setText(s.getPro()));
 
 
@@ -430,22 +431,29 @@ public class SICLogDetilActivity extends BaseActivity {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-        switch (id) {
-            case android.R.id.home:
-                finish();
-                break;
-            case R.id.id_sic_input_menu:
 
-                AlertDialog.Builder builder = new AlertDialog.Builder(SICLogDetilActivity.this);
-                builder.setTitle("确认提交修改？")
-                        .setPositiveButton("确认", (dialog, which) -> commit()).setNegativeButton("取消", null).show();
+        if (item.getItemId() == android.R.id.home) {
+            if (sicuploadPrg.getVisibility() == View.VISIBLE) {
+                SomeUtil.showSnackBarLong(rootview, "正在上传视频，确认退出？").setAction("确认", v -> onBackPressed());
 
-                break;
-
+            } else {
+                onBackPressed();
+                return true;
+            }
+            return true;
         }
+        else if (item.getItemId() == R.id.id_sic_input_menu){
 
-        return super.onOptionsItemSelected(item);
+            AlertDialog.Builder builder = new AlertDialog.Builder(SICLogDetilActivity.this);
+            builder.setTitle("确认提交修改？")
+                    .setPositiveButton("确认", (dialog, which) -> commit()).setNegativeButton("取消", null).show();
+            return true;
+
+        }else
+            return super.onOptionsItemSelected(item);
+
+
+
     }
 
     public class SicDetilAndStr {

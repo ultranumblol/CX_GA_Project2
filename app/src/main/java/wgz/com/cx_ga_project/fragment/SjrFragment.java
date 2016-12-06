@@ -1,6 +1,7 @@
 package wgz.com.cx_ga_project.fragment;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
@@ -11,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.jude.easyrecyclerview.EasyRecyclerView;
+import com.lzp.floatingactionbuttonplus.FloatingActionButtonPlus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,9 +22,10 @@ import butterknife.ButterKnife;
 import rx.Subscriber;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 import wgz.com.cx_ga_project.R;
+import wgz.com.cx_ga_project.activity.SJPeopleActivity;
+import wgz.com.cx_ga_project.activity.UpLoadSJCarActivity;
 import wgz.com.cx_ga_project.adapter.JQCallbackDetilAdapter;
 import wgz.com.cx_ga_project.app;
 import wgz.com.cx_ga_project.base.BaseFragment;
@@ -37,6 +40,8 @@ import wgz.datatom.com.utillibrary.util.LogUtil;
 public class SjrFragment extends BaseFragment implements SwipeRefreshLayout.OnRefreshListener {
     @Bind(R.id.id_sjrfragment)
     EasyRecyclerView recyclerview;
+    @Bind(R.id.FabPlus)
+    FloatingActionButtonPlus FabPlus;
     private Handler handler = new Handler();
     private JQCallbackDetilAdapter adapter;
     List<JqCallBack.Resperson> list = new ArrayList<>();
@@ -48,6 +53,17 @@ public class SjrFragment extends BaseFragment implements SwipeRefreshLayout.OnRe
         recyclerview.setAdapterWithProgress(adapter = new JQCallbackDetilAdapter(getActivity()));
         recyclerview.setRefreshListener(this);
         initData();
+        FabPlus.setOnItemClickListener((tagView, position) -> {
+            int id = tagView.getId();
+            switch (id) {
+
+                case R.id.fabtag_addsjPeople:
+                    startActivity(new Intent(getActivity(), SJPeopleActivity.class));
+
+                    break;
+
+            }
+        });
         rxSubscription = RxBus.getDefault().toObservable(String.class)
                 .subscribe(s -> {
                     if (s.equals("sjrflush"))
@@ -103,4 +119,11 @@ public class SjrFragment extends BaseFragment implements SwipeRefreshLayout.OnRe
                 });
     }
 
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        // TODO: inflate a fragment view
+        View rootView = super.onCreateView(inflater, container, savedInstanceState);
+        ButterKnife.bind(this, rootView);
+        return rootView;
+    }
 }

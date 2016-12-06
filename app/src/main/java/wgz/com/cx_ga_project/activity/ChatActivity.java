@@ -126,12 +126,8 @@ public class ChatActivity extends BaseActivity {
     private Subscription rxSubscription;
     private Subscription rxSubscription2;
     private Subscription rxSubscription3;
-    private String datrixUrl = DATRIX_BASE_URL + "preview/getImage?fileid=";
-    private String datrixurl2 = "&token=X7yABwjE20sUJLefATUFqU0iUs8mJPqEJo6iRnV63mI=";
-    private String datrixVideoPicdurl1 = DATRIX_BASE_URL + "preview/coverMedium?fileid=";
-    private String datrixPlayVideo = DATRIX_BASE_URL + "file/previewFileHtml?fileid=";
-    private String datrixPlayVideo2 = "&filetype=2&token=X7yABwjE20sUJLefATUFqU0iUs8mJPqEJo6iRnV63mI=";
-    private GetNewMsgService mService = new GetNewMsgService();
+   // private String datrixUrl = DATRIX_BASE_URL + "preview/getImage?fileid=";
+   private GetNewMsgService mService = new GetNewMsgService();
     ServiceConnection connection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
@@ -439,7 +435,7 @@ public class ChatActivity extends BaseActivity {
             String curredate = getTime(currentdate);
 
            // datrixUrl + fileid1 + datrixurl2
-            app.jqAPIService.sendMsg(SomeUtil.getJQId(), "", datrixUrl + fileid1 + datrixurl2, "", "", SomeUtil.getTASKId(), curredate, SomeUtil.getUserId())
+            app.jqAPIService.sendMsg(SomeUtil.getJQId(), "", fileid1 , "", "", SomeUtil.getTASKId(), curredate, SomeUtil.getUserId())
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(new Subscriber<String>() {
@@ -479,7 +475,7 @@ public class ChatActivity extends BaseActivity {
             String curredate = getTime(currentdate);
 
 
-            app.jqAPIService.sendMsg(SomeUtil.getJQId(), "", "", datrixPlayVideo + fileid1 + datrixPlayVideo2, datrixVideoPicdurl1 + fileid1 + datrixurl2, SomeUtil.getTASKId(), curredate, SomeUtil.getUserId())
+            app.jqAPIService.sendMsg(SomeUtil.getJQId(), "", "",  fileid1,  fileid1 , SomeUtil.getTASKId(), curredate, SomeUtil.getUserId())
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(new Subscriber<String>() {
