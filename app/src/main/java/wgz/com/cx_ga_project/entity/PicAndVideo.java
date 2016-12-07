@@ -20,6 +20,15 @@ public class PicAndVideo {
     @Expose
     private List<Resvideo> resvideo = null;
 
+    @Override
+    public String toString() {
+        return "PicAndVideo{" +
+                "code=" + code +
+                ", respic=" + respic +
+                ", resvideo=" + resvideo +
+                '}';
+    }
+
     /**
      * @return The code
      */
@@ -117,6 +126,14 @@ public class PicAndVideo {
             this.policename = policename;
         }
 
+        @Override
+        public String toString() {
+            return "Respic{" +
+                    "id='" + id + '\'' +
+                    ", pic='" + pic + '\'' +
+                    ", policename='" + policename + '\'' +
+                    '}';
+        }
     }
 
     public class Resvideo {
@@ -130,6 +147,15 @@ public class PicAndVideo {
         @SerializedName("policename")
         @Expose
         private String policename;
+
+        @Override
+        public String toString() {
+            return "Resvideo{" +
+                    "id='" + id + '\'' +
+                    ", videopic='" + videopic + '\'' +
+                    ", policename='" + policename + '\'' +
+                    '}';
+        }
 
         /**
          * @return The id

@@ -75,7 +75,7 @@ public class SICTypeActivity extends BaseActivity {
                     public void onError(Throwable e) {
 
                         LogUtil.d("SICType error: " + e.toString());
-                        SomeUtil.checkHttpException(SICTypeActivity.this,e,rootview);
+                        //SomeUtil.checkHttpException(SICTypeActivity.this,e,rootview);
                     }
 
                     @Override

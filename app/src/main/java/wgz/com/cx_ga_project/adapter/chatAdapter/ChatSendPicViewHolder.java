@@ -32,6 +32,7 @@ import wgz.com.cx_ga_project.app;
 import wgz.com.cx_ga_project.base.Constant;
 import wgz.com.cx_ga_project.entity.ChatMsg;
 import wgz.com.cx_ga_project.util.RxUtil;
+import wgz.com.cx_ga_project.util.SomeUtil;
 import wgz.datatom.com.utillibrary.util.LogUtil;
 
 import static wgz.com.cx_ga_project.app.DATRIX_BASE_URL;
@@ -87,11 +88,24 @@ public class ChatSendPicViewHolder extends BaseViewHolder<ChatMsg.Re> {
 
                     @Override
                     public void onNext(ResponseBody s) {
-                        Bitmap btp = BitmapFactory.decodeStream(s.byteStream());
-                        mSendPicture.setImageBitmap(btp);
+
+                        Glide.with(getContext())
+                                .load(SomeUtil.input2byte(s.byteStream()))
+                                .dontAnimate()
+                                .centerCrop()
+                                .override(300, 300)
+                                .thumbnail(0.1f)
+                                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                                .into(mSendPicture);
+
+                       /* Bitmap btp = BitmapFactory.decodeStream(s.byteStream());
+                        mSendPicture.setImageBitmap(btp);*/
 
                     }
                 });
+
+
+
        /* Glide.with(getContext())
                 .load(data.getPic())
                 .dontAnimate()

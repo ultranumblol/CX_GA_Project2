@@ -18,7 +18,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.math.BigDecimal;
 import java.net.ConnectException;
 import java.net.SocketTimeoutException;
@@ -71,6 +74,24 @@ public class SomeUtil {
                 .show();
 
     }
+    public static final byte[] input2byte(InputStream inStream)
+             {
+                 try {
+                     ByteArrayOutputStream swapStream = new ByteArrayOutputStream();
+                     byte[] buff = new byte[100];
+                     int rc = 0;
+                     while ((rc = inStream.read(buff, 0, 100)) > 0) {
+                         swapStream.write(buff, 0, rc);
+                     }
+                     byte[] in2b = swapStream.toByteArray();
+                     return in2b;
+                 } catch (IOException e) {
+                     e.printStackTrace();
+                     return null;
+                 }
+
+             }
+
 
     /**
      * 检查对象非空

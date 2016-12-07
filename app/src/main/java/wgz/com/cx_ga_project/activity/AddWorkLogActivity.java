@@ -34,8 +34,6 @@ import wgz.com.cx_ga_project.util.DatrixUtil;
 import wgz.com.cx_ga_project.util.RxUtil;
 import wgz.com.cx_ga_project.util.SomeUtil;
 import wgz.datatom.com.utillibrary.util.LogUtil;
-
-import static wgz.com.cx_ga_project.app.DATRIX_BASE_URL;
 import static wgz.com.cx_ga_project.util.SomeUtil.getUserId;
 
 
@@ -185,7 +183,8 @@ public class AddWorkLogActivity extends BaseActivity {
 
                     @Override
                     public void onError(Throwable e) {
-                        SomeUtil.checkHttpException(AddWorkLogActivity.this,e,rootview);
+                       // SomeUtil.checkHttpException(AddWorkLogActivity.this,e,rootview);
+                        LogUtil.d("error :"+e.toString());
                     }
 
                     @Override
@@ -246,7 +245,8 @@ public class AddWorkLogActivity extends BaseActivity {
                                         @Override
                                         public void onError(Throwable e) {
                                             uploadProgerss.setVisibility(View.GONE);
-                                            SomeUtil.checkHttpException(AddWorkLogActivity.this,e,rootview);
+                                            LogUtil.d("error :"+e.toString());
+                                           // SomeUtil.checkHttpException(AddWorkLogActivity.this,e,rootview);
                                         }
 
                                         @Override
@@ -299,7 +299,7 @@ public class AddWorkLogActivity extends BaseActivity {
                     @Override
                     public void onError(Throwable e) {
                         LogUtil.d("error:" + e.toString());
-                        SomeUtil.checkHttpException(AddWorkLogActivity.this,e,rootview);
+                       // SomeUtil.checkHttpException(AddWorkLogActivity.this,e,rootview);
                     }
 
                     @Override

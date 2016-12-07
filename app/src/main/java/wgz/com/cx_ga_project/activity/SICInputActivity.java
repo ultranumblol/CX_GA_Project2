@@ -291,7 +291,7 @@ public class SICInputActivity extends BaseActivity {
 
                     @Override
                     public void onError(Throwable e) {
-                        SomeUtil.checkHttpException(getApplicationContext(), e, rootview);
+                       // SomeUtil.checkHttpException(getApplicationContext(), e, rootview);
                     }
 
                     @Override

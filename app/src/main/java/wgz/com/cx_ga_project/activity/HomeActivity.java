@@ -284,7 +284,7 @@ public class HomeActivity extends AppCompatActivity
 
             @Override
             public void onError(Throwable e) {
-                SomeUtil.checkHttpException(HomeActivity.this,e,homeRootView);
+               // SomeUtil.checkHttpException(HomeActivity.this,e,homeRootView);
             }
 
             @Override

@@ -229,7 +229,7 @@ public class JQCallbackActivity extends BaseActivity {
                                     uploadProtext.setVisibility(View.GONE);
                                     progressRl.setVisibility(View.GONE);
                                     LogUtil.d("uploadvideo error:" + e.toString());
-                                    SomeUtil.checkHttpException(JQCallbackActivity.this, e, rootview);
+                                   // SomeUtil.checkHttpException(JQCallbackActivity.this, e, rootview);
                                 }
 
                                 @Override

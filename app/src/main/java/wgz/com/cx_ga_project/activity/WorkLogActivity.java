@@ -217,7 +217,7 @@ public class WorkLogActivity extends BaseActivity {
 
                                             @Override
                                             public void onError(Throwable e) {
-
+                                                LogUtil.d("error :"+e.toString());
                                             }
 
                                             @Override
@@ -253,7 +253,7 @@ public class WorkLogActivity extends BaseActivity {
 
                                             @Override
                                             public void onError(Throwable e) {
-
+                                                LogUtil.d("error :"+e.toString());
                                             }
 
                                             @Override
@@ -423,7 +423,7 @@ public class WorkLogActivity extends BaseActivity {
 
                         @Override
                         public void onError(Throwable e) {
-
+                            LogUtil.d("error :"+e.toString());
                         }
 
                         @Override

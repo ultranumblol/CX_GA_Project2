@@ -122,7 +122,7 @@ public class AskForJiabanActivity extends BaseActivity {
                     @Override
                     public void onError(Throwable e) {
                         LogUtil.d("Subordinate : "+e.toString());
-                        SomeUtil.checkHttpException(AskForJiabanActivity.this,e,rootview);
+                       // SomeUtil.checkHttpException(AskForJiabanActivity.this,e,rootview);
                     }
 
                     @Override
@@ -193,7 +193,7 @@ public class AskForJiabanActivity extends BaseActivity {
                         @Override
                         public void onError(Throwable e) {
                             LogUtil.d("result error:"+e.toString());
-                            SomeUtil.checkHttpException(AskForJiabanActivity.this,e,rootview);
+                           // SomeUtil.checkHttpException(AskForJiabanActivity.this,e,rootview);
                         }
 
                         @Override

@@ -190,7 +190,7 @@ public class ApprovalDetilActivity extends BaseActivity {
 
                             @Override
                             public void onError(Throwable e) {
-                                SomeUtil.checkHttpException(ApprovalDetilActivity.this, e, rootview);
+                              //  SomeUtil.checkHttpException(ApprovalDetilActivity.this, e, rootview);
                             }
 
                             @Override

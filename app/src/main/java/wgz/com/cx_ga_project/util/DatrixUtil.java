@@ -152,7 +152,7 @@ public class DatrixUtil {
                     @Override
                     public void onError(Throwable e) {
                         //LogUtil.d("Detrix_upPic_error:" + e.toString());
-                        SomeUtil.checkHttpException(app.getApp().getApplicationContext(), e, rootview);
+                       // SomeUtil.checkHttpException(app.getApp().getApplicationContext(), e, rootview);
                     }
 
                     @Override
@@ -238,7 +238,7 @@ public class DatrixUtil {
 
                     @Override
                     public void onError(Throwable e) {
-                        SomeUtil.checkHttpException(app.getApp().getApplicationContext(), e, rootview);
+                        //SomeUtil.checkHttpException(app.getApp().getApplicationContext(), e, rootview);
                         LogUtil.d("detrix_write_Response_error :" + e.toString());
                     }
 
@@ -293,7 +293,7 @@ public class DatrixUtil {
 
                     @Override
                     public void onError(Throwable e) {
-                        SomeUtil.checkHttpException(app.getApp().getApplicationContext(), e, rootview);
+                       // SomeUtil.checkHttpException(app.getApp().getApplicationContext(), e, rootview);
                         LogUtil.d("detrix_write_Response_error :" + e.toString());
                     }
 
@@ -340,7 +340,7 @@ public class DatrixUtil {
                     @Override
                     public void onError(Throwable e) {
                         LogUtil.d("Detrix_upPic_error:" + e.toString());
-                        SomeUtil.checkHttpException(app.getApp().getApplicationContext(), e, rootview);
+                       // SomeUtil.checkHttpException(app.getApp().getApplicationContext(), e, rootview);
                     }
 
                     @Override
@@ -385,7 +385,7 @@ public class DatrixUtil {
                         @Override
                         public void onError(Throwable e) {
                             LogUtil.d("detrix_write_Response_error :" + e.toString());
-                            SomeUtil.checkHttpException(app.getApp().getApplicationContext(), e, rootview);
+                           // SomeUtil.checkHttpException(app.getApp().getApplicationContext(), e, rootview);
                         }
 
                         @Override
@@ -427,7 +427,7 @@ public class DatrixUtil {
                     @Override
                     public void onError(Throwable e) {
                         LogUtil.d("DatrixDoFinish error:"+e.toString());
-                        SomeUtil.checkHttpException(app.getApp().getApplicationContext(), e, rootview);
+                        //SomeUtil.checkHttpException(app.getApp().getApplicationContext(), e, rootview);
                     }
 
                     @Override
@@ -473,7 +473,7 @@ public class DatrixUtil {
 
                     @Override
                     public void onError(Throwable e) {
-                        SomeUtil.checkHttpException(app.getApp().getApplicationContext(), e, rootview);
+                       // SomeUtil.checkHttpException(app.getApp().getApplicationContext(), e, rootview);
                     }
 
                     @Override

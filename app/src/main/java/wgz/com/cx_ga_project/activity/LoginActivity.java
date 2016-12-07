@@ -163,7 +163,7 @@ public class LoginActivity extends BaseActivity {
                         //;
                         showProgress(false);
                         LogUtil.d("login2 : " + e.toString());
-                        SomeUtil.checkHttpException(getApplicationContext(), e, scrollLoginForm);
+                       // SomeUtil.checkHttpException(getApplicationContext(), e, scrollLoginForm);
                     }
 
                     @Override
@@ -186,15 +186,15 @@ public class LoginActivity extends BaseActivity {
                                         @Override
                                         public void onError(Throwable e) {
                                             showProgress(false);
-                                            LogUtil.d("Login error:" + e.toString());
-                                            SomeUtil.checkHttpException(getApplicationContext(),e,scrollLoginForm);
+                                            LogUtil.d("Login get info error:" + e.toString());
+                                            //SomeUtil.checkHttpException(getApplicationContext(),e,scrollLoginForm);
                                            // startActivity(new Intent(LoginActivity.this, HomeActivity.class));
                                         }
 
                                         @Override
                                         public void onNext(UserInfo userInfo) {
-                                            LogUtil.d("login result code:" + userInfo.getCode().toString());
-                                            LogUtil.d("login result :" + userInfo.getRes().toString());
+                                            LogUtil.d("login get info result code:" + userInfo.getCode().toString());
+                                            LogUtil.d("login get info result :" + userInfo.getRes().toString());
                                             if (userInfo.getCode().equals(200)) {
                                                 showProgress(false);
                                                 saveUserInfo(userInfo.getRes().get(0), password);
@@ -240,7 +240,8 @@ public class LoginActivity extends BaseActivity {
 
                     @Override
                     public void onError(Throwable e) {
-                        SomeUtil.checkHttpException(app.getApp().getApplicationContext(), e, scrollLoginForm);
+                        //SomeUtil.checkHttpException(app.getApp().getApplicationContext(), e, scrollLoginForm);
+                        LogUtil.d("getsubup error :"+e.toString());
                     }
 
                     @Override

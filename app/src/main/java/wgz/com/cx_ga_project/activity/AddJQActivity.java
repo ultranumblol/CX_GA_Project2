@@ -126,7 +126,7 @@ public class AddJQActivity extends BaseActivity {
                     @Override
                     public void onError(Throwable e) {
                         upJqProgress.setVisibility(View.GONE);
-                        SomeUtil.checkHttpException(AddJQActivity.this,e,rootview);
+                       // SomeUtil.checkHttpException(AddJQActivity.this,e,rootview);
 
                     }
 
@@ -184,7 +184,7 @@ public class AddJQActivity extends BaseActivity {
                                         @Override
                                         public void onError(Throwable e) {
                                             upJqProgress.setVisibility(View.GONE);
-                                            SomeUtil.checkHttpException(AddJQActivity.this,e,rootview);
+                                            //SomeUtil.checkHttpException(AddJQActivity.this,e,rootview);
                                         }
 
                                         @Override
@@ -201,7 +201,7 @@ public class AddJQActivity extends BaseActivity {
 
                     @Override
                     public void onError(Throwable e) {
-                        SomeUtil.checkHttpException(AddJQActivity.this,e,rootview);
+                       // SomeUtil.checkHttpException(AddJQActivity.this,e,rootview);
                     }
 
                     @Override

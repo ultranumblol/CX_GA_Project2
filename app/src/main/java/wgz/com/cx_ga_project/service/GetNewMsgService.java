@@ -18,6 +18,7 @@ import android.support.annotation.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
@@ -47,6 +48,25 @@ public class GetNewMsgService extends Service {
     public void onCreate() {
         super.onCreate();
         LogUtil.d("获取新消息服务启动！");
+    /*    rx.Observable.interval(10, TimeUnit.SECONDS)
+                .subscribe(new Subscriber<Long>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        LogUtil.d("getnewmessage error : "+e.toString());
+                    }
+
+                    @Override
+                    public void onNext(Long aLong) {
+
+                    }
+                });*/
+
+
         new Thread(() -> {
             try {
                 while (true){

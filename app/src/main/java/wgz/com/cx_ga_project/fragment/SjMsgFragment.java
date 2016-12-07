@@ -167,16 +167,18 @@ public class SjMsgFragment extends BaseFragment implements SwipeRefreshLayout.On
 
                     @Override
                     public void onNext(PicAndVideo s) {
-                        for (PicAndVideo.Respic pic :s.getRespic())
-                        {
-                            piclist.add(pic.getPic());
+                        LogUtil.d("result code:"+s.getCode());
 
+                        LogUtil.d("piclist: "+s.toString());
+                        if (s.getRespic()!=null){
+                            for (PicAndVideo.Respic pic :s.getRespic())
+                                piclist.add(pic.getPic());
                         }
-                        for (PicAndVideo.Resvideo video :s.getResvideo())
-                        {
-                            videolist.add(video.getVideopic());
+                        if (s.getResvideo()!=null){
+                            for (PicAndVideo.Resvideo video :s.getResvideo())
+                                videolist.add(video.getVideopic());
+                        }
 
-                        }
                         LogUtil.d("piclist : " + piclist.toString());
                         LogUtil.d("videolist : " + videolist.toString());
 

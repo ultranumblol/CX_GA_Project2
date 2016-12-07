@@ -97,7 +97,7 @@ public class SICInputLogActivity extends BaseActivity {
 
             @Override
             public void onError(Throwable e) {
-                SomeUtil.checkHttpException(SICInputLogActivity.this,e,rootview);
+               // SomeUtil.checkHttpException(SICInputLogActivity.this,e,rootview);
             }
 
             @Override

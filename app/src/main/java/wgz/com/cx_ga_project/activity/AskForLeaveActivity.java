@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.EditText;
@@ -113,14 +114,14 @@ public class AskForLeaveActivity extends BaseActivity {
                 case 1:
                     mLeaveStarttime.setText(getTime(date));
                     mstartdate = date;
-                    if (menddate!=null){
+                    if (!TextUtils.isEmpty(mLeaveEndtime.getText().toString())){
                         mLeaveDaycount.setText(TimeUtils.getGapCount(mstartdate,menddate)+"");
                     }
                     break;
                 case 2:
                     mLeaveEndtime.setText(getTime(date));
                     menddate = date;
-                    if (mstartdate!=null){
+                    if (!TextUtils.isEmpty(mLeaveStarttime.getText().toString())){
                         mLeaveDaycount.setText(TimeUtils.getGapCount(mstartdate,menddate)+"");
 
                     }
@@ -165,7 +166,7 @@ public class AskForLeaveActivity extends BaseActivity {
                     @Override
                     public void onError(Throwable e) {
                         LogUtil.d("leavetype  error: "+e.toString());
-                        SomeUtil.checkHttpException(AskForLeaveActivity.this,e,rootview);
+                     //   SomeUtil.checkHttpException(AskForLeaveActivity.this,e,rootview);
                     }
 
                     @Override
@@ -205,7 +206,7 @@ public class AskForLeaveActivity extends BaseActivity {
                     @Override
                     public void onError(Throwable e) {
                         LogUtil.d("Subordinate : "+e.toString());
-                        SomeUtil.checkHttpException(AskForLeaveActivity.this,e,rootview);
+                      //  SomeUtil.checkHttpException(AskForLeaveActivity.this,e,rootview);
                     }
 
                     @Override

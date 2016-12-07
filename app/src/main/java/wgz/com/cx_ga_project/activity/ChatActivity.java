@@ -220,7 +220,7 @@ public class ChatActivity extends BaseActivity {
                     @Override
                     public void onError(Throwable e) {
                         LogUtil.d("rxSubscription2 error :"+e.toString());
-                        SomeUtil.checkHttpException(ChatActivity.this,e,rootview);
+                      //  SomeUtil.checkHttpException(ChatActivity.this,e,rootview);
                     }
 
                     @Override
@@ -264,7 +264,7 @@ public class ChatActivity extends BaseActivity {
 
                     @Override
                     public void onError(Throwable e) {
-                        SomeUtil.checkHttpException(ChatActivity.this,e,rootview);
+                       // SomeUtil.checkHttpException(ChatActivity.this,e,rootview);
                     }
 
                     @Override
@@ -314,8 +314,7 @@ public class ChatActivity extends BaseActivity {
 
                     @Override
                     public void onError(Throwable e) {
-                        SomeUtil.checkHttpException(ChatActivity.this,e,rootview);
-                    }
+                   }
 
                     @Override
                     public void onNext(ChatMsg chatMsg) {
@@ -342,7 +341,7 @@ public class ChatActivity extends BaseActivity {
 
                     @Override
                     public void onError(Throwable e) {
-                        SomeUtil.checkHttpException(ChatActivity.this,e,rootview);
+                       // SomeUtil.checkHttpException(ChatActivity.this,e,rootview);
                     }
 
                     @Override
@@ -370,7 +369,7 @@ public class ChatActivity extends BaseActivity {
 
                     @Override
                     public void onError(Throwable e) {
-                        SomeUtil.checkHttpException(ChatActivity.this,e,rootview);
+                       // SomeUtil.checkHttpException(ChatActivity.this,e,rootview);
                     }
 
                     @Override
@@ -411,7 +410,7 @@ public class ChatActivity extends BaseActivity {
                     @Override
                     public void onError(Throwable e) {
                         SomeUtil.showSnackBar(rootview, "error:" + e.toString());
-                        SomeUtil.checkHttpException(ChatActivity.this,e,rootview);
+                       // SomeUtil.checkHttpException(ChatActivity.this,e,rootview);
                     }
 
                     @Override
@@ -450,7 +449,7 @@ public class ChatActivity extends BaseActivity {
                         public void onError(Throwable e) {
                             //SomeUtil.showSnackBar(rootview, "error:" + e.toString());
                             LogUtil.d("error:" + e.toString());
-                            SomeUtil.checkHttpException(ChatActivity.this,e,rootview);
+                           // SomeUtil.checkHttpException(ChatActivity.this,e,rootview);
                         }
 
                         @Override
@@ -499,7 +498,7 @@ public class ChatActivity extends BaseActivity {
                         public void onError(Throwable e) {
                             //SomeUtil.showSnackBar(rootview, "error:" + e.toString());
                             LogUtil.d("error:" + e.toString());
-                            SomeUtil.checkHttpException(ChatActivity.this,e,rootview);
+                           // SomeUtil.checkHttpException(ChatActivity.this,e,rootview);
                         }
 
                         @Override
