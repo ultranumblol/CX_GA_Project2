@@ -27,5 +27,6 @@
         android:layout_gravity="center"
         android:id="@+id/up_jq_progress"
         android:visibility="gone"
+        android:layout_centerInParent="true"
         />
 </RelativeLayout>

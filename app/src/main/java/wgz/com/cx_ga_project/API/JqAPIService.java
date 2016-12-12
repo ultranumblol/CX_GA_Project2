@@ -408,6 +408,13 @@ public interface JqAPIService {
     Observable<NewJQ> getNewJqlist1(@Field("policeid") String policeid);
 
 
+
+    @FormUrlEncoded
+    @POST("appjqreport/getInvInfo")
+    Observable<NearJQ> getInvInfo(@Field("name") String name,
+                                 @Field("idcard") String idcard,
+                                 @Field("jqid") String jqid);
+
     /**
      * 获取警员的历史警情
      *

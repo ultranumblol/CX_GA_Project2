@@ -24,6 +24,8 @@ import java.util.concurrent.TimeUnit;
 import butterknife.Bind;
 import me.iwf.photopicker.PhotoPicker;
 import rx.Subscriber;
+import rx.Subscription;
+import rx.subscriptions.CompositeSubscription;
 import wgz.com.cx_ga_project.R;
 import wgz.com.cx_ga_project.adapter.AddPictureAdapter;
 import wgz.com.cx_ga_project.app;
@@ -149,7 +151,7 @@ public class AddJQPicActivity extends BaseActivity {
     private void addjqAndpic(String fileid, final List<String> ids) {
 
         final int k = ids.size() - 1;
-        app.jqAPIService.uploadJqMsg(SomeUtil.getJQId(), SomeUtil.getTASKId(), SomeUtil.getUserId(),
+        Subscription i = app.jqAPIService.uploadJqMsg(SomeUtil.getJQId(), SomeUtil.getTASKId(), SomeUtil.getUserId(),
                 "", SomeUtil.getSysTime(), "", "", "", SomeUtil.getDepartId())
                 .compose(RxUtil.<String>applySchedulers())
                 .subscribe(new Subscriber<String>() {
@@ -157,7 +159,7 @@ public class AddJQPicActivity extends BaseActivity {
                     public void onCompleted() {
                         for (int i = 0; i < ids.size(); i++) {
                             final int j = i;
-                            app.jqAPIService.uploadJqMsg(SomeUtil.getJQId(), SomeUtil.getTASKId(), SomeUtil.getUserId(),
+                            Subscription sub = app.jqAPIService.uploadJqMsg(SomeUtil.getJQId(), SomeUtil.getTASKId(), SomeUtil.getUserId(),
                                     "", SomeUtil.getSysTime(),  ids.get(i) , "", "", SomeUtil.getDepartId())
                                     .compose(RxUtil.<String>applySchedulers())
                                     .subscribe(new Subscriber<String>() {
@@ -191,6 +193,7 @@ public class AddJQPicActivity extends BaseActivity {
                                             } else onError(new Exception(s));
                                         }
                                     });
+                            addSubscription(sub);
                         }
 
                     }
@@ -208,7 +211,7 @@ public class AddJQPicActivity extends BaseActivity {
                     }
                 });
 
-
+        addSubscription(i);
     }
 
     private List<String> initdata() {
@@ -255,12 +258,15 @@ public class AddJQPicActivity extends BaseActivity {
         switch (item.getItemId()) {
             case android.R.id.home:
                 if (paths.size()==1) {
+                    RxBus.getDefault().post("stopSubscription");
                     finish();
 
                 } else {
                     AlertDialog.Builder dialog = new AlertDialog.Builder(AddJQPicActivity.this);
                     dialog.setTitle("请确认").setMessage("还没有上传，确认退出?")
-                            .setPositiveButton("确认", (dialog1, which) -> finish()).setNegativeButton("取消", null).show();
+                            .setPositiveButton("确认", (dialog1, which) ->
+
+                                    finish()).setNegativeButton("取消", null).show();
                 }
 
 

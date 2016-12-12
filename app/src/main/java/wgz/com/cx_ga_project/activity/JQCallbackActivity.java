@@ -81,6 +81,7 @@ public class JQCallbackActivity extends BaseActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        RxBus.getDefault().post("stopSubscription");
         if (!rxSubscription.isUnsubscribed()) {
             rxSubscription.unsubscribe();
         }
@@ -209,40 +210,37 @@ public class JQCallbackActivity extends BaseActivity {
                 SomeUtil.showSnackBarLong(rootview, "正在上传视频，请稍后！");
                 DatrixUtil datrixUtil = new DatrixUtil(videopaths.get(0), rootview);
                 datrixUtil.DatrixUpLoadVideo();
-                datrixUtil.setOnAfterFinish((fileid, ids) -> {
-                    app.jqAPIService.uploadJqMsg(SomeUtil.getJQId(), SomeUtil.getTASKId(), SomeUtil.getUserId(),
-                            "", SomeUtil.getSysTime(), "", fileid, fileid, SomeUtil.getDepartId())
-                            .compose(RxUtil.<String>applySchedulers())
-                            .subscribe(new Subscriber<String>() {
-                                @Override
-                                public void onCompleted() {
-                                    uploadBg.setVisibility(View.GONE);
-                                    uploadPrg.setVisibility(View.GONE);
-                                    uploadProtext.setVisibility(View.GONE);
-                                     progressRl.setVisibility(View.GONE);
+                datrixUtil.setOnAfterFinish((fileid, ids) ->
+                        app.jqAPIService.uploadJqMsg(SomeUtil.getJQId(), SomeUtil.getTASKId(), SomeUtil.getUserId(),
+                        "", SomeUtil.getSysTime(), "", fileid, fileid, SomeUtil.getDepartId())
+                        .compose(RxUtil.applySchedulers())
+                        .subscribe(new Subscriber<String>() {
+                            @Override
+                            public void onCompleted() {
+                                uploadBg.setVisibility(View.GONE);
+                                uploadPrg.setVisibility(View.GONE);
+                                uploadProtext.setVisibility(View.GONE);
+                                 progressRl.setVisibility(View.GONE);
+                            }
+
+                            @Override
+                            public void onError(Throwable e) {
+                                uploadBg.setVisibility(View.GONE);
+                                uploadPrg.setVisibility(View.GONE);
+                                uploadProtext.setVisibility(View.GONE);
+                                progressRl.setVisibility(View.GONE);
+                                LogUtil.d("uploadvideo error:" + e.toString());
+                               // SomeUtil.checkHttpException(JQCallbackActivity.this, e, rootview);
+                            }
+
+                            @Override
+                            public void onNext(String s) {
+                                LogUtil.d("result : " + s);
+                                if (s.contains("200")) {
+                                    SomeUtil.showSnackBarLong(rootview, "视频上传成功！");
                                 }
-
-                                @Override
-                                public void onError(Throwable e) {
-                                    uploadBg.setVisibility(View.GONE);
-                                    uploadPrg.setVisibility(View.GONE);
-                                    uploadProtext.setVisibility(View.GONE);
-                                    progressRl.setVisibility(View.GONE);
-                                    LogUtil.d("uploadvideo error:" + e.toString());
-                                   // SomeUtil.checkHttpException(JQCallbackActivity.this, e, rootview);
-                                }
-
-                                @Override
-                                public void onNext(String s) {
-                                    LogUtil.d("result : " + s);
-                                    if (s.contains("200")) {
-                                        SomeUtil.showSnackBarLong(rootview, "视频上传成功！");
-                                    }
-                                }
-                            });
-
-
-                });
+                            }
+                        }));
 
 
             }
@@ -271,11 +269,4 @@ public class JQCallbackActivity extends BaseActivity {
         }
     }
 
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        // TODO: add setContentView(...) invocation
-        ButterKnife.bind(this);
-    }
 }

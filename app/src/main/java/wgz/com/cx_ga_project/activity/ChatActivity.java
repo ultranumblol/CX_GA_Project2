@@ -517,7 +517,7 @@ public class ChatActivity extends BaseActivity {
 
     @Override
     protected void onStop() {
-
+        RxBus.getDefault().post("stopSubscription");
         super.onStop();
     }
 

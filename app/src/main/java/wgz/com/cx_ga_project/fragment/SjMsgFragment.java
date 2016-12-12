@@ -124,6 +124,8 @@ public class SjMsgFragment extends BaseFragment implements SwipeRefreshLayout.On
     public void onRefresh() {
         handler.postDelayed(() -> {
             list.clear();
+            piclist.clear();
+            videolist.clear();
             adapter.clear();
             initData();
         }, 2000);
@@ -170,6 +172,8 @@ public class SjMsgFragment extends BaseFragment implements SwipeRefreshLayout.On
                         LogUtil.d("result code:"+s.getCode());
 
                         LogUtil.d("piclist: "+s.toString());
+
+                        LogUtil.d("videolist: "+s.getResvideo().toString());
                         if (s.getRespic()!=null){
                             for (PicAndVideo.Respic pic :s.getRespic())
                                 piclist.add(pic.getPic());

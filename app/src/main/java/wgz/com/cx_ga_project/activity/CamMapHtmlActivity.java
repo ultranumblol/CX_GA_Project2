@@ -145,6 +145,14 @@ public class CamMapHtmlActivity extends BaseActivity {
                 //return "25.041062";
                 return latitude;
             }
+            @JavascriptInterface
+            public String getdepartmentid() {
+                String departmentid = SomeUtil.getDepartId();
+                LogUtil.d("depart "+departmentid);
+
+                return departmentid;
+            }
+
 
             @JavascriptInterface
             public void goPlay(String camID) {

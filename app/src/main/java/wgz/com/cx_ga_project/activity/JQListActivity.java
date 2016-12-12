@@ -1,31 +1,24 @@
 package wgz.com.cx_ga_project.activity;
 
 import android.content.Intent;
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
-import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.jude.easyrecyclerview.EasyRecyclerView;
 
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.Bind;
-import butterknife.ButterKnife;
 import rx.Subscriber;
 import wgz.com.cx_ga_project.R;
 import wgz.com.cx_ga_project.adapter.JQAdapter;
-import wgz.com.cx_ga_project.adapter.MyRecyclerArrayAdapter;
 import wgz.com.cx_ga_project.app;
 import wgz.com.cx_ga_project.base.BaseActivity;
 import wgz.com.cx_ga_project.base.Constant;
 import wgz.com.cx_ga_project.entity.CallerInfo;
-import wgz.com.cx_ga_project.entity.JQDetil;
 import wgz.com.cx_ga_project.entity.NearJQ;
 import wgz.com.cx_ga_project.entity.NewJQ;
 import wgz.com.cx_ga_project.util.RxUtil;
@@ -51,6 +44,9 @@ public class JQListActivity extends BaseActivity {
     private List<NearJQ.Re> nearjqdata = new ArrayList<>();
     private List<NewJQ.NewjqRe> jqhisdate = new ArrayList<>();
     private String baojingrenname = "";
+    private String name = "";
+    private String idcard = "";
+
     @Override
     public int getLayoutId() {
         return R.layout.activity_jqlist;
@@ -61,13 +57,15 @@ public class JQListActivity extends BaseActivity {
         Intent intent = getIntent();
         title = intent.getStringExtra("title");
         baojingrenname = intent.getStringExtra("bjrname");
-        if (title.equals("nearjq")){
+        if (title.equals("nearjq")) {
             toolbar.setTitle("附近历史警情");
-        }else if (title.equals("bjr"))
-            toolbar.setTitle(baojingrenname+"的关联警情");
-        else if (title.equals("sjr"))
+        } else if (title.equals("bjr"))
+            toolbar.setTitle(baojingrenname + "的关联警情");
+        else if (title.equals("sjr")) {
             toolbar.setTitle("涉警人关联警情");
-        else if (title.equals("jqhistory"))
+            name = intent.getStringExtra("name");
+            idcard = intent.getStringExtra("idcard");
+        } else if (title.equals("jqhistory"))
             toolbar.setTitle("历史警情");
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -79,8 +77,8 @@ public class JQListActivity extends BaseActivity {
             String jqid = jqidview.getText().toString();
 
             startActivity(new Intent(JQListActivity.this, NewFightActivity.class)
-                    .putExtra("jqid",jqid)
-                    .putExtra("jqlist",true));
+                    .putExtra("jqid", jqid)
+                    .putExtra("jqlist", true));
             JQListActivity.this.finish();
         });
         initdata();
@@ -89,10 +87,10 @@ public class JQListActivity extends BaseActivity {
     private void initdata() {
         String latitude = (String) SPUtils.get(app.getApp().getApplicationContext(), Constant.LATITUDE, "111");
         String longitude = (String) SPUtils.get(app.getApp().getApplicationContext(), Constant.LONGITUDE, "1111");
-        if (title.equals("nearjq")){
+        if (title.equals("nearjq")) {
             //toolbar.setTitle("附近历史警情");
             //附近警情查询
-            app.jqAPIService.getNearHisJq(longitude,latitude,page+"","30")
+            app.jqAPIService.getNearHisJq(longitude, latitude, page + "", "30")
                     .compose(RxUtil.<NearJQ>applySchedulers())
                     .subscribe(new Subscriber<NearJQ>() {
                         @Override
@@ -107,9 +105,9 @@ public class JQListActivity extends BaseActivity {
 
                         @Override
                         public void onNext(NearJQ jqDetil) {
-                            LogUtil.d("nearjq : "+jqDetil);
-                            if (jqDetil.getCode().equals(200)){
-                                nearjqdata  = jqDetil.getRes();
+                            LogUtil.d("nearjq : " + jqDetil);
+                            if (jqDetil.getCode().equals(200)) {
+                                nearjqdata = jqDetil.getRes();
                                 adapter.addAll(nearjqdata);
                             }
 
@@ -123,7 +121,7 @@ public class JQListActivity extends BaseActivity {
                     });
 
 
-        }else if (title.equals("bjr")){
+        } else if (title.equals("bjr")) {
 
             //报警人警情查询
             app.jqAPIService.getCallerInfo(baojingrenname)
@@ -136,23 +134,49 @@ public class JQListActivity extends BaseActivity {
 
                         @Override
                         public void onError(Throwable e) {
-                           // SomeUtil.checkHttpException(JQListActivity.this,e,rootview);
+                            // SomeUtil.checkHttpException(JQListActivity.this,e,rootview);
                         }
 
                         @Override
                         public void onNext(CallerInfo callerInfo) {
-                            if (callerInfo.getCode().equals(200)){
-                                LogUtil.d("callerinfo resutl : "+callerInfo.getCode());
+                            if (callerInfo.getCode().equals(200)) {
+                                LogUtil.d("callerinfo resutl : " + callerInfo.getCode());
                                 bjrdata = callerInfo.getResjq();
                                 adapter.addAll(bjrdata);
                             }
 
                         }
                     });
-        }
-
-        else if (title.equals("sjr")){
+        } else if (title.equals("sjr")) {
             //涉警人关联警情
+            LogUtil.d("name :" + name + " idcard :" + idcard + "jqid :" + SomeUtil.getJQId());
+            app.jqAPIService.getInvInfo(name, idcard, SomeUtil.getJQId())
+                    .compose(RxUtil.applySchedulers())
+                    .subscribe(new Subscriber<NearJQ>() {
+                        @Override
+                        public void onCompleted() {
+
+                        }
+
+                        @Override
+                        public void onError(Throwable e) {
+                            LogUtil.d("error " + e.toString());
+                        }
+
+                        @Override
+                        public void onNext(NearJQ newJQ) {
+                           // LogUtil.d("sjr reuslt :"+newJQ);
+                          LogUtil.d("sjr result " + newJQ.getRes().toString());
+                            if (newJQ.getCode().equals(200)) {
+                                sjrdata = newJQ.getRes();
+                                adapter.addAll(sjrdata);
+                            }
+                        }
+                    });
+
+
+
+            /*
             app.jqAPIService.getPoliceJqInfo(SomeUtil.getUserId())
                     .compose(RxUtil.<NearJQ>applySchedulers())
                     .subscribe(new Subscriber<NearJQ>() {
@@ -176,33 +200,32 @@ public class JQListActivity extends BaseActivity {
 
 
                         }
-                    });
-        }
-        else if (title.equals("jqhistory")){
+                    });*/
+        } else if (title.equals("jqhistory")) {
             //历史警情
             app.jqAPIService.getOldJqlist(SomeUtil.getUserId())
-            .compose(RxUtil.<NewJQ>applySchedulers())
-            .subscribe(new Subscriber<NewJQ>() {
-                @Override
-                public void onCompleted() {
+                    .compose(RxUtil.<NewJQ>applySchedulers())
+                    .subscribe(new Subscriber<NewJQ>() {
+                        @Override
+                        public void onCompleted() {
 
-                }
+                        }
 
-                @Override
-                public void onError(Throwable e) {
-                    //SomeUtil.checkHttpException(JQListActivity.this,e,rootview);
-                }
+                        @Override
+                        public void onError(Throwable e) {
+                            //SomeUtil.checkHttpException(JQListActivity.this,e,rootview);
+                        }
 
-                @Override
-                public void onNext(NewJQ newJQ) {
-                    if (newJQ.getCode().equals(200)){
-                        jqhisdate = newJQ.getRes();
-                        LogUtil.d("jqhistory result :"+newJQ.getRes().toString());
-                        adapter.addAll(jqhisdate);
-                    }
+                        @Override
+                        public void onNext(NewJQ newJQ) {
+                            if (newJQ.getCode().equals(200)) {
+                                jqhisdate = newJQ.getRes();
+                                LogUtil.d("jqhistory result :" + newJQ.getRes().toString());
+                                adapter.addAll(jqhisdate);
+                            }
 
-                }
-            });
+                        }
+                    });
         }
 
 

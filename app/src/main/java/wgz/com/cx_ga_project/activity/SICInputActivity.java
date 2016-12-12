@@ -98,6 +98,7 @@ public class SICInputActivity extends BaseActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        RxBus.getDefault().post("stopSubscription");
         if (!rxSubscription.isUnsubscribed()) {
             rxSubscription.unsubscribe();
         }

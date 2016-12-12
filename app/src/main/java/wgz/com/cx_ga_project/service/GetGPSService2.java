@@ -55,7 +55,7 @@ public class GetGPSService2 extends Service {
 // criteria ： 设置定位属性
 // enabledOnly ： 如果定位可以就返回
         String bestProvider = locationManager.getBestProvider(criteria, true);
-        System.out.println("GPSService 最佳的定位方式:" + bestProvider);
+       // System.out.println("GPSService 最佳的定位方式:" + bestProvider);
 // 3.定位
         myLocationListener = new MyLocationListener();
 // provider : 定位方式
@@ -89,7 +89,7 @@ public class GetGPSService2 extends Service {
 // location ： 当前的位置
         @Override
         public void onLocationChanged(Location location) {
-            System.out.println(location + "oooooooooooooooooo");
+           // System.out.println(location + "oooooooooooooooooo");
 // 5.获取经纬度
             location.getAccuracy();// 获取精确的位置
             location.getAltitude();// 获取海拔

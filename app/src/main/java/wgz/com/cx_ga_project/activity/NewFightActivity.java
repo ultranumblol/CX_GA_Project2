@@ -29,9 +29,11 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import rx.Subscriber;
+import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.schedulers.Schedulers;
+import rx.subscriptions.CompositeSubscription;
 import wgz.com.cx_ga_project.R;
 import wgz.com.cx_ga_project.app;
 import wgz.com.cx_ga_project.base.BaseActivity;
@@ -141,13 +143,13 @@ public class NewFightActivity extends BaseActivity {
 
                     }
                     break;
-                case R.id.fabtag_sjrJQ:
+               /* case R.id.fabtag_sjrJQ:
                     startActivity(new Intent(NewFightActivity.this, JQListActivity.class).putExtra("title", "sjr"));
                     if (ifFromJQlist){
                         NewFightActivity.this.finish();
 
                     }
-                    break;
+                    break;*/
                 case R.id.fabtag_zyJQ:
                     if(!ifFromJQlist){
 
@@ -200,34 +202,44 @@ public class NewFightActivity extends BaseActivity {
         if (jqstate.equals("1")) {
 
             idFightTalk.setVisibility(View.GONE);
-
+/*
             RxView.clicks(fabNewfight).throttleFirst(500, TimeUnit.MICROSECONDS)
                     .subscribe(aVoid -> {
                         ShowDialog();
-                    });
+                    });*/
         }
 
         if (jqstate.equals("2")) {
             fabNewfight.setImageResource(R.drawable.ic_stop_white_48dp);
-            RxView.clicks(fabNewfight).throttleFirst(500, TimeUnit.MICROSECONDS)
+          /*  RxView.clicks(fabNewfight).throttleFirst(500, TimeUnit.MICROSECONDS)
                     .subscribe(aVoid -> {
                         stopjq();
-                    });
+                    });*/
             idFightBulu.setVisibility(View.GONE);
             idFightUpload.setVisibility(View.VISIBLE);
 
         }
         if (jqstate.equals("4")) {
             fabNewfight.setImageResource(R.drawable.ic_stop_white_48dp);
-            RxView.clicks(fabNewfight).throttleFirst(500, TimeUnit.MICROSECONDS)
+         /*   RxView.clicks(fabNewfight).throttleFirst(500, TimeUnit.MICROSECONDS)
                     .subscribe(aVoid -> {
                         stopjq2();
-                    });
+                    });*/
             idFightBulu.setVisibility(View.VISIBLE);
             idFightUpload.setVisibility(View.GONE);
             idFightTalk.setVisibility(View.GONE);
         }
-
+        RxView.clicks(fabNewfight).throttleFirst(500, TimeUnit.MICROSECONDS)
+                .subscribe(aVoid -> {
+                   if (jqstate.equals("4")){
+                       stopjq2();
+                   }if (jqstate.equals("2")){
+                        stopjq();
+                    }
+                    if (jqstate.equals("1")){
+                        ShowDialog();
+                    }
+                });
         // LogUtil.d("jqid : "+JQid);
 
         initData();
@@ -236,7 +248,8 @@ public class NewFightActivity extends BaseActivity {
     private void stopjq2() {
         final AlertDialog.Builder builder = new AlertDialog.Builder(NewFightActivity.this);
         builder.setTitle("是否结束警情补录?")
-                .setPositiveButton("确定", (dialog, which) -> app.jqAPIService.stopTaskJq("3", stopid, taskid)
+                .setPositiveButton("确定", (dialog, which) ->
+                        app.jqAPIService.stopTaskJq("3", stopid, taskid)
                         .compose(RxUtil.<String>applySchedulers())
                         .subscribe(new Subscriber<String>() {
                             @Override
@@ -252,10 +265,11 @@ public class NewFightActivity extends BaseActivity {
                             @Override
                             public void onNext(String s) {
                                 LogUtil.d("jqstop result :" + s);
+                                RxBus.getDefault().post("newjqflush");
                                 SomeUtil.showSnackBar(rootview, "出警任务已经结束！").setCallback(new Snackbar.Callback() {
                                     @Override
                                     public void onDismissed(Snackbar snackbar, int event) {
-                                        RxBus.getDefault().post("newjqflush");
+
                                         finish();
 
                                     }
@@ -323,7 +337,7 @@ public class NewFightActivity extends BaseActivity {
         final String[] parts = new String[]{"楚雄市公安局", "楚雄市森林公安局"};
         final String[] choice = new String[]{"已完成警情回告并结束此次出警任务", "结束任务，后期补录警情内容"};
 
-        app.jqAPIService.getAllDep()
+        Subscription i  =app.jqAPIService.getAllDep()
                 .compose(RxUtil.<AllDep>applySchedulers())
                 .subscribe(new Subscriber<AllDep>() {
                     @Override
@@ -447,12 +461,12 @@ public class NewFightActivity extends BaseActivity {
 
                     }
                 });
-
+        addSubscription(i);//把订阅加入管理集合中
 
     }
 
     private void Jqzhuanyi() {
-        app.jqAPIService.JqTransfer(JQid, taskid, SomeUtil.getSysTime(), departmentName, departmentID)
+        Subscription i  = app.jqAPIService.JqTransfer(JQid, taskid, SomeUtil.getSysTime(), departmentName, departmentID)
                 .compose(RxUtil.<String>applySchedulers())
                 .subscribe(new Subscriber<String>() {
                     @Override
@@ -479,12 +493,12 @@ public class NewFightActivity extends BaseActivity {
                     }
                 });
 
-
+        addSubscription(i);//把订阅加入管理集合中
     }
 
     private void ShowDialog() {
         //  部门id替换 日期替换sendtime
-        app.jqAPIService.getPeoOnduty(SomeUtil.getDepartId(), OtherUtils.formatDate(SomeUtil.getStrToDate(sendtime)))
+        Subscription i  =app.jqAPIService.getPeoOnduty(SomeUtil.getDepartId(), OtherUtils.formatDate(SomeUtil.getStrToDate(sendtime)))
                 .compose(RxUtil.<JQOnDutyPeople>applySchedulers())
                 .subscribe(new Subscriber<JQOnDutyPeople>() {
                     @Override
@@ -552,6 +566,7 @@ public class NewFightActivity extends BaseActivity {
                         }).show();
                     }
                 });
+        addSubscription(i);//把订阅加入管理集合中
     }
 
     private void addCjPerson(String[] lid) {
@@ -635,7 +650,7 @@ public class NewFightActivity extends BaseActivity {
                 });
 
 
-        app.jqAPIService.GetJQDetil(JQid)
+        Subscription i =app.jqAPIService.GetJQDetil(JQid)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe(new Subscriber<JQDetil>() {
@@ -666,6 +681,7 @@ public class NewFightActivity extends BaseActivity {
 
                     }
                 });
+        addSubscription(i);//把订阅加入管理集合中
 
     }
 

@@ -57,6 +57,7 @@ import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 
 import rx.schedulers.Schedulers;
+import rx.subscriptions.CompositeSubscription;
 import wgz.com.cx_ga_project.R;
 import wgz.com.cx_ga_project.app;
 import wgz.com.cx_ga_project.base.Constant;
@@ -123,6 +124,7 @@ public class HomeActivity extends AppCompatActivity
     private List<Deps.Re> deplist = new ArrayList<>();
     private List<DepPeople.Re> deppeopleplist = new ArrayList<>();
     private Subscription rxSubscription;
+    private CompositeSubscription msubscription;//管理所有的订阅
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -472,7 +474,7 @@ public class HomeActivity extends AppCompatActivity
         } else if (id == R.id.nav_updateAPP) {
             final int versionCode = SomeUtil.getVersionCode(this);
             LogUtil.d("versionCode:" + versionCode);
-            app.apiService.checkVersion().subscribeOn(Schedulers.io())
+            Subscription i  =app.apiService.checkVersion().subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(new Subscriber<AppVersion>() {
                         @Override
@@ -514,7 +516,6 @@ public class HomeActivity extends AppCompatActivity
                             }
                         }
                     });
-
 
             //startService(new Intent(HomeActivity.this, UpdataService.class));
 
@@ -585,7 +586,9 @@ public class HomeActivity extends AppCompatActivity
     @Override
     protected void onDestroy() {
         super.onDestroy();
-
+        if(msubscription != null){
+            this.msubscription.unsubscribe();
+        }
         ButterKnife.unbind(this);
     }
 

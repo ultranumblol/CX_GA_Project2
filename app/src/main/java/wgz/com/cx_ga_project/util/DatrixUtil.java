@@ -13,9 +13,11 @@ import java.util.Observable;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
 import rx.Subscriber;
+import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.schedulers.Schedulers;
+import rx.subscriptions.CompositeSubscription;
 import wgz.com.cx_ga_project.app;
 import wgz.com.cx_ga_project.base.DefaultProgressListener;
 import wgz.com.cx_ga_project.base.RxBus;
@@ -51,6 +53,8 @@ public class DatrixUtil {
     private boolean flag = false;
     private int videofile = 0;
     private int videofilecount = 0;
+    private Subscription rxSubscription;
+    private CompositeSubscription msubscription;//管理所有的订阅
 
     /**
      * 文件地址集合
@@ -66,9 +70,22 @@ public class DatrixUtil {
         flag = true;
         this.paths = paths;
         this.rootview = rootview;
+        msubscription= new CompositeSubscription();
+        rxSubscription = RxBus.getDefault().toObservable(String.class)
+                .subscribe(s -> {
+                    if (s.equals("stopSubscription"))
+                    StopSubscription();
+                });
 
     }
 
+    public void StopSubscription(){
+
+        if(msubscription != null){
+            this.msubscription.unsubscribe();
+        }
+
+    }
     /**
      * 单个文件地址
      *
@@ -81,7 +98,12 @@ public class DatrixUtil {
         ids.clear();
         flag = true;
         this.rootview = rootview;
-
+        msubscription= new CompositeSubscription();
+        rxSubscription = RxBus.getDefault().toObservable(String.class)
+                .subscribe(s -> {
+                    if (s.equals("stopSubscription"))
+                    StopSubscription();
+                });
     }
 
 
@@ -228,7 +250,7 @@ public class DatrixUtil {
         RxBus.getDefault().post(new progress(df.format(num * 100)));
 
         LogUtil.d("current:" + currentPieces + "filepiece:" + filePieces);
-        app.apiService.detrixWrite(fileid, startsize + "", filePieceSize + "", piecebodyMap)
+        Subscription i = app.apiService.detrixWrite(fileid, startsize + "", filePieceSize + "", piecebodyMap)
                 .compose(RxUtil.applySchedulers())
                 .subscribe(new Subscriber<String>() {
                     @Override
@@ -259,7 +281,7 @@ public class DatrixUtil {
                         }
                     }
                 });
-
+            msubscription.add(i);
     }
 
 
@@ -283,7 +305,7 @@ public class DatrixUtil {
         RxBus.getDefault().post(new progress(df.format(num * 100)));
 
         LogUtil.d("current:" + currentPieces + "filepiece:" + filePieces);
-        app.apiService.detrixWrite(fileid, startsize + "", filePieceSize + "", piecebodyMap)
+        Subscription i =app.apiService.detrixWrite(fileid, startsize + "", filePieceSize + "", piecebodyMap)
                 .compose(RxUtil.<String>applySchedulers())
                 .subscribe(new Subscriber<String>() {
                     @Override
@@ -314,6 +336,7 @@ public class DatrixUtil {
                         }
                     }
                 });
+        msubscription.add(i);
 
     }
 
@@ -373,7 +396,7 @@ public class DatrixUtil {
 
             bodyMap.put("file" + 1 + "\" ; filename=\"" + file.getName(), RequestBody.create(MediaType.parse("image/*"), file));
             filesize = (int) file.length();
-            app.apiService.detrixWrite(fileid, "0", filesize + "", bodyMap)
+            Subscription i = app.apiService.detrixWrite(fileid, "0", filesize + "", bodyMap)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(new Subscriber<String>() {
@@ -391,7 +414,7 @@ public class DatrixUtil {
                         @Override
                         public void onNext(String s) {
                             LogUtil.d("detrix_writePic_Response :" + s);
-                            if (s.contains("\t\"code\":\t200")) {
+                            if (s.contains("200")) {
                                 DatrixDoFinish(fileid);
                             } else {
                                 SomeUtil.showSnackBar(rootview, "写入文件失败!");
@@ -399,6 +422,7 @@ public class DatrixUtil {
                             }
                         }
                     });
+            msubscription.add(i);
         }
         if (type == UPLOADVIDEO) {
             File file = new File(path);
@@ -432,6 +456,7 @@ public class DatrixUtil {
 
                     @Override
                     public void onNext(String s) {
+                        LogUtil.d("DatrixDoFinish_Response:"+s.toString());
                         if (s.contains("200")) {
                             if (afterFinish != null) {
 

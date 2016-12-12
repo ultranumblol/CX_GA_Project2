@@ -118,7 +118,7 @@ public interface APIservice {
 
 
     /**
-     *
+     * 获取datrix上的图片缩略图
      * @param fileid
      * @param height 缩略图的高度，单位为像素，默认为 0, 表示等比缩放图片
      * @param width 缩略图的宽度，单位为像素, 默认为 0, 表示大小不变
@@ -132,6 +132,18 @@ public interface APIservice {
             @Field("height") String height,
             @Field("width") String width
     );
+
+    /**
+     * 删除datrix文件
+     * @param fileid 要删除的文件的文件ID
+     * @param removesubs 删除文件时是否删除其子文件，默认为true(删除), false表示不删除
+     * @return
+     */
+    @FormUrlEncoded
+    @POST(DATRIX_BASE_URL + "api/v2/core/file/remove")
+    @Headers("ACCESS-TOKEN:X7yABwjE20sUJLefATUFqU0iUs8mJPqEJo6iRnV63mI=")
+    Observable<String> DetrixRemove( @Field("fileid") String fileid,
+                                     @Field("removesubs") String removesubs);
 
     /**
      * 修改工作日志
@@ -489,7 +501,8 @@ public interface APIservice {
                                         @Field("pic") String pic,
                                         @Field("video") String video,
                                         @Field("picdocid") String picdocid,
-                                        @Field("videodocid") String videodocid);
+                                        @Field("videodocid") String videodocid,
+                                        @Field("policeid") String policeid);
 
 
     /**

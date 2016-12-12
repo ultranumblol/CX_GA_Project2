@@ -21,8 +21,11 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.Bind;
+import butterknife.ButterKnife;
 import me.iwf.photopicker.PhotoPicker;
 import rx.Subscriber;
+import rx.Subscription;
+import rx.subscriptions.CompositeSubscription;
 import wgz.com.cx_ga_project.R;
 import wgz.com.cx_ga_project.adapter.AddPictureAdapter;
 import wgz.com.cx_ga_project.app;
@@ -53,6 +56,8 @@ public class AddJQActivity extends BaseActivity {
     @Bind(R.id.up_jq_progress)
     ProgressBar upJqProgress;
     private AddPictureAdapter adapter;
+
+
     private String fileid = "";
    // private String datrixUrl = DATRIX_BASE_URL + "preview/getImage?fileid=";
     private String datrixurl2 = "&token=X7yABwjE20sUJLefATUFqU0iUs8mJPqEJo6iRnV63mI=";
@@ -114,7 +119,7 @@ public class AddJQActivity extends BaseActivity {
     }
 
     private void addjq() {
-        app.jqAPIService.uploadJqMsg(SomeUtil.getJQId(), SomeUtil.getTASKId(), SomeUtil.getUserId(),
+        Subscription i  =app.jqAPIService.uploadJqMsg(SomeUtil.getJQId(), SomeUtil.getTASKId(), SomeUtil.getUserId(),
                 contenttext.getText().toString(), SomeUtil.getSysTime(), "", "", "", SomeUtil.getDepartId())
                 .compose(RxUtil.<String>applySchedulers())
                 .subscribe(new Subscriber<String>() {
@@ -145,7 +150,7 @@ public class AddJQActivity extends BaseActivity {
                         }
                     }
                 });
-
+        addSubscription(i);
 
 
     }
@@ -153,7 +158,7 @@ public class AddJQActivity extends BaseActivity {
     private void addjqAndpic(String fileid, final List<String> ids) {
 
         final int k = ids.size() - 1;
-        app.jqAPIService.uploadJqMsg(SomeUtil.getJQId(), SomeUtil.getTASKId(), SomeUtil.getUserId(),
+        Subscription i  =app.jqAPIService.uploadJqMsg(SomeUtil.getJQId(), SomeUtil.getTASKId(), SomeUtil.getUserId(),
                 contenttext.getText().toString(), SomeUtil.getSysTime(), "", "", "", SomeUtil.getDepartId())
                 .compose(RxUtil.<String>applySchedulers())
                 .subscribe(new Subscriber<String>() {
@@ -211,7 +216,7 @@ public class AddJQActivity extends BaseActivity {
                         } else onError(new Exception(s));
                     }
                 });
-
+        addSubscription(i);
 
     }
 

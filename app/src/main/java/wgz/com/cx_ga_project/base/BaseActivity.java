@@ -12,6 +12,8 @@ import android.view.Window;
 import android.view.WindowManager;
 
 import butterknife.ButterKnife;
+import rx.Subscription;
+import rx.subscriptions.CompositeSubscription;
 
 /**
  * Created by wgz on 2016/7/26.
@@ -21,10 +23,12 @@ public abstract class BaseActivity extends AppCompatActivity{
     //关键的是否登录 由父类提供
     public boolean isLogin=false;
     protected Context mContext;
+    private CompositeSubscription msubscription;//管理所有的订阅
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.setContentView(this.getLayoutId());
+        msubscription = new CompositeSubscription();
         ButterKnife.bind(this);
         this.initView();
     }
@@ -32,6 +36,11 @@ public abstract class BaseActivity extends AppCompatActivity{
     public abstract int getLayoutId();
 
     public abstract void initView();
+
+    public void addSubscription(Subscription subscription){
+        msubscription.add(subscription);
+
+    }
 
     public void setToolbarBack(Toolbar toolbar){
         setSupportActionBar(toolbar);
@@ -42,7 +51,9 @@ public abstract class BaseActivity extends AppCompatActivity{
     @Override
     protected void onDestroy() {
         super.onDestroy();
-
+        if(msubscription != null){
+            this.msubscription.unsubscribe();
+        }
         ButterKnife.unbind(this);
     }
 

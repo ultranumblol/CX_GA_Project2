@@ -1,11 +1,15 @@
 package wgz.com.cx_ga_project.adapter;
 
+import android.content.Intent;
+import android.support.design.widget.FloatingActionButton;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.jude.easyrecyclerview.adapter.BaseViewHolder;
 
 import wgz.com.cx_ga_project.R;
+import wgz.com.cx_ga_project.activity.JQListActivity;
 import wgz.com.cx_ga_project.entity.JqCallBack;
 
 /**
@@ -13,6 +17,7 @@ import wgz.com.cx_ga_project.entity.JqCallBack;
  */
 public class JQCallbackSJRViewHolder extends BaseViewHolder<Object> {
     private TextView name, sex, phone, mobilephone, idnum, addr, mac, serialnumber, sim;
+    private FloatingActionButton fab ;
 
     public JQCallbackSJRViewHolder(ViewGroup parent) {
         super(parent, R.layout.item_sjr_callback);
@@ -25,6 +30,7 @@ public class JQCallbackSJRViewHolder extends BaseViewHolder<Object> {
         mac = $(R.id.sjr_mac);
         serialnumber = $(R.id.sjr_serialnumber);
         sim = $(R.id.sjr_sim);
+        fab = $(R.id.sjr_fab);
 
     }
 
@@ -45,8 +51,10 @@ public class JQCallbackSJRViewHolder extends BaseViewHolder<Object> {
             }
             serialnumber.setText(((JqCallBack.Resperson) data).getSerialnumber());
             sim.setText(((JqCallBack.Resperson) data).getSimi());
+            fab.setOnClickListener(v -> getContext().startActivity(new Intent(getContext(), JQListActivity.class).putExtra("title", "sjr")
+                    .putExtra("name",((JqCallBack.Resperson) data).getInvolvepeoplename()).putExtra("idcard",((JqCallBack.Resperson) data).getInvolvepeopleidcard())));
 
 
         }
-    }
+        }
 }

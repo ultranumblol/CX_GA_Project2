@@ -104,7 +104,7 @@ public class MyWorkingTrackActivity extends BaseActivity {
                 holder.timeLineMarker.setText("" + (position + 1));
             }
             holder.time.setText(list.get(position).getSendtime());
-            holder.desc_tv.setText(list.get(position).getTreatmentdep());
+            holder.desc_tv.setText("出警警情："+list.get(position).getJqid()+"\n"+list.get(position).getTreatmentdep());
 
 
         }

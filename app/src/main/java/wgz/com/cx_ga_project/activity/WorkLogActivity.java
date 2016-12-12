@@ -31,8 +31,10 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import rx.Observer;
 import rx.Subscriber;
+import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
+import rx.subscriptions.CompositeSubscription;
 import wgz.com.cx_ga_project.API.APIservice;
 import wgz.com.cx_ga_project.R;
 import wgz.com.cx_ga_project.adapter.AddPictureAdapter;
@@ -110,7 +112,7 @@ public class WorkLogActivity extends BaseActivity {
     private void iniData() {
         final Calendar calendar = Calendar.getInstance();
         LogUtil.d("initData : " + OtherUtils.formatMonth(calendar.getTime()).toString());
-        app.apiService.getLogData(CHECK_ONESSUMMARY,SomeUtil.getUserId(), OtherUtils.formatMonth(calendar.getTime()))
+        Subscription i =app.apiService.getLogData(CHECK_ONESSUMMARY,SomeUtil.getUserId(), OtherUtils.formatMonth(calendar.getTime()))
 
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -164,6 +166,7 @@ public class WorkLogActivity extends BaseActivity {
 
                     }
                 });
+       addSubscription(i);
     }
 
     /**
@@ -175,7 +178,7 @@ public class WorkLogActivity extends BaseActivity {
         adapter.clear();
         paths.clear();
         adapter.addAll(paths);
-        app.apiService.getLogData(CHECK_ONESSUMMARY, SomeUtil.getUserId(), calendarView.getCurrentDay())
+        Subscription i  =  app.apiService.getLogData(CHECK_ONESSUMMARY, SomeUtil.getUserId(), calendarView.getCurrentDay())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<WorkLog>() {
@@ -234,7 +237,7 @@ public class WorkLogActivity extends BaseActivity {
 
                                 //LogUtil.d("logdateToday date : "+calendarView.getCurrentDayDay());
 
-                                app.apiService.getLogDataToDay(SomeUtil.getUserId(),calendarView.getCurrentDayDay() )
+                                Subscription i  =app.apiService.getLogDataToDay(SomeUtil.getUserId(),calendarView.getCurrentDayDay() )
                                         .subscribeOn(Schedulers.io())
                                         .observeOn(AndroidSchedulers.mainThread())
                                         .subscribe(new Subscriber<WorkLog>() {
@@ -267,6 +270,7 @@ public class WorkLogActivity extends BaseActivity {
                                                 }
                                             }
                                         });
+                                addSubscription(i);
 
                             }
 
@@ -283,7 +287,7 @@ public class WorkLogActivity extends BaseActivity {
 
                     }
                 });
-
+        addSubscription(i);
     }
 
     private void initCalendar() {
@@ -376,6 +380,8 @@ public class WorkLogActivity extends BaseActivity {
         return super.onOptionsItemSelected(item);
     }
 
+
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         try {
@@ -459,7 +465,11 @@ public class WorkLogActivity extends BaseActivity {
 
                         @Override
                         public void onError(Throwable e) {
-                            idWorkLogText.setText("没有工作记录");
+                            try {
+                                idWorkLogText.setText("没有工作记录");
+                            } catch (Exception e1) {
+                                e1.printStackTrace();
+                            }
                         }
 
                         @Override
@@ -470,7 +480,11 @@ public class WorkLogActivity extends BaseActivity {
                                 LogUtil.d("worklogByday : "+workLog.getLogs().toString());
                                 id = workLog.getLogs().get(0).getId();
                             } else {
-                                idWorkLogText.setText("没有工作记录");
+                                try {
+                                    idWorkLogText.setText("没有工作记录");
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
                             }
                         }
                     });

@@ -74,7 +74,7 @@ public class StartNewFightActivity extends BaseActivity {
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter = new JQAdapter(this));
-        adapter.setNoMore(R.layout.view_nomore);
+        //adapter.setNoMore(R.layout.view_nomore);
 
         adapter.setOnItemClickListener((position, itemView) -> {
             TextView taskidview = (TextView) itemView.findViewById(R.id.taskid);
@@ -144,8 +144,12 @@ public class StartNewFightActivity extends BaseActivity {
                         LogUtil.d("newjq1 :" +newJQ.getRes().toString());
                        if (newJQ.getCode().equals(200)) {
                             data = newJQ.getRes();
+                           for (int i = 0 ; i <newJQ.getRes().size() ; i++){
+                               if (data.get(i)==null){
+                                   data.remove(i);
+                               }
+                           }
                             adapter.addAll(data);
-
 
                         } else {
                             //SomeUtil.showSnackBar(rootview, "没有新警情!");
@@ -170,7 +174,12 @@ public class StartNewFightActivity extends BaseActivity {
                         LogUtil.d("newjq2 :" +newJQ.getRes().toString());
                         if (newJQ.getCode().equals(200)) {
                             data = newJQ.getRes();
+                            for (int i = 0 ; i <newJQ.getRes().size() ; i++){
+                                if (data.get(i)==null){
+                                    data.remove(i);
+                                }
 
+                            }
                                 adapter.addAll(data);
 
 

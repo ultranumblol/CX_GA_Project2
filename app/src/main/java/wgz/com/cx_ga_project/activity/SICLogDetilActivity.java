@@ -32,14 +32,12 @@ import me.iwf.photopicker.PhotoPicker;
 import rx.Observable;
 import rx.Subscriber;
 import rx.Subscription;
-
 import wgz.com.cx_ga_project.R;
 import wgz.com.cx_ga_project.adapter.AddPictureAdapter;
 import wgz.com.cx_ga_project.app;
 import wgz.com.cx_ga_project.base.BaseActivity;
 import wgz.com.cx_ga_project.base.RxBus;
 import wgz.com.cx_ga_project.bean.ChatUpProgress;
-
 import wgz.com.cx_ga_project.entity.SICDetil;
 import wgz.com.cx_ga_project.util.DatrixUtil;
 import wgz.com.cx_ga_project.util.RxUtil;
@@ -69,6 +67,9 @@ public class SICLogDetilActivity extends BaseActivity {
     List<String> paths = new ArrayList<>();
     List<String> videopaths = new ArrayList<>();
     List<String> NewPicpaths = new ArrayList<>();
+    List<String> oldVideopaths = new ArrayList<>();
+    List<String> pids = new ArrayList<>();
+    List<String> vids = new ArrayList<>();
     private AddPictureAdapter adapter;
     private String type = "";
     private String docid = "";
@@ -78,12 +79,15 @@ public class SICLogDetilActivity extends BaseActivity {
     private Subscription rxSubscription;
     private String picids = "";
     private String videoids = "";
-    private String videoPath = "";
+    private String oldpicids = "";
+    private String oldvideoids = "";
+
 
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        RxBus.getDefault().post("stopSubscription");
         if (!rxSubscription.isUnsubscribed()) {
             rxSubscription.unsubscribe();
         }
@@ -110,7 +114,7 @@ public class SICLogDetilActivity extends BaseActivity {
         rxSubscription = RxBus.getDefault().toObservable(ChatUpProgress.class)
                 .subscribe(s -> {
                     if (sicuploadPrg.getVisibility() == View.VISIBLE)
-                    runOnUiThread(() -> sicuploadProtext.setText(s.getPro()));
+                        runOnUiThread(() -> sicuploadProtext.setText(s.getPro()));
 
 
                 });
@@ -132,7 +136,7 @@ public class SICLogDetilActivity extends BaseActivity {
 
             @Override
             public void onError(Throwable e) {
-
+                LogUtil.d("initdata error : " + e.toString());
             }
 
             @Override
@@ -160,7 +164,20 @@ public class SICLogDetilActivity extends BaseActivity {
                 LogUtil.d("sicDetil: " + sicDetilAndStr.getDetil().toString());
                 detildata = sicDetilAndStr.getDetil();
                 paths = detildata.getPicurl();
+                oldpicids = detildata.getDatrixpic();
+
+                if (detildata.getDatrixvideo()!=null)
+                oldvideoids = detildata.getDatrixvideo();
+                LogUtil.d("Picpaths: " + paths);
+                LogUtil.d("oldvideoids: " + oldvideoids);
                 adapter.addAll(paths);
+                /*if (!detildata.getDatrixvideo().equals("null")&&detildata.getDatrixvideo()!=null){
+                    oldvideoids = detildata.getDatrixvideo();
+                }*/
+
+                //oldVideopaths = detildata.getVideourl();
+
+                //adapter.addAll(oldVideopaths);
 
 
             }
@@ -183,13 +200,36 @@ public class SICLogDetilActivity extends BaseActivity {
                     sf.append(",");
                 }
             }
+            if (oldvideoids!=null){
+                sf.append(",");
+                sf.append(oldvideoids);
+            }
+            vids.clear();
             videoids = sf.toString();
+            vids = ids;
             LogUtil.d("videoids : " + videoids);
 
 
             UploadInfo();
         });
 
+
+    }
+
+    private void UploadPicNoInfo(List<String> ids) {
+        StringBuffer sf = new StringBuffer();
+        for (int i = 0; i < ids.size(); i++) {
+            if (i == ids.size() - 1) {
+                sf.append(ids.get(i));
+            } else {
+                sf.append(ids.get(i));
+                sf.append(",");
+            }
+
+
+        }
+        picids = sf.toString();
+        LogUtil.d("picids : " + picids);
 
     }
 
@@ -205,9 +245,13 @@ public class SICLogDetilActivity extends BaseActivity {
 
 
         }
+        sf.append(",");
+        sf.append(oldpicids);
+        pids.clear();
         picids = sf.toString();
+        pids = ids;
         LogUtil.d("picids : " + picids);
-
+        UploadInfo();
     }
 
     private void UploadInfo() {
@@ -234,15 +278,15 @@ public class SICLogDetilActivity extends BaseActivity {
         paraValue.put("addtime", SomeUtil.getSysTime());
 
         String txt = SomeUtil.mapTojsonStr(paraValue);
-        LogUtil.d("sicinput json : " + SomeUtil.mapTojsonStr(paraValue));
-        Map<String,Object> test = new HashMap<>();
-        test.put("doc",txt);
+       // LogUtil.d("sicinput json : " + SomeUtil.mapTojsonStr(paraValue));
+        Map<String, Object> test = new HashMap<>();
+        test.put("doc", txt);
 
-        String newtxt = "{\"doc\": "+txt+"}";
+        String newtxt = "{\"doc\": " + txt + "}";
 
-        LogUtil.d("sicinput json : " + newtxt);
-
-        app.apiService.updateSocialInfo(docid, type, newtxt, picids, videoids, detildata.getPicdocid(), detildata.getVideodocid())
+       // LogUtil.d("sicinput json : " + newtxt);
+       // LogUtil.d("docid : " + docid);
+        app.apiService.updateSocialInfo(docid, type, newtxt, picids, videoids, detildata.getPicdocid(), detildata.getVideodocid(),SomeUtil.getUserId())
                 .compose(RxUtil.<String>applySchedulers())
                 .subscribe(new Subscriber<String>() {
                     @Override
@@ -257,12 +301,15 @@ public class SICLogDetilActivity extends BaseActivity {
                         sicuploadPrg.setVisibility(View.GONE);
                         sicuploadBg.setVisibility(View.GONE);
                         sicuploadProtext.setVisibility(View.GONE);
+                        LogUtil.d("sicinputresult error: " + e.toString());
+                        SomeUtil.checkHttpException(SICLogDetilActivity.this, e, rootview);
+
                     }
 
                     @Override
                     public void onNext(String s) {
 
-                        LogUtil.d("sicinputresult : " + s);
+                        LogUtil.d("sicinput result : " + s);
                         SomeUtil.showSnackBar(rootview, "修改成功！").setCallback(new Snackbar.Callback() {
                             @Override
                             public void onDismissed(Snackbar snackbar, int event) {
@@ -285,12 +332,6 @@ public class SICLogDetilActivity extends BaseActivity {
                 .setItems(titles, (dialog, which) -> {
                     switch (which) {
                         case 0:
-                          /*  Intent intent = new Intent(SICLogDetilActivity.this, PickPhotoActivity.class);
-                            intent.putExtra(PhotoPickerFragment.EXTRA_SELECT_COUNT, 6);
-                            intent.putExtra(PhotoPickerFragment.EXTRA_DEFAULT_SELECTED_LIST, "");
-                            intent.putExtra(HTTP_URL, "");
-                            startActivityForResult(intent, 2);*/
-
                             PhotoPicker.builder()
                                     .setPhotoCount(6)
                                     .setShowCamera(true)
@@ -318,13 +359,13 @@ public class SICLogDetilActivity extends BaseActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         try {
-            LogUtil.d("resultCode :" + resultCode);
+            LogUtil.d("requestCode :" + requestCode);
 
-            if (resultCode == RESULT_OK && requestCode == 999){
+            if (resultCode == RESULT_OK && requestCode == 999) {
                 if (data != null) {
                     ArrayList<String> photos =
                             data.getStringArrayListExtra(PhotoPicker.KEY_SELECTED_PHOTOS);
-                    if (NewPicpaths.size()+paths.size()>3){
+                    if (NewPicpaths.size() + paths.size() > 3) {
 
                         ViewGroup.LayoutParams lp;
                         lp = sicloginputPics.getLayoutParams();
@@ -335,36 +376,21 @@ public class SICLogDetilActivity extends BaseActivity {
                         NewPicpaths = photos;
                         LogUtil.d("NewPicpaths :" + NewPicpaths.toString());
                         adapter.addAll(NewPicpaths);
+                    } else {
+                        NewPicpaths.clear();
+                        NewPicpaths = photos;
+                        LogUtil.d("NewPicpaths :" + NewPicpaths.toString());
+                        adapter.addAll(NewPicpaths);
+
                     }
 
                 }
 
             }
 
-
-            /*if (resultCode == 2) {
-                if (data.getStringExtra("result").equals("addpic")) {
-
-                    //  设置高度
-                    if (NewPicpaths.size()+paths.size()>3){
-
-                        ViewGroup.LayoutParams lp;
-                        lp = sicloginputPics.getLayoutParams();
-                        lp.height = 260;
-                        sicloginputPics.setLayoutParams(lp);
-                    }
-
-
-
-                    NewPicpaths.clear();
-                    NewPicpaths = data.getStringArrayListExtra("paths");
-                    LogUtil.d("NewPicpaths :" + NewPicpaths.toString());
-                    adapter.addAll(NewPicpaths);
-                }
-
-            }*/ else {
+            else {
                 Uri uri = data.getData();
-                videopaths.add( UriUtils.getPath(getApplicationContext(), uri));
+                videopaths.add(UriUtils.getPath(getApplicationContext(), uri));
                 //videoPath = UriUtils.getPath(getApplicationContext(), uri);
                /* paths.clear();
                 paths.add(testvideo);*/
@@ -396,14 +422,15 @@ public class SICLogDetilActivity extends BaseActivity {
             datrixUtil.DatrixUpLoadPic2();
             datrixUtil.setOnAfterFinish((fileid, ids) -> {
                 UploadPic(ids);
-                UploadInfo();
+
+
             });
         }
         if (NewPicpaths.size() > 0 && videopaths.size() > 0) {
             DatrixUtil datrixUtil = new DatrixUtil(NewPicpaths, rootview);
             datrixUtil.DatrixUpLoadPic2();
             datrixUtil.setOnAfterFinish((fileid, ids) -> {
-                UploadPic(ids);
+                UploadPicNoInfo(ids);
                 UpLoadVideo();
 
             });
@@ -441,17 +468,15 @@ public class SICLogDetilActivity extends BaseActivity {
                 return true;
             }
             return true;
-        }
-        else if (item.getItemId() == R.id.id_sic_input_menu){
+        } else if (item.getItemId() == R.id.id_sic_input_menu) {
 
             AlertDialog.Builder builder = new AlertDialog.Builder(SICLogDetilActivity.this);
             builder.setTitle("确认提交修改？")
                     .setPositiveButton("确认", (dialog, which) -> commit()).setNegativeButton("取消", null).show();
             return true;
 
-        }else
+        } else
             return super.onOptionsItemSelected(item);
-
 
 
     }

@@ -67,20 +67,13 @@ public class GpsUtil {
             double longitude = location.getLongitude();// 获取经度
             String locationStr = "纬度：" + latitude +"\n"
                     + "经度：" + longitude;
-            LogUtil.d("经纬度是：", locationStr);
-            System.out.println("getJingWeiDu经纬度是：" + locationStr);
+            LogUtil.d("经纬度：", locationStr);
+            //System.out.println("getJingWeiDu经纬度是：" + locationStr);
 //保存经纬度坐标
             new SPBuild(app.getApp().getApplicationContext())
                     .addData(Constant.LONGITUDE, longitude)
                     .addData(Constant.LATITUDE, latitude).build();
 
-
-
-// Timer timer = new Timer();
-// //task : 定时执行的任务，
-// //when:延迟的时间，延迟多长时间执行定时任务
-// //period ： 每次执行的间隔时间
-// timer.schedule(task, when, 1000*60*30)
         }
 
         @Override
