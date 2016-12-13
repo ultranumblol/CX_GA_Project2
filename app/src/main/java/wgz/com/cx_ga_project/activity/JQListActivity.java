@@ -62,7 +62,7 @@ public class JQListActivity extends BaseActivity {
         } else if (title.equals("bjr"))
             toolbar.setTitle(baojingrenname + "的关联警情");
         else if (title.equals("sjr")) {
-            toolbar.setTitle("涉警人关联警情");
+            toolbar.setTitle(name+"的涉关联警情");
             name = intent.getStringExtra("name");
             idcard = intent.getStringExtra("idcard");
         } else if (title.equals("jqhistory"))

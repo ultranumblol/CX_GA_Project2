@@ -23,9 +23,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.Bind;
+import rx.Observable;
 import rx.Subscriber;
 import rx.Subscription;
 import rx.functions.Action1;
+import rx.functions.Func2;
 import wgz.com.cx_ga_project.R;
 import wgz.com.cx_ga_project.adapter.JQAdapter;
 import wgz.com.cx_ga_project.adapter.MyRecyclerArrayAdapter;
@@ -34,6 +36,7 @@ import wgz.com.cx_ga_project.base.BaseActivity;
 import wgz.com.cx_ga_project.base.Constant;
 import wgz.com.cx_ga_project.base.RxBus;
 import wgz.com.cx_ga_project.entity.NewJQ;
+import wgz.com.cx_ga_project.entity.SICDetil;
 import wgz.com.cx_ga_project.util.GpsUtil;
 import wgz.com.cx_ga_project.util.RxUtil;
 import wgz.com.cx_ga_project.util.SPBuild;
@@ -125,8 +128,54 @@ public class StartNewFightActivity extends BaseActivity {
     private void initdata() {
         adapter.clear();
         data.clear();
+        Observable<JQ1JQ2> jq =  Observable.zip(app.jqAPIService.getNewJqlist(SomeUtil.getUserId(), SomeUtil.getDepartId())
+                , app.jqAPIService.getNewJqlist1(SomeUtil.getUserId()), (newJQ, newJQ2) -> new JQ1JQ2(newJQ,newJQ2));
+
+        jq.compose(RxUtil.applySchedulers())
+                .subscribe(new Subscriber<JQ1JQ2>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        LogUtil.d("newjq error:" +e.toString());
+                    }
+
+                    @Override
+                    public void onNext(JQ1JQ2 jq1JQ2) {
+                        LogUtil.d("newjq1 :" +jq1JQ2.getJq1().getRes().toString());
+                        LogUtil.d("newjq2 :" +jq1JQ2.getJq2().getRes().toString());
+                        if (jq1JQ2.getJq1().getCode().equals(200)) {
+                            data = jq1JQ2.getJq1().getRes();
+                            for (int i = 0 ; i <jq1JQ2.getJq1().getRes().size() ; i++){
+                                if (data.get(i)==null){
+                                    data.remove(i);
+                                }
+                            }
+                            adapter.addAll(data);
+
+                        }
+                        if (jq1JQ2.getJq2().getCode().equals(200)) {
+                            data = jq1JQ2.getJq2().getRes();
+                            for (int i = 0 ; i <jq1JQ2.getJq2().getRes().size() ; i++){
+                                if (data.get(i)==null){
+                                    data.remove(i);
+                                }
+                            }
+                            adapter.addAll(data);
+                        }
+
+
+
+                    }
+                });
+
+
+
         //  部门id
-        app.jqAPIService.getNewJqlist(SomeUtil.getUserId(),SomeUtil.getDepartId())
+           /*  app.jqAPIService.getNewJqlist(SomeUtil.getUserId(),SomeUtil.getDepartId())
                 .compose(RxUtil.<NewJQ>applySchedulers())
                 .subscribe(new Subscriber<NewJQ>() {
                     @Override
@@ -151,8 +200,6 @@ public class StartNewFightActivity extends BaseActivity {
                            }
                             adapter.addAll(data);
 
-                        } else {
-                            //SomeUtil.showSnackBar(rootview, "没有新警情!");
                         }
                     }
                 });
@@ -178,25 +225,41 @@ public class StartNewFightActivity extends BaseActivity {
                                 if (data.get(i)==null){
                                     data.remove(i);
                                 }
-
                             }
                                 adapter.addAll(data);
-
-
-
-
-
-                        } else {
-                           // SomeUtil.showSnackBar(rootview, "没有新警情!");
                         }
                     }
                 });
-
+*/
 
 
     }
 
+    public class JQ1JQ2 {
+        private NewJQ jq1;
+        private NewJQ jq2;
 
+        public JQ1JQ2(NewJQ jq1, NewJQ jq2) {
+            this.jq1 = jq1;
+            this.jq2 = jq2;
+        }
+
+        public NewJQ getJq1() {
+            return jq1;
+        }
+
+        public void setJq1(NewJQ jq1) {
+            this.jq1 = jq1;
+        }
+
+        public NewJQ getJq2() {
+            return jq2;
+        }
+
+        public void setJq2(NewJQ jq2) {
+            this.jq2 = jq2;
+        }
+    }
     @Override
     protected void onResume() {
         super.onResume();

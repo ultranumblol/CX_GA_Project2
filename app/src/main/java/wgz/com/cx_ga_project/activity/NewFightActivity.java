@@ -300,7 +300,7 @@ public class NewFightActivity extends BaseActivity {
                             }).setPositiveButton("确定", (dialog1, which1) -> {
                                 LogUtil.d("taskid:" + taskid);
                                 app.jqAPIService.stopTaskJq(stopstate, stopid, taskid)
-                                        .compose(RxUtil.<String>applySchedulers())
+                                        .compose(RxUtil.applySchedulers())
                                         .subscribe(new Subscriber<String>() {
                                             @Override
                                             public void onCompleted() {
@@ -338,7 +338,7 @@ public class NewFightActivity extends BaseActivity {
         final String[] choice = new String[]{"已完成警情回告并结束此次出警任务", "结束任务，后期补录警情内容"};
 
         Subscription i  =app.jqAPIService.getAllDep()
-                .compose(RxUtil.<AllDep>applySchedulers())
+                .compose(RxUtil.applySchedulers())
                 .subscribe(new Subscriber<AllDep>() {
                     @Override
                     public void onCompleted() {

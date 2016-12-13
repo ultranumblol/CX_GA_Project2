@@ -46,7 +46,7 @@ public class MyWorkingTrackActivity extends BaseActivity {
 
     @Override
     public void initView() {
-        toolbar.setTitle("我的工作轨迹");
+        toolbar.setTitle("我的作战轨迹");
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         recyclerview.setLayoutManager(new Mylayout(this));
