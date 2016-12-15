@@ -124,7 +124,7 @@ public class JQListActivity extends BaseActivity {
         } else if (title.equals("bjr")) {
 
             //报警人警情查询
-            app.jqAPIService.getCallerInfo(baojingrenname)
+            app.jqAPIService.getCallerInfo(baojingrenname,SomeUtil.getJQId())
                     .compose(RxUtil.<CallerInfo>applySchedulers())
                     .subscribe(new Subscriber<CallerInfo>() {
                         @Override
@@ -134,11 +134,14 @@ public class JQListActivity extends BaseActivity {
 
                         @Override
                         public void onError(Throwable e) {
+                            LogUtil.d("error "+e.toString());
                             // SomeUtil.checkHttpException(JQListActivity.this,e,rootview);
                         }
 
                         @Override
                         public void onNext(CallerInfo callerInfo) {
+                            LogUtil.d("code "+callerInfo.getCode().toString());
+                            LogUtil.d("result "+callerInfo.getResjq().toString());
                             if (callerInfo.getCode().equals(200)) {
                                 LogUtil.d("callerinfo resutl : " + callerInfo.getCode());
                                 bjrdata = callerInfo.getResjq();

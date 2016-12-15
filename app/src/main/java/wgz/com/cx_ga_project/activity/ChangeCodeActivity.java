@@ -72,8 +72,8 @@ public class ChangeCodeActivity extends BaseActivity {
         String newpwd2 = newpass2.getText().toString();
         if (MD5.md5(oldpwd) .equals(SPUtils.get(app.getApp().getApplicationContext(), Constant.USERPASSWORD,""))){
             if (newpwd.equals(newpwd2)){
-
-                app.apiService.changePass(SomeUtil.getUserId(),Constant.DATAFUSION,MD5.md5(oldpwd),MD5.md5(newpwd))
+                LogUtil.d("old :"+MD5.md5(oldpwd)+" new : "+MD5.md5(newpwd));
+                app.apiService.changePass(SomeUtil.getUserId(),Constant.DATAFUSION,oldpwd,newpwd)
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(new Subscriber<String>() {
@@ -103,7 +103,7 @@ public class ChangeCodeActivity extends BaseActivity {
                                     });
 
 
-                                }else SomeUtil.showSnackBar(rootview,"修改密码失败！"+s);
+                                }else SomeUtil.showSnackBar(rootview,"修改密码失败！");
                             }
                         });
             }

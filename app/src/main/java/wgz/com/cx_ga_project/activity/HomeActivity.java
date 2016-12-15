@@ -28,6 +28,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -43,6 +44,10 @@ import com.jude.rollviewpager.adapter.StaticPagerAdapter;
 import com.jude.rollviewpager.hintview.ColorPointHintView;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -473,6 +478,10 @@ public class HomeActivity extends AppCompatActivity
 
         } else if (id == R.id.nav_updateAPP) {
             final int versionCode = SomeUtil.getVersionCode(this);
+
+
+
+
             LogUtil.d("versionCode:" + versionCode);
             Subscription i  =app.apiService.checkVersion().subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
@@ -495,19 +504,17 @@ public class HomeActivity extends AppCompatActivity
                                 LogUtil.d("serviceCode : " + a);
                                 if (a > versionCode) {
                                     //  下载更新
-                                    String url = appVersion.getRes().get(0).getApkUrl();
-                                    url.replaceAll("\\\\", "");
-                                    new SPBuild(getApplicationContext())
-                                            .addData(Constant.UPDATEURL, url).build();
                                     AlertDialog.Builder alertDialog = new AlertDialog.Builder(HomeActivity.this);
                                     alertDialog.setTitle("检查到新版本，是否更新？")
                                             .setMessage(appVersion.getRes().get(0).getApkUpdatelog())
-                                            .setPositiveButton("立即更新", (dialog, which) -> startService(new Intent(HomeActivity.this, UpdataService.class))).setNegativeButton("稍后更新", new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialog, int which) {
+                                            .setPositiveButton("立即更新", (dialog, which) -> update(appVersion)).setNegativeButton("稍后更新", (dialog, which) -> {
 
-                                        }
                                     }).show();
+
+/*
+                                    new SPBuild(getApplicationContext())
+                                            .addData(Constant.UPDATEURL, url).build();
+                                  */
 
                                 } else {
                                     SomeUtil.showSnackBar(homeRootView, "当前已经是最新版本！");
@@ -544,6 +551,114 @@ public class HomeActivity extends AppCompatActivity
         return true;
     }
 
+    private void update(AppVersion appVersion) {
+
+        String url = appVersion.getRes().get(0).getApkUrl();
+        url.replaceAll("\\\\", "");
+        String  filename = appVersion.getRes().get(0).getApkName();
+        LogUtil.d("url : " + url);
+        app.apiService.downloadFileWithFixedUrl(url)
+                .compose(RxUtil.applySchedulers())
+                .subscribe(new Subscriber<ResponseBody>() {
+                    @Override
+                    public void onStart() {
+                        SomeUtil.showSnackBarLong(homeRootView,"正在后台下载，稍后提示安装");
+                    }
+
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        SomeUtil.showSnackBar(homeRootView,"下载错误！");
+                        LogUtil.d("error:"+e.toString());
+                    }
+
+                    @Override
+                    public void onNext(ResponseBody responseBody) {
+                        LogUtil.d("size :"+responseBody.contentLength() );
+                        writeResponseBodyToDisk(responseBody,filename);
+                        installAPK(filename);
+                    }
+                });
+
+
+
+    }
+
+    /**
+     * 安装apk文件
+     */
+    private void installAPK(String  filename) {
+
+        // 通过Intent安装APK文件
+        Intent intents = new Intent();
+
+        intents.setAction("android.intent.action.VIEW");
+        intents.addCategory("android.intent.category.DEFAULT");
+        intents.setType("application/vnd.android.package-archive");
+        intents.setData(Uri.fromFile(new File(getExternalFilesDir(null) + File.separator + filename)));
+        intents.setDataAndType(Uri.fromFile(new File(getExternalFilesDir(null) + File.separator + filename)), "application/vnd.android.package-archive");
+        intents.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        //android.os.Process.killProcess(android.os.Process.myPid());
+        // 如果不加上这句的话在apk安装完成之后点击单开会崩溃
+
+        startActivity(intents);
+
+    }
+
+
+    private boolean writeResponseBodyToDisk(ResponseBody body,String filename) {
+        try {
+            // todo change the file location/name according to your needs
+            File futureStudioIconFile = new File(getExternalFilesDir(null) + File.separator + filename);
+
+            InputStream inputStream = null;
+            OutputStream outputStream = null;
+
+            try {
+                byte[] fileReader = new byte[4096];
+
+                long fileSize = body.contentLength();
+                long fileSizeDownloaded = 0;
+
+                inputStream = body.byteStream();
+                outputStream = new FileOutputStream(futureStudioIconFile);
+
+                while (true) {
+                    int read = inputStream.read(fileReader);
+
+                    if (read == -1) {
+                        break;
+                    }
+
+                    outputStream.write(fileReader, 0, read);
+
+                    fileSizeDownloaded += read;
+
+                   // Log.d(TAG, "file download: " + fileSizeDownloaded + " of " + fileSize);
+                }
+
+                outputStream.flush();
+
+                return true;
+            } catch (IOException e) {
+                return false;
+            } finally {
+                if (inputStream != null) {
+                    inputStream.close();
+                }
+
+                if (outputStream != null) {
+                    outputStream.close();
+                }
+            }
+        } catch (IOException e) {
+            return false;
+        }
+    }
     /**
      * 清除所有图片缓存
      */

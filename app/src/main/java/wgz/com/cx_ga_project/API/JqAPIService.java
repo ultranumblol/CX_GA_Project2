@@ -319,7 +319,8 @@ public interface JqAPIService {
      */
     @FormUrlEncoded
     @POST("appjqreport/getCallerInfo")
-    Observable<CallerInfo> getCallerInfo(@Field("caller") String caller);
+    Observable<CallerInfo> getCallerInfo(@Field("caller") String caller,
+                                         @Field("jqid") String jqid);
 
     /**
      * 获取涉警人警情列表

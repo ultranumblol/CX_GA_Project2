@@ -63,17 +63,20 @@ public class SomeUtil {
 
     public static void showNetworkErrorSnackBar(final Context context, View view, String message, String action) {
         Snackbar.make(view, message, Snackbar.LENGTH_LONG)
-                .setAction(action, new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent intent = new Intent(Settings.ACTION_SETTINGS);
-                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
-                        context.startActivity(intent);
-                    }
+                .setAction(action, v -> {
+                    Intent intent = new Intent(Settings.ACTION_SETTINGS);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
+                    context.startActivity(intent);
                 })
                 .show();
 
     }
+
+    /**
+     * inputstream 转byte
+     * @param inStream
+     * @return
+     */
     public static final byte[] input2byte(InputStream inStream)
              {
                  try {
@@ -143,7 +146,12 @@ public class SomeUtil {
         return false;
     }
 
-
+    /**
+     * 检查网络
+     * @param mContext
+     * @param mThrowable
+     * @param mRootView
+     */
     public static void checkHttpException(Context mContext, Throwable mThrowable, View mRootView) {
         LogUtil.d("error :" + mThrowable.toString());
         String snack_action_to_setting = "设置";
@@ -248,7 +256,11 @@ public class SomeUtil {
         return result4.setScale(2, BigDecimal.ROUND_HALF_UP).toPlainString() + "TB";
     }
 
-
+    /**
+     * map转jsonstr
+     * @param datas
+     * @return
+     */
     public static String ListmapTojsonStr(List<Map<String, Object>> datas) {
         JSONArray mJsonArray = new JSONArray();
         for (int i = 0; i < datas.size(); i++) {
@@ -272,6 +284,11 @@ public class SomeUtil {
 
     }
 
+    /**
+     * map转json
+     * @param datas
+     * @return
+     */
     public static String mapTojsonStr(Map<String, Object> datas) {
 
         Iterator<Map.Entry<String, Object>> iterator = datas.entrySet().iterator();
@@ -291,7 +308,11 @@ public class SomeUtil {
 
     }
 
-
+    /**
+     * jsonstr转map
+     * @param result
+     * @return
+     */
     public static List<Map<String, Object>> JsonStrToListMap(String result) {
         List<Map<String, Object>> datas = new ArrayList<Map<String, Object>>();
         try {
@@ -390,6 +411,12 @@ public class SomeUtil {
 
         return false;
     }
+
+    /**
+     * 获取时间 yyyy-MM-dd HH:mm:ss
+     * @param date
+     * @return
+     */
     public  static String getTime(Date date) {
         try {
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -415,7 +442,7 @@ public class SomeUtil {
     }
 
     /**
-     * 获取系统日期
+     * 获取系统日期 yyyy-MM-dd
      * @return
      */
     public static String getSysTime2() {

@@ -36,11 +36,7 @@ public class SaoYiSaoActivity extends BaseActivity implements SurfaceHolder.Call
 
     private static final float BEEP_VOLUME = 0.10f;
     private static final long VIBRATE_DURATION = 200L;
-    private final MediaPlayer.OnCompletionListener beepListener = new MediaPlayer.OnCompletionListener() {
-        public void onCompletion(MediaPlayer mediaPlayer) {
-            mediaPlayer.seekTo(0);
-        }
-    };
+    private final MediaPlayer.OnCompletionListener beepListener = mediaPlayer1 -> mediaPlayer1.seekTo(0);
     @Bind(R.id.toolbar_saoyisao)
     Toolbar toolbar;
     @Bind(R.id.preview_view)
@@ -198,8 +194,9 @@ public class SaoYiSaoActivity extends BaseActivity implements SurfaceHolder.Call
             startActivity(resultIntent);
             // resultIntent.putExtras(bundle);
             //this.setResult(RESULT_OK, resultIntent);
+            SaoYiSaoActivity.this.finish();
         }
-        SaoYiSaoActivity.this.finish();
+
     }
 
     private void playBeepSoundAndVibrate() {
