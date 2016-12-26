@@ -28,7 +28,10 @@ public class UploadFileRequestBody extends RequestBody {
         this.mRequestBody = RequestBody.create(MediaType.parse("video/*"), file) ;
         this.mProgressListener = progressListener ;
     }
-
+    public UploadFileRequestBody(File file , ProgressListener progressListener,int pic) {
+        this.mRequestBody = RequestBody.create(MediaType.parse("image/*"), file) ;
+        this.mProgressListener = progressListener ;
+    }
 
     public UploadFileRequestBody(RequestBody requestBody, ProgressListener progressListener) {
         this.mRequestBody = requestBody;

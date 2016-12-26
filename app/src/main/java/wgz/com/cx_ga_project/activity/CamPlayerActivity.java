@@ -136,7 +136,9 @@ public class CamPlayerActivity extends BaseActivity implements KeepaliveService.
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 */
         Intent i = getIntent();
-        mCameraCode = i.getStringExtra("camid");
+       // mCameraCode = i.getStringExtra("camid");
+       mCameraCode = "53230101001130000059_1";//内网摄像头测试id
+       // mCameraCode = "67853222381325420569_1";//测试账户视像头id
         LogUtil.d("mCameraCode : " + mCameraCode);
         camid.setText(mCameraCode);
 
@@ -165,12 +167,7 @@ public class CamPlayerActivity extends BaseActivity implements KeepaliveService.
                 .subscribe(aVoid -> {
                     ptzCommand(mCameraCode, PtzCommandParam.PTZ_CMD.ALLSTOP);
                 });
-        RxView.clicks(fab2).throttleFirst(300, TimeUnit.MILLISECONDS)
-                .subscribe(aVoid -> {
-                    //queryCameraRes();
-                    startLive(mCameraCode);
-                    //queryCameraRes();
-                });
+
 
 
         //初始化一个Player对象
@@ -194,7 +191,12 @@ public class CamPlayerActivity extends BaseActivity implements KeepaliveService.
         params.setServer("53.20.31.5");
         params.setPort(52060);
         params.setUserName("loadmin");
-        params.setPassword("zhxts110");
+        params.setPassword("Cxsgaj123456");
+
+        /*params.setServer("60.12.249.169");
+        params.setPort(52060);
+        params.setUserName("test10");
+        params.setPassword("123abc");*/
 
         //调用登录接口
         ServiceManager.login(params, CamPlayerActivity.this);
@@ -251,7 +253,7 @@ public class CamPlayerActivity extends BaseActivity implements KeepaliveService.
             //SomeUtil.showSnackBar(rootview, "连接成功！可以查看摄像头");
             LogUtil.d("连接成功！可以查看摄像头");
             camid.setText("连接成功！可以查看摄像头 camid:" +mCameraCode);
-            startLive(mCameraCode);
+           // startLive(mCameraCode);
         } else {
             LogUtil.d("连接失败");
             camid.setText(errorCode+"连接失败 "+errorDesc+" camid:" +mCameraCode);
@@ -262,7 +264,7 @@ public class CamPlayerActivity extends BaseActivity implements KeepaliveService.
     }
 
 
-    @OnClick({R.id.fab_up, R.id.fab_left, R.id.fab_right, R.id.fab_down, R.id.id_replay_starttime, R.id.id_replay_endtime})
+    @OnClick({R.id.fab2,R.id.fab_up, R.id.fab_left, R.id.fab_right, R.id.fab_down, R.id.id_replay_starttime, R.id.id_replay_endtime})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.fab_up:
@@ -286,6 +288,10 @@ public class CamPlayerActivity extends BaseActivity implements KeepaliveService.
             case R.id.id_replay_endtime:
                 pvTime.show();
                 flag = 2;
+                break;
+            case R.id.fab2:
+                 startLive(mCameraCode);
+                LogUtil.d("start~!!");
                 break;
 
         }
@@ -331,7 +337,7 @@ public class CamPlayerActivity extends BaseActivity implements KeepaliveService.
             //启动实况结果监听
             OnStartLiveListener listener = (errorCode, errorDesc, playSession) -> {
 
-                if (errorCode == 0) {
+
                     //将播放回话设给Player
                     mPlayer.setPlaySession(playSession);
 
@@ -340,31 +346,30 @@ public class CamPlayerActivity extends BaseActivity implements KeepaliveService.
                         mRecvStreamThread.interrupt();
                         mRecvStreamThread = null;
                     }
-
+                    LogUtil.d("1");
                     //启动播放
                     mPlayer.AVStartPlay();
-
+                LogUtil.d("2");
                     mRecvStreamThread = new RecvStreamThread(mPlayer, playSession);
                     mRecvStreamThread.start();
-                } else {
-                    //Toast.makeText(PtzActivity.this,errorDesc,Toast.LENGTH_SHORT).show();
-                }
+
 
             };
-
+            LogUtil.d("3");
             //设置实况的参数
             StartLiveParam param = new StartLiveParam();
             param.setUseSecondStream(true);
             param.setCameraCode(cameraCode);
-            param.setResolution(2);     //4CIF分辨率
-            param.setFramerate(15);
+            param.setResolution(2);
+            param.setFramerate(12);
             param.setBitrate(32 * 8);
 
             //启动实况接口调用
             ServiceManager.startLive(param, listener);
-
+            LogUtil.d("4");
         } catch (Exception ex) {
             ex.printStackTrace();
+            LogUtil.d("5");
         }
     }
 
@@ -574,10 +579,10 @@ public class CamPlayerActivity extends BaseActivity implements KeepaliveService.
     public void onKeepaliveFailed() {
 
         mRequireLogout = true;
-        Intent intent = new Intent();
-        intent.setClass(CamPlayerActivity.this, LoginActivity.class);
-        startActivity(intent);
+       // Intent intent = new Intent();
+       // intent.setClass(CamPlayerActivity.this, LoginActivity.class);
+       // startActivity(intent);
         Toast.makeText(CamPlayerActivity.this, "保活失败，已退出", Toast.LENGTH_LONG).show();
-        finish();
+       // finish();
     }
 }

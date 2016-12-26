@@ -444,9 +444,9 @@ public class HomeActivity extends AppCompatActivity
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
 
-            //startActivity(new Intent(HomeActivity.this, CamMapHtmlActivity.class));
+            startActivity(new Intent(HomeActivity.this, CamPlayerActivity.class));
             //startActivity(new Intent(HomeActivity.this, LoginActivity.class));
-           startActivity(new Intent(HomeActivity.this, NewMsgActivity.class));
+           //startActivity(new Intent(HomeActivity.this, NewMsgActivity.class));
 
 
             return true;

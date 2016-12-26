@@ -392,9 +392,15 @@ public class DatrixUtil {
 
         if (type == UPLOADPIC) {
             File file = new File(path);
+            UploadFileRequestBody fileRequestBody = new UploadFileRequestBody(file, new DefaultProgressListener(0, 1),1);
+
+            //piecebodyMap.put("file" + currentPieces + "\" ; filename=\"" + file.getName(), RequestBody.create(MediaType.parse("video/*"), file));
 
 
-            bodyMap.put("file" + 1 + "\" ; filename=\"" + file.getName(), RequestBody.create(MediaType.parse("image/*"), file));
+            bodyMap.put("file" + 1 + "\" ; filename=\"" + file.getName(), fileRequestBody);
+
+
+            //bodyMap.put("file" + 1 + "\" ; filename=\"" + file.getName(), RequestBody.create(MediaType.parse("image/*"), file));
             filesize = (int) file.length();
             Subscription i = app.apiService.detrixWrite(fileid, "0", filesize + "", bodyMap)
                     .subscribeOn(Schedulers.io())
