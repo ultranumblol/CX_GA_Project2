@@ -157,7 +157,7 @@ public class CamMapHtmlActivity extends BaseActivity {
             @JavascriptInterface
             public void goPlay(String camID) {
                 LogUtil.d("camid : "+camID);
-                startActivity(new Intent(CamMapHtmlActivity.this, CamPlayerActivity.class).putExtra("camid", camID));
+                startActivity(new Intent(CamMapHtmlActivity.this, TestPlayerActivity.class).putExtra("camid", camID));
 
             }
 

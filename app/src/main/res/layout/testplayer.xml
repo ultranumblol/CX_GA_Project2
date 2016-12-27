@@ -1,0 +1,317 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:keepScreenOn="true"
+    android:layout_height="match_parent">
+
+
+
+    <SurfaceView
+        android:id="@+id/surface_view"
+        android:layout_width="match_parent"
+        android:layout_height="270dp" />
+    <TextView
+        android:id="@+id/tips"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/surface_view"
+        android:padding="4dp"
+        android:textColor="@color/gray" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="left|bottom"
+        android:orientation="vertical"
+        android:visibility="gone"
+        android:weightSum="1">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:background="#999999"
+            android:orientation="horizontal"
+            android:padding="2dp">
+
+            <Button
+                android:id="@+id/btn_query_res"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="1dp"
+
+                android:padding="4dp"
+                android:text="查询资源"
+                android:textColor="#EEEE" />
+
+            <EditText
+                android:id="@+id/edit_camera_code"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="1dp"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:hint="摄像机编码"
+                android:padding="4dp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:background="#999999"
+            android:orientation="horizontal"
+            android:padding="2dp">
+
+            <Button
+                android:id="@+id/btn_start_live"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="1dp"
+
+                android:padding="4dp"
+                android:text="启动实况"
+                android:textColor="#EEEE" />
+
+            <Button
+                android:id="@+id/btn_stop_live"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="1dp"
+
+                android:padding="4dp"
+                android:text="停止实况"
+                android:textColor="#EEEE" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:background="#999999"
+            android:orientation="vertical"
+            android:padding="2dp">
+
+            <EditText
+                android:id="@+id/edit_replay_begin_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="1dp"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:hint="起始时间"
+                android:padding="4dp" />
+
+            <EditText
+                android:id="@+id/edit_replay_end_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="1dp"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:hint="结束时间"
+                android:padding="4dp" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/btn_start_replay"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="1dp"
+
+                    android:padding="4dp"
+                    android:text="启动回放"
+                    android:textColor="#EEEE" />
+
+                <Button
+                    android:id="@+id/btn_stop_replay"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="1dp"
+
+                    android:padding="4dp"
+                    android:text="停止回放"
+                    android:textColor="#EEEE" />
+
+                <Button
+                    android:id="@+id/btn_drag_replay"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="1dp"
+
+                    android:padding="4dp"
+                    android:text="拖动回放"
+                    android:textColor="#EEEE" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:background="#999999"
+            android:orientation="horizontal"
+            android:padding="2dp">
+
+            <Button
+                android:id="@+id/btn_mute"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="1dp"
+
+                android:padding="4dp"
+                android:text="静音切换"
+                android:textColor="#EEEE" />
+
+            <Button
+                android:id="@+id/btn_snatch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="1dp"
+
+                android:padding="4dp"
+                android:text="图像抓拍"
+                android:textColor="#EEEE" />
+
+            <Button
+                android:id="@+id/btn_record"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="1dp"
+
+                android:padding="4dp"
+                android:text="本地录像"
+                android:textColor="#EEEE" />
+
+
+            <Button
+                android:id="@+id/btn_stop_record"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="1dp"
+
+                android:padding="4dp"
+                android:text="停止本地录像"
+                android:textColor="#EEEE" />
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:background="#999999"
+            android:orientation="horizontal"
+            android:padding="2dp">
+
+            <Button
+                android:id="@+id/btn_get_alarm"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="1dp"
+
+                android:padding="4dp"
+                android:text="查询告警"
+                android:textColor="#EEEE" />
+
+            <Button
+                android:id="@+id/btn_push_alarm"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="1dp"
+
+                android:padding="4dp"
+                android:text="触发报警"
+                android:textColor="#EEEE" />
+
+
+        </LinearLayout>
+
+
+        <Button
+            android:id="@+id/ptzControl"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:text="云台控制演示"
+            android:textColor="#EEE"
+            android:textSize="16sp" />
+
+    </LinearLayout>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+
+
+        app:backgroundTint="@color/colorPrimary"
+        app:srcCompat="@drawable/ic_play_arrow_white_36dp" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        app:srcCompat="@drawable/ic_keyboard_arrow_down_white_48dp"
+        android:id="@+id/fab_down"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+
+        android:layout_marginRight="60dp"
+        app:backgroundTint="@color/colorPrimary"
+
+        app:fabSize="mini"/>
+
+    <android.support.design.widget.FloatingActionButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        app:srcCompat="@drawable/ic_keyboard_arrow_right_white_48dp"
+        android:id="@+id/fab_right"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="18dp"
+
+
+        app:backgroundTint="@color/colorPrimary"
+        app:fabSize="mini"/>
+    <android.support.design.widget.FloatingActionButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        app:srcCompat="@drawable/ic_keyboard_arrow_up_white_48dp"
+        android:id="@+id/fab_up"
+
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="42dp"
+        android:layout_marginRight="60dp"
+        android:layout_alignParentRight="true"
+
+        app:backgroundTint="@color/colorPrimary"
+
+        app:fabSize="mini"/>
+    <android.support.design.widget.FloatingActionButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        app:srcCompat="@drawable/ic_keyboard_arrow_left_white_48dp"
+        android:id="@+id/fab_left"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="102dp"
+
+
+
+        app:backgroundTint="@color/colorPrimary"
+        app:fabSize="mini"/>
+
+
+
+
+</RelativeLayout>

@@ -315,7 +315,10 @@
 
         <activity android:name="me.iwf.photopicker.PhotoPagerActivity"
             android:theme="@style/Theme.AppCompat.NoActionBar"/>
-
+        <activity
+            android:name=".activity.TestPlayerActivity"
+            >
+        </activity>
     </application>
 
 </manifest>

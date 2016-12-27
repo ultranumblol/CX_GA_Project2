@@ -137,7 +137,7 @@ public class CamPlayerActivity extends BaseActivity implements KeepaliveService.
 */
         Intent i = getIntent();
        // mCameraCode = i.getStringExtra("camid");
-       mCameraCode = "53230101001130000059_1";//内网摄像头测试id
+       mCameraCode = "53230101001130039082_1";//内网摄像头测试id
        // mCameraCode = "67853222381325420569_1";//测试账户视像头id
         LogUtil.d("mCameraCode : " + mCameraCode);
         camid.setText(mCameraCode);
@@ -297,12 +297,6 @@ public class CamPlayerActivity extends BaseActivity implements KeepaliveService.
         }
     }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        // TODO: add setContentView(...) invocation
-        ButterKnife.bind(this);
-    }
 
 
     class MySurfaceCallback implements SurfaceHolder.Callback {
