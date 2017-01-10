@@ -101,6 +101,30 @@ public class JQDetil {
 
         private String talktime;
 
+        @SerializedName("jqnature1")
+
+        private String jqnature1;
+
+        @SerializedName("jqtype1")
+
+        private String jqtype1;
+
+        public String getJqnature1() {
+            return jqnature1;
+        }
+
+        public void setJqnature1(String jqnature1) {
+            this.jqnature1 = jqnature1;
+        }
+
+        public String getJqtype1() {
+            return jqtype1;
+        }
+
+        public void setJqtype1(String jqtype1) {
+            this.jqtype1 = jqtype1;
+        }
+
         /**
          * @return The briefcase
          */

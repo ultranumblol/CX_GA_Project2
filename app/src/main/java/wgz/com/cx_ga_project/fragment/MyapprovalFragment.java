@@ -54,48 +54,42 @@ public class MyapprovalFragment extends BaseFragment implements SwipeRefreshLayo
         recyclerview.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerview.setAdapter(adapter = new ApplyAdapter(getActivity()));
         recyclerview.setRefreshListener(this);
-        adapter.setOnItemClickListener(new MyRecyclerArrayAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(int position, View itemView) {
-                ImageView im_face = (ImageView) itemView.findViewById(R.id.user_face);
-                Intent intent = new Intent();
-                intent.setClass(getActivity(), ApprovalDetilActivity.class);
-                Bundle bundle = new Bundle();
-                bundle.putString("id",adapter.getItem(position).getId());
-                bundle.putString("poiceid",adapter.getItem(position).getPoliceid());
-                bundle.putString("poicename",adapter.getItem(position).getPolicename());
-                bundle.putString("applytime",adapter.getItem(position).getApplytime());
-                bundle.putString("starttime",adapter.getItem(position).getStart());
-                bundle.putString("endtime",adapter.getItem(position).getEnd());
-                bundle.putString("days",adapter.getItem(position).getDays()+"");
-                bundle.putString("content",adapter.getItem(position).getContent());
-                bundle.putString("status",adapter.getItem(position).getStatus());
-                bundle.putString("upperid",adapter.getItem(position).getUpperid());
-                bundle.putString("reasontype",adapter.getItem(position).getReasontype());
-                bundle.putString("head","http://"+adapter.getItem(position).getUrl());
-                intent.putExtra("detil",bundle);
-                //intent.putExtra("type","qingjia");
+        adapter.setOnItemClickListener((position, itemView) -> {
+            ImageView im_face = (ImageView) itemView.findViewById(R.id.user_face);
+            Intent intent = new Intent();
+            intent.setClass(getActivity(), ApprovalDetilActivity.class);
+            Bundle bundle = new Bundle();
+            bundle.putString("id",adapter.getItem(position).getId());
+            bundle.putString("poiceid",adapter.getItem(position).getPoliceid());
+            bundle.putString("poicename",adapter.getItem(position).getPolicename());
+            bundle.putString("applytime",adapter.getItem(position).getApplytime());
+            bundle.putString("starttime",adapter.getItem(position).getStart());
+            bundle.putString("endtime",adapter.getItem(position).getEnd());
+            bundle.putString("days",adapter.getItem(position).getDays()+"");
+            bundle.putString("content",adapter.getItem(position).getContent());
+            bundle.putString("status",adapter.getItem(position).getStatus());
+            bundle.putString("upperid",adapter.getItem(position).getUpperid());
+            bundle.putString("reasontype",adapter.getItem(position).getReasontype());
+            bundle.putString("head","http://"+adapter.getItem(position).getUrl());
+            intent.putExtra("detil",bundle);
+            //intent.putExtra("type","qingjia");
 
 
 
-                intent.putExtra("type",adapter.getItem(position).getType());
-                intent.putExtra("ifhis",false);
-                ActivityCompat.startActivityForResult(getActivity(),
-                        intent,1002,ActivityOptionsCompat
-                                .makeSceneTransitionAnimation(getActivity(),
-                                        im_face, "share_img").toBundle());
-            }
+            intent.putExtra("type",adapter.getItem(position).getType());
+            intent.putExtra("ifhis",false);
+            ActivityCompat.startActivityForResult(getActivity(),
+                    intent,1002,ActivityOptionsCompat
+                            .makeSceneTransitionAnimation(getActivity(),
+                                    im_face, "share_img").toBundle());
         });
 
         //adapter.addAll(initData());
         initdata();
         rxSubscription = RxBus.getDefault().toObservable(String.class)
-                .subscribe(new Action1<String>() {
-                    @Override
-                    public void call(String s) {
-                        if (s.equals("myspflush"))
-                            onRefresh();
-                    }
+                .subscribe(s -> {
+                    if (s.equals("myspflush"))
+                        onRefresh();
                 });
 
     }
@@ -104,12 +98,9 @@ public class MyapprovalFragment extends BaseFragment implements SwipeRefreshLayo
         app.apiService.getBeanData("getDepLeaveOverApply", SomeUtil.getUserId())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .map(new Func1<Apply, List<Apply.Result>>() {
-                    @Override
-                    public List<Apply.Result> call(Apply apply) {
-                       // LogUtil.d("approval map_result::"+apply.getResult().toString());
-                        return apply.getResult();
-                    }
+                .map(apply -> {
+                   // LogUtil.d("approval map_result::"+apply.getResult().toString());
+                    return apply.getResult();
                 })
                 .flatMap(new Func1<List<Apply.Result>, Observable<Apply.Result>>() {
                     @Override
@@ -118,19 +109,11 @@ public class MyapprovalFragment extends BaseFragment implements SwipeRefreshLayo
                         return Observable.from(results);
                     }
                 })
-                .filter(new Func1<Apply.Result, Boolean>() {
-                    @Override
-                    public Boolean call(Apply.Result result) {
-                        return result.getStatus().equals(UNAPPROVAL)?true:false;
-                    }
-                }).
-                map(new Func1<Apply.Result, List<Apply.Result>>() {
-                    @Override
-                    public List<Apply.Result> call(Apply.Result result) {
-                        list.add(result);
-                        //LogUtil.d("approval result list :"+list.toString());
-                        return list;
-                    }
+                .filter(result -> result.getStatus().equals(UNAPPROVAL)?true:false).
+                map(result -> {
+                    list.add(result);
+                    //LogUtil.d("approval result list :"+list.toString());
+                    return list;
                 }).subscribe(new Observer<List<Apply.Result>>() {
             @Override
             public void onCompleted() {
@@ -156,21 +139,22 @@ public class MyapprovalFragment extends BaseFragment implements SwipeRefreshLayo
         return R.layout.fragment_my_approval;
     }
 
+
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         ButterKnife.unbind(this);
+        if (!rxSubscription.isUnsubscribed()) {
+            rxSubscription.unsubscribe();
+        }
     }
 
     @Override
     public void onRefresh() {
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                list.clear();
-                adapter.clear();
-                initdata();
-            }
+        handler.postDelayed(() -> {
+            list.clear();
+            adapter.clear();
+            initdata();
         }, 2000);
     }
 

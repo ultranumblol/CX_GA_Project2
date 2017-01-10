@@ -27,11 +27,20 @@ public class Constant {
     public static final String USERHEADURL = "http://" + SPUtils.get(app.getApp().getApplicationContext(), Constant.USERHEAD, "");
     public static final String LONGITUDE = "longitude";
     public static final String LATITUDE = "latitude";
-    public static final String DATRIXUID ="?uid=10098";
+    public static final String DATRIXUID ="?uid=10013&publicdirid=df8aca42-6fee-4c5e-9236-1f8c9e252a6c";
 
     public static final String GET_USER_HEAD = "getAvantar";
     public static final String CHECK_ONESSUMMARY_BYDAYS = "checkOnceSummaryBydays";
     public static final String CHECK_ONESSUMMARY = "checkOnceSummary";
     public static final String CHECK_ONESSUMMARYPIC_BYDAYS = "checkOnceSummaryPicBydays";
     public static final String UPLOAD_PICS = "saveAppPics";
+    public static final String ISLEADER = "false";
+    public static final String HASUPPER = "ture";
+    public static final String JQID = "jqid";
+    public static final String TASKID = "taskid";
+    public static final String DATAFUSION = "datafusion";
+    public static final String DEPARTNAME = "departname";
+    public static final String DEPARTID = "departID";
+
+
 }

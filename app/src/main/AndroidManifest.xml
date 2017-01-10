@@ -11,6 +11,7 @@
     <!-- 这个权限用于访问GPS定位 -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <!-- 用于访问wifi网络信息，wifi信息会用于进行网络定位 -->
+    <uses-permission android:name="android.permission.ACCESS_MOCK_LOCATION"/>
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <!-- 获取运营商信息，用于支持提供运营商信息相关的接口 -->
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -52,7 +53,8 @@
         <service android:name="com.uniview.airimos.service.KeepaliveService" />
         <service android:name=".service.GetNewMsgService" />
         <service android:name=".service.NewJQMsgPush" />
-
+        <service android:name=".service.GetGPSService2"/>
+        <service android:name=".service.GetGPSService3"/>
         <meta-data
             android:name="com.baidu.lbsapi.API_KEY"
             android:value="FZ4918PmSrrxkDRFBhaB0mw8NfRQnw2P" />
@@ -68,6 +70,7 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
         </activity>
         <activity
             android:name=".activity.SchedulingActivity"
@@ -89,8 +92,8 @@
         <activity
             android:name=".activity.LoginActivity"
             android:label="登录"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".base.BaseActivity"
             android:screenOrientation="portrait"
@@ -157,12 +160,12 @@
         <service android:name=".service.GetGPSService" />
 
         <activity
-            android:name=".activity.PickPhotoActivity"
-            android:label="@string/title_activity_pick_photo"
+            android:name=".activity.AddJQActivity"
+            android:label="@string/title_activity_add_jq"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".activity.AddJQActivity"
+            android:name=".activity.AddJQPicActivity"
             android:label="@string/title_activity_add_jq"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
@@ -175,6 +178,7 @@
             android:name=".activity.NewFightActivity"
             android:label="@string/title_activity_new_fight"
             android:screenOrientation="portrait"
+            android:launchMode="standard"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activity.FullscreenActivity"
@@ -215,7 +219,7 @@
         <activity
             android:name=".activity.CamPlayerActivity"
             android:label="@string/title_activity_cam_player"
-            android:screenOrientation="portrait"
+
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".activity.CamLoginActivity" />
         <activity
@@ -260,9 +264,61 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
+            android:name=".activity.ShowBigImage2"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
             android:name=".activity.SICActivity"
             android:label="@string/title_activity_sic"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activity.SICTypeActivity"
+            android:label="@string/title_activity_sicinput"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activity.SICInputActivity"
+            android:label="@string/title_activity_sicinput"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activity.WorkLogCloudActivity"
+            android:label="@string/title_activity_work_log_cloud"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activity.TimeBankActivity"
+            android:label="@string/title_activity_time_bank"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activity.SICInputLogActivity"
+            android:label="@string/title_activity_sicinput_log"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activity.SICLogDetilActivity"
+            android:label="@string/title_activity_siclog_detil"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activity.WorkCloudListActivity"
+            android:label="@string/title_activity_work_cloud_list"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".activity.OnesLogActivity" />
+        <activity android:name=".activity.SecondCodeShowActivity"
+            android:launchMode="singleTask"
+            ></activity>
+        <activity android:name="me.iwf.photopicker.PhotoPickerActivity"
+            android:theme="@style/Theme.AppCompat.NoActionBar"
+            />
+
+        <activity android:name="me.iwf.photopicker.PhotoPagerActivity"
+            android:theme="@style/Theme.AppCompat.NoActionBar"/>
+        <activity
+            android:name=".activity.TestPlayerActivity"
+            >
+        </activity>
     </application>
 
 </manifest>

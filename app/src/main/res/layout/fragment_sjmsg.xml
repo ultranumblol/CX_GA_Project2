@@ -1,19 +1,60 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
-
-    <com.jude.easyrecyclerview.EasyRecyclerView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:scrollbarStyle="insideOverlay"
-        app:layout_progress="@layout/view_progress"
-        app:layout_empty="@layout/view_empty"
-        android:id="@+id/id_sjmsgfragment"
+        android:orientation="vertical"
         >
+        <com.jude.easyrecyclerview.EasyRecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            app:scrollbarStyle="insideOverlay"
+            app:layout_progress="@layout/view_progress"
+            app:layout_empty="@layout/view_empty"
+            android:id="@+id/id_sjmsgfragment"
+            />
+
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="120dp"
+            app:contentPadding="2dp"
+            >
+            <com.jude.easyrecyclerview.EasyRecyclerView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="4dp"
+                app:scrollbarStyle="insideOverlay"
+                android:id="@+id/id_sjmsgpic_rv"
+                />
+
+        </android.support.v7.widget.CardView>
+
+      <android.support.v7.widget.CardView
+          android:layout_width="match_parent"
+          android:layout_height="120dp"
+
+          app:contentPadding="2dp"
+          >
+          <com.jude.easyrecyclerview.EasyRecyclerView
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:layout_marginTop="2dp"
+              android:layout_marginBottom="4dp"
+              app:scrollbarStyle="insideOverlay"
+              android:id="@+id/id_sjmsgvideo_rv"
+              />
+      </android.support.v7.widget.CardView>
 
 
-    </com.jude.easyrecyclerview.EasyRecyclerView>
-</LinearLayout>
+    </LinearLayout>
+
+
+
+
+    <include layout="@layout/fab_btns_addjq"></include>
+</RelativeLayout>

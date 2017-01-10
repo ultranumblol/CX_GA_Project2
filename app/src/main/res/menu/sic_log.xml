@@ -4,6 +4,6 @@
     <item
         android:id="@+id/id_sic_log"
         android:orderInCategory="100"
-        android:title="采集日志"
+        android:title="采集历史"
         app:showAsAction="never" />
 </menu>

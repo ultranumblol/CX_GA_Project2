@@ -24,6 +24,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="李四"
+                android:id="@+id/sjmsg_name"
                 android:layout_marginLeft="12dp"
 
                 />
@@ -38,6 +39,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="指挥中心"
+                android:id="@+id/sjmsg_depart"
                 android:layout_marginLeft="12dp"
                 />
 
@@ -53,6 +55,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="是的范德萨仿盛大范德萨大师傅福建代理商就快乐的撒娇就废了阿三放假了艾弗杰阿凡达的顶顶顶顶"
+                android:id="@+id/sjmsg_txt"
                 />
 
         </LinearLayout>
@@ -73,6 +76,7 @@
                 android:layout_height="wrap_content"
                 android:text="2016年1月2日 09:22:22"
                 android:layout_marginLeft="12dp"
+                android:id="@+id/sjmsg_time"
                 />
 
 

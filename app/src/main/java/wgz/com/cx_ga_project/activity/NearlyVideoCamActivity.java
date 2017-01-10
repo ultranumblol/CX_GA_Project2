@@ -59,15 +59,12 @@ public class NearlyVideoCamActivity extends BaseActivity {
 
 
         });
-        webView.setOnKeyListener(new View.OnKeyListener() {
-            @Override
-            public boolean onKey(View v, int keyCode, KeyEvent event) {
-                if (webView.canGoBack() && event.getAction() == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_BACK) {
-                    webView.goBack();
-                    return true;
-                }
-                return false;
+        webView.setOnKeyListener((v, keyCode, event) -> {
+            if (webView.canGoBack() && event.getAction() == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_BACK) {
+                webView.goBack();
+                return true;
             }
+            return false;
         });
         webView.loadUrl("http://192.168.1.100/nearbyresources?flag_menu=ZHDD-jqcl");
 

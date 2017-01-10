@@ -59,7 +59,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="18dp"
-                    android:text="邦德"
+                    android:text="---"
                     android:textColor="@color/blueviolet"
                     android:layout_marginTop="8dp"
                     android:layout_marginLeft="14dp"
@@ -69,11 +69,13 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="部门:特工"
+                    android:text="---"
+                    android:id="@+id/jingjia_depart"
                     android:layout_marginLeft="14dp"
                     android:layout_toRightOf="@id/userPic"
                     android:layout_marginTop="8dp"
                     android:layout_below="@id/userName"
+                    android:visibility="invisible"
 
                     />
             </RelativeLayout>
@@ -144,39 +146,39 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
                         android:id="@+id/detil_leave_committime"
-                        android:text="2016-07-80 20:14" />
+                        android:text="---" />
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
-                        android:text="2016-07-80 20:14"
+                        android:text="---"
                         android:id="@+id/detil_leave_starttime"
                         />
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="2016-07-80 20:14"
+                        android:text="---"
                         android:layout_marginTop="8dp"
                         android:id="@+id/detil_leave_endtime"
                         />
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="2天"
+                        android:text="@string/days"
                         android:id="@+id/detil_leave_dayscount"
                         android:layout_marginTop="8dp"
                         />
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="事假"
+                        android:text="---"
                         android:id="@+id/detil_leave_type"
                         android:layout_marginTop="8dp"
                         />
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="回老家"
+                        android:text="---"
                         android:layout_marginTop="8dp"
                         android:id="@+id/detil_leave_reason"
                         android:layout_marginBottom="8dp"
@@ -200,7 +202,7 @@
 
         <TextView
             android:layout_width="wrap_content"
-            android:text="已审核"
+            android:text="---"
             android:textSize="18dp"
             android:layout_gravity="right"
             android:layout_marginRight="24dp"
@@ -274,7 +276,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="18dp"
-            android:text="邦德"
+            android:text="---"
             android:textColor="@color/blueviolet"
             android:layout_marginTop="8dp"
             android:layout_marginLeft="14dp"
@@ -284,7 +286,9 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="部门:特工部"
+            android:text="---"
+            android:visibility="invisible"
+            android:id="@+id/jiaban_depart"
             android:layout_marginLeft="14dp"
             android:layout_toRightOf="@id/userPic_jiaban"
             android:layout_marginTop="8dp"

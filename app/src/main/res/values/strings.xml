@@ -8,7 +8,7 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="title_activity_add_work_log">AddWorkLogActivity</string>
     <string name="title_activity_login">Sign in</string>
-
+    <string name="days">%1$s天</string>
     <!-- Strings related to login -->
     <string name="prompt_email">Email</string>
     <string name="prompt_password">Password (optional)</string>
@@ -62,5 +62,11 @@
     <string name="title_activity_up_load_sjphone">UpLoadSJPhoneActivity</string>
     <string name="title_activity_cam_map_html">CamMapHtmlActivity</string>
     <string name="title_activity_sic">SICActivity</string>
+    <string name="title_activity_sicinput">SICInputActivity</string>
+    <string name="title_activity_work_log_cloud">WorkLogCloudActivity</string>
+    <string name="title_activity_time_bank">TimeBankActivity</string>
+    <string name="title_activity_sicinput_log">SICInputLogActivity</string>
+    <string name="title_activity_siclog_detil">SICLogDetilActivity</string>
+    <string name="title_activity_work_cloud_list">WorkCloudListActivity</string>
 
 </resources>

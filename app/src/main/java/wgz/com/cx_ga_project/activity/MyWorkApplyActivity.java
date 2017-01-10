@@ -64,18 +64,15 @@ public class MyWorkApplyActivity extends BaseActivity {
         myappleVp.setAdapter(new MyFragmentPagerAdapter(getSupportFragmentManager(), fragments, titles));
         myappleVp.setCurrentItem(0);
         tabMyapply.setupWithViewPager(myappleVp);
-        FabPlus.setOnItemClickListener(new FloatingActionButtonPlus.OnItemClickListener() {
-            @Override
-            public void onItemClick(FabTagLayout tagView, int position) {
-                int id = tagView.getId();
-                switch (id){
-                    case R.id.fabtag_addJiaban:
-                        startActivityForResult(new Intent(MyWorkApplyActivity.this,AskForJiabanActivity.class),1001);
-                        break;
-                    case R.id.fabtag_addQj:
-                        startActivityForResult(new Intent(MyWorkApplyActivity.this,AskForLeaveActivity.class),1001);
-                        break;
-                }
+        FabPlus.setOnItemClickListener((tagView, position) -> {
+            int id = tagView.getId();
+            switch (id){
+                case R.id.fabtag_addJiaban:
+                    startActivityForResult(new Intent(MyWorkApplyActivity.this,AskForJiabanActivity.class),1001);
+                    break;
+                case R.id.fabtag_addQj:
+                    startActivityForResult(new Intent(MyWorkApplyActivity.this,AskForLeaveActivity.class),1001);
+                    break;
             }
         });
 

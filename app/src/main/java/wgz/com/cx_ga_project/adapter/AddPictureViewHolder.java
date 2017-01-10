@@ -14,7 +14,7 @@ import wgz.com.cx_ga_project.R;
 import wgz.com.cx_ga_project.activity.ShowBigImage;
 
 /**
- * Created by wgz on 2016/8/16.
+ * Created by wgz
  */
 
 public class AddPictureViewHolder extends BaseViewHolder<String> {
@@ -23,7 +23,7 @@ public class AddPictureViewHolder extends BaseViewHolder<String> {
 
     public AddPictureViewHolder(ViewGroup parent) {
         super(parent, R.layout.item_addpic);
-        imageView = (ImageView) $(R.id.addpic);
+        imageView =  $(R.id.addpic);
     }
 
     @Override
@@ -37,24 +37,38 @@ public class AddPictureViewHolder extends BaseViewHolder<String> {
                     .into(imageView);
         }else{
 
-            imageView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    getContext().startActivity(new Intent(getContext(), ShowBigImage.class).putExtra("url",data));
-                }
-            });
+            if (data.equals("testvideo")){
+                Glide.with(getContext())
+                        .load(R.drawable.ic_local_movies_light_blue_a700_48dp)
+                        .thumbnail(0.7f)
+                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+                        .centerCrop()
+                        .dontAnimate()
+                        .placeholder(R.drawable.ic_photo_grey_400_48dp)
+                        .error(R.drawable.ic_broken_image_grey_400_48dp)
+                        .override(80,80)
+                        .into(imageView);
 
-            Glide.with(getContext())
-                    .load(data)
-                    .thumbnail(0.7f)
-                    .diskCacheStrategy(DiskCacheStrategy.ALL)
-                    .centerCrop()
+            }else{
+                imageView.setOnClickListener(v ->
+                        getContext().startActivity(new Intent(getContext()
+                                , ShowBigImage.class).putExtra("url",data)));
 
-                    .dontAnimate()
-                    .placeholder(R.drawable.ic_photo_grey_400_48dp)
-                    .error(R.drawable.ic_broken_image_grey_400_48dp)
-                    .override(80,80)
-                    .into(imageView);
+                Glide.with(getContext())
+                        .load(data)
+                        .thumbnail(0.7f)
+                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+                        .centerCrop()
+
+                        .dontAnimate()
+                        .placeholder(R.drawable.ic_photo_grey_400_48dp)
+                        .error(R.drawable.ic_broken_image_grey_400_48dp)
+                        .override(80,80)
+                        .into(imageView);
+
+            }
+
+
         }
 
         //imageView.setImageResource(R.drawable.ic_add_box_red_400_36dp);

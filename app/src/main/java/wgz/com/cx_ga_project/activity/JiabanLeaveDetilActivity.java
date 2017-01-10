@@ -86,7 +86,7 @@ public class JiabanLeaveDetilActivity extends BaseActivity {
                 ViewCompat.setTransitionName(userPicJiaban, "share_img");
                 jiabanLeaveDetilQingjia.setVisibility(View.GONE);
                 userNameJiaban.setText(bundle.getString("poicename"));
-                SomeUtil.GlidePic(this,userPicJiaban,bundle.getString("head"));
+                SomeUtil.GlidePic(this, userPicJiaban, bundle.getString("head"));
 
                 detilJiabanCommittime.setText(bundle.getString("applytime"));
                 detilJiabanStarttime.setText(bundle.getString("starttime"));
@@ -108,12 +108,15 @@ public class JiabanLeaveDetilActivity extends BaseActivity {
                 ViewCompat.setTransitionName(userPic, "share_img");
                 jiabanLeaveDetilQingjia.setVisibility(View.VISIBLE);
                 userName.setText(bundle.getString("poicename"));
-                SomeUtil.GlidePic(this,userPic,bundle.getString("head"));
+                SomeUtil.GlidePic(this, userPic, bundle.getString("head"));
 
                 detilLeaveCommittime.setText(bundle.getString("applytime"));
                 detilLeaveStarttime.setText(bundle.getString("starttime"));
                 detilLeaveEndtime.setText(bundle.getString("endtime"));
-                detilLeaveDayscount.setText(bundle.getString("days"));
+
+                String days = getResources().getString(R.string.days);
+                String day = String.format(days, bundle.getString("days"));
+                detilLeaveDayscount.setText(day);
                 detilLeaveReason.setText(bundle.getString("content"));
                 detilLeaveType.setText(bundle.getString("reasontype"));
                 detilQingjiaShenherenname.setText(bundle.getString("upperid"));

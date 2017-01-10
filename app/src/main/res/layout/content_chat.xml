@@ -128,8 +128,38 @@
             android:transcriptMode="disabled"
             >
         </com.jude.easyrecyclerview.EasyRecyclerView>
-
+        <android.support.v7.widget.CardView
+            android:layout_width="110dp"
+            android:layout_height="110dp"
+            app:cardCornerRadius="10dp"
+            android:layout_centerInParent="true"
+            android:visibility="gone"
+            android:id="@+id/sicupload_bg"
+            ></android.support.v7.widget.CardView>
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:visibility="gone"
+            android:id="@+id/sicupload_prg"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="00%"
+            android:visibility="gone"
+            android:id="@+id/sicupload_protext"
+            android:layout_centerInParent="true"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="4dp"
+            android:textColor="@color/darkcyan"
+            android:layout_below="@id/sicupload_prg"
+            />
 
 
     </RelativeLayout>
+
+
+
+
 </RelativeLayout>

@@ -1,51 +1,41 @@
 package wgz.com.cx_ga_project.activity;
 
 import android.content.Intent;
-import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 
-import com.bumptech.glide.util.ExceptionCatchingInputStream;
 import com.jakewharton.rxbinding.view.RxView;
 import com.jude.easyrecyclerview.EasyRecyclerView;
 
-import java.io.File;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import okhttp3.MediaType;
-import okhttp3.MultipartBody;
-import okhttp3.RequestBody;
-import okhttp3.ResponseBody;
-import retrofit2.Call;
-import retrofit2.Response;
-import rx.Observer;
+import me.iwf.photopicker.PhotoPicker;
 import rx.Subscriber;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action1;
-import rx.schedulers.Schedulers;
+import rx.Subscription;
+import rx.subscriptions.CompositeSubscription;
 import wgz.com.cx_ga_project.R;
 import wgz.com.cx_ga_project.adapter.AddPictureAdapter;
-import wgz.com.cx_ga_project.adapter.MyRecyclerArrayAdapter;
 import wgz.com.cx_ga_project.app;
 import wgz.com.cx_ga_project.base.BaseActivity;
-import wgz.com.cx_ga_project.entity.DatrixCreat;
-import wgz.com.cx_ga_project.entity.DatrixFinish;
-import wgz.com.cx_ga_project.fragment.PhotoPickerFragment;
+import wgz.com.cx_ga_project.base.RxBus;
+import wgz.com.cx_ga_project.util.DatrixUtil;
+import wgz.com.cx_ga_project.util.RxUtil;
 import wgz.com.cx_ga_project.util.SomeUtil;
 import wgz.datatom.com.utillibrary.util.LogUtil;
-
-import static wgz.com.cx_ga_project.activity.PickPhotoActivity.HTTP_URL;
+import static wgz.com.cx_ga_project.app.DATRIX_BASE_URL;
 
 /**
  * 警情信息回告
@@ -56,7 +46,6 @@ public class AddJQActivity extends BaseActivity {
     LinearLayout rootview;
     @Bind(R.id.uploadPic_fab)
     FloatingActionButton uploadPicFab;
-    private AddPictureAdapter adapter;
     @Bind(R.id.toolbar)
     Toolbar toolbar;
     @Bind(R.id.id_callbackJQ)
@@ -64,7 +53,15 @@ public class AddJQActivity extends BaseActivity {
     @Bind(R.id.addPicRV)
     EasyRecyclerView addPicRV;
     List<String> paths = new ArrayList<>();
+    @Bind(R.id.up_jq_progress)
+    ProgressBar upJqProgress;
+    private AddPictureAdapter adapter;
+
+
     private String fileid = "";
+   // private String datrixUrl = DATRIX_BASE_URL + "preview/getImage?fileid=";
+    private String datrixurl2 = "&token=X7yABwjE20sUJLefATUFqU0iUs8mJPqEJo6iRnV63mI=";
+
     @Override
     public int getLayoutId() {
         return R.layout.activity_addjq;
@@ -77,110 +74,54 @@ public class AddJQActivity extends BaseActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         addPicRV.setLayoutManager(new GridLayoutManager(this, 4));
         addPicRV.setAdapter(adapter = new AddPictureAdapter(this));
-        adapter.addAll(initdata());
-        adapter.setOnItemClickListener(new MyRecyclerArrayAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(int position, View itemView) {
+        //adapter.addAll(initdata());
+        adapter.setOnItemClickListener((position, itemView) -> {
+            if (paths.size()!=4){
                 if (position + 1 == adapter.getCount()) {
                     //PickPhotoActivity.actionStart(AddJQActivity.this, 9, null, null);
-                    Intent intent = new Intent(AddJQActivity.this, PickPhotoActivity.class);
-                    intent.putExtra(PhotoPickerFragment.EXTRA_SELECT_COUNT, 9);
-                    intent.putExtra(PhotoPickerFragment.EXTRA_DEFAULT_SELECTED_LIST, "");
-                    intent.putExtra(HTTP_URL, "");
-                    startActivityForResult(intent, 0);
+
+                    PhotoPicker.builder()
+                            .setPhotoCount(3)
+                            .setShowCamera(true)
+                            .setShowGif(true)
+                            .setPreviewEnabled(true)
+                            .start(this, 333);
+
                 }
+            }else {
+                SomeUtil.showSnackBar(rootview,"已经到达最大选择数量！");
+
             }
+
         });
         RxView.clicks(uploadPicFab).throttleFirst(500, TimeUnit.MILLISECONDS)
-                .subscribe(new Action1<Void>() {
-                    @Override
-                    public void call(Void aVoid) {
-                        // TODO: 2016/9/26 测试datrix 上传图片
-                        // UpLoadPictures(paths);
-                        DatrixCreate();
-                    }
-                });
-
-    }
-    private void uploadpics(List<File> files) {
-        app.apiService.uploadFileWithRequestBody("saveAppPics", SomeUtil.filesToMultipartBody(files))
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<String>() {
-                    @Override
-                    public void onCompleted() {
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        LogUtil.d("upPic_error:" + e.toString());
-                    }
-
-                    @Override
-                    public void onNext(String s) {
-                        LogUtil.d("upPic:" + s);
-                        if (s.contains("\"code\":200")) {
-                            SomeUtil.showSnackBar(rootview, "提交成功！").setCallback(new Snackbar.Callback() {
-                                @Override
-                                public void onDismissed(Snackbar snackbar, int event) {
-                                    finish();
-                                }
-                            });
-                        } else {
-                            SomeUtil.showSnackBar(rootview, "提交失败，请再试！");
-                        }
-                    }
+                .subscribe(aVoid -> {
+                    if (TextUtils.isEmpty(contenttext.getText().toString())){
+                        SomeUtil.showSnackBar(rootview,"请填写回告内容！");
+                    }else
+                    uploadjq();
                 });
 
     }
 
-    private void DatrixCreate() {
-        app.apiService.uploadFileWithRequestBodyTest("testtestwgzwgz","0")
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<DatrixCreat>() {
-                    @Override
-                    public void onCompleted() {
-
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        LogUtil.d("Detrix_upPic_error:" + e.toString());
-                    }
-
-                    @Override
-                    public void onNext(DatrixCreat datrixCreat) {
-                        LogUtil.d("Detrix_upPic_create : code :" +datrixCreat.getCode().toString());
-                        if (datrixCreat.getCode().equals(200)){
-                            LogUtil.d("Detrix_upPic_create :"+datrixCreat.getResult().getFileid());
-                            fileid = datrixCreat.getResult().getFileid();
-                            LogUtil.d("Detrix_upPic_create :" +datrixCreat.getResult().toString());
-                            DatrixDoWrite(paths,fileid);
-
-                        }else{
-
-                            SomeUtil.showSnackBar(rootview,"创建上传图片失败!");
-                        }
-
-                    }
-                });
-    }
-
-    private void DatrixDoWrite(List<String> paths, String fileid) {
-        String size = "";
-        Map<String, RequestBody> bodyMap = new HashMap<>();
-        if (paths.size() > 0) {
-            for (int i = 0; i < 1; i++) {
-                File file = new File(paths.get(i));
-                bodyMap.put("file" + i + "\" ; filename=\"" + file.getName(), RequestBody.create(MediaType.parse("image/*"), file));
-                size = file.length()+"";
-            }
+    private void uploadjq() {
+        SomeUtil.showSnackBar(rootview,"正在上传请稍后！");
+        LogUtil.d("pathsize : " + paths.size());
+        if (paths.size() > 1) {
+            upJqProgress.setVisibility(View.VISIBLE);
+            DatrixUtil datrixUtil = new DatrixUtil(paths, rootview);
+            datrixUtil.DatrixUpLoadPic();
+            datrixUtil.setOnAfterFinish((fileid1, ids) -> addjqAndpic(fileid1, ids));
+        } else {
+            addjq();
         }
-        LogUtil.d("file size : " +size);
-        app.apiService.detrixWrite(fileid,"0",size,bodyMap)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
+
+    }
+
+    private void addjq() {
+        Subscription i  =app.jqAPIService.uploadJqMsg(SomeUtil.getJQId(), SomeUtil.getTASKId(), SomeUtil.getUserId(),
+                contenttext.getText().toString(), SomeUtil.getSysTime(), "", "", "", SomeUtil.getDepartId())
+                .compose(RxUtil.<String>applySchedulers())
                 .subscribe(new Subscriber<String>() {
                     @Override
                     public void onCompleted() {
@@ -189,70 +130,127 @@ public class AddJQActivity extends BaseActivity {
 
                     @Override
                     public void onError(Throwable e) {
-                        LogUtil.d("detrix_write_Response_error :" + e.toString());
+                        upJqProgress.setVisibility(View.GONE);
+                       // SomeUtil.checkHttpException(AddJQActivity.this,e,rootview);
+
                     }
 
                     @Override
                     public void onNext(String s) {
-                        LogUtil.d("detrix_write_Response :" + s);
-                        if (s.contains("\t\"code\":\t200")){
-                            DatrixDoFinish();
-                        }else
-                        {
-                            SomeUtil.showSnackBar(rootview,"图片上传失败!");
+                        LogUtil.d("addjq result : " + s);
+                        if (s.contains("\"code\":200")) {
+                            upJqProgress.setVisibility(View.GONE);
+                            RxBus.getDefault().post("sjmsgflush");
+                            SomeUtil.showSnackBar(rootview, "警情回传成功！").setCallback(new Snackbar.Callback() {
+                                @Override
+                                public void onDismissed(Snackbar snackbar, int event) {
+                                    finish();
+                                }
+                            });
                         }
                     }
                 });
+        addSubscription(i);
 
 
     }
 
-    private void DatrixDoFinish() {
-            app.apiService.detrixfinish(fileid," ")
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(new Subscriber<String>() {
-                        @Override
-                        public void onCompleted() {
+    private void addjqAndpic(String fileid, final List<String> ids) {
 
+        final int k = ids.size() - 1;
+        Subscription i  =app.jqAPIService.uploadJqMsg(SomeUtil.getJQId(), SomeUtil.getTASKId(), SomeUtil.getUserId(),
+                contenttext.getText().toString(), SomeUtil.getSysTime(), "", "", "", SomeUtil.getDepartId())
+                .compose(RxUtil.<String>applySchedulers())
+                .subscribe(new Subscriber<String>() {
+                    @Override
+                    public void onCompleted() {
+                        for (int i = 0; i < ids.size(); i++) {
+                            final int j = i;
+                            app.jqAPIService.uploadJqMsg(SomeUtil.getJQId(), SomeUtil.getTASKId(), SomeUtil.getUserId(),
+                                    "", SomeUtil.getSysTime(),  ids.get(i) , "", "", SomeUtil.getDepartId())
+                                    .compose(RxUtil.<String>applySchedulers())
+                                    .subscribe(new Subscriber<String>() {
+                                        @Override
+                                        public void onCompleted() {
+                                            if (j == k) {
+                                                upJqProgress.setVisibility(View.GONE);
+                                                RxBus.getDefault().post("sjmsgflush");
+                                                SomeUtil.showSnackBar(rootview, "警情回传成功！").setCallback(new Snackbar.Callback() {
+                                                    @Override
+                                                    public void onDismissed(Snackbar snackbar, int event) {
+
+                                                        finish();
+                                                    }
+                                                });
+
+                                            }
+                                        }
+
+                                        @Override
+                                        public void onError(Throwable e) {
+                                            upJqProgress.setVisibility(View.GONE);
+                                            //SomeUtil.checkHttpException(AddJQActivity.this,e,rootview);
+                                        }
+
+                                        @Override
+                                        public void onNext(String s) {
+                                            LogUtil.d("result:" + s);
+                                            if (s.contains("200")) {
+
+                                            } else onError(new Exception(s));
+                                        }
+                                    });
                         }
 
-                        @Override
-                        public void onError(Throwable e) {
+                    }
 
-                        }
+                    @Override
+                    public void onError(Throwable e) {
+                       // SomeUtil.checkHttpException(AddJQActivity.this,e,rootview);
+                    }
 
-                        @Override
-                        public void onNext(String s) {
-                            if (s.contains("200")){
-                                SomeUtil.showSnackBar(rootview,"上传图片成功！");
-                            }
-                            else {
-                                SomeUtil.showSnackBar(rootview,"网络错误，请稍后！");
-                            }
-                        }
-                    });
+                    @Override
+                    public void onNext(String s) {
+                        if (s.contains("200")) {
 
+                        } else onError(new Exception(s));
+                    }
+                });
+        addSubscription(i);
 
     }
 
-
-    private List<String> initdata() {
+  /*  private List<String> initdata() {
 
         paths.add("end");
         return paths;
-    }
+    }*/
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         try {
+            if (resultCode == RESULT_OK && requestCode == 333){
+                if (data != null) {
+                    ArrayList<String> photos =
+                            data.getStringArrayListExtra(PhotoPicker.KEY_SELECTED_PHOTOS);
+                    adapter.clear();
+                    paths.clear();
+                    paths =photos ;
+                    //initdata();
+                    adapter.addAll(paths);
+
+                }
+
+            }
+
+         /*
             if (data.getStringExtra("result").equals("addpic")) {
                 adapter.clear();
                 paths.clear();
                 paths = data.getStringArrayListExtra("paths");
                 initdata();
                 adapter.addAll(paths);
-            }
+            }*/
 
         } catch (Exception e) {
             LogUtil.d("error : " + e);
@@ -262,9 +260,23 @@ public class AddJQActivity extends BaseActivity {
     }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        // TODO: add setContentView(...) invocation
-        ButterKnife.bind(this);
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                if (contenttext.getText().toString().isEmpty()) {
+                    finish();
+
+                } else {
+                    AlertDialog.Builder dialog = new AlertDialog.Builder(AddJQActivity.this);
+                    dialog.setTitle("请确认").setMessage("还没有提交记录，确认退出?")
+                            .setPositiveButton("确认", (dialog1, which) -> finish()).setNegativeButton("取消", null).show();
+                }
+
+
+        }
+
+        return true;
+
     }
+
 }

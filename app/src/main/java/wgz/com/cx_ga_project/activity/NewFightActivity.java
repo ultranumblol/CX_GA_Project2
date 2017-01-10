@@ -2,9 +2,11 @@ package wgz.com.cx_ga_project.activity;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -24,19 +26,25 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.Bind;
+import butterknife.ButterKnife;
 import butterknife.OnClick;
 import rx.Subscriber;
+import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.schedulers.Schedulers;
+import rx.subscriptions.CompositeSubscription;
 import wgz.com.cx_ga_project.R;
-import wgz.com.cx_ga_project.adapter.TimelineAdapter;
 import wgz.com.cx_ga_project.app;
 import wgz.com.cx_ga_project.base.BaseActivity;
 import wgz.com.cx_ga_project.base.Constant;
+import wgz.com.cx_ga_project.base.RxBus;
+import wgz.com.cx_ga_project.calendarView.utils.OtherUtils;
+import wgz.com.cx_ga_project.entity.AllDep;
 import wgz.com.cx_ga_project.entity.JQDetil;
 import wgz.com.cx_ga_project.entity.JQOnDutyPeople;
 import wgz.com.cx_ga_project.entity.JqOrbit;
+import wgz.com.cx_ga_project.util.GpsUtil;
 import wgz.com.cx_ga_project.util.RxUtil;
 import wgz.com.cx_ga_project.util.SPUtils;
 import wgz.com.cx_ga_project.util.SomeUtil;
@@ -49,6 +57,7 @@ import wgz.datatom.com.utillibrary.util.LogUtil;
  * Created by wgz on 2016/8/15.
  */
 public class NewFightActivity extends BaseActivity {
+
     @Bind(R.id.timeline_rv)
     EasyRecyclerView timelineRv;
     @Bind(R.id.id_fight_upload)
@@ -81,12 +90,26 @@ public class NewFightActivity extends BaseActivity {
     Toolbar toolbar;
     @Bind(R.id.app_bar)
     AppBarLayout appBar;
-    private TimelineAdapter adapter;
+    @Bind(R.id.fabtag_zyJQ)
+    FabTagLayout fabtagZyJQ;
+    @Bind(R.id.fabtag_zyJQ_fab)
+    FloatingActionButton fabtagZyJQFab;
+
     private List<JqOrbit.Re> list = new ArrayList<>();
     private ArrayList<String> list2 = new ArrayList<>();
     private HomeAdapter mAdapter;
     private String JQid = "";
     private List<JQOnDutyPeople.peoRe> mDutyPeodata = new ArrayList<>();
+    private String taskid = "";
+    private String jqstate = "";
+    private int partNum = -1;
+    private String departmentName = "";
+    private String departmentID = "";
+    private String stopid = "";
+    private String stopstate = "3";
+    private String baojingName = "";
+    private String sendtime = "";
+    private boolean ifFromJQlist = false;
 
 
     @Override
@@ -96,30 +119,54 @@ public class NewFightActivity extends BaseActivity {
 
     @Override
     public void initView() {
-        FabPlus.setOnItemClickListener(new FloatingActionButtonPlus.OnItemClickListener() {
-            @Override
-            public void onItemClick(FabTagLayout tagView, int position) {
-                int id = tagView.getId();
-                switch (id) {
-                    case R.id.fabtag_bjrJQ:
-                        startActivity(new Intent(NewFightActivity.this, JQListActivity.class).putExtra("title", "bjr"));
-                        break;
-                    case R.id.fabtag_nearvideoCam:
-                        startActivity(new Intent(NewFightActivity.this, CamMapHtmlActivity.class));
-                        break;
-                    case R.id.fabtag_nearjq:
-                        startActivity(new Intent(NewFightActivity.this, JQListActivity.class).putExtra("title", "nearjq"));
-                        break;
-                    case R.id.fabtag_sjrJQ:
-                        startActivity(new Intent(NewFightActivity.this, JQListActivity.class).putExtra("title", "sjr"));
-                        break;
-                    case R.id.fabtag_zyJQ:
-                        transferDialog();
-                        break;
+        FabPlus.setOnItemClickListener((tagView, position) -> {
+            int id = tagView.getId();
+            switch (id) {
+                case R.id.fabtag_bjrJQ:
+                    startActivity(new Intent(NewFightActivity.this, JQListActivity.class).putExtra("title", "bjr").putExtra("bjrname", baojingName));
+                    if (ifFromJQlist){
+                        NewFightActivity.this.finish();
 
-                }
+                    }
+                    break;
+                case R.id.fabtag_nearvideoCam:
+                    startActivity(new Intent(NewFightActivity.this, CamMapHtmlActivity.class));
+                    if (ifFromJQlist){
+                        NewFightActivity.this.finish();
+
+                    }
+                    break;
+                case R.id.fabtag_nearjq:
+                    startActivity(new Intent(NewFightActivity.this, JQListActivity.class).putExtra("title", "nearjq"));
+                    if (ifFromJQlist){
+                        NewFightActivity.this.finish();
+
+                    }
+                    break;
+               /* case R.id.fabtag_sjrJQ:
+                    startActivity(new Intent(NewFightActivity.this, JQListActivity.class).putExtra("title", "sjr"));
+                    if (ifFromJQlist){
+                        NewFightActivity.this.finish();
+
+                    }
+                    break;*/
+                case R.id.fabtag_zyJQ:
+                    if(!ifFromJQlist){
+
+                        if (jqstate.equals("4")) {
+
+                        }else {
+                            transferDialog();
+                        }
+
+                    }
+
+                    break;
+
             }
         });
+        GpsUtil gpsUtil = new GpsUtil();
+        gpsUtil.getJingWeiDu(this);
         toolbar.setTitle("接处警作战");
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -128,63 +175,330 @@ public class NewFightActivity extends BaseActivity {
         //idRecyclerview.setAdapter(mAdapter = new HomeAdapter());
 
 
-        timelineRv.setLayoutManager(new Mylayout(this));
-        timelineRv.setAdapter(adapter = new TimelineAdapter(this));
-        initData();
+        Intent intent = getIntent();
+        taskid = intent.getStringExtra("taskid");
+        jqstate = intent.getStringExtra("jqstate");
+        JQid = intent.getStringExtra("jqid");
+        stopid = intent.getStringExtra("jqstopid");
+        sendtime = intent.getStringExtra("sendtime");
+        ifFromJQlist = intent.getBooleanExtra("jqlist", false);
+        LogUtil.d("taskid : " + taskid);
+        LogUtil.d("jqstate : " + jqstate);
+        LogUtil.d("jqid : " + JQid);
+        LogUtil.d("sendtime : " + sendtime);
+        LogUtil.d("ifFromJQlist : " + ifFromJQlist);
+        if (jqstate == null) {
+            jqstate = "-1";
+        }
+        if (ifFromJQlist) {
+            fabNewfight.setVisibility(View.GONE);
+            idFightBulu.setVisibility(View.GONE);
+            idFightTalk.setVisibility(View.GONE);
+            idFightUpload.setVisibility(View.GONE);
 
 
-        RxView.clicks(fabNewfight).throttleFirst(500, TimeUnit.MICROSECONDS)
-                .subscribe(new Action1<Void>() {
-                    @Override
-                    public void call(Void aVoid) {
+
+        }
+        if (jqstate.equals("1")) {
+
+            idFightTalk.setVisibility(View.GONE);
+/*
+            RxView.clicks(fabNewfight).throttleFirst(500, TimeUnit.MICROSECONDS)
+                    .subscribe(aVoid -> {
                         ShowDialog();
-                        //StartFight();
+                    });*/
+        }
 
+        if (jqstate.equals("2")) {
+            fabNewfight.setImageResource(R.drawable.ic_stop_white_48dp);
+          /*  RxView.clicks(fabNewfight).throttleFirst(500, TimeUnit.MICROSECONDS)
+                    .subscribe(aVoid -> {
+                        stopjq();
+                    });*/
+            idFightBulu.setVisibility(View.GONE);
+            idFightUpload.setVisibility(View.VISIBLE);
+
+        }
+        if (jqstate.equals("4")) {
+            fabNewfight.setImageResource(R.drawable.ic_stop_white_48dp);
+         /*   RxView.clicks(fabNewfight).throttleFirst(500, TimeUnit.MICROSECONDS)
+                    .subscribe(aVoid -> {
+                        stopjq2();
+                    });*/
+            idFightBulu.setVisibility(View.VISIBLE);
+            idFightUpload.setVisibility(View.GONE);
+            idFightTalk.setVisibility(View.GONE);
+        }
+        RxView.clicks(fabNewfight).throttleFirst(500, TimeUnit.MICROSECONDS)
+                .subscribe(aVoid -> {
+                   if (jqstate.equals("4")){
+                       stopjq2();
+                   }if (jqstate.equals("2")){
+                        stopjq();
+                    }
+                    if (jqstate.equals("1")){
+                        ShowDialog();
                     }
                 });
+        // LogUtil.d("jqid : "+JQid);
+
+        initData();
+    }
+
+    private void stopjq2() {
+        final AlertDialog.Builder builder = new AlertDialog.Builder(NewFightActivity.this);
+        builder.setTitle("是否结束警情补录?")
+                .setPositiveButton("确定", (dialog, which) ->
+                        app.jqAPIService.stopTaskJq("3", stopid, taskid)
+                        .compose(RxUtil.<String>applySchedulers())
+                        .subscribe(new Subscriber<String>() {
+                            @Override
+                            public void onCompleted() {
+
+                            }
+
+                            @Override
+                            public void onError(Throwable e) {
+                                LogUtil.d("jqstop result error:" + e.toString());
+                            }
+
+                            @Override
+                            public void onNext(String s) {
+                                LogUtil.d("jqstop result :" + s);
+                                RxBus.getDefault().post("newjqflush");
+                                SomeUtil.showSnackBar(rootview, "出警任务已经结束！").setCallback(new Snackbar.Callback() {
+                                    @Override
+                                    public void onDismissed(Snackbar snackbar, int event) {
+
+                                        finish();
+
+                                    }
+                                });
+                            }
+                        }))
+                .setNegativeButton("取消", null).show();
+
+
+    }
+
+    private void stopjq() {
+        final String[] choice = new String[]{"已完成警情回告并结束此次出警任务", "结束任务，后期补录警情内容"};
+        final AlertDialog.Builder builder = new AlertDialog.Builder(NewFightActivity.this);
+        builder.setTitle("是否结束此次出警？")
+                .setPositiveButton("确定", (dialog, which) -> {
+                    builder.setTitle("请选择：")
+                            .setSingleChoiceItems(choice, -1, (dialog12, which12) -> {
+                                switch (which12) {
+                                    case 0:
+                                        stopstate = "3";
+                                        break;
+                                    case 1:
+                                        stopstate = "4";
+
+                                }
+
+                            }).setPositiveButton("确定", (dialog1, which1) -> {
+                                LogUtil.d("taskid:" + taskid);
+                                app.jqAPIService.stopTaskJq(stopstate, stopid, taskid)
+                                        .compose(RxUtil.applySchedulers())
+                                        .subscribe(new Subscriber<String>() {
+                                            @Override
+                                            public void onCompleted() {
+
+                                            }
+
+                                            @Override
+                                            public void onError(Throwable e) {
+                                                LogUtil.d("jqstop result error:" + e.toString());
+                                            }
+
+                                            @Override
+                                            public void onNext(String s) {
+                                                LogUtil.d("jqstop result :" + s);
+                                                SomeUtil.showSnackBar(rootview, "出警任务已经结束！").setCallback(new Snackbar.Callback() {
+                                                    @Override
+                                                    public void onDismissed(Snackbar snackbar, int event) {
+                                                        RxBus.getDefault().post("newjqflush");
+                                                        finish();
+                                                    }
+                                                });
+                                            }
+                                        });
+                            }).setNegativeButton("取消", null).show();
+
+                    /**/
+                }).setNegativeButton("取消", null)
+                .show();
+
 
     }
 
     private void transferDialog() {
-        final String[] parts = new String[]{"213", "31212", "4324", "111", "213", "31212", "4324"};
-        final AlertDialog.Builder tbuilder = new AlertDialog.Builder(this);
-        tbuilder.setTitle("请确认")
-                .setMessage("是否结束当前出警任务并转移该任务？")
-                .setNegativeButton("取消", null)
-                .setPositiveButton("确认", new DialogInterface.OnClickListener() {
+        final String[] parts = new String[]{"楚雄市公安局", "楚雄市森林公安局"};
+        final String[] choice = new String[]{"已完成警情回告并结束此次出警任务", "结束任务，后期补录警情内容"};
+
+        Subscription i  =app.jqAPIService.getAllDep()
+                .compose(RxUtil.applySchedulers())
+                .subscribe(new Subscriber<AllDep>() {
                     @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        tbuilder.setTitle("请选择要转移的部门")
-                                .setMessage(null)
-                                .setSingleChoiceItems(parts, -1, new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
+                    public void onCompleted() {
 
-                                    }
-                                })
-                                .setNegativeButton("取消", null)
-                                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        tbuilder.setTitle("警告")
-                                                .setMessage("请完成警情回告后再转移该警情!")
-                                                .setPositiveButton("确认", new DialogInterface.OnClickListener() {
-                                                    @Override
-                                                    public void onClick(DialogInterface dialog, int which) {
-
-                                                    }
-                                                }).setNegativeButton("取消", null)
-                                                .show();
-                                    }
-                                }).show();
                     }
-                }).show();
 
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onNext(AllDep result) {
+                        LogUtil.d("alldep : " + result.getRes().toString());
+                        final List<AllDep.AlldepRe> data1 = new ArrayList<>();
+                        final List<AllDep.AlldepRe> dataSL = new ArrayList<>();
+                        for (int i = 0; i < result.getRes().size(); i++) {
+                            if (result.getRes().get(i).getDepartParentid().equals("532301000000")) {
+                                data1.add(result.getRes().get(i));
+                            }
+                        }
+                        for (int i = 0; i < result.getRes().size(); i++) {
+                            if (result.getRes().get(i).getDepartParentid().equals("532301390000")) {
+                                dataSL.add(result.getRes().get(i));
+                            }
+                        }
+                        final String[] parts1 = new String[data1.size()];
+                        final String[] partsSL = new String[dataSL.size()];
+                        for (int i = 0; i < data1.size(); i++) {
+                            parts1[i] = data1.get(i).getDepartSimplename();
+                        }
+                        for (int i = 0; i < dataSL.size(); i++) {
+                            partsSL[i] = dataSL.get(i).getDepartSimplename();
+                        }
+
+                        final AlertDialog.Builder tbuilder = new AlertDialog.Builder(NewFightActivity.this);
+                        tbuilder.setTitle("请确认")
+                                .setMessage("是否结束当前出警任务并转移该任务？")
+                                .setNegativeButton("取消", null)
+                                .setPositiveButton("确认", (dialog, which) -> tbuilder.setTitle("请选择：")
+                                        .setMessage(null)
+                                        .setSingleChoiceItems(choice, -1, (dialog15, which15) -> {
+                                            switch (which15) {
+                                                case 0:
+                                                    stopstate = "3";
+                                                    break;
+                                                case 1:
+                                                    stopstate = "4";
+
+                                            }
+
+                                        }).setPositiveButton("确认", (dialog14, which14) -> {
+                                            //停止警情
+                                            app.jqAPIService.stopTaskJq(stopstate, stopid, taskid)
+                                                    .compose(RxUtil.<String>applySchedulers())
+                                                    .subscribe(new Subscriber<String>() {
+                                                        @Override
+                                                        public void onCompleted() {
+
+                                                        }
+
+                                                        @Override
+                                                        public void onError(Throwable e) {
+                                                            LogUtil.d("jqstop result error:" + e.toString());
+                                                        }
+
+                                                        @Override
+                                                        public void onNext(String s) {
+                                                            tbuilder.setTitle("请选择要转移的单位")
+                                                                    .setMessage(null)
+                                                                    .setSingleChoiceItems(parts, -1, (dialog13, which13) -> {
+                                                                        partNum = which13;
+                                                                    })
+                                                                    .setNegativeButton("取消", null)
+                                                                    .setPositiveButton("下一步", (dialog12, which12) -> {
+                                                                        LogUtil.d("which : " + which12);
+                                                                        switch (partNum) {
+                                                                            case 0:
+                                                                                tbuilder.setTitle(parts[partNum])
+                                                                                        .setMessage(null)
+                                                                                        .setSingleChoiceItems(parts1, -1, (dialog1, which1) -> {
+                                                                                            departmentName = parts1[which1];
+                                                                                            for (int i = 0; i < data1.size(); i++) {
+                                                                                                if (departmentName.equals(data1.get(i).getDepartSimplename())) {
+                                                                                                    departmentID = data1.get(i).getDepartmentid();
+                                                                                                }
+                                                                                            }
+
+                                                                                        }).setNegativeButton("取消", null)
+                                                                                        .setPositiveButton("确定", (dialog1213, which1213) -> {
+                                                                                            LogUtil.d("departmentName : " + departmentName);
+                                                                                            LogUtil.d("departmentid : " + departmentID);
+                                                                                            Jqzhuanyi();
+                                                                                        }).show();
+
+                                                                                break;
+                                                                            case 1:
+                                                                                tbuilder.setTitle(parts[partNum])
+                                                                                        .setMessage(null)
+                                                                                        .setSingleChoiceItems(partsSL, -1, (dialog1212, which1212) -> {
+                                                                                            departmentName = partsSL[which1212];
+                                                                                            for (int i = 0; i < dataSL.size(); i++) {
+                                                                                                if (departmentName.equals(dataSL.get(i).getDepartSimplename())) {
+                                                                                                    departmentID = dataSL.get(i).getDepartmentid();
+                                                                                                }
+                                                                                            }
+                                                                                        }).setNegativeButton("取消", null)
+                                                                                        .setPositiveButton("确定", (dialog121, which121) -> Jqzhuanyi()).show();
+                                                                                break;
+
+                                                                        }
+
+                                                                    }).show();
+
+                                                        }
+                                                    });
+
+                                        }).setNegativeButton("取消", null).show()).show();
+
+
+                    }
+                });
+        addSubscription(i);//把订阅加入管理集合中
 
     }
 
+    private void Jqzhuanyi() {
+        Subscription i  = app.jqAPIService.JqTransfer(JQid, taskid, SomeUtil.getSysTime(), departmentName, departmentID)
+                .compose(RxUtil.<String>applySchedulers())
+                .subscribe(new Subscriber<String>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                       // SomeUtil.checkHttpException(NewFightActivity.this,e,rootview);
+                    }
+
+                    @Override
+                    public void onNext(String s) {
+                        LogUtil.d("JqTransfer : " + s);
+                        RxBus.getDefault().post("newjqflush");
+                        SomeUtil.showSnackBar(rootview, "警情转移成功！").setCallback(new Snackbar.Callback() {
+                            @Override
+                            public void onDismissed(Snackbar snackbar, int event) {
+                                finish();
+                            }
+                        });
+
+                    }
+                });
+
+        addSubscription(i);//把订阅加入管理集合中
+    }
+
     private void ShowDialog() {
-        app.jqAPIService.getPeoOnduty("532301000000", "2016-09-29")
+        //  部门id替换 日期替换sendtime
+        Subscription i  =app.jqAPIService.getPeoOnduty(SomeUtil.getDepartId(), OtherUtils.formatDate(SomeUtil.getStrToDate(sendtime)))
                 .compose(RxUtil.<JQOnDutyPeople>applySchedulers())
                 .subscribe(new Subscriber<JQOnDutyPeople>() {
                     @Override
@@ -194,25 +508,24 @@ public class NewFightActivity extends BaseActivity {
 
                     @Override
                     public void onError(Throwable e) {
-                        SomeUtil.checkHttpException(getApplicationContext(), e, rootview);
+                        //SomeUtil.checkHttpException(getApplicationContext(), e, rootview);
                         LogUtil.d("JQOnDutyPeople error : " + e.toString());
                     }
 
                     @Override
                     public void onNext(JQOnDutyPeople result) {
                         LogUtil.d("JQOnDutyPeople code : " + result.getCode().toString());
-                        LogUtil.d("JQOnDutyPeople code : " + result.getRes().toString());
+                       // LogUtil.d("JQOnDutyPeople code : " + result.getRes().toString());
                         mDutyPeodata = result.getRes();
-                        final StringBuilder sb = new StringBuilder();
                         String[] lname = new String[mDutyPeodata.size()];
                         final String[] lid = new String[mDutyPeodata.size()];
                         final boolean[] ifchaeck = new boolean[mDutyPeodata.size()];
                         for (int i = 0; i < mDutyPeodata.size(); i++) {
-                            lname[i]=mDutyPeodata.get(i).getPolicename();
-                            lid[i]=mDutyPeodata.get(i).getPoliceid();
+                            lname[i] = mDutyPeodata.get(i).getPolicename();
+                            lid[i] = mDutyPeodata.get(i).getPoliceid();
                         }
 
-                         for (int i = 0; i < lname.length; i++) {
+                        for (int i = 0; i < lname.length; i++) {
                             if (SomeUtil.getUserId().equals(lid[i])) {
                                 ifchaeck[i] = true;
                             }
@@ -221,30 +534,50 @@ public class NewFightActivity extends BaseActivity {
 
                         AlertDialog.Builder builder = new AlertDialog.Builder(NewFightActivity.this);
                         builder.setTitle("请选择出警人员:")
-                                .setMultiChoiceItems(lname, ifchaeck, new DialogInterface.OnMultiChoiceClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which, boolean isChecked) {
-                                        ifchaeck[which] = isChecked;
-                                    }
-                                }).setPositiveButton("确认", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                for (int i = 0; i < ifchaeck.length; i++) {
-                                    if (ifchaeck[i]) {
-                                        sb.append(lid[i] + "&");
-                                    }
-                                }
-                                LogUtil.d("sb : " + sb.toString());
-                                // StartFight();
-                            }
-                        }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                                .setMultiChoiceItems(lname, ifchaeck, (dialog, which, isChecked) -> ifchaeck[which] = isChecked).setPositiveButton("确认", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
 
+                                int j = 0;
+                                for (int i = 0; i < ifchaeck.length; i++) {
+                                    if (ifchaeck[i]) {
+                                        //sb.append(lid[i] + "&");
+                                        j += 1;
+                                    }
+                                }
+                                String[] ids = new String[j];
+                                int k = 0;
+                                for (int i = 0; i < ifchaeck.length; i++) {
+                                    if (ifchaeck[i]) {
+                                        ids[k] = lid[i];
+                                        k += 1;
+                                    }
+                                }
+
+
+                                addCjPerson(ids);
+                                StartFight();
+
+
+                                // StartFight();
                             }
+                        }).setNegativeButton("取消", (dialog, which) -> {
+
                         }).show();
                     }
                 });
+        addSubscription(i);//把订阅加入管理集合中
+    }
+
+    private void addCjPerson(String[] lid) {
+
+        app.jqAPIService.addCjPerson(taskid, SomeUtil.getDepartId(), lid)
+                .compose(RxUtil.<String>applySchedulers())
+                .subscribe(s -> {
+                    LogUtil.d("addcjperson result : " + s);
+                });
+
+
     }
 
 
@@ -253,10 +586,10 @@ public class NewFightActivity extends BaseActivity {
         //LogUtil.d("systime : "+SomeUtil.getSysTime());
         String time = SomeUtil.getSysTime();
         String latitude = (String) SPUtils.get(app.getApp().getApplicationContext(), Constant.LATITUDE, "111");
-        String longitude = (String) SPUtils.get(app.getApp().getApplicationContext(), Constant.LONGITUDE, "1111");
+        String longitude = (String) SPUtils.get(app.getApp().getApplicationContext(), Constant.LONGITUDE, "1");
         LogUtil.d("fight latitude:" + latitude);
         LogUtil.d("fight longitude:" + longitude);
-        app.jqAPIService.StartNewFight("2016072100100000060", "1", time, longitude, latitude)
+        app.jqAPIService.StartNewFight(JQid, taskid, time, longitude, latitude)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<String>() {
@@ -274,12 +607,15 @@ public class NewFightActivity extends BaseActivity {
                         LogUtil.d("newfight result : " + s);
                         if (s.contains("199")) {
                             SomeUtil.showSnackBarLong(rootview, "已经开始作战！");
-                            fabNewfight.setImageResource(R.drawable.ic_stop_white_48dp);
+
 
                         }
                         if (s.contains("200")) {
                             SomeUtil.showSnackBar(rootview, "开始作战！");
-
+                            fabNewfight.setImageResource(R.drawable.ic_stop_white_48dp);
+                            RxBus.getDefault().post("newjqflush");
+                            jqstate="2";
+                            idFightTalk.setVisibility(View.VISIBLE);
                         }
                         if (s.contains("300")) {
                             SomeUtil.showSnackBar(rootview, "服务器错误！请稍后再试！");
@@ -292,7 +628,7 @@ public class NewFightActivity extends BaseActivity {
 
     private void initData() {
 
-        app.jqAPIService.getJqOrbit("2016072100100000060")
+        app.jqAPIService.getJqOrbit(JQid)
                 .compose(RxUtil.<JqOrbit>applySchedulers())
                 .subscribe(new Subscriber<JqOrbit>() {
                     @Override
@@ -314,7 +650,7 @@ public class NewFightActivity extends BaseActivity {
                 });
 
 
-        app.jqAPIService.GetJQDetil("2016072100100000060")
+        Subscription i =app.jqAPIService.GetJQDetil(JQid)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe(new Subscriber<JQDetil>() {
@@ -330,23 +666,22 @@ public class NewFightActivity extends BaseActivity {
 
                     @Override
                     public void onNext(JQDetil jqDetil) {
-                        //LogUtil.d("jqDetil : " + jqDetil.getCode().toString());
+                        LogUtil.d("jqDetil : " + jqDetil.getResult().toString());
 
                         if (jqDetil.getCode().equals(200)) {
-                            LogUtil.d("jqDetil :" + jqDetil.getResult().toString());
+                            // LogUtil.d("jqDetil :" + jqDetil.getResult().toString());
                             detilJqAddress.setText(jqDetil.getResult().get(0).getJqaddr());
                             detilJqBjrName.setText(jqDetil.getResult().get(0).getAlarmperson());
                             detilJqBjrPhone.setText(jqDetil.getResult().get(0).getCallingnumber());
-                            detilJqNature.setText(jqDetil.getResult().get(0).getJqnature());
-                            detilJqType.setText(jqDetil.getResult().get(0).getJqtype());
+                            detilJqNature.setText(jqDetil.getResult().get(0).getJqnature1());
+                            detilJqType.setText(jqDetil.getResult().get(0).getJqtype1());
                             detilJqBjtime.setText(jqDetil.getResult().get(0).getCallpolicetime());
-
-                            JQid = jqDetil.getResult().get(0).getJqid();
-
+                            baojingName = jqDetil.getResult().get(0).getAlarmperson();
                         }
 
                     }
                 });
+        addSubscription(i);//把订阅加入管理集合中
 
     }
 
@@ -357,13 +692,15 @@ public class NewFightActivity extends BaseActivity {
                 startActivity(new Intent(NewFightActivity.this, JQCallbackActivity.class));
                 break;
             case R.id.id_fight_bulu:
-
+                startActivity(new Intent(NewFightActivity.this, JQCallbackActivity.class));
                 break;
             case R.id.id_fight_talk:
                 startActivity(new Intent(NewFightActivity.this, ChatActivity.class).putExtra("jqid", JQid));
                 break;
         }
     }
+
+
 
     class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.MyViewHolder> {
 

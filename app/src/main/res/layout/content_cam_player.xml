@@ -11,13 +11,14 @@
     <SurfaceView
         android:id="@+id/video_view"
         android:layout_width="match_parent"
-        android:layout_height="245dp"
+        android:layout_height="270dp"
         android:focusable="true"/>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:padding="5dp"
+        android:visibility="gone"
 
         >
         <TextView
@@ -34,13 +35,19 @@
             android:layout_weight="1"/>
 
     </LinearLayout>
-    <com.jude.easyrecyclerview.EasyRecyclerView
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="12312312"
+        android:id="@+id/camid"
+        />
+   <!-- <com.jude.easyrecyclerview.EasyRecyclerView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:scrollbarStyle="insideOverlay"
         android:id="@+id/cam_recyclerview"
         app:layout_progress="@layout/view_progress"
-        ></com.jude.easyrecyclerview.EasyRecyclerView>
+        ></com.jude.easyrecyclerview.EasyRecyclerView>-->
 
 <TextView
     android:layout_width="match_parent"

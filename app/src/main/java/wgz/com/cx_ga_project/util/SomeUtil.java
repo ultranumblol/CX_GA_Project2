@@ -14,7 +14,14 @@ import android.widget.ImageView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.math.BigDecimal;
 import java.net.ConnectException;
 import java.net.SocketTimeoutException;
@@ -23,14 +30,15 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import wgz.com.cx_ga_project.R;
-import wgz.com.cx_ga_project.activity.ChatActivity;
-import wgz.com.cx_ga_project.activity.HomeActivity;
 import wgz.com.cx_ga_project.app;
 import wgz.com.cx_ga_project.base.Constant;
 import wgz.datatom.com.utillibrary.util.LogUtil;
@@ -55,17 +63,38 @@ public class SomeUtil {
 
     public static void showNetworkErrorSnackBar(final Context context, View view, String message, String action) {
         Snackbar.make(view, message, Snackbar.LENGTH_LONG)
-                .setAction(action, new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent intent = new Intent(Settings.ACTION_SETTINGS);
-                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
-                        context.startActivity(intent);
-                    }
+                .setAction(action, v -> {
+                    Intent intent = new Intent(Settings.ACTION_SETTINGS);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
+                    context.startActivity(intent);
                 })
                 .show();
 
     }
+
+    /**
+     * inputstream 转byte
+     * @param inStream
+     * @return
+     */
+    public static final byte[] input2byte(InputStream inStream)
+             {
+                 try {
+                     ByteArrayOutputStream swapStream = new ByteArrayOutputStream();
+                     byte[] buff = new byte[100];
+                     int rc = 0;
+                     while ((rc = inStream.read(buff, 0, 100)) > 0) {
+                         swapStream.write(buff, 0, rc);
+                     }
+                     byte[] in2b = swapStream.toByteArray();
+                     return in2b;
+                 } catch (IOException e) {
+                     e.printStackTrace();
+                     return null;
+                 }
+
+             }
+
 
     /**
      * 检查对象非空
@@ -82,7 +111,49 @@ public class SomeUtil {
         return object;
     }
 
+    /**
+     * 比较前一个日期是否大于后一个日期
+     * @param s1
+     * @param s2
+     * @return
+     */
+    public static boolean DateCompare(String s1, String s2) {
+        //设定时间的模板
+
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            //得到指定模范的时间
+            Date d1 = sdf.parse(s1);
+            Date d2 = sdf.parse(s2);
+            LogUtil.d("start time :"+d1.getTime());
+            LogUtil.d("end time :"+d2.getTime());
+
+            LogUtil.d("start time :"+d1.toString());
+            LogUtil.d("end time :"+d2.toString());
+
+            if (Math.abs(((d1.getTime() - d2.getTime()))) >0) {
+              return true;
+            } else {
+
+
+                return false;
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+            LogUtil.d(" compare time error:"+e.toString());
+        }
+
+        return false;
+    }
+
+    /**
+     * 检查网络
+     * @param mContext
+     * @param mThrowable
+     * @param mRootView
+     */
     public static void checkHttpException(Context mContext, Throwable mThrowable, View mRootView) {
+        LogUtil.d("error :" + mThrowable.toString());
         String snack_action_to_setting = "设置";
         if ((mThrowable instanceof UnknownHostException)) {
             String snack_message_net_error = "网络错误，请检查网络";
@@ -186,6 +257,88 @@ public class SomeUtil {
     }
 
     /**
+     * map转jsonstr
+     * @param datas
+     * @return
+     */
+    public static String ListmapTojsonStr(List<Map<String, Object>> datas) {
+        JSONArray mJsonArray = new JSONArray();
+        for (int i = 0; i < datas.size(); i++) {
+            Map<String, Object> itemMap = datas.get(i);
+            Iterator<Map.Entry<String, Object>> iterator = itemMap.entrySet().iterator();
+
+            JSONObject object = new JSONObject();
+
+            while (iterator.hasNext()) {
+                Map.Entry<String, Object> entry = iterator.next();
+                try {
+                    object.put(entry.getKey(), entry.getValue());
+                } catch (JSONException e) {
+
+                }
+            }
+            mJsonArray.put(object);
+        }
+
+        return mJsonArray.toString();
+
+    }
+
+    /**
+     * map转json
+     * @param datas
+     * @return
+     */
+    public static String mapTojsonStr(Map<String, Object> datas) {
+
+        Iterator<Map.Entry<String, Object>> iterator = datas.entrySet().iterator();
+
+        JSONObject object = new JSONObject();
+
+        while (iterator.hasNext()) {
+            Map.Entry<String, Object> entry = iterator.next();
+            try {
+                object.put(entry.getKey(), entry.getValue());
+            } catch (JSONException e) {
+
+            }
+        }
+
+        return object.toString();
+
+    }
+
+    /**
+     * jsonstr转map
+     * @param result
+     * @return
+     */
+    public static List<Map<String, Object>> JsonStrToListMap(String result) {
+        List<Map<String, Object>> datas = new ArrayList<Map<String, Object>>();
+        try {
+            JSONArray array = new JSONArray(result);
+            for (int i = 0; i < array.length(); i++) {
+                JSONObject itemObject = array.getJSONObject(i);
+                Map<String, Object> itemMap = new HashMap<>();
+                JSONArray names = itemObject.names();
+                if (names != null) {
+                    for (int j = 0; j < names.length(); j++) {
+                        String name = names.getString(j);
+                        String value = itemObject.getString(name);
+                        itemMap.put(name, value);
+                    }
+                }
+                datas.add(itemMap);
+            }
+        } catch (JSONException e) {
+
+        }
+
+        return datas;
+
+    }
+
+    /**
      * 获取软件版本号
      *
      * @param context
@@ -228,10 +381,11 @@ public class SomeUtil {
 
     /**
      * 用glide加载图片 有缓存和缩略图0.4f
+     *
      * @param context
      * @param view
      */
-    public static void GlidePic(Context context, ImageView view,String loadurl){
+    public static void GlidePic(Context context, ImageView view, String loadurl) {
         Glide.with(context)
                 .load(loadurl)
                 .placeholder(R.mipmap.ic_launcher)
@@ -243,13 +397,14 @@ public class SomeUtil {
                 .into(view);
 
     }
+
     //判断一个activity是否在运行
-    public  static  boolean isActivityRunning(Context context,Class clazz){
+    public static boolean isActivityRunning(Context context, Class clazz) {
         ActivityManager activityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
         List<ActivityManager.RunningTaskInfo> info = activityManager.getRunningTasks(1);
-        if (info!=null&&info.size()>0){
+        if (info != null && info.size() > 0) {
             ComponentName component = info.get(0).topActivity;
-            if (clazz.getName().equals(component.getClassName())){
+            if (clazz.getName().equals(component.getClassName())) {
                 return true;
             }
         }
@@ -257,10 +412,27 @@ public class SomeUtil {
         return false;
     }
 
+    /**
+     * 获取时间 yyyy-MM-dd HH:mm:ss
+     * @param date
+     * @return
+     */
+    public  static String getTime(Date date) {
+        try {
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            return format.format(date);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "";
+        }
+    }
 
-
-    public static String getSysTime(){
-        SimpleDateFormat formatter = new SimpleDateFormat ("yyyy-MM-dd HH:mm:ss ");
+    /**
+     * 获取系统时间yyyy-MM-dd HH:mm:ss
+     * @return
+     */
+    public static String getSysTime() {
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss ");
 
         Date curDate = new Date(System.currentTimeMillis());//获取当前时间
 
@@ -268,15 +440,65 @@ public class SomeUtil {
         return str;
 
     }
+
+    /**
+     * 获取系统日期 yyyy-MM-dd
+     * @return
+     */
+    public static String getSysTime2() {
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+
+        Date curDate = new Date(System.currentTimeMillis());//获取当前时间
+
+        String str = formatter.format(curDate);
+        return str;
+
+    }
+
     //(String) SPUtils.get(app.getApp().getApplicationContext(), Constant.USERNAME, "未知")
     //获取用户id
-    public static String getUserId(){
+    public static String getUserId() {
 
         return (String) SPUtils.get(app.getApp().getApplicationContext(), Constant.USERID, "未知");
     }
 
-    public static  int getNewJQMSgCount(){
-        return (int) SPUtils.get(app.getApp().getApplicationContext(),Constant.NEWJQCOUNT, 0);
+    public static String getDepartId() {
+
+        return (String) SPUtils.get(app.getApp().getApplicationContext(), Constant.DEPARTID, "未知");
+    }
+    public static String getDepartName() {
+
+        return (String) SPUtils.get(app.getApp().getApplicationContext(), Constant.DEPARTNAME, "未知");
+    }
+
+
+
+    public static int getNewJQMSgCount() {
+        return (int) SPUtils.get(app.getApp().getApplicationContext(), Constant.NEWJQCOUNT, 0);
 
     }
+
+    public static String getJQId() {
+
+        return (String) SPUtils.get(app.getApp().getApplicationContext(), Constant.JQID, "000");
+    }
+
+    public static String getTASKId() {
+
+        return (String) SPUtils.get(app.getApp().getApplicationContext(), Constant.TASKID, "000");
+    }
+
+    public static Date StrToDate(String str) {
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+            Date date = null;
+            date = sdf.parse(str);
+            return date;
+        } catch (ParseException e) {
+            e.printStackTrace();
+            LogUtil.d("DATE error" + e.toString());
+            return null;
+        }
+    }
+
 }

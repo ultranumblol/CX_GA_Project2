@@ -57,29 +57,47 @@ public class UserInfo {
 
 public class UserRes {
 
-    @SerializedName("userid")
+    @SerializedName("polid")
 
     private String userid;
     @SerializedName("policename")
 
     private String policename;
-    @SerializedName("datrixid")
+    @SerializedName("officecode")
 
-    private Object datrixid;
-    @SerializedName("pphonenum")
+    private Object officecode;
+    @SerializedName("ppolid")
 
-    private String pphonenum;
+    private String ppolid;
+
+
     @SerializedName("officecodename")
 
     private String officecodename;
+
+    public Object getOfficecode() {
+        return officecode;
+    }
+
+    public void setOfficecode(Object officecode) {
+        this.officecode = officecode;
+    }
+
+    public String getPpolid() {
+        return ppolid;
+    }
+
+    public void setPpolid(String ppolid) {
+        this.ppolid = ppolid;
+    }
 
     @Override
     public String toString() {
         return "UserRes{" +
                 "userid='" + userid + '\'' +
                 ", policename='" + policename + '\'' +
-                ", datrixid=" + datrixid +
-                ", pphonenum='" + pphonenum + '\'' +
+                ", officecode=" + officecode +
+                ", ppolid='" + ppolid + '\'' +
                 ", officecodename='" + officecodename + '\'' +
                 '}';
     }
@@ -120,41 +138,11 @@ public class UserRes {
         this.policename = policename;
     }
 
-    /**
-     *
-     * @return
-     * The datrixid
-     */
-    public Object getDatrixid() {
-        return datrixid;
-    }
 
-    /**
-     *
-     * @param datrixid
-     * The datrixid
-     */
-    public void setDatrixid(Object datrixid) {
-        this.datrixid = datrixid;
-    }
 
-    /**
-     *
-     * @return
-     * The pphonenum
-     */
-    public String getPphonenum() {
-        return pphonenum;
-    }
 
-    /**
-     *
-     * @param pphonenum
-     * The pphonenum
-     */
-    public void setPphonenum(String pphonenum) {
-        this.pphonenum = pphonenum;
-    }
+
+
 
     /**
      *

@@ -18,27 +18,16 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="座机号:"
-                />
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="72134324"
-                android:layout_marginLeft="12dp"
-                />
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
                 android:text="姓名:"
-                android:layout_marginLeft="40dp"
                 />
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="张三"
+                android:text="---"
+                android:id="@+id/sjphone_name"
                 android:layout_marginLeft="12dp"
-
                 />
+
 
 
 
@@ -48,7 +37,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_marginTop="12dp"
+            android:layout_marginTop="10dp"
             >
 
             <TextView
@@ -56,11 +45,13 @@
                 android:layout_height="wrap_content"
                 android:text="手机号:"
 
+
                 />
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="18669107011"
+                android:text="---"
+                android:id="@+id/sjphone_mobilephone"
                 android:layout_marginLeft="12dp"></TextView>
 
         </LinearLayout>
@@ -68,7 +59,29 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_marginTop="12dp">
+            android:layout_marginTop="10dp">
+            />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="座机号:"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="----"
+                android:layout_marginLeft="12dp"
+                android:id="@+id/sjphone_telphone"
+
+                />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="10dp">
             />
             <TextView
                 android:layout_width="wrap_content"
@@ -78,8 +91,9 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="78-fd-re-43-dd"
+                android:text="----"
                 android:layout_marginLeft="12dp"
+                android:id="@+id/sjphone_mac"
 
                 />
 
@@ -88,7 +102,51 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_marginTop="12dp"
+            android:layout_marginTop="10dp">
+            />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="手机串号IMEI:"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="----"
+                android:layout_marginLeft="12dp"
+                android:id="@+id/sjphone_serialnumber"
+
+                />
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="10dp">
+            />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="SIM卡号:"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="----"
+                android:layout_marginLeft="12dp"
+                android:id="@+id/sjphone_simi"
+
+                />
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="10dp"
 
             >
             <TextView
@@ -101,6 +159,7 @@
                 android:layout_height="wrap_content"
                 android:text="622101198911180395"
                 android:layout_marginLeft="12dp"
+                android:id="@+id/sjphone_idnum"
                 />
 
 

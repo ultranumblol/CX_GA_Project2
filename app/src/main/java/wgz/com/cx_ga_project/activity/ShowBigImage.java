@@ -16,6 +16,7 @@ import wgz.com.cx_ga_project.view.PinchImageView;
 
 
 /**
+ * 查看大图
  * Created by wgz on 2016/10/21.
  */
 
@@ -33,12 +34,7 @@ public class ShowBigImage extends BaseActivity {
     public void initView() {
         Intent intent = getIntent();
         String url = intent.getStringExtra("url");
-        image.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
+        image.setOnClickListener(v -> finish());
 
 
         Glide.with(this)

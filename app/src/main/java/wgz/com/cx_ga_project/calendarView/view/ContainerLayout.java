@@ -12,6 +12,7 @@ import android.widget.AbsListView;
 import android.widget.LinearLayout;
 
 import wgz.com.cx_ga_project.R;
+import wgz.datatom.com.utillibrary.util.LogUtil;
 
 
 /**
@@ -142,37 +143,42 @@ public class ContainerLayout extends LinearLayout {
                 intercepted = false;
                 break;
             case MotionEvent.ACTION_MOVE:
-                int deltaY = y - mLastYIntercept;
-                int deltaX = x - mLastXIntercept;
-                if (Math.abs(deltaX) > Math.abs(deltaY)) {
-                    //横向移动的时候不拦截touch事件，让viewpager处理
-                    intercepted = false;
-                } else {
-                    if (mContent.getTop() == mHeader.getBottom()) {
-                        //如果头部完全展开则直接拦截
-                        intercepted = true;
+                try {
+                    int deltaY = y - mLastYIntercept;
+                    int deltaX = x - mLastXIntercept;
+                    if (Math.abs(deltaX) > Math.abs(deltaY)) {
+                        //横向移动的时候不拦截touch事件，让viewpager处理
+                        intercepted = false;
                     } else {
-                        if (mContent.getTop() - mHeader.getTop() == hideBottom - hideTop) {
-                            //头部完全收缩
-                            if (canChildScrollDown(mContent)) {
-                                //底部还可以继续往下滚动
-                                intercepted = false;
-                            } else {
-                                //底部已经滚动到了最顶，不能滚动了
-                                if (deltaY > 0) {
-                                    //从上向下滚动拦截
-                                    intercepted = true;
-                                } else {
-                                    //从下向上滚动不拦截
-                                    intercepted = false;
-                                }
-                            }
-                        } else {
+                        if (mContent.getTop() == mHeader.getBottom()) {
+                            //如果头部完全展开则直接拦截
                             intercepted = true;
+                        } else {
+                            if (mContent.getTop() - mHeader.getTop() == hideBottom - hideTop) {
+                                //头部完全收缩
+                                if (canChildScrollDown(mContent)) {
+                                    //底部还可以继续往下滚动
+                                    intercepted = false;
+                                } else {
+                                    //底部已经滚动到了最顶，不能滚动了
+                                    if (deltaY > 0) {
+                                        //从上向下滚动拦截
+                                        intercepted = true;
+                                    } else {
+                                        //从下向上滚动不拦截
+                                        intercepted = false;
+                                    }
+                                }
+                            } else {
+                                intercepted = true;
+                            }
                         }
                     }
+                    break;
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    LogUtil.d("error :"+e);
                 }
-                break;
             case MotionEvent.ACTION_UP:
                 intercepted = false;
                 mLastYIntercept = 0;

@@ -41,11 +41,8 @@ public class HelpAndFeedBackActivity extends BaseActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         RxView.clicks(fabFeedback).throttleFirst(500, TimeUnit.MILLISECONDS)
-                .subscribe(new Action1<Void>() {
-                    @Override
-                    public void call(Void aVoid) {
-                        UploadMSg();
-                    }
+                .subscribe(aVoid -> {
+                    UploadMSg();
                 });
 
     }

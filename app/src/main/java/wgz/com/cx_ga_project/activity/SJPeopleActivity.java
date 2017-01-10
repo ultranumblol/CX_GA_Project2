@@ -2,7 +2,9 @@ package wgz.com.cx_ga_project.activity;
 
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v7.widget.Toolbar;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 
 import com.jakewharton.rxbinding.view.RxView;
@@ -18,6 +20,8 @@ import rx.schedulers.Schedulers;
 import wgz.com.cx_ga_project.R;
 import wgz.com.cx_ga_project.app;
 import wgz.com.cx_ga_project.base.BaseActivity;
+import wgz.com.cx_ga_project.base.RxBus;
+import wgz.com.cx_ga_project.util.SomeUtil;
 import wgz.datatom.com.utillibrary.util.LogUtil;
 
 /**
@@ -33,6 +37,24 @@ public class SJPeopleActivity extends BaseActivity {
     LinearLayout rootview;
     @Bind(R.id.fab_SJPeople)
     FloatingActionButton fab;
+    @Bind(R.id.addsjr_name)
+    EditText addsjrName;
+    @Bind(R.id.addsjr_sex)
+    EditText addsjrSex;
+    @Bind(R.id.addsjr_idnum)
+    EditText addsjrIdnum;
+    @Bind(R.id.addsjr_mobilephone)
+    EditText addsjrMobilephone;
+    @Bind(R.id.addsjr_telphone)
+    EditText addsjrTelphone;
+    @Bind(R.id.addsjr_addr)
+    EditText addsjrAddr;
+    @Bind(R.id.addsjr_mac)
+    EditText addsjrMac;
+    @Bind(R.id.addsjr_serialnumber)
+    EditText addsjrSerialnumber;
+    @Bind(R.id.addsjr_simi)
+    EditText addsjrSimi;
 
     @Override
     public int getLayoutId() {
@@ -45,17 +67,28 @@ public class SJPeopleActivity extends BaseActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         RxView.clicks(fab).throttleFirst(500, TimeUnit.MILLISECONDS)
-                .subscribe(new Action1<Void>() {
-                    @Override
-                    public void call(Void aVoid) {
-                        UpLoadSjr();
-                    }
+                .subscribe(aVoid -> {
+                    UpLoadSjr();
                 });
     }
 
     private void UpLoadSjr() {
-        app.jqAPIService.uploadSjPerson("123","123","10001","2016-9-1","詹姆斯","4324234324324234",
-                "3123213","1864343443","男").subscribeOn(Schedulers.io())
+
+
+        app.jqAPIService.uploadSjPerson(SomeUtil.getJQId()
+                , SomeUtil.getTASKId()
+                , SomeUtil.getUserId()
+                , SomeUtil.getSysTime()
+                , addsjrName.getText().toString()
+                , addsjrIdnum.getText().toString()
+                , addsjrTelphone.getText().toString()
+                , addsjrMobilephone.getText().toString()
+                , addsjrSex.getText().toString()
+                , addsjrAddr.getText().toString()
+                , addsjrMac.getText().toString()
+                , addsjrSerialnumber.getText().toString()
+                , addsjrSimi.getText().toString()
+        ).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<String>() {
                     @Override
@@ -65,16 +98,31 @@ public class SJPeopleActivity extends BaseActivity {
 
                     @Override
                     public void onError(Throwable e) {
-                        LogUtil.d("error:"+e.toString());
+                        LogUtil.d("error:" + e.toString());
                     }
 
                     @Override
                     public void onNext(String s) {
-                        LogUtil.d("result:"+s);
+                        LogUtil.d("result:" + s);
+                        RxBus.getDefault().post("sjrflush");
+
+                        SomeUtil.showSnackBar(rootview, "提交成功！").setCallback(new Snackbar.Callback() {
+                            @Override
+                            public void onDismissed(Snackbar snackbar, int event) {
+                                finish();
+                            }
+                        });
 
                     }
                 });
 
     }
 
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        // TODO: add setContentView(...) invocation
+        ButterKnife.bind(this);
+    }
 }

@@ -73,47 +73,41 @@ public class MyApplyJiabanFragment extends BaseFragment implements SwipeRefreshL
             }
         });*/
         //adapter.setNoMore(R.layout.view_nomore);
-        adapter.setOnItemClickListener(new MyRecyclerArrayAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(int position, View itemView) {
-                //ToastUtil.showShort(getActivity(),"cilck:"+position);
-                ImageView im_face = (ImageView) itemView.findViewById(R.id.user_face);
-                Intent intent = new Intent();
-                intent.setClass(getActivity(), JiabanLeaveDetilActivity.class);
-                Bundle bundle = new Bundle();
-                bundle.putString("poiceid",adapter.getItem(position).getPoliceid());
-                bundle.putString("poicename",adapter.getItem(position).getPolicename());
+        adapter.setOnItemClickListener((position, itemView) -> {
+            //ToastUtil.showShort(getActivity(),"cilck:"+position);
+            ImageView im_face = (ImageView) itemView.findViewById(R.id.user_face);
+            Intent intent = new Intent();
+            intent.setClass(getActivity(), JiabanLeaveDetilActivity.class);
+            Bundle bundle = new Bundle();
+            bundle.putString("poiceid",adapter.getItem(position).getPoliceid());
+            bundle.putString("poicename",adapter.getItem(position).getPolicename());
 
-                bundle.putString("applytime",adapter.getItem(position).getApplytime());
-                bundle.putString("starttime",adapter.getItem(position).getStart());
-                bundle.putString("endtime",adapter.getItem(position).getEnd());
+            bundle.putString("applytime",adapter.getItem(position).getApplytime());
+            bundle.putString("starttime",adapter.getItem(position).getStart());
+            bundle.putString("endtime",adapter.getItem(position).getEnd());
 
-                //bundle.putString("days",adapter.getItem(position).getDays()+"");
-                bundle.putString("content",adapter.getItem(position).getContent());
-                bundle.putString("status",adapter.getItem(position).getStatus());
-                bundle.putString("upperid",adapter.getItem(position).getUpperid());
-                bundle.putString("head","http://"+adapter.getItem(position).getUrl());
-                //bundle.putString("reasontype",adapter.getItem(position).getReasontype());
-                intent.putExtra("detil",bundle);
-                intent.putExtra("type",adapter.getItem(position).getType());
+            //bundle.putString("days",adapter.getItem(position).getDays()+"");
+            bundle.putString("content",adapter.getItem(position).getContent());
+            bundle.putString("status",adapter.getItem(position).getStatus());
+            bundle.putString("upperid",adapter.getItem(position).getUpperid());
+            bundle.putString("head","http://"+adapter.getItem(position).getUrl());
+            //bundle.putString("reasontype",adapter.getItem(position).getReasontype());
+            intent.putExtra("detil",bundle);
+            intent.putExtra("type",adapter.getItem(position).getType());
 
-                ActivityCompat.startActivityForResult(getActivity(),
-                        intent,1005, ActivityOptionsCompat
-                                .makeSceneTransitionAnimation(getActivity(),
-                                        im_face, "share_img").toBundle());
+            ActivityCompat.startActivityForResult(getActivity(),
+                    intent,1005, ActivityOptionsCompat
+                            .makeSceneTransitionAnimation(getActivity(),
+                                    im_face, "share_img").toBundle());
 
-            }
         });
 
         recyclerView.setRefreshListener(this);
         initData();
         rxSubscription = RxBus.getDefault().toObservable(String.class)
-                .subscribe(new Action1<String>() {
-                    @Override
-                    public void call(String s) {
-                        if (s.equals("jiabanflush"))
-                        onRefresh();
-                    }
+                .subscribe(s -> {
+                    if (s.equals("jiabanflush"))
+                    onRefresh();
                 });
 
     }
@@ -126,17 +120,17 @@ public class MyApplyJiabanFragment extends BaseFragment implements SwipeRefreshL
     public void onDestroyView() {
         super.onDestroyView();
         ButterKnife.unbind(this);
+        if (!rxSubscription.isUnsubscribed()) {
+            rxSubscription.unsubscribe();
+        }
     }
 
     @Override
     public void onRefresh() {
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                list.clear();
-                adapter.clear();
-               initData();
-            }
+        handler.postDelayed(() -> {
+            list.clear();
+            adapter.clear();
+           initData();
         }, 1500);
     }
 
@@ -147,12 +141,9 @@ public class MyApplyJiabanFragment extends BaseFragment implements SwipeRefreshL
         app.apiService.getBeanData("getOverLeaveStatus",(String) SPUtils.get(app.getApp().getApplicationContext(), Constant.USERID,""))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .map(new Func1<Apply, List<Apply.Result>>() {
-                    @Override
-                    public List<Apply.Result> call(Apply apply) {
-                        LogUtil.d("map_result::"+apply.getResult().toString());
-                        return apply.getResult();
-                    }
+                .map(apply -> {
+                    LogUtil.d("map_result::"+apply.getResult().toString());
+                    return apply.getResult();
                 })
                 .flatMap(new Func1<List<Apply.Result>, Observable<Apply.Result>>() {
                     @Override
@@ -161,18 +152,10 @@ public class MyApplyJiabanFragment extends BaseFragment implements SwipeRefreshL
                         return Observable.from(results);
                     }
                 })
-                .filter(new Func1<Apply.Result, Boolean>() {
-                    @Override
-                    public Boolean call(Apply.Result result) {
-                        return result.getType().equals(TYPE_JIABAN)?true:false;
-                    }
-                }).
-                map(new Func1<Apply.Result, List<Apply.Result>>() {
-                    @Override
-                    public List<Apply.Result> call(Apply.Result result) {
-                        list.add(result);
-                        return list;
-                    }
+                .filter(result -> result.getType().equals(TYPE_JIABAN)?true:false).
+                map(result -> {
+                    list.add(result);
+                    return list;
                 }).subscribe(new Observer<List<Apply.Result>>() {
             @Override
             public void onCompleted() {
@@ -195,7 +178,7 @@ public class MyApplyJiabanFragment extends BaseFragment implements SwipeRefreshL
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (data == null)
             return;
-        // TODO: 2016/10/21 刷新
+
         if (requestCode == 1001) {
             String result = data.getStringExtra("result");
             if (result.equals("refresh")){

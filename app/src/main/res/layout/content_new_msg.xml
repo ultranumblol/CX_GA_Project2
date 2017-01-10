@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/content_new_msg"
@@ -8,7 +8,13 @@
     android:layout_height="match_parent"
     tools:context="wgz.com.cx_ga_project.activity.NewMsgActivity"
     tools:showIn="@layout/activity_new_msg">
-
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/testpic"
+        android:scaleType="centerCrop"
+        android:layout_centerInParent="true"
+        />
     <com.jude.easyrecyclerview.EasyRecyclerView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -19,4 +25,4 @@
 
 
     </com.jude.easyrecyclerview.EasyRecyclerView>
-</LinearLayout>
+</RelativeLayout>

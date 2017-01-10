@@ -27,8 +27,13 @@ import wgz.com.cx_ga_project.R;
 import wgz.com.cx_ga_project.app;
 import wgz.com.cx_ga_project.base.BaseActivity;
 import wgz.com.cx_ga_project.base.Constant;
+import wgz.com.cx_ga_project.util.GpsUtil;
 import wgz.com.cx_ga_project.util.SPUtils;
+import wgz.com.cx_ga_project.util.SomeUtil;
 import wgz.datatom.com.utillibrary.util.LogUtil;
+
+import static wgz.com.cx_ga_project.app.BASE_URL;
+import static wgz.com.cx_ga_project.app.DATRIX_BASE_URL;
 
 public class CamMapHtmlActivity extends BaseActivity {
 
@@ -87,34 +92,32 @@ public class CamMapHtmlActivity extends BaseActivity {
             }
 
         });
-        webView.setOnKeyListener(new View.OnKeyListener() {
-            @Override
-            public boolean onKey(View v, int keyCode, KeyEvent event) {
-                if (webView.canGoBack() && event.getAction() == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_BACK) {
-                    webView.goBack();
-                    return true;
-                }
-                return false;
+        webView.setOnKeyListener((v, keyCode, event) -> {
+            if (webView.canGoBack() && event.getAction() == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_BACK) {
+                webView.goBack();
+                return true;
             }
+            return false;
         });
         WebSettings webSettings = webView.getSettings();
         webSettings.setJavaScriptEnabled(true);
         webSettings.setDefaultTextEncodingName("utf-8");
         webSettings.setBuiltInZoomControls(true);
         webView.addJavascriptInterface(getHtmlInterface(), "android");
-        webView.loadUrl("http://192.168.1.184:12345/appmap");
+
+        webView.loadUrl(BASE_URL+"fujinziyuan?flag_menu=ZHDD-fjzy&appflag=1&apptoken=58c93a51-3e95-43b6-8a11-e33c96bb78cf");
 
         RxView.clicks(fab).throttleFirst(500, TimeUnit.MICROSECONDS)
-                .subscribe(new Action1<Void>() {
-                    @Override
-                    public void call(Void aVoid) {
-                        //获取body标签下的详情内容
-                       // webView.loadUrl("javascript:window.android.copyText(document.getElementsByTagName('body')[0].innerHTML);");
-                        webView.loadUrl("javascript:getposition()");
-                    }
+                .subscribe(aVoid -> {
+                    //获取body标签下的详情内容
+                   // webView.loadUrl("javascript:window.android.copyText(document.getElementsByTagName('body')[0].innerHTML);");
+                    webView.loadUrl("javascript:getposition()");
                 });
-
-
+        GpsUtil gpsUtil = new GpsUtil();
+        gpsUtil.getJingWeiDu(this);
+       /* SomeUtil.showSnackBarLong(rootview,"经纬度：" +SPUtils.get(app.getApp().getApplicationContext(),
+                Constant.LONGITUDE, "101.55499")+";"+ SPUtils.get(app.getApp().getApplicationContext(), Constant.LATITUDE, "25.041062"));
+*/
     }
 
     private Object getHtmlInterface() {
@@ -129,22 +132,32 @@ public class CamMapHtmlActivity extends BaseActivity {
 
             @JavascriptInterface
             public String getlongitude() {
-                String longitude = (String) SPUtils.get(app.getApp().getApplicationContext(), Constant.LONGITUDE, "1111");
+                String longitude = (String) SPUtils.get(app.getApp().getApplicationContext(), Constant.LONGITUDE, "101.55499");
                 LogUtil.d("html longitude "+longitude);
+                //return "101.55499";
                 return longitude;
             }
 
             @JavascriptInterface
             public String getlatitude() {
-                String latitude = (String) SPUtils.get(app.getApp().getApplicationContext(), Constant.LATITUDE, "111");
+                String latitude = (String) SPUtils.get(app.getApp().getApplicationContext(), Constant.LATITUDE, "25.041062");
                 LogUtil.d("html latitude "+latitude);
+                //return "25.041062";
                 return latitude;
             }
+            @JavascriptInterface
+            public String getdepartmentid() {
+                String departmentid = SomeUtil.getDepartId();
+                LogUtil.d("depart "+departmentid);
+
+                return departmentid;
+            }
+
 
             @JavascriptInterface
             public void goPlay(String camID) {
                 LogUtil.d("camid : "+camID);
-                startActivity(new Intent(CamMapHtmlActivity.this, CamPlayerActivity.class).putExtra("camid", camID));
+                startActivity(new Intent(CamMapHtmlActivity.this, TestPlayerActivity.class).putExtra("camid", camID));
 
             }
 
@@ -166,10 +179,5 @@ public class CamMapHtmlActivity extends BaseActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        // TODO: add setContentView(...) invocation
-        ButterKnife.bind(this);
-    }
+
 }

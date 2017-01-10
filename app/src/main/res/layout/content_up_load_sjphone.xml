@@ -35,7 +35,7 @@
             android:textSize="16dp" />
 
         <EditText
-            android:id="@+id/id_leave_type"
+            android:id="@+id/addphone_mibilephone"
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="wrap_content"
@@ -57,7 +57,7 @@
 
 
     <LinearLayout
-        android:id="@+id/id_leave_starttime_layout"
+
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:background="@color/white"
@@ -75,7 +75,112 @@
             android:textSize="16dp" />
 
         <EditText
-            android:id="@+id/id_leave_starttime"
+            android:id="@+id/addphone_telphone"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:background="@null"
+            android:textSize="16dp" />
+
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="1sp"
+        android:layout_marginLeft="16dp"
+        android:background="@color/gainsboro" />
+    <LinearLayout
+
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:background="@color/white"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="16dp"
+            android:text="MAC地址"
+            android:textColor="@color/darkcyan"
+            android:textSize="16dp" />
+
+        <EditText
+            android:id="@+id/addphone_mac"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:background="@null"
+            android:textSize="16dp" />
+
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="1sp"
+        android:layout_marginLeft="16dp"
+        android:background="@color/gainsboro" />
+    <LinearLayout
+
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:background="@color/white"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="16dp"
+            android:text="手机串号IMEI"
+            android:textColor="@color/darkcyan"
+            android:textSize="16dp" />
+
+        <EditText
+            android:id="@+id/serialnumber"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:background="@null"
+            android:textSize="16dp" />
+
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="1sp"
+        android:layout_marginLeft="16dp"
+        android:background="@color/gainsboro" />
+    <LinearLayout
+
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:background="@color/white"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="16dp"
+            android:text="SIM卡号"
+            android:textColor="@color/darkcyan"
+            android:textSize="16dp" />
+
+        <EditText
+            android:id="@+id/addphone_simi"
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="wrap_content"
@@ -106,12 +211,12 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginLeft="16dp"
-            android:text="MAC地址"
+            android:text="姓名"
             android:textColor="@color/darkcyan"
             android:textSize="16dp" />
 
         <EditText
-            android:id="@+id/id_leave_endtime"
+            android:id="@+id/addphone_name"
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="wrap_content"
@@ -146,7 +251,7 @@
             android:textSize="16dp" />
 
         <EditText
-
+            android:id="@+id/addphone_idnum"
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="wrap_content"

@@ -20,6 +20,7 @@ import com.jakewharton.rxbinding.view.RxView;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.Bind;
+import butterknife.ButterKnife;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
@@ -89,6 +90,10 @@ public class ApprovalDetilActivity extends BaseActivity {
     TextView userName;
     @Bind(R.id.userName_jiaban)
     TextView userNameJiaban;
+    @Bind(R.id.jingjia_depart)
+    TextView jingjiaDepart;
+    @Bind(R.id.jiaban_depart)
+    TextView jiabanDepart;
     private String mId = "";
 
     @Override
@@ -139,7 +144,12 @@ public class ApprovalDetilActivity extends BaseActivity {
                 detilLeaveCommittime.setText(bundle.getString("applytime"));
                 detilLeaveStarttime.setText(bundle.getString("starttime"));
                 detilLeaveEndtime.setText(bundle.getString("endtime"));
-                detilLeaveDayscount.setText(bundle.getString("days"));
+
+                String days = getResources().getString(R.string.days);
+                String day = String.format(days, bundle.getString("days"));
+                detilLeaveDayscount.setText(day);
+
+
                 detilLeaveReason.setText(bundle.getString("content"));
                 detilLeaveType.setText(bundle.getString("reasontype"));
                 detilQingjiaShenherenname.setText(bundle.getString("upperid"));
@@ -159,11 +169,8 @@ public class ApprovalDetilActivity extends BaseActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         RxView.clicks(approvalMakesrue)
                 .throttleFirst(500, TimeUnit.MILLISECONDS)
-                .subscribe(new Action1<Void>() {
-                    @Override
-                    public void call(Void aVoid) {
-                        showAlert();
-                    }
+                .subscribe(aVoid -> {
+                    showAlert();
                 });
 
 
@@ -172,51 +179,39 @@ public class ApprovalDetilActivity extends BaseActivity {
     private void showAlert() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("请确认")
-                .setPositiveButton("审核通过", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        app.apiService.approvalApply("approvalApply", mId, "1", "")
-                                .subscribeOn(Schedulers.io())
-                                .observeOn(AndroidSchedulers.mainThread())
-                                .subscribe(new Subscriber<String>() {
-                                    @Override
-                                    public void onCompleted() {
+                .setPositiveButton("审核通过", (dialog, which) -> app.apiService.approvalApply("approvalApply", mId, "1", "")
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(new Subscriber<String>() {
+                            @Override
+                            public void onCompleted() {
 
-                                    }
+                            }
 
-                                    @Override
-                                    public void onError(Throwable e) {
+                            @Override
+                            public void onError(Throwable e) {
+                              //  SomeUtil.checkHttpException(ApprovalDetilActivity.this, e, rootview);
+                            }
 
-                                    }
+                            @Override
+                            public void onNext(String s) {
+                                if (s.contains("200")) {
+                                    RxBus.getDefault().post("myspflush");
+                                    SomeUtil.showSnackBar(detilRoot, "审批通过！").setCallback(new Snackbar.Callback() {
 
-                                    @Override
-                                    public void onNext(String s) {
-                                        if (s.contains("200")) {
-                                            RxBus.getDefault().post("myspflush");
-                                            SomeUtil.showSnackBar(detilRoot, "审批通过！").setCallback(new Snackbar.Callback() {
+                                        @Override
+                                        public void onDismissed(Snackbar snackbar, int event) {
+                                            //setResult(1002,new Intent(ApprovalDetilActivity.this,MyApprovalActivity.class).putExtra("result", "refresh"));
 
-                                                @Override
-                                                public void onDismissed(Snackbar snackbar, int event) {
-                                                    //setResult(1002,new Intent(ApprovalDetilActivity.this,MyApprovalActivity.class).putExtra("result", "refresh"));
-
-                                                    finish();
-                                                }
-                                            }).show();
-
-                                        } else {
-                                            SomeUtil.showSnackBar(detilRoot, "服务器错误！请稍后再试");
+                                            finish();
                                         }
-                                    }
-                                });
+                                    });
 
-
-                    }
-                }).setNegativeButton("拒绝申请", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                whyRefuse();
-            }
-        }).show();
+                                } else {
+                                    SomeUtil.showSnackBar(detilRoot, "服务器错误！请稍后再试");
+                                }
+                            }
+                        })).setNegativeButton("拒绝申请", (dialog, which) -> whyRefuse()).show();
 
 
     }
@@ -226,37 +221,39 @@ public class ApprovalDetilActivity extends BaseActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("请输入未通过原因")
                 .setView(input)
-                .setPositiveButton("提交", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        app.apiService.approvalApply("approvalApply", mId, "2", input.getText().toString())
-                                .subscribeOn(Schedulers.io())
-                                .observeOn(AndroidSchedulers.mainThread())
-                                .subscribe(new Subscriber<String>() {
-                                    @Override
-                                    public void onCompleted() {
+                .setPositiveButton("提交", (dialog, which) -> app.apiService.approvalApply("approvalApply", mId, "2", input.getText().toString())
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(new Subscriber<String>() {
+                            @Override
+                            public void onCompleted() {
 
-                                    }
+                            }
 
-                                    @Override
-                                    public void onError(Throwable e) {
+                            @Override
+                            public void onError(Throwable e) {
 
-                                    }
+                            }
 
-                                    @Override
-                                    public void onNext(String s) {
-                                        if (s.contains("200")) {
-                                            SomeUtil.showSnackBar(detilRoot, "提交成功").show();
-                                            setResult(1002, new Intent(ApprovalDetilActivity.this, MyApprovalActivity.class).putExtra("result", "refresh"));
+                            @Override
+                            public void onNext(String s) {
+                                if (s.contains("200")) {
+                                    RxBus.getDefault().post("myspflush");
+                                    SomeUtil.showSnackBar(detilRoot, "提交成功").setCallback(new Snackbar.Callback() {
+                                        @Override
+                                        public void onDismissed(Snackbar snackbar, int event) {
                                             finish();
-
-                                        } else {
-                                            SomeUtil.showSnackBar(detilRoot, "服务器错误！").show();
                                         }
-                                    }
-                                });
-                    }
-                }).setNegativeButton("取消", null).show();
+                                    });
+                                    //setResult(1002, new Intent(ApprovalDetilActivity.this, MyApprovalActivity.class).putExtra("result", "refresh"));
+
+
+                                } else {
+                                    SomeUtil.showSnackBar(detilRoot, "服务器错误！").show();
+                                }
+                            }
+                        })).setNegativeButton("取消", null).show();
     }
+
 
 }

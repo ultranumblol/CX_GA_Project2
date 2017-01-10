@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/activity_ones_log"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="wgz.com.cx_ga_project.activity.OnesLogActivity">
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="10dp"
+        app:cardBackgroundColor="@color/white"
+        app:cardCornerRadius="10dp"
+        app:contentPaddingLeft="10dp">
+
+        <TextView
+            android:layout_margin="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="log"
+            android:textSize="16dp"
+            android:id="@+id/id_tv_oneslog"
+            android:textColor="@color/goldenrod"
+
+            />
+    </android.support.v7.widget.CardView>
+
+</RelativeLayout>

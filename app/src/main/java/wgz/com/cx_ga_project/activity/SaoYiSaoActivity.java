@@ -3,36 +3,29 @@ package wgz.com.cx_ga_project.activity;
 import android.content.Intent;
 import android.content.res.AssetFileDescriptor;
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Vibrator;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.Toolbar;
-
-import butterknife.Bind;
-import butterknife.ButterKnife;
-import wgz.com.cx_ga_project.R;
-import wgz.com.cx_ga_project.base.BaseActivity;
-
-import wgz.com.cx_ga_project.view.zxing.camera.CameraManager;
-import wgz.com.cx_ga_project.view.zxing.decoding.CaptureActivityHandler;
-import wgz.com.cx_ga_project.view.zxing.decoding.InactivityTimer;
-import wgz.com.cx_ga_project.view.zxing.view.ViewfinderView;
-
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
-import android.view.WindowManager;
-import android.widget.Toast;
 
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.Result;
 
 import java.io.IOException;
 import java.util.Vector;
+
+import butterknife.Bind;
+import wgz.com.cx_ga_project.R;
+import wgz.com.cx_ga_project.base.BaseActivity;
+import wgz.com.cx_ga_project.view.zxing.camera.CameraManager;
+import wgz.com.cx_ga_project.view.zxing.decoding.CaptureActivityHandler;
+import wgz.com.cx_ga_project.view.zxing.decoding.InactivityTimer;
+import wgz.com.cx_ga_project.view.zxing.view.ViewfinderView;
 
 /**
  * 扫一扫
@@ -41,6 +34,9 @@ import java.util.Vector;
 public class SaoYiSaoActivity extends BaseActivity implements SurfaceHolder.Callback {
 
 
+    private static final float BEEP_VOLUME = 0.10f;
+    private static final long VIBRATE_DURATION = 200L;
+    private final MediaPlayer.OnCompletionListener beepListener = mediaPlayer1 -> mediaPlayer1.seekTo(0);
     @Bind(R.id.toolbar_saoyisao)
     Toolbar toolbar;
     @Bind(R.id.preview_view)
@@ -56,7 +52,6 @@ public class SaoYiSaoActivity extends BaseActivity implements SurfaceHolder.Call
     private InactivityTimer inactivityTimer;
     private MediaPlayer mediaPlayer;
     private boolean playBeep;
-    private static final float BEEP_VOLUME = 0.10f;
     private boolean vibrate;
 
     @Override
@@ -190,16 +185,19 @@ public class SaoYiSaoActivity extends BaseActivity implements SurfaceHolder.Call
         if (resultString.equals("")) {
         } else {
             Intent resultIntent = new Intent();
+            resultIntent.setClass(SaoYiSaoActivity.this, SecondCodeShowActivity.class);
             Bundle bundle = new Bundle();
             bundle.putString("result", resultString);
             bundle.putParcelable("bitmap", barcode);
             resultIntent.putExtras(bundle);
-            this.setResult(RESULT_OK, resultIntent);
+            //RxBus.getDefault().post(new SecondCode(resultString,barcode));
+            startActivity(resultIntent);
+            // resultIntent.putExtras(bundle);
+            //this.setResult(RESULT_OK, resultIntent);
+            SaoYiSaoActivity.this.finish();
         }
-        SaoYiSaoActivity.this.finish();
-    }
 
-    private static final long VIBRATE_DURATION = 200L;
+    }
 
     private void playBeepSoundAndVibrate() {
         if (playBeep && mediaPlayer != null) {
@@ -210,10 +208,4 @@ public class SaoYiSaoActivity extends BaseActivity implements SurfaceHolder.Call
             vibrator.vibrate(VIBRATE_DURATION);
         }
     }
-
-    private final MediaPlayer.OnCompletionListener beepListener = new MediaPlayer.OnCompletionListener() {
-        public void onCompletion(MediaPlayer mediaPlayer) {
-            mediaPlayer.seekTo(0);
-        }
-    };
 }

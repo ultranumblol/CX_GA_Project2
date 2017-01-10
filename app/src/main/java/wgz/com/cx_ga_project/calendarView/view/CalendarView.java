@@ -96,7 +96,13 @@ public class CalendarView extends GridView {
         }
         return null;
     }
-
+    public String getCurrentDayDay() {
+        DateBean firstDateBean = calendarAdapter.getFirstDateBean();
+        if (firstDateBean != null) {
+            return OtherUtils.formatDate(firstDateBean.getDate());
+        }
+        return null;
+    }
 
     public int getColorDataPosition() {
         return calendarAdapter.getColorDataPosition();

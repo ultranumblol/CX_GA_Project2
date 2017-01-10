@@ -1,6 +1,7 @@
 package wgz.com.cx_ga_project.fragment;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
@@ -11,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.jude.easyrecyclerview.EasyRecyclerView;
+import com.lzp.floatingactionbuttonplus.FloatingActionButtonPlus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,13 +20,18 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import rx.Subscriber;
+import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import wgz.com.cx_ga_project.R;
+import wgz.com.cx_ga_project.activity.SJPeopleActivity;
+import wgz.com.cx_ga_project.activity.UpLoadSJCarActivity;
 import wgz.com.cx_ga_project.adapter.JQCallbackDetilAdapter;
 import wgz.com.cx_ga_project.app;
 import wgz.com.cx_ga_project.base.BaseFragment;
+import wgz.com.cx_ga_project.base.RxBus;
 import wgz.com.cx_ga_project.entity.JqCallBack;
+import wgz.com.cx_ga_project.util.SomeUtil;
 import wgz.datatom.com.utillibrary.util.LogUtil;
 
 /**
@@ -33,9 +40,12 @@ import wgz.datatom.com.utillibrary.util.LogUtil;
 public class SjrFragment extends BaseFragment implements SwipeRefreshLayout.OnRefreshListener {
     @Bind(R.id.id_sjrfragment)
     EasyRecyclerView recyclerview;
+    @Bind(R.id.FabPlus)
+    FloatingActionButtonPlus FabPlus;
     private Handler handler = new Handler();
     private JQCallbackDetilAdapter adapter;
     List<JqCallBack.Resperson> list = new ArrayList<>();
+    private Subscription rxSubscription;
 
     @Override
     public void initview(View view) {
@@ -43,6 +53,22 @@ public class SjrFragment extends BaseFragment implements SwipeRefreshLayout.OnRe
         recyclerview.setAdapterWithProgress(adapter = new JQCallbackDetilAdapter(getActivity()));
         recyclerview.setRefreshListener(this);
         initData();
+        FabPlus.setOnItemClickListener((tagView, position) -> {
+            int id = tagView.getId();
+            switch (id) {
+
+                case R.id.fabtag_addsjPeople:
+                    startActivity(new Intent(getActivity(), SJPeopleActivity.class));
+
+                    break;
+
+            }
+        });
+        rxSubscription = RxBus.getDefault().toObservable(String.class)
+                .subscribe(s -> {
+                    if (s.equals("sjrflush"))
+                        onRefresh();
+                });
     }
 
     @Override
@@ -50,26 +76,28 @@ public class SjrFragment extends BaseFragment implements SwipeRefreshLayout.OnRe
         return R.layout.fragment_sjr;
     }
 
+
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         ButterKnife.unbind(this);
+        if (!rxSubscription.isUnsubscribed()) {
+            rxSubscription.unsubscribe();
+        }
     }
 
     @Override
     public void onRefresh() {
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                list.clear();
-                adapter.clear();
-                initData();
-            }
+        handler.postDelayed(() -> {
+            list.clear();
+            adapter.clear();
+            initData();
         }, 2000);
     }
 
     private void initData() {
-        app.jqAPIService.GetAllJQDetil("2016072100100000060")
+
+        app.jqAPIService.GetAllJQDetil(SomeUtil.getJQId())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<JqCallBack>() {
@@ -91,4 +119,11 @@ public class SjrFragment extends BaseFragment implements SwipeRefreshLayout.OnRe
                 });
     }
 
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        // TODO: inflate a fragment view
+        View rootView = super.onCreateView(inflater, container, savedInstanceState);
+        ButterKnife.bind(this, rootView);
+        return rootView;
+    }
 }

@@ -25,7 +25,11 @@ import java.util.Hashtable;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import wgz.com.cx_ga_project.R;
+import wgz.com.cx_ga_project.app;
 import wgz.com.cx_ga_project.base.BaseActivity;
+import wgz.com.cx_ga_project.base.Constant;
+import wgz.com.cx_ga_project.util.SPUtils;
+import wgz.com.cx_ga_project.util.SomeUtil;
 
 /**
  * 我的二维码页面
@@ -87,25 +91,17 @@ public class FullscreenActivity extends BaseActivity {
         }
     };
     private boolean mVisible;
-    private final Runnable mHideRunnable = new Runnable() {
-        @Override
-        public void run() {
-            hide();
-        }
-    };
+    private final Runnable mHideRunnable = () -> hide();
     /**
      * Touch listener to use for in-layout UI controls to delay hiding the
      * system UI. This is to prevent the jarring behavior of controls going away
      * while interacting with activity UI.
      */
-    private final View.OnTouchListener mDelayHideTouchListener = new View.OnTouchListener() {
-        @Override
-        public boolean onTouch(View view, MotionEvent motionEvent) {
-            if (AUTO_HIDE) {
-                delayedHide(AUTO_HIDE_DELAY_MILLIS);
-            }
-            return false;
+    private final View.OnTouchListener mDelayHideTouchListener = (view, motionEvent) -> {
+        if (AUTO_HIDE) {
+            delayedHide(AUTO_HIDE_DELAY_MILLIS);
         }
+        return false;
     };
 
     @Override
@@ -119,13 +115,8 @@ public class FullscreenActivity extends BaseActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         mVisible = true;
         // Set up the user interaction to manually show or hide the system UI.
-        mContentView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                toggle();
-            }
-        });
-        createQRImage("app的作者太帅了！！！");
+        mContentView.setOnClickListener(view -> toggle());
+        createQRImage("警员："+ SPUtils.get(app.getApp().getApplicationContext(), Constant.USERNAME, "未知")+"\n"+"部门："+SomeUtil.getDepartName());
     }
 
     @Override

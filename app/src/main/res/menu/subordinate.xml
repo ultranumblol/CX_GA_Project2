@@ -2,8 +2,14 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/Statistics"
+        android:id="@+id/sub_timebank"
         android:orderInCategory="100"
-        android:title="统计详情"
+        android:title="时间银行"
         app:showAsAction="never" />
+    <item
+        android:id="@+id/sub_cloudtag"
+        android:orderInCategory="100"
+        android:title="云标签"
+        app:showAsAction="never" />
+
 </menu>

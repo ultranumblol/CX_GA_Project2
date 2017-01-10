@@ -41,11 +41,8 @@ public class CamLoginActivity extends BaseActivity  implements OnLoginListener {
     @Override
     public void initView() {
         RxView.clicks(btnLogin).throttleFirst(500, TimeUnit.MILLISECONDS)
-                .subscribe(new Action1<Void>() {
-                    @Override
-                    public void call(Void aVoid) {
-                        dologin();
-                    }
+                .subscribe(aVoid -> {
+                    dologin();
                 });
     }
 
